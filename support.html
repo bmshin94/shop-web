@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>고객센터 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "background-dark": "#221310",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                    },
+                    fontFamily: {
+                        display: [
+                            "Pretendard",
+                            "-apple-system",
+                            "BlinkMacSystemFont",
+                            "system-ui",
+                            "Roboto",
+                            "Helvetica Neue",
+                            "Segoe UI",
+                            "Apple SD Gothic Neo",
+                            "Noto Sans KR",
+                            "Malgun Gothic",
+                            "sans-serif",
+                        ],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+
+    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+    <style id="fout-guard">
+      .material-symbols-outlined { 
+        color: transparent !important; 
+        display: inline-block;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+      }
+    </style>
+    <script>
+      document.fonts.ready.then(() => {
+        const foutGuard = document.getElementById('fout-guard');
+        if (foutGuard) foutGuard.remove();
+      });
+    </script>
+</head>
+
+<body class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- HEADER -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary" href="login.html">로그인</a>
+                    <a class="hover:text-primary" href="register.html">회원가입</a>
+                    <a class="text-primary font-bold" href="support.html">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
+                            Active Women
+                        </h1>
+                    </a>
+                    <div class="hidden md:flex flex-col relative group">
+                        <div
+                            class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50">
+                            <input
+                                class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
+                                placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span
+                                class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                        </div>
+                    </div>
+                </div>
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="event.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="community.html">커뮤니티</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="exhibition.html">기획전</a>
+                </nav>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                    <a href="cart.html"
+                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span
+                            class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                    </a>
+                    <a href="mypage.html"
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full bg-background-light">
+            <div class="mx-auto flex max-w-7xl flex-col lg:flex-row px-4 sm:px-6 lg:px-8 py-12 gap-12">
+
+                <!-- LNB (Left Navigation Bar) -->
+                <aside class="w-full lg:w-64 flex-shrink-0">
+                    <h2 class="text-3xl font-extrabold text-text-main mb-8">고객센터</h2>
+                    <nav class="flex flex-col gap-2">
+                        <a href="#" class="px-4 py-3 bg-text-main text-white rounded-xl font-bold transition-colors">자주
+                            묻는 질문 (FAQ)</a>
+                        <a href="#"
+                            class="px-4 py-3 text-text-main hover:bg-gray-50 rounded-xl font-medium transition-colors">공지사항</a>
+                        <a href="#"
+                            class="px-4 py-3 text-text-main hover:bg-gray-50 rounded-xl font-medium transition-colors">1:1
+                            문의하기</a>
+                        <a href="#"
+                            class="px-4 py-3 text-text-main hover:bg-gray-50 rounded-xl font-medium transition-colors">주문/배송
+                            조회</a>
+                        <a href="#"
+                            class="px-4 py-3 text-text-main hover:bg-gray-50 rounded-xl font-medium transition-colors">교환/반품
+                            안내</a>
+                        <a href="#"
+                            class="px-4 py-3 text-text-main hover:bg-gray-50 rounded-xl font-medium transition-colors">멤버십
+                            혜택 안내</a>
+                    </nav>
+
+                    <!-- CS Contact Info Panel -->
+                    <div class="mt-8 p-6 bg-background-alt rounded-2xl border border-gray-100">
+                        <h3 class="font-bold text-text-main flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">support_agent</span>
+                            고객상담센터
+                        </h3>
+                        <p class="text-2xl font-extrabold text-primary mb-1">1544-0000</p>
+                        <div class="text-sm text-text-muted space-y-1 mt-3">
+                            <p>평일 <span class="text-text-main font-medium">09:00 - 18:00</span></p>
+                            <p>점심시간 <span class="text-text-main font-medium">12:00 - 13:00</span></p>
+                            <p>주말 및 공휴일 휴무</p>
+                        </div>
+                        <button
+                            class="w-full mt-6 py-3 bg-black text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+                            카카오톡 실시간 상담
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="flex-1">
+
+                    <!-- Quick Search -->
+                    <div class="bg-[#F9F7F6] p-8 rounded-2xl mb-12 border border-[#EBE5E4]">
+                        <h3 class="text-xl font-extrabold text-text-main mb-4 text-center">무엇을 도와드릴까요?</h3>
+                        <div class="relative max-w-2xl mx-auto flex items-center">
+                            <input type="text" placeholder="궁금하신 내용을 입력해 주세요 (예: 배송조회, 반품)"
+                                class="w-full pl-6 pr-16 py-4 rounded-full border border-gray-200 shadow-sm focus:border-primary focus:ring-1 focus:ring-primary text-text-main font-medium placeholder:text-gray-400" />
+                            <button
+                                class="absolute right-3 flex items-center justify-center size-10 bg-primary text-white rounded-full hover:bg-red-600 transition-colors">
+                                <span class="material-symbols-outlined">search</span>
+                            </button>
+                        </div>
+                        <div class="flex justify-center flex-wrap gap-2 mt-4 text-sm">
+                            <span class="text-gray-400 font-medium whitespace-nowrap">자주 찾는 키워드 :</span>
+                            <a href="#"
+                                class="text-text-muted hover:text-primary transition-colors underline whitespace-nowrap">배송조회</a>
+                            <a href="#"
+                                class="text-text-muted hover:text-primary transition-colors underline whitespace-nowrap">사이즈
+                                교환</a>
+                            <a href="#"
+                                class="text-text-muted hover:text-primary transition-colors underline whitespace-nowrap">반품
+                                배송비</a>
+                            <a href="#"
+                                class="text-text-muted hover:text-primary transition-colors underline whitespace-nowrap">품절
+                                보상</a>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-text-main mb-6">자주 묻는 질문</h3>
+
+                    <!-- FAQ Category Tabs -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button
+                            class="px-5 py-2.5 bg-black text-white rounded-full text-sm font-bold shadow-sm whitespace-nowrap">전체</button>
+                        <button
+                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-main hover:border-black rounded-full text-sm font-bold transition-colors whitespace-nowrap">가입/정보</button>
+                        <button
+                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-main hover:border-black rounded-full text-sm font-bold transition-colors whitespace-nowrap">주문/결제</button>
+                        <button
+                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-main hover:border-black rounded-full text-sm font-bold transition-colors whitespace-nowrap">배송</button>
+                        <button
+                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-main hover:border-black rounded-full text-sm font-bold transition-colors whitespace-nowrap">반품/교환/환불</button>
+                        <button
+                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-main hover:border-black rounded-full text-sm font-bold transition-colors whitespace-nowrap">상품/기타</button>
+                    </div>
+
+                    <!-- FAQ List (Accordion style visual) -->
+                    <div class="border-t-[2px] border-black">
+
+                        <!-- FAQ Item 1 (Expanded) -->
+                        <div class="border-b border-gray-200">
+                            <button class="w-full flex justify-between items-center py-5 text-left group">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-primary font-bold w-12 text-center text-lg">Q.</span>
+                                    <span
+                                        class="text-text-main font-bold text-base group-hover:text-primary transition-colors">[반품/교환]
+                                        교환이나 반품을 하고 싶은데 배송비는 어떻게 되나요?</span>
+                                </div>
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-hover:text-text-main transition-colors mr-2">expand_less</span>
+                            </button>
+                            <div class="bg-gray-50 p-6 text-sm text-text-muted leading-relaxed pb-8">
+                                <div class="flex gap-4">
+                                    <span class="text-gray-400 font-bold w-12 text-center text-lg">A.</span>
+                                    <div class="flex-1 break-keep">
+                                        상품 수령 후 7일 이내에 마이페이지에서 교환/반품 접수가 가능합니다.<br /><br />
+                                        <strong class="text-text-main">단순 변심에 의한 교환/반품:</strong><br />
+                                        - 고객님께서 왕복 배송비(6,000원)를 부담하셔야 합니다.<br />
+                                        - 무료배송 혜택을 받은 주문의 경우, 초기 전액 반품 시 왕복 배송비가 차감됩니다.<br /><br />
+                                        <strong class="text-text-main">상품 불량/오배송으로 인한 교환/반품:</strong><br />
+                                        - Active Women에서 배송비를 100% 전액 부담합니다.<br />
+                                        - 단, 제품 훼손이나 사용 흔적이 있는 경우 교환/반품이 거절될 수 있습니다.<br /><br />
+                                        자세한 사항은 [1:1 문의]를 통해 남겨주시면 빠르게 처리해 드리겠습니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 (Collapsed) -->
+                        <div class="border-b border-gray-200">
+                            <button class="w-full flex justify-between items-center py-5 text-left group">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-primary font-bold w-12 text-center text-lg">Q.</span>
+                                    <span
+                                        class="text-text-main font-medium text-base group-hover:text-primary transition-colors">[배송]
+                                        주문한 상품은 언제 배송되나요?</span>
+                                </div>
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-hover:text-text-main transition-colors mr-2">expand_more</span>
+                            </button>
+                        </div>
+
+                        <!-- FAQ Item 3 (Collapsed) -->
+                        <div class="border-b border-gray-200">
+                            <button class="w-full flex justify-between items-center py-5 text-left group">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-primary font-bold w-12 text-center text-lg">Q.</span>
+                                    <span
+                                        class="text-text-main font-medium text-base group-hover:text-primary transition-colors">[주문/결제]
+                                        무통장 입금 확인은 언제 되나요?</span>
+                                </div>
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-hover:text-text-main transition-colors mr-2">expand_more</span>
+                            </button>
+                        </div>
+
+                        <!-- FAQ Item 4 (Collapsed) -->
+                        <div class="border-b border-gray-200">
+                            <button class="w-full flex justify-between items-center py-5 text-left group">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-primary font-bold w-12 text-center text-lg">Q.</span>
+                                    <span
+                                        class="text-text-main font-medium text-base group-hover:text-primary transition-colors">[가입/정보]
+                                        회원 정보 수정과 탈퇴는 어디서 하나요?</span>
+                                </div>
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-hover:text-text-main transition-colors mr-2">expand_more</span>
+                            </button>
+                        </div>
+
+                        <!-- FAQ Item 5 (Collapsed) -->
+                        <div class="border-b border-gray-200">
+                            <button class="w-full flex justify-between items-center py-5 text-left group">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-primary font-bold w-12 text-center text-lg">Q.</span>
+                                    <span
+                                        class="text-text-main font-medium text-base group-hover:text-primary transition-colors">[상품/기타]
+                                        레깅스 세탁은 어떻게 해야 하나요?</span>
+                                </div>
+                                <span
+                                    class="material-symbols-outlined text-gray-400 group-hover:text-text-main transition-colors mr-2">expand_more</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-12 flex justify-center items-center gap-2">
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_left</span>
+                        </button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg bg-text-main text-white font-bold transition-colors shadow">1</button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">2</button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">3</button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">4</button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">5</button>
+                        <button
+                            class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main hover:bg-gray-50 transition-colors">
+                            <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="border-t border-gray-200 bg-white pb-8 pt-16">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="grid gap-12 lg:grid-cols-4">
+                    <div class="lg:col-span-1">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex size-6 items-center justify-center rounded-full bg-primary text-white">
+                                <span class="material-symbols-outlined text-sm">stat_1</span>
+                            </div>
+                            <span class="text-lg font-bold text-text-main">Active Women</span>
+                        </div>
+                        <p class="mb-6 text-sm leading-relaxed text-text-muted break-keep">
+                            프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브 라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
+                        </p>
+                        <div class="flex gap-4">
+                            <a class="text-text-muted hover:text-primary" href="#"><span
+                                    class="material-symbols-outlined">thumb_up</span></a>
+                            <a class="text-text-muted hover:text-primary" href="#"><span
+                                    class="material-symbols-outlined">photo_camera</span></a>
+                            <a class="text-text-muted hover:text-primary" href="#"><span
+                                    class="material-symbols-outlined">play_circle</span></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-text-main">쇼핑하기</h4>
+                        <ul class="space-y-3 text-sm text-text-muted">
+                            <li><a class="hover:text-primary" href="product-list.html">신상품</a></li>
+                            <li><a class="hover:text-primary" href="product-list.html">베스트 셀러</a></li>
+                            <li><a class="hover:text-primary" href="product-list.html">스포츠웨어</a></li>
+                            <li><a class="hover:text-primary" href="#">뷰티 &amp; 케어</a></li>
+                            <li><a class="hover:text-primary" href="#">액세서리</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-text-main">고객지원</h4>
+                        <ul class="space-y-3 text-sm text-text-muted">
+                            <li><a class="hover:text-primary" href="support.html">주문배송 조회</a></li>
+                            <li><a class="hover:text-primary" href="support.html">교환/반품 신청</a></li>
+                            <li><a class="hover:text-primary" href="#">사이즈 가이드</a></li>
+                            <li><a class="hover:text-primary" href="support.html">1:1 문의</a></li>
+                            <li><a class="hover:text-primary" href="support.html">자주 묻는 질문</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="mb-4 font-bold text-text-main">뉴스레터</h4>
+                        <p class="mb-4 text-sm text-text-muted">
+                            새로운 드롭 소식과 이벤트 혜택을 놓치지 마세요.
+                        </p>
+                        <form class="flex gap-2">
+                            <input
+                                class="w-full rounded-lg border border-gray-200 bg-background-alt px-4 py-2 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary"
+                                placeholder="이메일 주소 입력" type="email" />
+                            <button class="rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-red-600"
+                                type="submit">
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
+                            <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
+                            <p>통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자: 이담당</p>
+                            <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
+                            <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
+                        </div>
+                        <div class="md:text-right flex flex-col justify-between">
+                            <div class="flex gap-2 justify-start md:justify-end mb-2">
+                                <a class="font-bold text-text-main" href="#">이용약관</a>
+                                <span class="text-gray-300">|</span>
+                                <a class="font-bold text-primary" href="#">개인정보처리방침</a>
+                                <span class="text-gray-300">|</span>
+                                <a class="font-bold text-text-main" href="#">사업자정보확인</a>
+                            </div>
+                            <p>© 2024 Active Women Store. All rights reserved.</p>
+                            <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

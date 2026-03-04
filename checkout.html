@@ -10,7 +10,7 @@
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
       rel="stylesheet"
     />
     <script>
@@ -67,7 +67,25 @@
         scrollbar-width: none;
       }
     </style>
-  </head>
+  
+    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+    <style id="fout-guard">
+      .material-symbols-outlined { 
+        color: transparent !important; 
+        display: inline-block;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+      }
+    </style>
+    <script>
+      document.fonts.ready.then(() => {
+        const foutGuard = document.getElementById('fout-guard');
+        if (foutGuard) foutGuard.remove();
+      });
+    </script>
+</head>
 
   <body
     class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white"

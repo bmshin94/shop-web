@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>찜한 상품 | 마이페이지 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "background-dark": "#221310",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                        "border-color": "#e5e7eb",
+                    },
+                    fontFamily: {
+                        display: [
+                            "Pretendard",
+                            "-apple-system",
+                            "BlinkMacSystemFont",
+                            "system-ui",
+                            "Roboto",
+                            "Helvetica Neue",
+                            "Segoe UI",
+                            "Apple SD Gothic Neo",
+                            "Noto Sans KR",
+                            "Malgun Gothic",
+                            "sans-serif",
+                        ],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+
+    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+    <style id="fout-guard">
+      .material-symbols-outlined { 
+        color: transparent !important; 
+        display: inline-block;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+      }
+    </style>
+    <script>
+      document.fonts.ready.then(() => {
+        const foutGuard = document.getElementById('fout-guard');
+        if (foutGuard) foutGuard.remove();
+      });
+    </script>
+</head>
+
+<body class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- HEADER -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary font-bold text-text-main" href="#">김에스핏님</a>
+                    <a class="hover:text-primary" href="#">로그아웃</a>
+                    <a class="hover:text-primary" href="#">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
+                            Active Women
+                        </h1>
+                    </a>
+                    <!-- Search Bar (Desktop) -->
+                    <div class="hidden md:flex flex-col relative group">
+                        <div
+                            class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50">
+                            <input
+                                class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
+                                placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span
+                                class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+                        href="product-list.html">커뮤니티</a>
+                    <a class="text-base font-bold text-primary transition-colors hover:text-red-700"
+                        href="product-list.html">기획전</a>
+                </nav>
+                <!-- Icons -->
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                    <a href="cart.html"
+                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                    </a>
+                    <a href="mypage.html"
+                        class="flex size-10 items-center justify-center rounded-full text-primary transition-colors hover:bg-background-alt bg-primary-light">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+
+            <!-- Page Title -->
+            <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">마이페이지</h2>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+
+                <!-- LNB (Left Navigation Bar) -->
+                <aside class="w-full lg:w-64 shrink-0 bg-white rounded-2xl shadow-sm border border-border-color p-6 sticky top-32 h-fit">
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">person</span> 나의 쇼핑 정보
+                        </h3>
+                        <ul class="space-y-3">
+                            <li><a href="mypage-order-list.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">주문/배송 조회</a></li>
+                            <li><a href="mypage-claim-list.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">취소/반품/교환 내역</a></li>
+                            <li><a href="mypage-refund-list.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">환불/입금 내역</a></li>
+                            <li><a href="mypage-receipt.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">영수증/계산서 발급</a></li>
+                        </ul>
+                    </div>
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">redeem</span> 혜택 관리
+                        </h3>
+                        <ul class="space-y-3">
+                            <li><a href="mypage-coupon.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors text-sm flex justify-between">쿠폰 <span class="text-primary font-bold">2장</span></a></li>
+                            <li><a href="mypage-point.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors text-sm flex justify-between">적립금 <span class="text-primary font-bold">12,500원</span></a></li>
+                            <li><a href="mypage-deposit.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">예치금 내역</a></li>
+                        </ul>
+                    </div>
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">favorite</span> 관심 상품
+                        </h3>
+                        <ul class="space-y-3">
+                            <li><a href="mypage-wishlist.html" class="text-sm font-bold text-primary hover:underline">찜한 상품</a></li>
+                            <li><a href="mypage-recent.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">최근 본 상품</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">support_agent</span> 고객 센터
+                        </h3>
+                        <ul class="space-y-3">
+                            <li><a href="mypage-inquiry.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">1:1 문의내역</a></li>
+                            <li><a href="mypage-review.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">상품 리뷰 관리</a></li>
+                            <li><a href="mypage-profile.html" class="text-sm font-medium text-text-main hover:text-primary transition-colors">회원정보 수정</a></li>
+                        </ul>
+                    </div>
+                </aside>
+
+
+<!-- Main Dashboard Content -->
+<div class="flex-1 w-full space-y-8">
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-border-color p-6 sm:p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-text-main">찜한 상품</h3>
+                            <button class="text-sm border border-gray-300 text-text-main rounded px-3 py-1.5 hover:bg-gray-50 font-bold transition-colors">선택 삭제</button>
+                        </div>
+
+                        <h4 class="text-md font-bold text-primary mb-4 mt-8"><span class="material-symbols-outlined align-middle text-sm mr-1">check_circle</span>[상태 1] 데이터가 있는 경우</h4>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                            <!-- Product -->
+                            <div class="group relative">
+                                <div class="aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-3 relative">
+                                    <a href="product-detail.html"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=533&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" /></a>
+                                    <button class="absolute top-2 right-2 p-1.5 rounded-full bg-white/80 text-primary hover:bg-white transition-colors">
+                                        <span class="material-symbols-outlined filled text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                    </button>
+                                </div>
+                                <div>
+                                    <a href="product-detail.html" class="text-sm font-bold text-text-main leading-tight group-hover:underline line-clamp-2">프리미엄 요가 레깅스</a>
+                                    <div class="mt-2 flex items-center gap-2">
+                                        <span class="text-sm font-extrabold text-text-main">54,000원</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 class="text-md font-bold text-gray-500 mb-4"><span class="material-symbols-outlined align-middle text-sm mr-1">cancel</span>[상태 2] 데이터가 없는 경우</h4>
+                        <div class="flex flex-col items-center justify-center py-20 text-center border border-gray-100 rounded-xl bg-gray-50">
+                            <span class="material-symbols-outlined text-5xl text-gray-300 mb-4">favorite</span>
+                            <p class="text-text-muted font-medium text-lg">아직 찜한 상품이 없습니다.</p>
+                            <a href="product-list.html" class="mt-4 px-6 py-2 bg-text-main text-white font-bold rounded-lg hover:bg-black transition-colors block w-fit mx-auto">상품 보러가기</a>
+                        </div>
+                    </div>
+
+</div>
+</main>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto border-t border-gray-200 bg-white pt-16 pb-12">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="md:col-span-1">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex size-8 items-center justify-center rounded-full bg-text-main text-white">
+                                <span class="material-symbols-outlined text-xl">stat_1</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold tracking-tight text-text-main">Active Women</h3>
+                        </div>
+                        <p class="text-sm text-text-muted leading-relaxed">
+                            액티브 우먼 프리미엄 스토어<br />
+                            건강하고 아름다운 라이프스타일을 제안합니다.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-text-main mb-4">CS CENTER</h4>
+                        <p class="text-2xl font-extrabold text-text-main mb-2">1588-0000</p>
+                        <p class="text-sm text-text-muted leading-relaxed">
+                            월-금 10:00 - 17:00<br />
+                            점심시간 12:00 - 13:00<br />
+                            토/일/공휴일 휴무
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-text-main mb-4">ABOUT</h4>
+                        <ul class="space-y-2 text-sm text-text-muted">
+                            <li><a href="#" class="hover:text-primary transition-colors">브랜드 스토리</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">회사소개</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">채용정보</a></li>
+                            <li><a href="#" class="hover:text-primary transition-colors">제휴상담</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-text-main mb-4">LEGAL</h4>
+                        <ul class="space-y-2 text-sm text-text-muted">
+                            <li><a href="#" class="hover:text-primary transition-colors">이용약관</a></li>
+                            <li><a href="#"
+                                    class="font-bold text-text-main hover:text-primary transition-colors">개인정보처리방침</a>
+                            </li>
+                            <li><a href="#" class="hover:text-primary transition-colors">이메일무단수집거부</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="mt-12 pt-8 border-t border-gray-200 md:flex flex-row justify-between items-center text-xs text-text-muted">
+                    <p>(주)에스핏 | 대표: 신백민 | 사업자등록번호: 123-45-67890 | 통신판매업신고: 제2026-서울강남-0000호</p>
+                    <p class="mt-2 md:mt-0">&copy; 2026 Active Women Premium Store. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

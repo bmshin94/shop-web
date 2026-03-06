@@ -574,6 +574,77 @@
       </div>
     </footer>
   </div>
+
+  <!-- jQuery CDN 추가 -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script>
+    /**
+     * @file index.html의 주요 인터랙션을 담당하는 스크립트
+     * @description 찜하기, 장바구니 카운트, 가로 스크롤 등 쇼핑몰 UI 피드백 구현
+     */
+
+    $(document).ready(function() {
+      // 1. 찜하기(Favorite) 토글 기능
+      // 사용자가 상품에 관심을 표시할 때 즉각적인 시각적 피드백을 주기 위함
+      $(document).on('click', '.material-symbols-outlined:contains("favorite")', function(e) {
+        e.preventDefault();
+        const $this = $(this);
+        
+        // 하트 색상 및 상태 변경
+        if ($this.hasClass('text-primary')) {
+          $this.removeClass('text-primary').css('font-variation-settings', "'FILL' 0");
+        } else {
+          $this.addClass('text-primary').css('font-variation-settings', "'FILL' 1");
+        }
+      });
+
+      // 2. 장바구니 담기 시뮬레이션
+      // 구매 의사 결정 과정에서 장바구니에 담겼음을 상단 헤더에 숫자로 표시
+      $(document).on('click', 'button:contains("장바구니 담기")', function() {
+        const $cartBadge = $('header .relative span.bg-primary');
+        let currentCount = parseInt($cartBadge.text());
+        
+        // 카운트 증가 및 애니메이션 효과
+        $cartBadge.text(currentCount + 1);
+        $cartBadge.addClass('animate-bounce');
+        setTimeout(() => $cartBadge.removeClass('animate-bounce'), 1000);
+        
+        alert('장바구니에 상품을 담았어요! 😊💖');
+      });
+
+      // 3. 실시간 인기 급상승 섹션 가로 스크롤 제어
+      // 마우스 휠 외에도 화살표 버튼을 통해 편리하게 상품 리스트를 탐색하기 위함
+      const $scrollContainer = $('.scrollbar-hide').last();
+      
+      $('button:has(span:contains("arrow_forward"))').on('click', function() {
+        $scrollContainer.animate({ scrollLeft: '+=300' }, 400);
+      });
+
+      $('button:has(span:contains("arrow_back"))').on('click', function() {
+        $scrollContainer.animate({ scrollLeft: '-=300' }, 400);
+      });
+
+      // 4. 뉴스레터 구독 폼 제출
+      // 실제 서버 통신 전 사용자에게 구독 확인 메시지 노출
+      $('footer form').on('submit', function(e) {
+        e.preventDefault();
+        const email = $(this).find('input').val();
+        if (email) {
+          alert(email + ' 주소로 따끈따끈한 소식을 보내드릴게요! 💌✨');
+          $(this).find('input').val('');
+        }
+      });
+
+      // 5. 검색창 포커스 효과 강화
+      // 사용자가 검색에 집중할 수 있도록 UI 강조
+      $('header input[type="text"]').on('focus', function() {
+        $(this).parent().addClass('shadow-lg shadow-primary/10');
+      }).on('blur', function() {
+        $(this).parent().removeClass('shadow-lg shadow-primary/10');
+      });
+    });
+  </script>
 </body>
 
 </html>

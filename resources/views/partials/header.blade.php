@@ -3,7 +3,7 @@
     <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
       <a class="hover:text-primary" href="/login">로그인</a>
       <a class="hover:text-primary" href="/register">회원가입</a>
-      <a class="hover:text-primary" href="#">고객센터</a>
+      <a class="hover:text-primary" href="/support">고객센터</a>
     </div>
   </div>
   <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
@@ -31,34 +31,34 @@
         </div>
         <div class="absolute top-full left-4 mt-1 flex gap-2 text-xs text-text-muted">
           <span class="font-bold text-primary">추천:</span>
-          <a class="hover:underline" href="#">#야구</a>
-          <a class="hover:underline" href="#">#풋살</a>
-          <a class="hover:underline" href="#">#러닝</a>
+          <a class="hover:underline" href="/product-list">#야구</a>
+          <a class="hover:underline" href="/product-list">#풋살</a>
+          <a class="hover:underline" href="/product-list">#러닝</a>
         </div>
       </div>
     </div>
     <nav class="hidden items-center gap-8 lg:flex">
       <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/product-list">신상품</a>
-      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">베스트</a>
-      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">이벤트</a>
-      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">커뮤니티</a>
-      <a class="text-base font-bold text-primary transition-colors hover:text-red-700" href="#">기획전</a>
+      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/product-list">베스트</a>
+      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/event">이벤트</a>
+      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/community">커뮤니티</a>
+      <a class="text-base font-bold text-primary transition-colors hover:text-red-700" href="/exhibition">기획전</a>
     </nav>
     <div class="flex items-center gap-2">
-      <button
+      <a href="/mypage/wishlist"
         class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
         <span class="material-symbols-outlined">favorite</span>
-      </button>
-      <button
+      </a>
+      <a href="/cart"
         class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
         <span class="material-symbols-outlined">shopping_cart</span>
         <span
           class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
-      </button>
-      <button
+      </a>
+      <a href="/mypage"
         class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
         <span class="material-symbols-outlined">person</span>
-      </button>
+      </a>
     </div>
   </div>
 </header>
@@ -85,16 +85,16 @@
         <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/product-list">
           신상품 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="#">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/product-list">
           베스트 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="#">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/event">
           이벤트 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="#">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/community">
           커뮤니티 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-primary transition-colors hover:bg-primary-light" href="#">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-primary transition-colors hover:bg-primary-light" href="/exhibition">
           기획전 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
       </nav>

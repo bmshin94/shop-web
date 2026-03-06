@@ -42,7 +42,7 @@
 <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
   <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-8">
     <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md"
-      href="#">
+      href="/product-list">
       <div
         class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
         <span class="material-symbols-outlined text-3xl">sports_baseball</span>
@@ -50,7 +50,7 @@
       <span class="text-lg font-bold text-text-main group-hover:text-primary">야구</span>
     </a>
     <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md"
-      href="#">
+      href="/product-list">
       <div
         class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
         <span class="material-symbols-outlined text-3xl">sports_soccer</span>
@@ -58,7 +58,7 @@
       <span class="text-lg font-bold text-text-main group-hover:text-primary">풋살</span>
     </a>
     <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md"
-      href="#">
+      href="/product-list">
       <div
         class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
         <span class="material-symbols-outlined text-3xl">directions_run</span>
@@ -66,7 +66,7 @@
       <span class="text-lg font-bold text-text-main group-hover:text-primary">러닝</span>
     </a>
     <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md"
-      href="#">
+      href="/product-list">
       <div
         class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
         <span class="material-symbols-outlined text-3xl">spa</span>
@@ -87,7 +87,7 @@
         </p>
       </div>
       <a class="group flex items-center text-sm font-bold text-text-muted transition-colors hover:text-primary"
-        href="#">
+        href="/product-list">
         전체보기
         <span
           class="material-symbols-outlined ml-1 text-base transition-transform group-hover:translate-x-1">arrow_forward</span>

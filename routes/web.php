@@ -103,3 +103,4 @@ Route::get('/exhibition', function () { return view('pages.exhibition'); })->nam
 Route::get('/find-password', function () { return view('pages.find-password'); })->name('find-password');
 Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
 Route::get('/review/write', function () { return view('pages.review-write'); })->name('review.write');
+Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry');

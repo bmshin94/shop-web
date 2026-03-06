@@ -1,0 +1,8 @@
+@extends('layouts.app')
+@section('title', '고객센터 - Active Women\'s Premium Store')
+@section('content')
+$(cat support-exchange-main.html)
+@endsection
+@push('scripts')
+$(cat support-exchange-scripts.html)
+@endpush

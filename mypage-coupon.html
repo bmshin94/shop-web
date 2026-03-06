@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
 
 <head>
@@ -7,7 +7,8 @@
     <title>쿠폰 | 마이페이지 - Active Women's Premium Store</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
         rel="stylesheet" />
     <script>
         tailwind.config = {
@@ -60,20 +61,20 @@
 
     <!-- Prevent FOUT and Layout Shift for Material Symbols -->
     <style id="fout-guard">
-      .material-symbols-outlined { 
-        color: transparent !important; 
-        display: inline-block;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-      }
+        .material-symbols-outlined {
+            color: transparent !important;
+            display: inline-block;
+            width: 1em;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: bottom;
+        }
     </style>
     <script>
-      document.fonts.ready.then(() => {
-        const foutGuard = document.getElementById('fout-guard');
-        if (foutGuard) foutGuard.remove();
-      });
+        document.fonts.ready.then(() => {
+            const foutGuard = document.getElementById('fout-guard');
+            if (foutGuard) foutGuard.remove();
+        });
     </script>
 </head>
 
@@ -291,6 +292,370 @@
             </div>
         </footer>
     </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal"
+        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform scale-95 transition-transform duration-300"
+            id="reviewModalContent">
+
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-text-main flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">rate_review</span> 리뷰 작성
+                </h3>
+                <button id="closeReviewModal"
+                    class="text-gray-400 hover:text-text-main transition-colors rounded-full p-1 hover:bg-gray-100">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-6">
+                <!-- Product Info Summary -->
+                <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <div class="size-12 bg-white rounded-md overflow-hidden shrink-0 border border-gray-200">
+                        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=100&h=100&fit=crop"
+                            alt="상품" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-text-main line-clamp-1">에어 컴포트 스포츠 브라탑</p>
+                        <p class="text-xs text-text-muted mt-0.5" id="reviewModalOptionText">화이트 / S 사이즈</p>
+                    </div>
+                </div>
+
+                <!-- Star Rating -->
+                <div>
+                    <label class="block text-sm font-bold text-text-main mb-3 text-center">상품은 만족하셨나요?</label>
+                    <div class="flex justify-center gap-1" id="starRatingContainer">
+                        <button type="button" class="star-btn text-gray-300 hover:text-yellow-400 transition-colors"
+                            data-rating="1">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                        </button>
+                        <button type="button" class="star-btn text-gray-300 hover:text-yellow-400 transition-colors"
+                            data-rating="2">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                        </button>
+                        <button type="button" class="star-btn text-gray-300 hover:text-yellow-400 transition-colors"
+                            data-rating="3">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                        </button>
+                        <button type="button" class="star-btn text-gray-300 hover:text-yellow-400 transition-colors"
+                            data-rating="4">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                        </button>
+                        <button type="button" class="star-btn text-gray-300 hover:text-yellow-400 transition-colors"
+                            data-rating="5">
+                            <span class="material-symbols-outlined text-4xl"
+                                style="font-variation-settings: 'FILL' 1;">star</span>
+                        </button>
+                    </div>
+                    <p class="text-center text-xs font-bold text-primary mt-2 hidden" id="ratingFeedback">최고에요!</p>
+                </div>
+
+                <!-- Review Textarea -->
+                <div>
+                    <textarea id="reviewText" rows="4"
+                        class="w-full rounded-xl border border-gray-200 p-4 text-sm text-text-main placeholder-text-muted focus:border-primary focus:ring-1 focus:ring-primary resize-none transition-colors"
+                        placeholder="다른 고객님들께 도움이 될 수 있도록 상품에 대한 솔직한 평가를 남겨주세요. (최소 10자 이상)"></textarea>
+                </div>
+
+                <!-- Photo Upload with Preview -->
+                <div>
+                    <input type="file" id="reviewImageUpload" accept="image/*" multiple class="hidden">
+                    <button type="button" id="reviewImageUploadBtn"
+                        class="flex items-center justify-center gap-2 w-full py-3 border border-dashed border-gray-300 rounded-xl text-sm font-bold text-text-muted hover:bg-gray-50 transition-colors">
+                        <span class="material-symbols-outlined">add_a_photo</span> 사진 첨부하기
+                    </button>
+                    <!-- Preview Container -->
+                    <div id="reviewImagePreviewContainer" class="flex flex-wrap gap-2 mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-5 border-t border-gray-100 flex gap-3">
+                <button type="button" id="cancelReviewBtn"
+                    class="flex-1 px-4 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                    취소
+                </button>
+                <button type="button" id="submitReviewBtn"
+                    class="flex-1 px-4 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-md">
+                    등록하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal"
+        class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-300"
+            id="confirmModalContent">
+            <div class="p-6 text-center mt-4">
+                <div class="size-14 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-3xl">error</span>
+                </div>
+                <h3 class="text-lg font-bold text-text-main mb-2">구매를 확정하시겠습니까?</h3>
+                <p class="text-sm text-text-muted">구매 확정 후에는 교환 및 반품이 불가능합니다.</p>
+            </div>
+            <div class="p-4 border-t border-gray-100 flex gap-3 bg-gray-50">
+                <button type="button" id="cancelConfirmBtn"
+                    class="flex-1 px-4 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">취소</button>
+                <button type="button" id="acceptConfirmBtn"
+                    class="flex-1 px-4 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-black transition-colors shadow-md">구매확정</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Popup -->
+    <div id="toast"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] flex items-center justify-center gap-2 bg-text-main text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl transition-all duration-300 opacity-0 translate-y-8 pointer-events-none">
+        <span class="material-symbols-outlined text-lg text-green-400" id="toastIcon">check_circle</span>
+        <span id="toastMsg">처리되었습니다.</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 토스트 알림 컴포넌트 ---
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            let toastTimeout;
+
+            function showToast(message, iconName = 'check_circle', iconColorClass = 'text-green-400', isError = false) {
+                toastMsg.textContent = message;
+                toastIcon.textContent = iconName;
+                toastIcon.className = `material-symbols-outlined text-lg ${iconColorClass}`;
+
+                if (isError) {
+                    toast.classList.replace('bg-text-main', 'bg-red-600');
+                } else {
+                    toast.classList.replace('bg-red-600', 'bg-text-main');
+                }
+
+                toast.classList.remove('opacity-0', 'translate-y-8');
+
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-8');
+                }, 3000);
+            }
+
+            // --- 최근 주문내역 (구매확정 커스텀 모달) 인터랙션 ---
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmModalContent = document.getElementById('confirmModalContent');
+            const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+            const acceptConfirmBtn = document.getElementById('acceptConfirmBtn');
+            let confirmTargetBtn = null;
+
+            const confirmOrderBtns = document.querySelectorAll('.btn-confirm-order');
+            confirmOrderBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // 커스텀 확인 모달 오픈
+                    confirmTargetBtn = e.currentTarget;
+                    confirmModal.classList.remove('opacity-0', 'pointer-events-none');
+                    confirmModalContent.classList.remove('scale-95');
+                    confirmModalContent.classList.add('scale-100');
+                });
+            });
+
+            function closeConfirmModal() {
+                confirmModal.classList.add('opacity-0', 'pointer-events-none');
+                confirmModalContent.classList.remove('scale-100');
+                confirmModalContent.classList.add('scale-95');
+                confirmTargetBtn = null;
+            }
+
+            if (cancelConfirmBtn) cancelConfirmBtn.addEventListener('click', closeConfirmModal);
+            // 모달 배경 클릭 시 닫기
+            if (confirmModal) confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) closeConfirmModal(); });
+
+            if (acceptConfirmBtn) {
+                acceptConfirmBtn.addEventListener('click', () => {
+                    if (confirmTargetBtn) {
+                        // 구매확정 완료 처리
+                        confirmTargetBtn.textContent = '구매확정완료';
+                        confirmTargetBtn.disabled = true;
+                        confirmTargetBtn.className = 'btn-confirm-order px-3 py-1.5 bg-gray-100 border border-gray-200 text-gray-400 text-xs font-bold rounded-md transition-colors w-full cursor-not-allowed';
+                        showToast('구매 확정 완료! 적립금 500원이 지급되었습니다.', 'paid', 'text-yellow-400');
+                    }
+                    closeConfirmModal();
+                });
+            }
+
+            // --- 리뷰 작성 모달 동작 제어 ---
+            const reviewModal = document.getElementById('reviewModal');
+            const reviewModalContent = document.getElementById('reviewModalContent');
+            const closeReviewModal = document.getElementById('closeReviewModal');
+            const cancelReviewBtn = document.getElementById('cancelReviewBtn');
+            const submitReviewBtn = document.getElementById('submitReviewBtn');
+            const reviewText = document.getElementById('reviewText');
+
+            const writeReviewBtns = document.querySelectorAll('.btn-write-review');
+            let currentReviewTargetBtn = null;
+
+            function openModal(originBtn) {
+                currentReviewTargetBtn = originBtn;
+                reviewModal.classList.remove('opacity-0', 'pointer-events-none');
+                reviewModalContent.classList.remove('scale-95');
+                reviewModalContent.classList.add('scale-100');
+
+                // 오픈 시 폼 클리어
+                reviewText.value = '';
+                resetStars();
+
+                if (document.getElementById('reviewImagePreviewContainer')) {
+                    document.getElementById('reviewImagePreviewContainer').innerHTML = '';
+                    reviewSelectedFiles = [];
+                }
+            }
+
+            function closeModal() {
+                reviewModal.classList.add('opacity-0', 'pointer-events-none');
+                reviewModalContent.classList.remove('scale-100');
+                reviewModalContent.classList.add('scale-95');
+                currentReviewTargetBtn = null;
+            }
+
+            writeReviewBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    openModal(e.target);
+                });
+            });
+
+            closeReviewModal.addEventListener('click', closeModal);
+            cancelReviewBtn.addEventListener('click', closeModal);
+
+            reviewModal.addEventListener('click', (e) => {
+                if (e.target === reviewModal) {
+                    closeModal();
+                }
+            });
+
+            // --- 사진 첨부 인터랙션 ---
+            const reviewImageUploadBtn = document.getElementById('reviewImageUploadBtn');
+            const reviewImageUpload = document.getElementById('reviewImageUpload');
+            const reviewImagePreviewContainer = document.getElementById('reviewImagePreviewContainer');
+            let reviewSelectedFiles = [];
+
+            if (reviewImageUploadBtn) {
+                reviewImageUploadBtn.addEventListener('click', () => {
+                    reviewImageUpload.click();
+                });
+            }
+
+            if (reviewImageUpload) {
+                reviewImageUpload.addEventListener('change', (e) => {
+                    const files = Array.from(e.target.files);
+                    files.forEach(file => {
+                        reviewSelectedFiles.push(file);
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            const container = document.createElement('div');
+                            container.className = 'relative size-20 rounded-lg overflow-hidden border border-gray-200 shrink-0 group';
+
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            img.className = 'w-full h-full object-cover';
+
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity';
+                            removeBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">close</span>';
+                            removeBtn.onclick = () => {
+                                container.remove();
+                                reviewSelectedFiles = reviewSelectedFiles.filter(f => f !== file);
+                            };
+
+                            container.appendChild(img);
+                            container.appendChild(removeBtn);
+                            reviewImagePreviewContainer.appendChild(container);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                    // Reset input
+                    e.target.value = '';
+                });
+            }
+
+            // --- 별점 인터랙션 연동 ---
+            const starBtns = document.querySelectorAll('.star-btn');
+            const ratingFeedback = document.getElementById('ratingFeedback');
+            let currentRating = 0;
+
+            const feedbackTexts = [
+                "아쉬워요", "그저 그래요", "보통이에요", "맘에 들어요", "최고에요!"
+            ];
+
+            function fillStars(rating) {
+                starBtns.forEach((btn, index) => {
+                    if (index < rating) {
+                        btn.classList.remove('text-gray-300');
+                        btn.classList.add('text-yellow-400');
+                    } else {
+                        btn.classList.remove('text-yellow-400');
+                        btn.classList.add('text-gray-300');
+                    }
+                });
+            }
+
+            function resetStars() {
+                currentRating = 0;
+                fillStars(0);
+                ratingFeedback.classList.add('hidden');
+            }
+
+            starBtns.forEach(btn => {
+                btn.addEventListener('mouseenter', (e) => {
+                    const rating = parseInt(e.currentTarget.getAttribute('data-rating'));
+                    fillStars(rating);
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    fillStars(currentRating);
+                });
+
+                btn.addEventListener('click', (e) => {
+                    currentRating = parseInt(e.currentTarget.getAttribute('data-rating'));
+                    fillStars(currentRating);
+
+                    ratingFeedback.textContent = feedbackTexts[currentRating - 1];
+                    ratingFeedback.classList.remove('hidden');
+                });
+            });
+
+            // --- 리뷰 제출 제어 ---
+            submitReviewBtn.addEventListener('click', () => {
+                if (currentRating === 0) {
+                    showToast('별점을 선택해주세요.', 'error', 'text-white', true);
+                    return;
+                }
+                if (reviewText.value.trim().length < 10) {
+                    showToast('리뷰 내용을 10자 이상 입력해주세요.', 'error', 'text-white', true);
+                    reviewText.focus();
+                    return;
+                }
+
+                closeModal();
+                showToast('리뷰 작성이 완료되었습니다! 적립금 1,000원이 지급되었습니다.', 'celebration', 'text-yellow-400');
+
+                // 원본 호출버튼 비활성화 모양으로 치환
+                if (currentReviewTargetBtn) {
+                    currentReviewTargetBtn.textContent = '리뷰작성완료';
+                    currentReviewTargetBtn.disabled = true;
+                    currentReviewTargetBtn.className = 'btn-write-review px-3 py-1.5 bg-gray-50 border border-gray-200 text-gray-400 hover:text-gray-400 text-xs font-bold rounded-md w-full mt-1 cursor-not-allowed transition-colors';
+                }
+            });
+
+        });
+    </script>
 </body>
+
 
 </html>

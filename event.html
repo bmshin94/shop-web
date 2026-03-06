@@ -24,19 +24,7 @@
                         "text-muted": "#896861",
                     },
                     fontFamily: {
-                        display: [
-                            "Pretendard",
-                            "-apple-system",
-                            "BlinkMacSystemFont",
-                            "system-ui",
-                            "Roboto",
-                            "Helvetica Neue",
-                            "Segoe UI",
-                            "Apple SD Gothic Neo",
-                            "Noto Sans KR",
-                            "Malgun Gothic",
-                            "sans-serif",
-                        ],
+                        display: ["Pretendard", "sans-serif"],
                     },
                     borderRadius: {
                         DEFAULT: "0.25rem",
@@ -49,35 +37,15 @@
         };
     </script>
     <style>
-        /* Tailwind 로드 전 텍스트 깜빡임(FOUC) 방지 */
-        .hidden {
-            display: none;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .aspect-event {
-            aspect-ratio: 16 / 9;
-        }
+        .hidden { display: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .aspect-event { aspect-ratio: 16 / 9; }
     </style>
 
     <!-- Prevent FOUT and Layout Shift for Material Symbols -->
     <style id="fout-guard">
-      .material-symbols-outlined { 
-        color: transparent !important; 
-        display: inline-block;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-      }
+      .material-symbols-outlined { color: transparent !important; display: inline-block; width: 1em; overflow: hidden; white-space: nowrap; vertical-align: bottom; }
     </style>
     <script>
       document.fonts.ready.then(() => {
@@ -89,7 +57,7 @@
 
 <body class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white">
     <div class="flex min-h-screen flex-col">
-        <!-- HEADER 동일 코드 영역 시작 -->
+        <!-- HEADER -->
         <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
             <div class="bg-background-alt py-1 text-xs text-text-muted">
                 <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
@@ -104,451 +72,231 @@
                         <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
                             <span class="material-symbols-outlined text-xl">stat_1</span>
                         </div>
-                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
-                            Active Women
-                        </h1>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">Active Women</h1>
                     </a>
-                    <div class="hidden md:flex flex-col relative group">
-                        <div
-                            class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50">
-                            <input
-                                class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
-                                placeholder="찾으시는 상품을 검색해보세요" type="text" />
-                            <span
-                                class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                    <div class="hidden md:flex relative group">
+                        <div class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 border border-transparent focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+                            <input class="w-full border-none bg-transparent px-2 text-sm text-text-main focus:ring-0" placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
                         </div>
                     </div>
                 </div>
                 <nav class="hidden items-center gap-8 lg:flex">
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="product-list.html">신상품</a>
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="product-list.html">베스트</a>
-                    <a class="text-base font-bold text-primary transition-colors border-b-2 border-primary pb-1 -mb-[3px]"
-                        href="event.html">이벤트</a>
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="product-list.html">기획전</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-primary border-b-2 border-primary pb-1 -mb-[3px]" href="event.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="product-list.html">기획전</a>
                 </nav>
                 <div class="flex items-center gap-2">
-                    <button
-                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
-                        <span class="material-symbols-outlined">favorite</span>
-                    </button>
-                    <a href="cart.html"
-                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                    <button class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">favorite</span></button>
+                    <a href="cart.html" class="relative flex size-10 items-center justify-center rounded-full hover:bg-background-alt">
                         <span class="material-symbols-outlined">shopping_cart</span>
-                        <span
-                            class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                        <span class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
                     </a>
-                    <a href="mypage.html"
-                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
-                        <span class="material-symbols-outlined">person</span>
-                    </a>
+                    <a href="mypage.html" class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">person</span></a>
                 </div>
             </div>
         </header>
-        <!-- HEADER 동일 코드 영역 끝 -->
 
         <main class="flex-1 w-full bg-background-light pb-20">
-
-            <!-- Hero Section : Main Event Highlight -->
-            <section
-                class="relative w-full h-[300px] md:h-[450px] lg:h-[500px] bg-background-dark overflow-hidden flex items-center mb-10">
-                <!-- Background Image -->
-                <div class="absolute inset-0 w-full h-full opacity-60">
-                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop"
-                        class="object-cover w-full h-full" alt="Main Event Background" />
+            <!-- Hero Section -->
+            <section class="relative w-full h-[300px] md:h-[500px] bg-background-dark overflow-hidden flex items-center mb-10">
+                <div class="absolute inset-0 opacity-60">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070" class="object-cover w-full h-full" alt="Hero" />
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-
-                <!-- Content -->
                 <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 text-white">
-                    <span
-                        class="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-4 md:mb-6 animate-pulse">
-                        HOT EVENT
-                    </span>
-                    <h2 class="text-3xl md:text-5xl lg:text-7xl font-extrabold tracking-tight mb-4 break-keep">
-                        SPRING<br />VIBE ACTIVE
-                    </h2>
-                    <p
-                        class="text-sm md:text-lg lg:text-xl text-gray-200 mb-8 max-w-xl break-keep font-medium leading-relaxed">
-                        새로운 시작을 위한 완벽한 준비.<br />봄 신상 구매 시 최대 30% 즉시 할인 혜택을 드립니다.
-                    </p>
-                    <button
-                        class="bg-white text-text-main hover:bg-primary hover:text-white transition-colors duration-300 font-bold px-8 py-4 rounded-xl shadow-lg border-2 border-transparent">
-                        이벤트 자세히 보기
-                    </button>
+                    <span class="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-6 animate-pulse">HOT EVENT</span>
+                    <h2 class="text-4xl md:text-7xl font-extrabold mb-4 break-keep">SPRING<br />VIBE ACTIVE</h2>
+                    <p class="text-sm md:text-xl text-gray-200 mb-8 max-w-xl break-keep font-medium">새로운 시작을 위한 봄 신상 최대 30% 할인 혜택 ✨</p>
+                    <button onclick="openEventDetail(1)" class="bg-white text-text-main hover:bg-primary hover:text-white transition-all font-bold px-8 py-4 rounded-xl shadow-lg">이벤트 자세히 보기</button>
                 </div>
             </section>
 
-            <!-- Events List Section -->
+            <!-- Events List -->
             <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-                <!-- Page Header & Title -->
-                <div
-                    class="flex flex-col md:flex-row justify-between items-end mb-8 pt-4 pb-4 border-b border-gray-100 gap-4">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 pt-4 pb-4 border-b border-gray-100 gap-4">
                     <div>
-                        <h2 class="text-3xl font-extrabold text-text-main tracking-tight">이벤트 <span
-                                class="text-primary font-normal">EVENT</span></h2>
-                        <p class="text-text-muted mt-2 text-sm">Active Women에서 준비한 다양한 혜택과 즐거운 이벤트를 경험해 보세요.</p>
+                        <h2 class="text-3xl font-extrabold text-text-main tracking-tight">이벤트 <span class="text-primary font-normal uppercase">Event</span></h2>
+                        <p class="text-text-muted mt-2 text-sm">Active Women의 특별한 혜택을 만나보세요.</p>
                     </div>
-
-                    <!-- Filters & Tabs -->
-                    <div class="flex gap-2 text-sm font-bold overflow-x-auto scrollbar-hide pb-1">
-                        <button
-                            class="px-5 py-2.5 bg-text-main text-white rounded-full whitespace-nowrap shadow-sm hover:bg-black transition-colors">진행중인
-                            이벤트</button>
-                        <button
-                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-muted rounded-full hover:border-text-main hover:text-text-main whitespace-nowrap transition-colors">당첨자
-                            발표</button>
-                        <button
-                            class="px-5 py-2.5 bg-white border border-gray-200 text-text-muted rounded-full hover:border-text-main hover:text-text-main whitespace-nowrap transition-colors">종료된
-                            이벤트</button>
+                    <!-- Tabs -->
+                    <div class="flex gap-2 text-sm font-bold overflow-x-auto scrollbar-hide pb-1" id="eventTabs">
+                        <button onclick="switchEventTab('ongoing')" id="tab-ongoing" class="tab-btn px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm transition-all bg-text-main text-white border border-text-main">진행중인 이벤트</button>
+                        <button onclick="switchEventTab('winners')" id="tab-winners" class="tab-btn px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm transition-all bg-white border border-gray-200 text-text-muted hover:text-text-main">당첨자 발표</button>
+                        <button onclick="switchEventTab('ended')" id="tab-ended" class="tab-btn px-5 py-2.5 rounded-full whitespace-nowrap shadow-sm transition-all bg-white border border-gray-200 text-text-muted hover:text-text-main">종료된 이벤트</button>
                     </div>
                 </div>
 
-                <!-- Event Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
-
-                    <!-- Event Card 1 -->
-                    <a href="#"
-                        class="group flex flex-col cursor-pointer border border-transparent hover:border-gray-100 hover:shadow-xl rounded-2xl transition-all duration-300 pb-4 bg-white">
-                        <div
-                            class="relative w-full aspect-event overflow-hidden rounded-t-2xl rounded-b-lg mb-4 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2069&auto=format&fit=crop"
-                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                alt="Event Thumbnail" />
-                            <!-- Badges -->
-                            <div class="absolute top-4 left-4 z-10 flex gap-2">
-                                <span
-                                    class="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded shadow-sm">D-14</span>
-                                <span
-                                    class="bg-white/90 text-text-main text-xs font-bold px-2.5 py-1 rounded shadow-sm">가입혜택</span>
-                            </div>
-                        </div>
-                        <div class="px-3 flex-1 flex flex-col">
-                            <h3
-                                class="text-xl font-extrabold text-text-main mb-2 break-keep group-hover:text-primary transition-colors leading-tight">
-                                신규 회원 가입 웰컴 팩 : 1만원 쿠폰 무조건 증정</h3>
-                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2 break-keep">Active Women 프리미엄
-                                멤버십에 가입하시고 누구나 주어지는 1만원 할인 혜택으로 첫 구매를 완벽하게 시작하세요.</p>
-                            <div class="text-xs font-bold text-gray-400">
-                                <span
-                                    class="material-symbols-outlined text-[14px] align-middle mr-1">calendar_today</span>
-                                2024.03.01 - 2024.03.31
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Event Card 2 -->
-                    <a href="#"
-                        class="group flex flex-col cursor-pointer border border-transparent hover:border-gray-100 hover:shadow-xl rounded-2xl transition-all duration-300 pb-4 bg-white">
-                        <div
-                            class="relative w-full aspect-event overflow-hidden rounded-t-2xl rounded-b-lg mb-4 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=2070&auto=format&fit=crop"
-                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                alt="Event Thumbnail" />
-                            <div class="absolute top-4 left-4 z-10 flex gap-2">
-                                <span
-                                    class="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded shadow-sm">D-5</span>
-                                <span
-                                    class="bg-white/90 text-text-main text-xs font-bold px-2.5 py-1 rounded shadow-sm">리뷰이벤트</span>
-                            </div>
-                        </div>
-                        <div class="px-3 flex-1 flex flex-col">
-                            <h3
-                                class="text-xl font-extrabold text-text-main mb-2 break-keep group-hover:text-primary transition-colors leading-tight">
-                                베스트 포토 리뷰 챌린지 : 애사플 워치 추첨</h3>
-                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2 break-keep">당신의 액티브한 일상을 사진으로
-                                남겨주세요! 매월 3명을 추첨하여 최신 스마트 워치를 선물로 드립니다.</p>
-                            <div class="text-xs font-bold text-gray-400">
-                                <span
-                                    class="material-symbols-outlined text-[14px] align-middle mr-1">calendar_today</span>
-                                2024.03.10 - 2024.03.25
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Event Card 3 -->
-                    <a href="#"
-                        class="group flex flex-col cursor-pointer border border-transparent hover:border-gray-100 hover:shadow-xl rounded-2xl transition-all duration-300 pb-4 bg-white">
-                        <div
-                            class="relative w-full aspect-event overflow-hidden rounded-t-2xl rounded-b-lg mb-4 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1540496905036-5937c10647cc?q=80&w=2070&auto=format&fit=crop"
-                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                alt="Event Thumbnail" />
-                            <div class="absolute top-4 left-4 z-10 flex gap-2">
-                                <span
-                                    class="bg-black text-white text-xs font-bold px-2.5 py-1 rounded shadow-sm">상시진행</span>
-                                <span
-                                    class="bg-white/90 text-text-main text-xs font-bold px-2.5 py-1 rounded shadow-sm">할인/쿠폰</span>
-                            </div>
-                        </div>
-                        <div class="px-3 flex-1 flex flex-col">
-                            <h3
-                                class="text-xl font-extrabold text-text-main mb-2 break-keep group-hover:text-primary transition-colors leading-tight">
-                                카톡 플친 추가하면 5,000원 번개 할인 쿠폰</h3>
-                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2 break-keep">공식 플러스 친구 맺고 다양한 신상
-                                드롭 소식과 시크릿 할인 쿠폰을 누구보다 먼저 받아보세요.</p>
-                            <div class="text-xs font-bold text-gray-400">
-                                <span
-                                    class="material-symbols-outlined text-[14px] align-middle mr-1">calendar_today</span>
-                                기한 없음
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Event Card 4 -->
-                    <a href="#"
-                        class="group flex flex-col cursor-pointer border border-transparent hover:border-gray-100 hover:shadow-xl rounded-2xl transition-all duration-300 pb-4 bg-white">
-                        <div
-                            class="relative w-full aspect-event overflow-hidden rounded-t-2xl rounded-b-lg mb-4 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop"
-                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                alt="Event Thumbnail" />
-                            <div class="absolute inset-0 bg-white/20 z-0 group-hover:bg-transparent transition-colors">
-                            </div>
-                            <!-- Badges -->
-                            <div class="absolute top-4 left-4 z-10 flex gap-2">
-                                <span
-                                    class="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded shadow-sm">D-2</span>
-                                <span
-                                    class="bg-white/90 text-text-main text-xs font-bold px-2.5 py-1 rounded shadow-sm">타임특가</span>
-                            </div>
-                        </div>
-                        <div class="px-3 flex-1 flex flex-col">
-                            <h3
-                                class="text-xl font-extrabold text-text-main mb-2 break-keep group-hover:text-primary transition-colors leading-tight">
-                                [단 이틀 만] 레깅스 전 품목 2+1 위캔드 특가</h3>
-                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2 break-keep">다가오는 주말을 위한 깜짝 혜택.
-                                레깅스를 2개 구매하시면 1개를 무료로 드립니다. 이번 기회를 놓치지 마세요!</p>
-                            <div class="text-xs font-bold text-gray-400">
-                                <span
-                                    class="material-symbols-outlined text-[14px] align-middle mr-1">calendar_today</span>
-                                2024.03.20 - 2024.03.22
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Event Card 5 -->
-                    <a href="#"
-                        class="group flex flex-col cursor-pointer border border-transparent hover:border-gray-100 hover:shadow-xl rounded-2xl transition-all duration-300 pb-4 bg-white">
-                        <div
-                            class="relative w-full aspect-event overflow-hidden rounded-t-2xl rounded-b-lg mb-4 bg-gray-100">
-                            <img src="https://images.unsplash.com/photo-1434596922112-19c563067271?q=80&w=2070&auto=format&fit=crop"
-                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                alt="Event Thumbnail" />
-                            <!-- Badges -->
-                            <div class="absolute top-4 left-4 z-10 flex gap-2">
-                                <span
-                                    class="bg-gray-800 text-white text-xs font-bold px-2.5 py-1 rounded shadow-sm">진행중</span>
-                                <span
-                                    class="bg-white/90 text-text-main text-xs font-bold px-2.5 py-1 rounded shadow-sm">기획전</span>
-                            </div>
-                        </div>
-                        <div class="px-3 flex-1 flex flex-col">
-                            <h3
-                                class="text-xl font-extrabold text-text-main mb-2 break-keep group-hover:text-primary transition-colors leading-tight">
-                                ACTIVE VIBES 2024 룩북 콜렉션 기획전</h3>
-                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2 break-keep">새로운 시즌을 여는 크루들의 에너제틱한
-                                룩북 아카이브. 전체 콜렉션 아이템 10% 일괄 할인 적용.</p>
-                            <div class="text-xs font-bold text-gray-400">
-                                <span
-                                    class="material-symbols-outlined text-[14px] align-middle mr-1">calendar_today</span>
-                                2024.03.15 - 상시진행
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Event Card 6 : Empty / Load More Dummy -->
-                    <div
-                        class="flex items-center justify-center p-8 bg-background-alt rounded-2xl border-2 border-dashed border-gray-200">
-                        <div class="text-center">
-                            <div
-                                class="size-16 w-16 h-16 rounded-full bg-white flex justify-center items-center shadow-sm mx-auto mb-4 border border-gray-100">
-                                <span class="material-symbols-outlined text-gray-300 font-bold text-3xl">add</span>
-                            </div>
-                            <p class="text-text-main font-bold">더 많은 이벤트 보기</p>
-                            <p class="text-sm text-text-muted mt-1 break-keep">스크롤하여 다음 페이지의 혜택을<br />확인해 보세요.</p>
+                <!-- Ongoing Grid -->
+                <div id="content-ongoing" class="event-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+                    <div onclick="openEventDetail(1)" class="group flex flex-col cursor-pointer bg-white rounded-2xl overflow-hidden border border-transparent hover:border-gray-100 hover:shadow-xl transition-all">
+                        <div class="relative aspect-event overflow-hidden"><img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /></div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="text-xl font-extrabold mb-2 group-hover:text-primary transition-colors line-clamp-1">신규 가입 웰컴 팩 : 1만원 쿠폰</h3>
+                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2">지금 가입하고 첫 구매 혜택을 받으세요!</p>
+                            <div class="text-xs font-bold text-gray-400">2026.03.01 - 2026.03.31</div>
                         </div>
                     </div>
+                    <div onclick="openEventDetail(2)" class="group flex flex-col cursor-pointer bg-white rounded-2xl overflow-hidden border border-transparent hover:border-gray-100 hover:shadow-xl transition-all">
+                        <div class="relative aspect-event overflow-hidden"><img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /></div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="text-xl font-extrabold mb-2 group-hover:text-primary transition-colors line-clamp-1">포토 리뷰 챌린지 : 스마트 워치</h3>
+                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2">당신의 액티브한 일상을 사진으로 남겨주세요!</p>
+                            <div class="text-xs font-bold text-gray-400">2026.03.10 - 2026.03.25</div>
+                        </div>
+                    </div>
+                    <div onclick="openEventDetail(3)" class="group flex flex-col cursor-pointer bg-white rounded-2xl overflow-hidden border border-transparent hover:border-gray-100 hover:shadow-xl transition-all">
+                        <div class="relative aspect-event overflow-hidden"><img src="https://images.unsplash.com/photo-1540496905036-5937c10647cc?w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /></div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="text-xl font-extrabold mb-2 group-hover:text-primary transition-colors line-clamp-1">카톡 플친 추가 5,000원 할인</h3>
+                            <p class="text-sm text-text-muted mb-4 flex-1 line-clamp-2">플친 맺고 시크릿 쿠폰을 받아보세요.</p>
+                            <div class="text-xs font-bold text-gray-400">상시 진행</div>
+                        </div>
+                    </div>
+                    <div id="load-more-btn" onclick="loadMoreEvents()" class="flex items-center justify-center p-8 bg-background-alt rounded-2xl border-2 border-dashed border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                        <div class="text-center">
+                            <div class="size-12 rounded-full bg-white flex justify-center items-center shadow-sm mx-auto mb-3"><span class="material-symbols-outlined text-gray-300">add</span></div>
+                            <p class="text-sm font-bold">더 많은 이벤트 보기</p>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Winners List -->
+                <div id="content-winners" class="event-content hidden space-y-4">
+                    <div onclick="openWinnerDetail(1)" class="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-all cursor-pointer flex justify-between items-center group">
+                        <div class="flex items-center gap-4"><span class="bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded">공지</span><h3 class="font-bold group-hover:text-primary transition-colors">2월 베스트 리뷰어 이벤트 당첨 안내</h3></div>
+                        <span class="text-sm text-gray-400">2026.03.02</span>
+                    </div>
+                    <div onclick="openWinnerDetail(2)" class="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-all cursor-pointer flex justify-between items-center group">
+                        <div class="flex items-center gap-4"><span class="bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded">공지</span><h3 class="font-bold group-hover:text-primary transition-colors">설맞이 가입 경품 이벤트 결과 발표</h3></div>
+                        <span class="text-sm text-gray-400">2026.02.15</span>
+                    </div>
+                </div>
+
+                <!-- Ended Grid -->
+                <div id="content-ended" class="event-content hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+                    <div class="opacity-60 grayscale-[0.5] flex flex-col border border-gray-100 rounded-2xl pb-4 bg-white overflow-hidden">
+                        <div class="relative aspect-event overflow-hidden"><img src="https://images.unsplash.com/photo-1518459031867-a89b944bffe4?w=800" class="w-full h-full object-cover" /><div class="absolute inset-0 bg-black/40 flex items-center justify-center"><span class="text-white font-bold border border-white px-4 py-2 rounded-lg">종료된 이벤트</span></div></div>
+                        <div class="p-5"><h3 class="text-lg font-bold mb-2">Winter Season OFF</h3><div class="text-xs text-gray-400">2026.01.01 - 2026.02.28</div></div>
+                    </div>
                 </div>
 
                 <!-- Pagination -->
                 <div class="mt-16 flex justify-center items-center gap-2">
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors">
-                        <span class="material-symbols-outlined text-sm">chevron_left</span>
-                    </button>
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg bg-text-main text-white font-bold transition-colors shadow">1</button>
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">2</button>
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">3</button>
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main hover:bg-gray-50 transition-colors">
-                        <span class="material-symbols-outlined text-sm">chevron_right</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- App Download CTA Highlight -->
-            <section class="mt-20 border-t border-gray-100 bg-gradient-to-r from-primary/5 to-primary-light">
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-                    <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-                        <div class="lg:w-1/2 text-center lg:text-left">
-                            <span class="text-primary font-bold text-sm tracking-wider uppercase mb-2 block">Mobile App
-                                Service</span>
-                            <h2
-                                class="text-3xl md:text-5xl font-extrabold text-text-main tracking-tight mb-4 break-keep leading-tight">
-                                앱 전용 시크릿 혜택<br />오직 당신만을 위해
-                            </h2>
-                            <p
-                                class="text-base text-text-muted mb-8 max-w-md mx-auto lg:mx-0 break-keep leading-relaxed">
-                                스토어 앱을 다운로드하시면 즉시 사용 가능한 <strong class="text-text-main">20% 전용 쿠폰</strong>을 발급해 드립니다.
-                                새로운 입고 소식도 알림으로 가장 먼저 받아보세요.
-                            </p>
-                            <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                                <button
-                                    class="bg-text-main text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors shadow-sm">
-                                    <span class="material-symbols-outlined">android</span>
-                                    Google Play
-                                </button>
-                                <button
-                                    class="bg-text-main text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors shadow-sm">
-                                    <span class="material-symbols-outlined">apple</span>
-                                    App Store
-                                </button>
-                            </div>
-                        </div>
-                        <div class="lg:w-1/2 relative flex justify-center lg:justify-end">
-                            <div
-                                class="relative z-10 w-full max-w-xs bg-white rounded-[2.5rem] p-3 shadow-2xl border-4 border-gray-100 -rotate-2 transform hover:rotate-0 transition-transform duration-500">
-                                <!-- Mock Phone Screen -->
-                                <div
-                                    class="bg-gray-50 h-[500px] rounded-[2rem] overflow-hidden border border-gray-200 relative">
-                                    <div class="absolute top-0 inset-x-0 h-6 bg-black flex justify-center">
-                                        <div class="w-24 h-4 bg-black rounded-b-xl absolute top-0"></div>
-                                    </div>
-                                    <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=2070&auto=format&fit=crop"
-                                        class="w-full h-[50%] object-cover pt-6" alt="App screenshot" />
-                                    <div class="p-6">
-                                        <h4 class="font-extrabold text-xl mb-2 text-text-main">Welcome Back</h4>
-                                        <div
-                                            class="w-full bg-primary text-white text-center py-3 rounded-xl font-bold text-sm mb-4 shadow-sm">
-                                            20% Coupon Code</div>
-                                        <div class="w-full bg-gray-200 h-10 rounded-xl mb-2"></div>
-                                        <div class="w-full bg-gray-200 h-10 rounded-xl"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:bg-gray-50 transition-colors disabled:opacity-50" disabled><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+                    <button class="size-10 flex items-center justify-center rounded-lg bg-text-main text-white font-bold transition-colors shadow">1</button>
+                    <button class="size-10 flex items-center justify-center rounded-lg border border-transparent text-text-main hover:bg-gray-100 font-bold transition-colors">2</button>
+                    <button class="size-10 flex items-center justify-center rounded-lg border border-gray-200 text-text-main hover:bg-gray-50 transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
                 </div>
             </section>
         </main>
 
-        <!-- FOOTER 동일 코드 영역 시작 -->
-        <footer class="border-t border-gray-200 bg-white pb-8 pt-16">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid gap-12 lg:grid-cols-4">
-                    <div class="lg:col-span-1">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="flex size-6 items-center justify-center rounded-full bg-primary text-white">
-                                <span class="material-symbols-outlined text-sm">stat_1</span>
-                            </div>
-                            <span class="text-lg font-bold text-text-main">Active Women</span>
-                        </div>
-                        <p class="mb-6 text-sm leading-relaxed text-text-muted break-keep">
-                            프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브
-                            라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
-                        </p>
-                        <div class="flex gap-4">
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">thumb_up</span></a>
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">photo_camera</span></a>
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">play_circle</span></a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">쇼핑하기</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary" href="product-list.html">신상품</a></li>
-                            <li><a class="hover:text-primary" href="product-list.html">베스트 셀러</a></li>
-                            <li><a class="hover:text-primary" href="product-list.html">스포츠웨어</a></li>
-                            <li>
-                                <a class="hover:text-primary" href="#">뷰티 &amp; 케어</a>
-                            </li>
-                            <li><a class="hover:text-primary" href="#">액세서리</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">고객지원</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li>
-                                <a class="hover:text-primary" href="mypage.html">주문배송 조회</a>
-                            </li>
-                            <li>
-                                <a class="hover:text-primary" href="mypage.html">교환/반품 신청</a>
-                            </li>
-                            <li>
-                                <a class="hover:text-primary" href="#">사이즈 가이드</a>
-                            </li>
-                            <li><a class="hover:text-primary" href="#">1:1 문의</a></li>
-                            <li>
-                                <a class="hover:text-primary" href="#">자주 묻는 질문</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">뉴스레터</h4>
-                        <p class="mb-4 text-sm text-text-muted">
-                            새로운 드롭 소식과 이벤트 혜택을 놓치지 마세요.
-                        </p>
-                        <form class="flex gap-2">
-                            <input
-                                class="w-full rounded-lg border border-gray-200 bg-background-alt px-4 py-2 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary"
-                                placeholder="이메일 주소 입력" type="email" />
-                            <button class="rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-red-600"
-                                type="submit">
-                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
-                            </button>
-                        </form>
-                    </div>
+        <!-- FOOTER -->
+        <footer class="border-t border-gray-200 bg-white pb-8 pt-16 mt-auto">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-400">© 2026 Active Women Store. All rights reserved.</div>
+        </footer>
+
+        <!-- Event Detail Modal -->
+        <div id="eventDetailModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+            <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden my-auto animate-in fade-in zoom-in duration-300">
+                <div class="relative h-[200px] md:h-[350px]">
+                    <img id="modalImg" src="" class="w-full h-full object-cover" />
+                    <button onclick="closeEventDetail()" class="absolute top-6 right-6 size-10 bg-black/20 text-white rounded-full flex items-center justify-center">×</button>
                 </div>
-                <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
-                            <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
-                            <p>
-                                통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자:
-                                이담당
-                            </p>
-                            <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
-                            <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
-                        </div>
-                        <div class="md:text-right flex flex-col justify-between">
-                            <div class="flex gap-2 justify-start md:justify-end mb-2">
-                                <a class="font-bold text-text-main" href="#">이용약관</a>
-                                <span class="text-gray-300">|</span>
-                                <a class="font-bold text-primary" href="#">개인정보처리방침</a>
-                                <span class="text-gray-300">|</span>
-                                <a class="font-bold text-text-main" href="#">사업자정보확인</a>
-                            </div>
-                            <p>© 2024 Active Women Store. All rights reserved.</p>
-                            <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
-                        </div>
+                <div class="p-8 md:p-12">
+                    <h2 id="modalTitle" class="text-2xl md:text-4xl font-extrabold text-text-main mb-4"></h2>
+                    <p id="modalDate" class="text-sm text-text-muted mb-8 pb-6 border-b"></p>
+                    <div class="prose text-text-main space-y-6">
+                        <p>이벤트 상세 내용입니다. 우리 자기랑 같이 참여하면 좋을 것 같아! 😍💖</p>
+                        <div class="text-center pt-8"><a href="event-participate.html" class="inline-block px-10 py-4 bg-primary text-white font-bold rounded-xl shadow-lg">이벤트 참여하기</a></div>
                     </div>
                 </div>
             </div>
-        </footer>
-        <!-- FOOTER 동일 코드 영역 끝 -->
+        </div>
+
+        <!-- Winner Detail Modal -->
+        <div id="winnerDetailModal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
+                <h2 id="winnerModalTitle" class="text-2xl font-extrabold text-center mb-4"></h2>
+                <p id="winnerModalDate" class="text-sm text-center text-gray-400 mb-8 pb-6 border-b"></p>
+                <div id="winnerListContainer" class="grid grid-cols-2 gap-3 mb-10"></div>
+                <button onclick="closeWinnerDetail()" class="w-full py-4 bg-text-main text-white font-bold rounded-2xl">확인</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // 1. 탭 전환
+        function switchEventTab(t) {
+            document.querySelectorAll('.event-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('content-' + t);
+            target.classList.remove('hidden');
+            if(t!=='winners') target.classList.add('grid');
+
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-text-main', 'text-white', 'border-text-main');
+                b.classList.add('bg-white', 'border-gray-200', 'text-text-muted', 'hover:text-text-main');
+            });
+            const active = document.getElementById('tab-' + t);
+            active.classList.remove('bg-white', 'border-gray-200', 'text-text-muted', 'hover:text-text-main');
+            active.classList.add('bg-text-main', 'text-white', 'border-text-main');
+        }
+
+        // 2. 모달 제어
+        const evData = {
+            1: { title: "신규 가입 웰컴 팩 : 1만원 쿠폰", date: "2026.03.01 - 2026.03.31", img: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=1200" },
+            2: { title: "포토 리뷰 챌린지 : 스마트 워치", date: "2026.03.10 - 2026.03.25", img: "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=1200" },
+            3: { title: "카톡 플친 추가 5,000원 할인", date: "상시 진행", img: "https://images.unsplash.com/photo-1540496905036-5937c10647cc?w=1200" }
+        };
+        function openEventDetail(id) {
+            const d = evData[id];
+            if(!d) return;
+            document.getElementById('modalTitle').innerText = d.title;
+            document.getElementById('modalDate').innerText = d.date;
+            document.getElementById('modalImg').src = d.img;
+            const m = document.getElementById('eventDetailModal');
+            m.classList.remove('hidden'); m.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeEventDetail() {
+            const m = document.getElementById('eventDetailModal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        const winData = {
+            1: { title: "2월 베스트 리뷰어 이벤트 당첨 안내", date: "2026.03.02", winners: ["active***@naver.com", "fit_gir***@gmail.com", "workout_***@daum.net"] },
+            2: { title: "설맞이 가입 경품 이벤트 결과 발표", date: "2026.02.15", winners: ["happynew***@naver.com", "seol_ev***@gmail.com"] }
+        };
+        function openWinnerDetail(id) {
+            const d = winData[id];
+            if(!d) return;
+            document.getElementById('winnerModalTitle').innerText = d.title;
+            document.getElementById('winnerModalDate').innerText = "발표일: " + d.date;
+            const c = document.getElementById('winnerListContainer');
+            c.innerHTML = d.winners.map(w => `<div class='bg-gray-50 p-3 rounded-xl text-center text-xs font-bold'>${w}</div>`).join('');
+            const m = document.getElementById('winnerDetailModal');
+            m.classList.remove('hidden'); m.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeWinnerDetail() {
+            const m = document.getElementById('winnerDetailModal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        window.onclick = (e) => {
+            const em = document.getElementById('eventDetailModal');
+            const wm = document.getElementById('winnerDetailModal');
+            if(e.target === em) closeEventDetail();
+            if(e.target === wm) closeWinnerDetail();
+        }
+
+        function loadMoreEvents() {
+            alert('새로운 이벤트가 곧 업데이트됩니다! 🥰');
+        }
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>리뷰 작성 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "background-dark": "#221310",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                    },
+                    fontFamily: {
+                        display: [
+                            "Pretendard",
+                            "-apple-system",
+                            "BlinkMacSystemFont",
+                            "system-ui",
+                            "Roboto",
+                            "Helvetica Neue",
+                            "Segoe UI",
+                            "Apple SD Gothic Neo",
+                            "Noto Sans KR",
+                            "Malgun Gothic",
+                            "sans-serif",
+                        ],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+    <style id="fout-guard">
+        .material-symbols-outlined {
+            color: transparent !important;
+            display: inline-block;
+            width: 1em;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: bottom;
+        }
+    </style>
+    <script>
+        document.fonts.ready.then(() => {
+            const foutGuard = document.getElementById('fout-guard');
+            if (foutGuard) foutGuard.remove();
+        });
+    </script>
+</head>
+
+<body class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- Header -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary" href="login.html">로그인</a>
+                    <a class="hover:text-primary" href="register.html">회원가입</a>
+                    <a class="hover:text-primary" href="support.html">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
+                            Active Women
+                        </h1>
+                    </a>
+                </div>
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">베스트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">커뮤니티</a>
+                    <a class="text-base font-bold text-primary transition-colors hover:text-red-700" href="#">기획전</a>
+                </nav>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                    <button
+                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span
+                            class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                    </button>
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">person</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Breadcrumb -->
+            <div class="bg-white py-4 border-b border-gray-100">
+                <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+                    <nav class="flex text-xs text-text-muted" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+                                    <a href="product-detail.html" class="hover:text-primary transition-colors">상품 상세</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+                                    <span class="text-text-main font-bold">리뷰 작성</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Review Write Form -->
+            <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
+                <!-- Page Title -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-text-main tracking-tight">리뷰 작성</h2>
+                    <p class="mt-2 text-sm text-text-muted">구매하신 상품에 대한 솔직한 후기를 남겨주세요.</p>
+                </div>
+
+                <!-- Product Info Card -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-5 mb-8 shadow-sm">
+                    <div class="flex gap-4 items-center">
+                        <div class="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBGlHCHqpU42xe1u1nLQnFERzQJOA7muFfDQ_jSqXFxwt2Qxr2iT_3nqpzXFQvdA7kxjmLVeJtijR2g1hJOeG6-K6F9eFwjzwrcYbk3-T4Gg5MrS8mhcXkscPSd_3e5y8sWa3SRvjNR5gw00r3uT1TkKPWnhWkHu6wMi_rvlIR5WjU0MrCPcRVwQ_rXJqUt2R-E8aL-H_g43iAKNkkHFekCx_I_Vwq2kh3cAPi_cVPBhBOiCk1S_FKQCFq2ldTPOoN2vBH8pBD0"
+                                alt="위켄드 워리어 셋업" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-primary font-bold mb-1">ACTIVE WOMEN CLASSICS</p>
+                            <h3 class="text-base font-bold text-text-main truncate">위켄드 워리어 셋업</h3>
+                            <p class="text-sm text-text-muted mt-1">오트밀 화이트 / M</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <form id="reviewForm" class="space-y-8">
+                    <!-- Rating Section -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-2">상품은 만족하셨나요?</h3>
+                        <p class="text-sm text-text-muted mb-5">별점을 선택해주세요</p>
+                        <div class="flex items-center gap-2" id="starRating">
+                            <button type="button" data-rating="1"
+                                class="star-btn text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined text-4xl"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </button>
+                            <button type="button" data-rating="2"
+                                class="star-btn text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined text-4xl"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </button>
+                            <button type="button" data-rating="3"
+                                class="star-btn text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined text-4xl"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </button>
+                            <button type="button" data-rating="4"
+                                class="star-btn text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined text-4xl"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </button>
+                            <button type="button" data-rating="5"
+                                class="star-btn text-gray-300 hover:text-yellow-400 transition-colors focus:outline-none">
+                                <span class="material-symbols-outlined text-4xl"
+                                    style="font-variation-settings: 'FILL' 0">star</span>
+                            </button>
+                            <span id="ratingText" class="ml-3 text-sm font-bold text-text-muted">선택 안 됨</span>
+                        </div>
+                        <input type="hidden" id="ratingValue" name="rating" value="0" />
+                    </div>
+
+                    <!-- Review Content Section -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-2">리뷰 내용</h3>
+                        <p class="text-sm text-text-muted mb-5">상품에 대한 솔직한 의견을 자유롭게 작성해주세요.</p>
+
+                        <!-- Title -->
+                        <div class="mb-5">
+                            <label for="reviewTitle" class="block text-sm font-bold text-text-main mb-2">제목</label>
+                            <input type="text" id="reviewTitle" name="title" maxlength="50"
+                                placeholder="리뷰 제목을 입력해주세요 (최대 50자)"
+                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                        </div>
+
+                        <!-- Content -->
+                        <div class="mb-2">
+                            <label for="reviewContent" class="block text-sm font-bold text-text-main mb-2">내용</label>
+                            <textarea id="reviewContent" name="content" rows="6" maxlength="1000"
+                                placeholder="최소 20자 이상 작성해주세요. 상품의 장단점, 착용감, 사이즈 등을 자세히 적어주시면 다른 고객분들에게 큰 도움이 됩니다."
+                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none leading-relaxed"></textarea>
+                            <div class="flex justify-end mt-1.5">
+                                <span class="text-xs text-text-muted"><span id="charCount">0</span> / 1,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Upload Section -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-2">사진 첨부 <span
+                                class="text-sm font-normal text-text-muted">(선택)</span></h3>
+                        <p class="text-sm text-text-muted mb-5">상품 착용 사진을 올려주시면 포인트 500P를 추가 적립해드립니다.</p>
+                        <div class="flex gap-3 flex-wrap">
+                            <!-- Upload Button -->
+                            <label id="uploadLabel"
+                                class="flex flex-col items-center justify-center w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors group">
+                                <span
+                                    class="material-symbols-outlined text-2xl text-gray-400 group-hover:text-primary transition-colors">add_a_photo</span>
+                                <span class="text-[10px] text-gray-400 mt-1 font-bold group-hover:text-primary">사진
+                                    추가</span>
+                                <input type="file" id="photoInput" accept="image/*" multiple class="hidden" />
+                            </label>
+                            <!-- Preview Container -->
+                            <div id="photoPreview" class="flex gap-3 flex-wrap"></div>
+                        </div>
+                        <p class="text-xs text-text-muted mt-3">
+                            <span class="material-symbols-outlined text-xs align-middle mr-0.5">info</span>
+                            최대 5장, JPG/PNG 파일만 가능 (장당 10MB 이하)
+                        </p>
+                    </div>
+
+                    <!-- Size & Fit Info -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-5">착용 정보 <span
+                                class="text-sm font-normal text-text-muted">(선택)</span></h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-text-main mb-2">키</label>
+                                <div class="relative">
+                                    <input type="number" placeholder="예: 165"
+                                        class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors pr-10" />
+                                    <span
+                                        class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-muted">cm</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-text-main mb-2">몸무게</label>
+                                <div class="relative">
+                                    <input type="number" placeholder="예: 52"
+                                        class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors pr-10" />
+                                    <span
+                                        class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-text-muted">kg</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-text-main mb-2">사이즈 만족도</label>
+                                <select
+                                    class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23896861%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_12px_center] bg-no-repeat">
+                                    <option value="" disabled selected>선택</option>
+                                    <option value="small">작아요</option>
+                                    <option value="fit">정사이즈</option>
+                                    <option value="large">커요</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2 pb-8">
+                        <a href="product-detail.html#reviews"
+                            class="flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-gray-300 bg-white text-base font-bold text-text-main transition-colors hover:border-text-main hover:bg-gray-50 shadow-sm">
+                            취소
+                        </a>
+                        <button type="submit" id="submitBtn"
+                            class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-primary text-base font-extrabold text-white transition-colors hover:bg-red-600 shadow-lg shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled>
+                            <span class="material-symbols-outlined text-lg mr-2">edit</span>
+                            리뷰 등록하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-gray-200 bg-background-dark text-gray-400">
+            <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between gap-8">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex size-7 items-center justify-center rounded-full bg-primary text-white">
+                                <span class="material-symbols-outlined text-lg">stat_1</span>
+                            </div>
+                            <span class="font-extrabold text-white text-lg">Active Women</span>
+                        </div>
+                        <p class="text-xs leading-relaxed max-w-xs">
+                            (주)액티브우먼 | 대표: 홍길동<br>
+                            사업자등록번호: 123-45-67890<br>
+                            서울특별시 강남구 테헤란로 123, 4층
+                        </p>
+                    </div>
+                    <div class="flex gap-12 text-sm">
+                        <div>
+                            <h4 class="font-bold text-white mb-3">고객 서비스</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-white transition-colors">공지사항</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">자주 묻는 질문</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">1:1 문의</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-3">이용 안내</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-white transition-colors">이용약관</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">개인정보처리방침</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 pt-6 border-t border-gray-700 text-xs text-center">
+                    © 2026 Active Women. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9998] flex flex-col items-center gap-3 pointer-events-none">
+    </div>
+
+    <style>
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .toast-enter {
+            animation: toastIn 0.3s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toastOut 0.3s ease-in forwards;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // ============================================
+            // 유틸: 토스트 알림
+            // ============================================
+            function showToast(message, icon = "check_circle", color = "bg-text-main") {
+                const container = document.getElementById("toastContainer");
+                const toast = document.createElement("div");
+                toast.className = `flex items-center gap-3 ${color} text-white px-6 py-3.5 rounded-xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`;
+                toast.innerHTML = `<span class="material-symbols-outlined text-lg">${icon}</span><span>${message}</span>`;
+                container.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.classList.remove("toast-enter");
+                    toast.classList.add("toast-exit");
+                    toast.addEventListener("animationend", () => toast.remove());
+                }, 2500);
+            }
+
+            // ============================================
+            // 1. 별점 선택
+            // ============================================
+            const starBtns = document.querySelectorAll(".star-btn");
+            const ratingText = document.getElementById("ratingText");
+            const ratingValue = document.getElementById("ratingValue");
+            let currentRating = 0;
+
+            const ratingLabels = {
+                1: "별로예요",
+                2: "그저 그래요",
+                3: "보통이에요",
+                4: "만족해요",
+                5: "아주 좋아요!",
+            };
+
+            function setRating(rating) {
+                currentRating = rating;
+                ratingValue.value = rating;
+                ratingText.textContent = ratingLabels[rating] || "선택 안 됨";
+                ratingText.classList.toggle("text-yellow-500", rating > 0);
+                ratingText.classList.toggle("text-text-muted", rating === 0);
+
+                starBtns.forEach((btn, index) => {
+                    const icon = btn.querySelector(".material-symbols-outlined");
+                    if (index < rating) {
+                        btn.classList.remove("text-gray-300");
+                        btn.classList.add("text-yellow-400");
+                        icon.style.fontVariationSettings = "'FILL' 1";
+                    } else {
+                        btn.classList.remove("text-yellow-400");
+                        btn.classList.add("text-gray-300");
+                        icon.style.fontVariationSettings = "'FILL' 0";
+                    }
+                });
+
+                validateForm();
+            }
+
+            starBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const rating = parseInt(btn.dataset.rating);
+                    setRating(rating);
+                });
+
+                // 호버 효과
+                btn.addEventListener("mouseenter", () => {
+                    const hoverRating = parseInt(btn.dataset.rating);
+                    starBtns.forEach((b, i) => {
+                        const icon = b.querySelector(".material-symbols-outlined");
+                        if (i < hoverRating) {
+                            b.classList.remove("text-gray-300");
+                            b.classList.add("text-yellow-400");
+                            icon.style.fontVariationSettings = "'FILL' 1";
+                        }
+                    });
+                });
+
+                btn.addEventListener("mouseleave", () => {
+                    setRating(currentRating);
+                });
+            });
+
+            // ============================================
+            // 2. 글자 수 카운터
+            // ============================================
+            const reviewContent = document.getElementById("reviewContent");
+            const charCount = document.getElementById("charCount");
+
+            reviewContent.addEventListener("input", () => {
+                charCount.textContent = reviewContent.value.length;
+                validateForm();
+            });
+
+            // ============================================
+            // 3. 사진 업로드 & 프리뷰
+            // ============================================
+            const photoInput = document.getElementById("photoInput");
+            const photoPreview = document.getElementById("photoPreview");
+            const uploadLabel = document.getElementById("uploadLabel");
+            let uploadedFiles = [];
+            const MAX_PHOTOS = 5;
+
+            photoInput.addEventListener("change", (e) => {
+                const files = Array.from(e.target.files);
+                const remaining = MAX_PHOTOS - uploadedFiles.length;
+
+                if (remaining <= 0) {
+                    showToast("사진은 최대 5장까지 첨부할 수 있습니다.", "warning", "bg-amber-600");
+                    return;
+                }
+
+                const filesToAdd = files.slice(0, remaining);
+
+                filesToAdd.forEach((file) => {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showToast(`${file.name} 파일 크기가 10MB를 초과합니다.`, "error", "bg-red-600");
+                        return;
+                    }
+
+                    uploadedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "relative w-24 h-24 rounded-xl overflow-hidden group";
+                        wrapper.innerHTML = `
+              <img src="${ev.target.result}" class="w-full h-full object-cover" alt="업로드 사진" />
+              <button type="button" class="remove-photo absolute top-1 right-1 flex size-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600">
+                <span class="material-symbols-outlined text-sm">close</span>
+              </button>
+            `;
+                        photoPreview.appendChild(wrapper);
+
+                        wrapper.querySelector(".remove-photo").addEventListener("click", () => {
+                            const index = Array.from(photoPreview.children).indexOf(wrapper);
+                            uploadedFiles.splice(index, 1);
+                            wrapper.remove();
+                            updateUploadBtn();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                updateUploadBtn();
+                photoInput.value = "";
+            });
+
+            function updateUploadBtn() {
+                if (uploadedFiles.length >= MAX_PHOTOS) {
+                    uploadLabel.classList.add("hidden");
+                } else {
+                    uploadLabel.classList.remove("hidden");
+                }
+            }
+
+            // ============================================
+            // 4. 폼 유효성 검사
+            // ============================================
+            const submitBtn = document.getElementById("submitBtn");
+            const reviewTitle = document.getElementById("reviewTitle");
+
+            reviewTitle.addEventListener("input", validateForm);
+
+            function validateForm() {
+                const hasRating = currentRating > 0;
+                const hasContent = reviewContent.value.trim().length >= 20;
+                const hasTitle = reviewTitle.value.trim().length > 0;
+
+                submitBtn.disabled = !(hasRating && hasContent && hasTitle);
+            }
+
+            // ============================================
+            // 5. 폼 제출
+            // ============================================
+            const reviewForm = document.getElementById("reviewForm");
+
+            reviewForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                if (submitBtn.disabled) return;
+
+                // 성공 토스트 + 리다이렉트
+                showToast("리뷰가 성공적으로 등록되었습니다! 🎉", "check_circle", "bg-green-600");
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-lg mr-2 animate-spin">progress_activity</span>
+          등록 중...
+        `;
+
+                setTimeout(() => {
+                    location.href = "product-detail.html#reviews";
+                }, 1500);
+            });
+
+        });
+    </script>
+</body>
+
+</html>

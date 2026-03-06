@@ -24,19 +24,7 @@
                         "text-muted": "#896861",
                     },
                     fontFamily: {
-                        display: [
-                            "Pretendard",
-                            "-apple-system",
-                            "BlinkMacSystemFont",
-                            "system-ui",
-                            "Roboto",
-                            "Helvetica Neue",
-                            "Segoe UI",
-                            "Apple SD Gothic Neo",
-                            "Noto Sans KR",
-                            "Malgun Gothic",
-                            "sans-serif",
-                        ],
+                        display: ["Pretendard", "sans-serif"],
                     },
                     borderRadius: {
                         DEFAULT: "0.25rem",
@@ -49,40 +37,16 @@
         };
     </script>
     <style>
-        .hidden {
-            display: none;
-        }
-
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .aspect-banner {
-            aspect-ratio: 21 / 9;
-        }
-
-        @media (max-width: 640px) {
-            .aspect-banner {
-                aspect-ratio: 16 / 9;
-            }
-        }
+        .hidden { display: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .aspect-banner { aspect-ratio: 21 / 9; }
+        @media (max-width: 640px) { .aspect-banner { aspect-ratio: 16 / 9; } }
     </style>
 
     <!-- Prevent FOUT and Layout Shift for Material Symbols -->
     <style id="fout-guard">
-      .material-symbols-outlined { 
-        color: transparent !important; 
-        display: inline-block;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-      }
+      .material-symbols-outlined { color: transparent !important; display: inline-block; width: 1em; overflow: hidden; white-space: nowrap; vertical-align: bottom; }
     </style>
     <script>
       document.fonts.ready.then(() => {
@@ -109,357 +73,231 @@
                         <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
                             <span class="material-symbols-outlined text-xl">stat_1</span>
                         </div>
-                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
-                            Active Women
-                        </h1>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">Active Women</h1>
                     </a>
-                    <div class="hidden md:flex flex-col relative group">
-                        <div
-                            class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50">
-                            <input
-                                class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
-                                placeholder="찾으시는 상품을 검색해보세요" type="text" />
-                            <span
-                                class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                    <div class="hidden md:flex relative group">
+                        <div class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 border border-transparent focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+                            <input class="w-full border-none bg-transparent px-2 text-sm text-text-main focus:ring-0" placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
                         </div>
                     </div>
                 </div>
                 <nav class="hidden items-center gap-8 lg:flex">
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="product-list.html">신상품</a>
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="product-list.html">베스트</a>
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="event.html">이벤트</a>
-                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
-                        href="community.html">커뮤니티</a>
-                    <a class="text-base font-bold text-primary transition-colors border-b-2 border-primary pb-1 -mb-[3px]"
-                        href="exhibition.html">기획전</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="event.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="community.html">커뮤니티</a>
+                    <a class="text-base font-bold text-primary border-b-2 border-primary pb-1 -mb-[3px]" href="exhibition.html">기획전</a>
                 </nav>
                 <div class="flex items-center gap-2">
-                    <button
-                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
-                        <span class="material-symbols-outlined">favorite</span>
-                    </button>
-                    <a href="cart.html"
-                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                    <button class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">favorite</span></button>
+                    <a href="cart.html" class="relative flex size-10 items-center justify-center rounded-full hover:bg-background-alt">
                         <span class="material-symbols-outlined">shopping_cart</span>
-                        <span
-                            class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                        <span class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
                     </a>
-                    <a href="mypage.html"
-                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
-                        <span class="material-symbols-outlined">person</span>
-                    </a>
+                    <a href="mypage.html" class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">person</span></a>
                 </div>
             </div>
         </header>
 
         <main class="flex-1 w-full bg-white pb-20">
-            <!-- Title -->
+            <!-- Page Title -->
             <div class="py-12 border-b border-gray-100 bg-background-alt">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-8">
-                    <h2 class="text-4xl font-extrabold text-text-main tracking-tight mb-4">시즌 기획전</h2>
-                    <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션을 만나보세요.</p>
+                    <h2 class="text-4xl font-extrabold text-text-main tracking-tight mb-4 uppercase">Season Exhibition</h2>
+                    <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션 ✨</p>
                 </div>
             </div>
 
-            <!-- Sticky Anchor Nav -->
-            <div class="sticky top-[138px] lg:top-[142px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+            <!-- Sticky Nav (Fixed top value!) -->
+            <div class="sticky top-[142px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <nav class="flex gap-4 overflow-x-auto scrollbar-hide py-3 text-sm font-bold">
-                        <a href="#exhibit-1"
-                            class="px-4 py-2 bg-text-main text-white rounded-full whitespace-nowrap transition-colors border border-transparent">24
-                            SPRING 애슬레저 룩</a>
-                        <a href="#exhibit-2"
-                            class="px-4 py-2 bg-white text-text-muted border border-gray-200 hover:border-text-main hover:text-text-main rounded-full whitespace-nowrap transition-colors">홈트
-                            필수 기어 10선</a>
-                        <a href="#exhibit-3"
-                            class="px-4 py-2 bg-white text-text-muted border border-gray-200 hover:border-text-main hover:text-text-main rounded-full whitespace-nowrap transition-colors">주말
-                            하이킹 기획전</a>
+                    <nav id="exhibit-nav" class="flex gap-4 overflow-x-auto scrollbar-hide py-4 text-sm font-bold">
+                        <a href="#exhibit-1" class="nav-item px-5 py-2 bg-text-main text-white rounded-full whitespace-nowrap transition-all border border-text-main">24 SPRING 애슬레저 룩</a>
+                        <a href="#exhibit-2" class="nav-item px-5 py-2 bg-white text-text-muted border border-gray-200 rounded-full whitespace-nowrap transition-all hover:text-text-main">홈트 필수 기어 10선</a>
+                        <a href="#exhibit-3" class="nav-item px-5 py-2 bg-white text-text-muted border border-gray-200 rounded-full whitespace-nowrap transition-all hover:text-text-main">주말 하이킹 기획전</a>
                     </nav>
                 </div>
             </div>
 
             <!-- Exhibition 1 -->
             <section id="exhibit-1" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]">
-                <div
-                    class="relative w-full aspect-banner rounded-2xl overflow-hidden mb-8 group cursor-pointer shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070&auto=format&fit=crop"
-                        class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                        alt="Spring Athleisure Banner" />
-                    <div
-                        class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center p-6 transition-colors group-hover:bg-black/50">
-                        <span class="text-primary-light font-bold text-sm tracking-wider uppercase mb-2">SPRING
-                            COLLECTION</span>
-                        <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">24 SPRING 애슬레저 룩
-                        </h3>
-                        <p class="text-white/90 max-w-xl text-sm md:text-base font-medium break-keep">따스한 봄날, 산뜻하게 시작하는
-                            러닝과 일상을 어우르는 스타일 코디. 지금 가장 주목받는 파스텔톤 컬러 팔레트를 확인하세요.</p>
+                <div class="relative aspect-banner rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/30 flex flex-col justify-center items-center text-center p-6">
+                        <span class="text-primary-light font-bold text-sm tracking-widest mb-2 uppercase">Spring Collection</span>
+                        <h3 class="text-3xl md:text-6xl font-extrabold text-white mb-4">24 SPRING 애슬레저 룩</h3>
+                        <p class="text-white/90 max-w-xl text-sm md:text-lg">봄날의 에너지를 담은 산뜻한 러닝 & 라이프스타일 웨어</p>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Item 1 -->
-                    <a href="product-detail.html" class="group">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDabAzzyO-1GPR9w9KUZy2t-akxd-pTry06ye-7EmfLIj4HsSh3Qsl3-4SPzOjkEiIvcTGGDyNJEuMpEpxJVMBh2D4z-w70xv-_n1ulP9ym_oYqWuFOnJqPl25Vm9FlyjgGTi65HS6qSzlRQgslgoXVASr5mvobAhP-rUuwV34o5MwDa2O-Tj9-CB71iqI7UuUDKfOzXILS0hUApxV--IBEjQ9t7EFGHTyyK8Vxetjz5EeEdY7nQBJbqJ9qIk1KAJSZqHHXH55EY1c"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                위켄드 워리어 셋업</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-primary font-bold text-sm">10%</span>
-                                <span class="text-text-main font-bold text-sm">₩148,500</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 2 -->
-                    <a href="product-detail.html" class="group">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG_KhKcmbL_tfD6o7Wodrv4S7ibX6ujwxndVGPgfKaIBYNTgJemxUf40EOkeIaRYUIpj4Ev6Ms7KW87nUBN0O2-_HjjU3XY6CIl9GHOnTsDi0DbDZZXY2loY2aWcN96JZOjSQ2uEKSZvAunpehA8VyNinHagNltBDPAkBIhe0i-DI1Zq8OGpc5uor1d9BwAoXZR_5E1hfFRSN4YmsMjijZ7Gly2NVRLkbKyBUnn8i98Zhc2BjTQt_-XWoDpQLGYPkEI9CwI5vRdtY"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                모닝 런 글로우 자켓</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-text-main font-bold text-sm">₩98,000</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 3 -->
-                    <a href="product-detail.html" class="group">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                브리즈 크롭 탑</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-primary font-bold text-sm">15%</span>
-                                <span class="text-text-main font-bold text-sm">₩51,000</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 4 -->
-                    <a href="product-detail.html" class="group hidden lg:block">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1552858725-2758b5fb1286?q=80&w=2070&auto=format&fit=crop"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                시그니처 레깅스 V2</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-text-main font-bold text-sm">₩79,000</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="mt-8 text-center">
-                    <button
-                        class="px-8 py-3 border border-gray-300 rounded-lg text-sm font-bold text-text-main hover:bg-gray-50 transition-colors">이
-                        기획전 상품 더보기 (24)</button>
-                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="items-1"></div>
+                <div class="mt-12 text-center"><button onclick="loadMore(1)" class="px-8 py-3 border border-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all">상품 더보기 (24) +</button></div>
             </section>
 
-            <!-- Divider -->
-            <div class="w-full border-t border-gray-100"></div>
+            <div class="w-full border-t border-gray-50"></div>
 
             <!-- Exhibition 2 -->
             <section id="exhibit-2" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]">
-                <div
-                    class="relative w-full aspect-banner rounded-2xl overflow-hidden mb-8 group cursor-pointer shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop"
-                        class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                        alt="Home Gym Banner" />
-                    <div
-                        class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 transition-colors group-hover:bg-black/60">
-                        <span
-                            class="text-primary border border-primary font-bold text-sm px-3 py-1 rounded-full uppercase mb-3 bg-white/10 backdrop-blur">BEST
-                            SELLER</span>
-                        <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg">홈트 필수 기어 10선</h3>
-                        <p class="text-white/90 max-w-xl text-sm md:text-base font-medium break-keep">집을 완벽한 짐(Gym)으로
-                            만들어 줄 컴팩트하고 유용한 프리미엄 피트니스 악세서리 모음.</p>
+                <div class="relative aspect-banner rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center p-6">
+                        <span class="text-white border border-white px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase">Home Training</span>
+                        <h3 class="text-3xl md:text-6xl font-extrabold text-white mb-4">홈트 필수 기어 10선</h3>
+                        <p class="text-white/90 max-w-xl text-sm md:text-lg">집을 완벽한 나만의 짐(Gym)으로 만들어 줄 프리미엄 소도구</p>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Item 1 -->
-                    <a href="product-detail.html" class="group">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcCwiVYOZ2XgfbLcwNfv1CndtwSuCXp93p0COmlecQ1tiFvX1yHwnncV-Mk_jv50p4Xxpiiflipp5Eir5XRuvNHNisCCLSdPLL_Woyw8J9hJMROPJ1pFlO8i7_kvDB-t6Zg-TEaXfbOb2TCLJGkpDcSw5raqesusBSrsrN4BTI_-aA0Omr6D5iv310qKxBat9vEcf4kdLytn3w0R-cPV9qo2AahQmCb6qkGTUyW78SKki6dYgAhWn-k3DpIFl8lj3b_kmSpn4re1w"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                에코 그립 요가 매트</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-primary font-bold text-sm">20%</span>
-                                <span class="text-text-main font-bold text-sm">₩78,400</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 2 -->
-                    <a href="product-detail.html" class="group">
-                        <div
-                            class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer p-8 bg-white border border-gray-100">
-                            <img src="https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?q=80&w=2071&auto=format&fit=crop"
-                                class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                스마트 케틀벨 (4kg)</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-text-main font-bold text-sm">₩45,000</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 3 -->
-                    <a href="product-detail.html" class="group">
-                        <div
-                            class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer p-8 bg-white border border-gray-100">
-                            <img src="https://images.unsplash.com/photo-1517343985841-f8b2d66e010b?q=80&w=2069&auto=format&fit=crop"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                라텍스 밴드 세트</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-text-main font-bold text-sm">₩22,000</span>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Item 4 -->
-                    <a href="product-detail.html" class="group hidden lg:block">
-                        <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 mb-4 cursor-pointer">
-                            <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=2069&auto=format&fit=crop"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                alt="Item" />
-                        </div>
-                        <div>
-                            <h4
-                                class="text-sm font-bold text-text-main group-hover:text-primary transition-colors truncate mb-1">
-                                논슬립 요가 타월</h4>
-                            <div class="flex items-center gap-2">
-                                <span class="text-primary font-bold text-sm">10%</span>
-                                <span class="text-text-main font-bold text-sm">₩26,100</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="mt-8 text-center">
-                    <button
-                        class="px-8 py-3 border border-gray-300 rounded-lg text-sm font-bold text-text-main hover:bg-gray-50 transition-colors">이
-                        기획전 상품 더보기 (10)</button>
-                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="items-2"></div>
+                <div class="mt-12 text-center"><button onclick="loadMore(2)" class="px-8 py-3 border border-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all">상품 더보기 (10) +</button></div>
             </section>
 
+            <div class="w-full border-t border-gray-50"></div>
+
+            <!-- Exhibition 3 -->
+            <section id="exhibit-3" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]">
+                <div class="relative aspect-banner rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 flex flex-col justify-end items-start p-8 md:p-12">
+                        <span class="bg-primary text-white px-3 py-1 rounded text-xs font-bold mb-4 uppercase">New Theme</span>
+                        <h3 class="text-3xl md:text-6xl font-extrabold text-white mb-4">주말 하이킹 기획전</h3>
+                        <p class="text-white/90 max-w-2xl text-sm md:text-lg">자연 속에서 즐기는 완벽한 힐링. 고기능성 아웃도어 기어 콜렉션</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6" id="items-3"></div>
+                <div class="mt-12 text-center"><button onclick="loadMore(3)" class="px-8 py-3 border border-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all">상품 더보기 (12) +</button></div>
+            </section>
         </main>
 
         <!-- FOOTER -->
-        <footer class="border-t border-gray-200 bg-white pb-8 pt-16">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid gap-12 lg:grid-cols-4">
-                    <div class="lg:col-span-1">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="flex size-6 items-center justify-center rounded-full bg-primary text-white">
-                                <span class="material-symbols-outlined text-sm">stat_1</span>
-                            </div>
-                            <span class="text-lg font-bold text-text-main">Active Women</span>
-                        </div>
-                        <p class="mb-6 text-sm leading-relaxed text-text-muted break-keep">
-                            프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브 라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
-                        </p>
-                        <div class="flex gap-4">
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">thumb_up</span></a>
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">photo_camera</span></a>
-                            <a class="text-text-muted hover:text-primary" href="#"><span
-                                    class="material-symbols-outlined">play_circle</span></a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">쇼핑하기</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary" href="product-list.html">신상품</a></li>
-                            <li><a class="hover:text-primary" href="product-list.html">베스트 셀러</a></li>
-                            <li><a class="hover:text-primary" href="product-list.html">스포츠웨어</a></li>
-                            <li><a class="hover:text-primary" href="#">뷰티 &amp; 케어</a></li>
-                            <li><a class="hover:text-primary" href="#">액세서리</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">고객지원</h4>
-                        <ul class="space-y-3 text-sm text-text-muted">
-                            <li><a class="hover:text-primary" href="support.html">주문배송 조회</a></li>
-                            <li><a class="hover:text-primary" href="support.html">교환/반품 신청</a></li>
-                            <li><a class="hover:text-primary" href="#">사이즈 가이드</a></li>
-                            <li><a class="hover:text-primary" href="support.html">1:1 문의</a></li>
-                            <li><a class="hover:text-primary" href="support.html">자주 묻는 질문</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="mb-4 font-bold text-text-main">뉴스레터</h4>
-                        <p class="mb-4 text-sm text-text-muted">
-                            새로운 드롭 소식과 이벤트 혜택을 놓치지 마세요.
-                        </p>
-                        <form class="flex gap-2">
-                            <input
-                                class="w-full rounded-lg border border-gray-200 bg-background-alt px-4 py-2 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary"
-                                placeholder="이메일 주소 입력" type="email" />
-                            <button class="rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-red-600"
-                                type="submit">
-                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
-                            <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
-                            <p>통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자: 이담당</p>
-                            <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
-                            <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
-                        </div>
-                        <div class="md:text-right flex flex-col justify-between">
-                            <div class="flex gap-2 justify-start md:justify-end mb-2">
-                                <a class="font-bold text-text-main" href="#">이용약관</a>
-                                <span class="text-gray-300">|</span>
-                                <a class="font-bold text-primary" href="#">개인정보처리방침</a>
-                                <span class="text-gray-300">|</span>
-                                <a class="font-bold text-text-main" href="#">사업자정보확인</a>
-                            </div>
-                            <p>© 2024 Active Women Store. All rights reserved.</p>
-                            <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
-                        </div>
-                    </div>
-                </div>
+        <footer class="border-t border-gray-200 bg-white pb-12 pt-16 mt-auto">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+                <p class="text-sm text-text-muted">© 2026 Active Women Premium Store. All rights reserved.</p>
             </div>
         </footer>
     </div>
-</body>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] hidden items-center gap-2 bg-text-main text-white px-8 py-4 rounded-full shadow-2xl animate-in fade-in slide-in-from-bottom-10">
+        <span id="toast-icon" class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+        <span id="toast-msg" class="font-bold">찜한 상품에 담겼어요! ❤️</span>
+    </div>
+
+    <script>
+        // 1. 샘플 상품 렌더링 (data-favorite added)
+        function renderItems(id, count) {
+            const container = document.getElementById('items-' + id);
+            for(let i=0; i<count; i++) {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "group relative cursor-pointer";
+                itemDiv.innerHTML = `
+                    <div class="aspect-[3/4] rounded-2xl bg-gray-100 overflow-hidden mb-4 relative" onclick="location.href='product-detail.html'">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400" class="w-full h-full object-cover transition-all group-hover:scale-105" />
+                    </div>
+                    <button onclick="toggleWish(event, this)" data-favorite="false" class="absolute top-3 right-3 z-10 size-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:bg-white transition-all">
+                        <span class="material-symbols-outlined text-text-muted text-xl transition-all" style="font-variation-settings: 'FILL' 0;">favorite</span>
+                    </button>
+                    <div onclick="location.href='product-detail.html'">
+                        <h4 class="font-bold text-sm mb-1 group-hover:text-primary transition-colors">프리미엄 액티브 아이템 ${i+1}</h4>
+                        <p class="font-extrabold text-sm text-text-main">₩${(Math.floor(Math.random()*10)+5)*10000}</p>
+                    </div>`;
+                container.appendChild(itemDiv);
+            }
+        }
+
+        // 2. 찜하기 / 해제하기 기능 (Robust version)
+        function toggleWish(e, btn) {
+            e.stopPropagation();
+            const icon = btn.querySelector('.material-symbols-outlined');
+            const isFavorite = btn.getAttribute('data-favorite') === 'true';
+            
+            if (isFavorite) {
+                // 찜 해제하기 💔
+                btn.setAttribute('data-favorite', 'false');
+                icon.style.fontVariationSettings = "'FILL' 0";
+                icon.classList.remove('text-primary');
+                icon.classList.add('text-text-muted');
+                showToast("찜한 상품에서 해제되었어요! 💔", "heart_broken");
+            } else {
+                // 찜 하기 ❤️
+                btn.setAttribute('data-favorite', 'true');
+                icon.style.fontVariationSettings = "'FILL' 1";
+                icon.classList.remove('text-text-muted');
+                icon.classList.add('text-primary');
+                showToast("찜한 상품에 담겼어요! ❤️", "favorite");
+            }
+        }
+
+        let toastTimeout;
+        function showToast(msg, iconName) {
+            const t = document.getElementById('toast');
+            const tMsg = document.getElementById('toast-msg');
+            const tIcon = document.getElementById('toast-icon');
+            
+            tMsg.innerText = msg;
+            tIcon.innerText = iconName;
+            
+            t.classList.remove('hidden');
+            t.classList.add('flex');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                t.classList.add('hidden');
+                t.classList.remove('flex');
+            }, 2000);
+        }
+
+        // 3. 스크롤 앵커 및 탭 스타일 제어
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItems(1, 4); renderItems(2, 4); renderItems(3, 4);
+
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('section[id]');
+            
+            function updateNavStyle(id) {
+                navItems.forEach(item => {
+                    item.classList.remove('bg-text-main', 'text-white', 'border-text-main');
+                    item.classList.add('bg-white', 'text-text-muted', 'border-gray-200', 'hover:text-text-main');
+                    if (item.getAttribute('href') === `#${id}`) {
+                        item.classList.remove('bg-white', 'text-text-muted', 'border-gray-200', 'hover:text-text-main');
+                        item.classList.add('bg-text-main', 'text-white', 'border-text-main');
+                    }
+                });
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        updateNavStyle(entry.target.getAttribute('id'));
+                    }
+                });
+            }, { rootMargin: '-150px 0px -70% 0px', threshold: 0 });
+
+            sections.forEach(s => observer.observe(s));
+
+            // 4. 부드러운 스크롤 및 즉시 스타일 반영
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = item.getAttribute('href').substring(1);
+                    updateNavStyle(id); // 클릭 즉시 스타일 변경! ✨
+                    
+                    const target = document.getElementById(id);
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - 160;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                });
+            });
+        });
+
+        // 5. 더보기 시뮬레이션
+        function loadMore(id) {
+            const btn = event.target;
+            btn.innerText = "로딩 중...";
+            setTimeout(() => {
+                renderItems(id, 4);
+                btn.innerText = "모든 상품 확인 ✨";
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.onclick = null;
+            }, 600);
+        }
+    </script>
+</body>
 </html>

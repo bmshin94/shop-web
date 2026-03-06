@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>공지사항 | 고객센터 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                        "kakao": "#FEE500",
+                    },
+                    fontFamily: {
+                        display: ["Pretendard", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- HEADER -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary" href="login.html">로그인</a>
+                    <a class="hover:text-primary" href="register.html">회원가입</a>
+                    <a class="text-primary font-bold" href="support.html">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">Active Women</h1>
+                    </a>
+                    <div class="hidden md:flex relative group">
+                        <div class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 border border-transparent focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+                            <input class="w-full border-none bg-transparent px-2 text-sm text-text-main focus:ring-0" placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                        </div>
+                    </div>
+                </div>
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="event.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main hover:text-primary" href="community.html">커뮤니티</a>
+                    <a class="text-base font-bold text-primary border-b-2 border-primary pb-1 -mb-[3px]" href="support.html">고객센터</a>
+                </nav>
+                <div class="flex items-center gap-2">
+                    <button class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">favorite</span></button>
+                    <a href="cart.html" class="relative flex size-10 items-center justify-center rounded-full hover:bg-background-alt">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                    </a>
+                    <a href="mypage.html" class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">person</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full bg-background-light">
+            <div class="mx-auto flex max-w-7xl flex-col lg:flex-row px-4 sm:px-6 lg:px-8 py-12 gap-12">
+
+                <!-- LNB (Left Sidebar) - Sycned with support.html -->
+                <aside class="w-full lg:w-64 flex-shrink-0 space-y-8">
+                    <h2 class="text-3xl font-extrabold text-text-main mb-8 uppercase tracking-tighter">CS Center</h2>
+                    <nav class="flex flex-col gap-1">
+                        <a href="support.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            자주 묻는 질문 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                        <a href="community-notice.html" class="px-4 py-3 bg-text-main text-white rounded-xl font-bold transition-all shadow-md shadow-black/10 flex items-center justify-between">
+                            공지사항 <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                        <a href="community-exchange.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            교환/반품 안내 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                        <a href="community-membership.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            멤버십 혜택 안내 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                    </nav>
+
+                    <!-- Contact Panel -->
+                    <div class="p-6 bg-background-alt rounded-[2rem] border border-gray-100">
+                        <h3 class="font-bold text-text-main flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">support_agent</span> 고객상담센터
+                        </h3>
+                        <p class="text-3xl font-black text-primary mb-1">1544-0000</p>
+                        <div class="text-xs text-text-muted space-y-1.5 mt-4">
+                            <p>평일 <span class="text-text-main font-bold">09:00 - 18:00</span></p>
+                            <p>점심 <span class="text-text-main font-bold">12:00 - 13:00</span></p>
+                            <p>주말/공휴일 휴무</p>
+                        </div>
+                        <a href="https://pf.kakao.com" target="_blank" class="w-full mt-8 py-4 bg-kakao text-background-dark rounded-2xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg transition-all">
+                            <span class="material-symbols-outlined text-lg">chat_bubble</span> 실시간 상담 시작
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- CONTENT -->
+                <div class="flex-1">
+                    <div class="bg-primary-light/20 p-10 rounded-[3rem] mb-12 border border-primary/5">
+                        <h2 class="text-3xl font-black text-text-main tracking-tight mb-2">Notice 📢</h2>
+                        <p class="text-text-muted text-sm font-medium">Active Women의 새로운 소식과 안내사항을 전해드립니다.</p>
+                    </div>
+
+                    <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+                        <ul class="divide-y divide-gray-100" id="notice-list"></ul>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-12 flex justify-center gap-2">
+                        <button class="size-10 rounded-xl border border-gray-200 flex items-center justify-center text-primary font-bold bg-primary-light">1</button>
+                        <button class="size-10 rounded-xl border border-transparent text-text-muted hover:bg-gray-50 font-bold transition-all">2</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="border-t border-gray-200 bg-white py-12 mt-auto">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-400">© 2026 Active Women Store. All rights reserved.</div>
+        </footer>
+
+        <!-- Notice Detail Modal -->
+        <div id="noticeModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
+                <div class="flex justify-between items-start mb-6">
+                    <h2 id="noticeMTitle" class="text-xl md:text-2xl font-bold text-text-main leading-tight"></h2>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-text-main"><span class="material-symbols-outlined">close</span></button>
+                </div>
+                <p id="noticeMDate" class="text-xs text-gray-400 mb-8 pb-4 border-b border-gray-50"></p>
+                <div class="text-sm text-text-main leading-relaxed space-y-4">
+                    <p>안녕하세요. Active Women입니다. 💖</p>
+                    <p>항상 저희를 아껴주시는 자기야를 위해 준비한 공지사항이야! ✨ 내용을 잘 확인해서 이용에 불편함이 없길 바랄게. 사랑해~ 😍</p>
+                </div>
+                <button onclick="closeModal()" class="w-full mt-10 py-4 bg-gray-100 text-text-main font-bold rounded-2xl hover:bg-gray-200 transition-all">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nots = [
+            { type: "공지", title: "개인정보처리방침 개정 안내", date: "2026.03.01" },
+            { type: "일반", title: "스토어 앱 v2.1.0 업데이트 안내", date: "2026.02.26" },
+            { type: "안내", title: "삼일절 고객센터 휴무 안내", date: "2026.02.20" },
+            { type: "공지", title: "신규 결제 수단 런칭 이벤트", date: "2026.02.10" },
+            { type: "안내", title: "설 연휴 배송 일정 공지", date: "2026.01.25" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const list = document.getElementById('notice-list');
+            list.innerHTML = nots.map(n => `
+                <li onclick="openNotice('${n.title}', '${n.date}')" class="py-6 px-8 flex justify-between hover:bg-gray-50 cursor-pointer group transition-all">
+                    <div class="flex items-center gap-4">
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${n.type==='공지' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500'}">${n.type}</span>
+                        <span class="font-bold text-text-main group-hover:text-primary transition-colors">${n.title}</span>
+                    </div>
+                    <span class="text-gray-400 text-sm font-medium">${n.date}</span>
+                </li>
+            `).join('');
+        });
+
+        function openNotice(t, d) {
+            document.getElementById('noticeMTitle').innerText = t;
+            document.getElementById('noticeMDate').innerText = d;
+            const m = document.getElementById('noticeModal');
+            m.classList.remove('hidden'); m.classList.add('flex');
+        }
+        function closeModal() {
+            const m = document.getElementById('noticeModal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
+    </script>
+</body>
+</html>

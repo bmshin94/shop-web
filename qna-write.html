@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>문의 작성 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "background-dark": "#221310",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                    },
+                    fontFamily: {
+                        display: [
+                            "Pretendard",
+                            "-apple-system",
+                            "BlinkMacSystemFont",
+                            "system-ui",
+                            "Roboto",
+                            "Helvetica Neue",
+                            "Segoe UI",
+                            "Apple SD Gothic Neo",
+                            "Noto Sans KR",
+                            "Malgun Gothic",
+                            "sans-serif",
+                        ],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+    <style id="fout-guard">
+        .material-symbols-outlined {
+            color: transparent !important;
+            display: inline-block;
+            width: 1em;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: bottom;
+        }
+    </style>
+    <script>
+        document.fonts.ready.then(() => {
+            const foutGuard = document.getElementById('fout-guard');
+            if (foutGuard) foutGuard.remove();
+        });
+    </script>
+</head>
+
+<body class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- Header -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary" href="login.html">로그인</a>
+                    <a class="hover:text-primary" href="register.html">회원가입</a>
+                    <a class="hover:text-primary" href="support.html">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">
+                            Active Women
+                        </h1>
+                    </a>
+                </div>
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">베스트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="#">커뮤니티</a>
+                    <a class="text-base font-bold text-primary transition-colors hover:text-red-700" href="#">기획전</a>
+                </nav>
+                <div class="flex items-center gap-2">
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                    <button
+                        class="relative flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span
+                            class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                    </button>
+                    <button
+                        class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+                        <span class="material-symbols-outlined">person</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Breadcrumb -->
+            <div class="bg-white py-4 border-b border-gray-100">
+                <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+                    <nav class="flex text-xs text-text-muted" aria-label="Breadcrumb">
+                        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                            <li class="inline-flex items-center">
+                                <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+                                    <a href="product-detail.html" class="hover:text-primary transition-colors">상품 상세</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+                                    <span class="text-text-main font-bold">문의 작성</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Q&A Write Form -->
+            <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
+                <!-- Page Title -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-text-main tracking-tight">상품 문의</h2>
+                    <p class="mt-2 text-sm text-text-muted">상품에 대해 궁금한 점을 남겨주시면 빠르게 답변드리겠습니다.</p>
+                </div>
+
+                <!-- Product Info Card -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-5 mb-8 shadow-sm">
+                    <div class="flex gap-4 items-center">
+                        <div class="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBGlHCHqpU42xe1u1nLQnFERzQJOA7muFfDQ_jSqXFxwt2Qxr2iT_3nqpzXFQvdA7kxjmLVeJtijR2g1hJOeG6-K6F9eFwjzwrcYbk3-T4Gg5MrS8mhcXkscPSd_3e5y8sWa3SRvjNR5gw00r3uT1TkKPWnhWkHu6wMi_rvlIR5WjU0MrCPcRVwQ_rXJqUt2R-E8aL-H_g43iAKNkkHFekCx_I_Vwq2kh3cAPi_cVPBhBOiCk1S_FKQCFq2ldTPOoN2vBH8pBD0"
+                                alt="위켄드 워리어 셋업" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-primary font-bold mb-1">ACTIVE WOMEN CLASSICS</p>
+                            <h3 class="text-base font-bold text-text-main truncate">위켄드 워리어 셋업</h3>
+                            <p class="text-sm text-text-muted mt-1">오트밀 화이트 / M</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notice Box -->
+                <div class="bg-primary-light rounded-2xl border border-primary/20 p-5 mb-8">
+                    <div class="flex gap-3">
+                        <span class="material-symbols-outlined text-primary text-xl flex-shrink-0 mt-0.5">info</span>
+                        <div class="text-sm text-text-main leading-relaxed">
+                            <p class="font-bold mb-1">문의 작성 시 참고해주세요</p>
+                            <ul class="text-text-muted space-y-1 list-disc list-inside">
+                                <li>상품과 관련 없는 내용은 관리자에 의해 삭제될 수 있습니다.</li>
+                                <li>개인정보(연락처, 주소 등)는 포함하지 말아주세요.</li>
+                                <li>답변은 영업일 기준 1~2일 이내에 등록됩니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Form -->
+                <form id="qnaForm" class="space-y-8">
+                    <!-- Category -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-5">문의 유형</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="categoryGroup">
+                            <button type="button" data-category="size"
+                                class="category-btn flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 text-sm font-bold text-text-muted transition-all hover:border-primary hover:text-primary hover:bg-primary-light">
+                                <span class="material-symbols-outlined text-2xl">straighten</span>
+                                사이즈
+                            </button>
+                            <button type="button" data-category="delivery"
+                                class="category-btn flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 text-sm font-bold text-text-muted transition-all hover:border-primary hover:text-primary hover:bg-primary-light">
+                                <span class="material-symbols-outlined text-2xl">local_shipping</span>
+                                배송
+                            </button>
+                            <button type="button" data-category="restock"
+                                class="category-btn flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 text-sm font-bold text-text-muted transition-all hover:border-primary hover:text-primary hover:bg-primary-light">
+                                <span class="material-symbols-outlined text-2xl">inventory</span>
+                                재입고
+                            </button>
+                            <button type="button" data-category="etc"
+                                class="category-btn flex flex-col items-center gap-2 rounded-xl border-2 border-gray-200 p-4 text-sm font-bold text-text-muted transition-all hover:border-primary hover:text-primary hover:bg-primary-light">
+                                <span class="material-symbols-outlined text-2xl">help</span>
+                                기타
+                            </button>
+                        </div>
+                        <input type="hidden" id="categoryValue" name="category" value="" />
+                    </div>
+
+                    <!-- Question Content -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-2">문의 내용</h3>
+                        <p class="text-sm text-text-muted mb-5">궁금한 점을 자유롭게 작성해주세요.</p>
+
+                        <!-- Title -->
+                        <div class="mb-5">
+                            <label for="qnaTitle" class="block text-sm font-bold text-text-main mb-2">제목</label>
+                            <input type="text" id="qnaTitle" name="title" maxlength="80"
+                                placeholder="문의 제목을 입력해주세요 (최대 80자)"
+                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" />
+                        </div>
+
+                        <!-- Content -->
+                        <div class="mb-2">
+                            <label for="qnaContent" class="block text-sm font-bold text-text-main mb-2">내용</label>
+                            <textarea id="qnaContent" name="content" rows="6" maxlength="2000"
+                                placeholder="상품에 대해 궁금한 점을 자세히 적어주세요. 가능한 구체적으로 작성해주시면 더 정확한 답변을 받으실 수 있습니다."
+                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors resize-none leading-relaxed"></textarea>
+                            <div class="flex justify-end mt-1.5">
+                                <span class="text-xs text-text-muted"><span id="charCount">0</span> / 2,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Upload Section -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-text-main mb-2">사진 첨부 <span
+                                class="text-sm font-normal text-text-muted">(선택)</span></h3>
+                        <p class="text-sm text-text-muted mb-5">문의와 관련된 사진이 있으면 첨부해주세요.</p>
+                        <div class="flex gap-3 flex-wrap">
+                            <!-- Upload Button -->
+                            <label id="uploadLabel"
+                                class="flex flex-col items-center justify-center w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors group">
+                                <span
+                                    class="material-symbols-outlined text-2xl text-gray-400 group-hover:text-primary transition-colors">add_a_photo</span>
+                                <span class="text-[10px] text-gray-400 mt-1 font-bold group-hover:text-primary">사진
+                                    추가</span>
+                                <input type="file" id="photoInput" accept="image/*" multiple class="hidden" />
+                            </label>
+                            <!-- Preview Container -->
+                            <div id="photoPreview" class="flex gap-3 flex-wrap"></div>
+                        </div>
+                        <p class="text-xs text-text-muted mt-3">
+                            <span class="material-symbols-outlined text-xs align-middle mr-0.5">info</span>
+                            최대 3장, JPG/PNG 파일만 가능 (장당 10MB 이하)
+                        </p>
+                    </div>
+
+                    <!-- Secret Toggle -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-text-main">비밀글 설정</h3>
+                                <p class="text-sm text-text-muted mt-1">비밀글로 설정하면 작성자와 관리자만 볼 수 있습니다.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="secretToggle" class="sr-only peer" />
+                                <div
+                                    class="w-12 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary">
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Secret Password (conditionally shown) -->
+                        <div id="secretPasswordWrap" class="mt-5 hidden">
+                            <label for="secretPassword" class="block text-sm font-bold text-text-main mb-2">비밀번호 (숫자
+                                4자리)</label>
+                            <input type="password" id="secretPassword" name="secretPassword" maxlength="4"
+                                pattern="[0-9]{4}" inputmode="numeric" placeholder="숫자 4자리를 입력해주세요"
+                                class="w-48 rounded-xl border border-gray-300 px-4 py-3 text-sm text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors tracking-[0.3em]" />
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2 pb-8">
+                        <a href="product-detail.html#qna"
+                            class="flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-gray-300 bg-white text-base font-bold text-text-main transition-colors hover:border-text-main hover:bg-gray-50 shadow-sm">
+                            취소
+                        </a>
+                        <button type="submit" id="submitBtn"
+                            class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-text-main text-base font-extrabold text-white transition-colors hover:bg-primary shadow-lg shadow-text-main/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled>
+                            <span class="material-symbols-outlined text-lg mr-2">edit_note</span>
+                            문의 등록하기
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-gray-200 bg-background-dark text-gray-400">
+            <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between gap-8">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex size-7 items-center justify-center rounded-full bg-primary text-white">
+                                <span class="material-symbols-outlined text-lg">stat_1</span>
+                            </div>
+                            <span class="font-extrabold text-white text-lg">Active Women</span>
+                        </div>
+                        <p class="text-xs leading-relaxed max-w-xs">
+                            (주)액티브우먼 | 대표: 홍길동<br>
+                            사업자등록번호: 123-45-67890<br>
+                            서울특별시 강남구 테헤란로 123, 4층
+                        </p>
+                    </div>
+                    <div class="flex gap-12 text-sm">
+                        <div>
+                            <h4 class="font-bold text-white mb-3">고객 서비스</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-white transition-colors">공지사항</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">자주 묻는 질문</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">1:1 문의</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-3">이용 안내</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-white transition-colors">이용약관</a></li>
+                                <li><a href="#" class="hover:text-white transition-colors">개인정보처리방침</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 pt-6 border-t border-gray-700 text-xs text-center">
+                    © 2026 Active Women. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9998] flex flex-col items-center gap-3 pointer-events-none">
+    </div>
+
+    <style>
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .toast-enter {
+            animation: toastIn 0.3s ease-out forwards;
+        }
+
+        .toast-exit {
+            animation: toastOut 0.3s ease-in forwards;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // ============================================
+            // 유틸: 토스트 알림
+            // ============================================
+            function showToast(message, icon = "check_circle", color = "bg-text-main") {
+                const container = document.getElementById("toastContainer");
+                const toast = document.createElement("div");
+                toast.className = `flex items-center gap-3 ${color} text-white px-6 py-3.5 rounded-xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`;
+                toast.innerHTML = `<span class="material-symbols-outlined text-lg">${icon}</span><span>${message}</span>`;
+                container.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.classList.remove("toast-enter");
+                    toast.classList.add("toast-exit");
+                    toast.addEventListener("animationend", () => toast.remove());
+                }, 2500);
+            }
+
+            // ============================================
+            // 1. 문의 유형 선택
+            // ============================================
+            const categoryBtns = document.querySelectorAll(".category-btn");
+            const categoryValue = document.getElementById("categoryValue");
+            let selectedCategory = "";
+
+            categoryBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    // 기존 선택 해제
+                    categoryBtns.forEach((b) => {
+                        b.classList.remove("border-primary", "text-primary", "bg-primary-light");
+                        b.classList.add("border-gray-200", "text-text-muted");
+                    });
+
+                    // 현재 선택
+                    btn.classList.remove("border-gray-200", "text-text-muted");
+                    btn.classList.add("border-primary", "text-primary", "bg-primary-light");
+
+                    selectedCategory = btn.dataset.category;
+                    categoryValue.value = selectedCategory;
+                    validateForm();
+                });
+            });
+
+            // ============================================
+            // 2. 글자 수 카운터
+            // ============================================
+            const qnaContent = document.getElementById("qnaContent");
+            const charCount = document.getElementById("charCount");
+
+            qnaContent.addEventListener("input", () => {
+                charCount.textContent = qnaContent.value.length;
+                validateForm();
+            });
+
+            // ============================================
+            // 3. 비밀글 토글
+            // ============================================
+            const secretToggle = document.getElementById("secretToggle");
+            const secretPasswordWrap = document.getElementById("secretPasswordWrap");
+
+            secretToggle.addEventListener("change", () => {
+                if (secretToggle.checked) {
+                    secretPasswordWrap.classList.remove("hidden");
+                } else {
+                    secretPasswordWrap.classList.add("hidden");
+                    document.getElementById("secretPassword").value = "";
+                }
+                validateForm();
+            });
+
+            // ============================================
+            // 4. 사진 업로드 & 프리뷰
+            // ============================================
+            const photoInput = document.getElementById("photoInput");
+            const photoPreview = document.getElementById("photoPreview");
+            const uploadLabel = document.getElementById("uploadLabel");
+            let uploadedFiles = [];
+            const MAX_PHOTOS = 3;
+
+            photoInput.addEventListener("change", (e) => {
+                const files = Array.from(e.target.files);
+                const remaining = MAX_PHOTOS - uploadedFiles.length;
+
+                if (remaining <= 0) {
+                    showToast("사진은 최대 3장까지 첨부할 수 있습니다.", "warning", "bg-amber-600");
+                    return;
+                }
+
+                const filesToAdd = files.slice(0, remaining);
+
+                filesToAdd.forEach((file) => {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showToast(`${file.name} 파일 크기가 10MB를 초과합니다.`, "error", "bg-red-600");
+                        return;
+                    }
+
+                    uploadedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "relative w-24 h-24 rounded-xl overflow-hidden group";
+                        wrapper.innerHTML = `
+              <img src="${ev.target.result}" class="w-full h-full object-cover" alt="업로드 사진" />
+              <button type="button" class="remove-photo absolute top-1 right-1 flex size-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600">
+                <span class="material-symbols-outlined text-sm">close</span>
+              </button>
+            `;
+                        photoPreview.appendChild(wrapper);
+
+                        wrapper.querySelector(".remove-photo").addEventListener("click", () => {
+                            const index = Array.from(photoPreview.children).indexOf(wrapper);
+                            uploadedFiles.splice(index, 1);
+                            wrapper.remove();
+                            updateUploadBtn();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                updateUploadBtn();
+                photoInput.value = "";
+            });
+
+            function updateUploadBtn() {
+                if (uploadedFiles.length >= MAX_PHOTOS) {
+                    uploadLabel.classList.add("hidden");
+                } else {
+                    uploadLabel.classList.remove("hidden");
+                }
+            }
+
+            // ============================================
+            // 5. 폼 유효성 검사
+            // ============================================
+            const submitBtn = document.getElementById("submitBtn");
+            const qnaTitle = document.getElementById("qnaTitle");
+
+            qnaTitle.addEventListener("input", validateForm);
+
+            function validateForm() {
+                const hasCategory = selectedCategory !== "";
+                const hasTitle = qnaTitle.value.trim().length > 0;
+                const hasContent = qnaContent.value.trim().length >= 10;
+
+                // 비밀글이 켜져 있으면 비밀번호 4자리 필수
+                let secretValid = true;
+                if (secretToggle.checked) {
+                    const pw = document.getElementById("secretPassword").value;
+                    secretValid = /^[0-9]{4}$/.test(pw);
+                }
+
+                submitBtn.disabled = !(hasCategory && hasTitle && hasContent && secretValid);
+            }
+
+            // 비밀번호 입력 시에도 유효성 재검사
+            document.getElementById("secretPassword").addEventListener("input", validateForm);
+
+            // ============================================
+            // 6. 폼 제출
+            // ============================================
+            const qnaForm = document.getElementById("qnaForm");
+
+            qnaForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                if (submitBtn.disabled) return;
+
+                showToast("문의가 성공적으로 등록되었습니다! 빠르게 답변드리겠습니다.", "check_circle", "bg-green-600");
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-lg mr-2 animate-spin">progress_activity</span>
+          등록 중...
+        `;
+
+                setTimeout(() => {
+                    location.href = "product-detail.html#qna";
+                }, 1500);
+            });
+
+        });
+    </script>
+</body>
+
+</html>

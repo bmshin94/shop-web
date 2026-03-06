@@ -1,221 +1,287 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>로그인 - Active Women's Premium Store</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#ec3713",
-              "primary-light": "#ffefe5",
-              "background-light": "#ffffff",
-              "background-alt": "#f8f6f6",
-              "background-dark": "#221310",
-              "text-main": "#181211",
-              "text-muted": "#896861",
-            },
-            fontFamily: {
-              display: [
-                "Pretendard",
-                "-apple-system",
-                "BlinkMacSystemFont",
-                "system-ui",
-                "Roboto",
-                "Helvetica Neue",
-                "Segoe UI",
-                "Apple SD Gothic Neo",
-                "Noto Sans KR",
-                "Malgun Gothic",
-                "sans-serif",
-              ],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>로그인 - Active Women's Premium Store</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ec3713",
+            "primary-light": "#ffefe5",
+            "background-light": "#ffffff",
+            "background-alt": "#f8f6f6",
+            "background-dark": "#221310",
+            "text-main": "#181211",
+            "text-muted": "#896861",
+          },
+          fontFamily: {
+            display: [
+              "Pretendard",
+              "-apple-system",
+              "BlinkMacSystemFont",
+              "system-ui",
+              "Roboto",
+              "Helvetica Neue",
+              "Segoe UI",
+              "Apple SD Gothic Neo",
+              "Noto Sans KR",
+              "Malgun Gothic",
+              "sans-serif",
+            ],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
           },
         },
-      };
-    </script>
-    <style>
-      .hidden {
-        display: none;
-      }
-    </style>
-  
-    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
-    <style id="fout-guard">
-      .material-symbols-outlined { 
-        color: transparent !important; 
-        display: inline-block;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-      }
-    </style>
-    <script>
-      document.fonts.ready.then(() => {
-        const foutGuard = document.getElementById('fout-guard');
-        if (foutGuard) foutGuard.remove();
-      });
-    </script>
+      },
+    };
+  </script>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+  <style id="fout-guard">
+    .material-symbols-outlined {
+      color: transparent !important;
+      display: inline-block;
+      width: 1em;
+      overflow: hidden;
+      white-space: nowrap;
+      vertical-align: bottom;
+    }
+  </style>
+  <script>
+    document.fonts.ready.then(() => {
+      const foutGuard = document.getElementById('fout-guard');
+      if (foutGuard) foutGuard.remove();
+    });
+  </script>
 </head>
 
-  <body
-    class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
-  >
-    <div
-      class="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-    >
-      <!-- Logo & Header -->
-      <div class="text-center">
-        <a href="index.html" class="inline-flex items-center gap-2 mb-6">
-          <div
-            class="flex size-10 items-center justify-center rounded-full bg-primary text-white"
-          >
-            <span class="material-symbols-outlined text-2xl">stat_1</span>
-          </div>
-          <h1 class="text-2xl font-extrabold tracking-tight text-text-main">
-            Active Women
-          </h1>
-        </a>
-        <h2 class="text-3xl font-bold tracking-tight text-text-main">로그인</h2>
-        <p class="mt-2 text-sm text-text-muted">
-          프리미엄 혜택을 위해 로그인해주세요.
-        </p>
-      </div>
-
-      <!-- Login Form -->
-      <form class="mt-8 space-y-6" action="#" method="POST">
-        <div class="space-y-4">
-          <div>
-            <label for="email" class="sr-only">이메일 주소</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-              class="relative block w-full appearance-none rounded-xl border border-gray-200 px-4 py-3 text-text-main placeholder-text-muted focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-sm transition-colors"
-              placeholder="이메일 주소를 입력해주세요"
-            />
-          </div>
-          <div>
-            <label for="password" class="sr-only">비밀번호</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              required
-              class="relative block w-full appearance-none rounded-xl border border-gray-200 px-4 py-3 text-text-main placeholder-text-muted focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-sm transition-colors"
-              placeholder="비밀번호를 입력해주세요"
-            />
-          </div>
+<body
+  class="bg-background-alt text-text-main font-display antialiased selection:bg-primary selection:text-white flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+    <!-- Logo & Header -->
+    <div class="text-center">
+      <a href="index.html" class="inline-flex items-center gap-2 mb-6">
+        <div class="flex size-10 items-center justify-center rounded-full bg-primary text-white">
+          <span class="material-symbols-outlined text-2xl">stat_1</span>
         </div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-text-main">
+          Active Women
+        </h1>
+      </a>
+      <h2 class="text-3xl font-bold tracking-tight text-text-main">로그인</h2>
+      <p class="mt-2 text-sm text-text-muted">
+        프리미엄 혜택을 위해 로그인해주세요.
+      </p>
+    </div>
 
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input
-              id="remember-me"
-              name="remember-me"
-              type="checkbox"
-              class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
-            />
-            <label
-              for="remember-me"
-              class="ml-2 block text-sm text-text-muted cursor-pointer"
-            >
-              아이디 저장
-            </label>
-          </div>
-
-          <div class="text-sm">
-            <a
-              href="#"
-              class="font-bold text-primary hover:text-red-600 transition-colors"
-            >
-              비밀번호를 잊으셨나요?
-            </a>
-          </div>
-        </div>
-
+    <!-- Login Form -->
+    <form class="mt-8 space-y-6" action="#" method="POST">
+      <div class="space-y-4">
         <div>
-          <button
-            type="submit"
-            class="group relative flex w-full justify-center rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all transform hover:-translate-y-0.5 shadow-md"
-          >
-            로그인
-          </button>
+          <label for="email" class="sr-only">이메일 주소</label>
+          <input id="email" name="email" type="email" autocomplete="email" required
+            class="relative block w-full appearance-none rounded-xl border border-gray-200 px-4 py-3 text-text-main placeholder-text-muted focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-sm transition-colors"
+            placeholder="이메일 주소를 입력해주세요" />
         </div>
-      </form>
+        <div>
+          <label for="password" class="sr-only">비밀번호</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required
+            class="relative block w-full appearance-none rounded-xl border border-gray-200 px-4 py-3 text-text-main placeholder-text-muted focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-sm transition-colors"
+            placeholder="비밀번호를 입력해주세요" />
+        </div>
+      </div>
 
-      <!-- Divider -->
-      <div class="mt-8">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span
-              class="bg-white px-4 text-text-muted font-bold text-xs uppercase tracking-wider"
-              >간편 로그인</span
-            >
-          </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember-me" name="remember-me" type="checkbox"
+            class="size-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" />
+          <label for="remember-me" class="ml-2 block text-sm text-text-muted cursor-pointer">
+            아이디 저장
+          </label>
         </div>
 
-        <!-- Social Login -->
-        <div class="mt-6 grid grid-cols-2 gap-3">
-          <a
-            href="#"
-            class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#fae100] px-4 py-3 hover:bg-[#ebd300] transition-colors border border-[#fae100] border-opacity-0 hover:border-black/5"
-          >
-            <span
-              class="rounded-full w-5 h-5 bg-[#3c1e1e] text-[#fae100] text-[10px] flex items-center justify-center font-extrabold"
-              >K</span
-            >
-            <span class="text-sm font-bold text-[#3c1e1e]">카카오 로그인</span>
-          </a>
-          <a
-            href="#"
-            class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#03c75a] px-4 py-3 hover:bg-[#02b351] transition-colors"
-          >
-            <span
-              class="font-extrabold text-[#03c75a] bg-white rounded-sm w-5 h-5 flex items-center justify-center text-xs tracking-tighter"
-              >N</span
-            >
-            <span class="text-sm font-bold text-white">네이버 로그인</span>
+        <div class="text-sm">
+          <a href="find-password.html" id="forgotPasswordBtn"
+            class="font-bold text-primary hover:text-red-600 transition-colors">
+            비밀번호를 잊으셨나요?
           </a>
         </div>
       </div>
 
-      <!-- Footer Linking -->
-      <div class="pt-6 text-center border-t border-gray-100 mt-6">
-        <p class="text-sm text-text-muted">
-          아직 회원이 아니신가요?
-          <a
-            href="register.html"
-            class="font-bold text-primary hover:underline ml-1"
-            >회원가입하기</a
-          >
-        </p>
+      <div>
+        <button type="submit" id="loginSubmitBtn"
+          class="group relative flex w-full justify-center rounded-xl bg-primary px-4 py-3.5 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all transform hover:-translate-y-0.5 shadow-md">
+          <span id="loginBtnText">로그인</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Divider -->
+    <div class="mt-8">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-200"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="bg-white px-4 text-text-muted font-bold text-xs uppercase tracking-wider">간편 로그인</span>
+        </div>
+      </div>
+
+      <!-- Social Login -->
+      <div class="mt-6 grid grid-cols-2 gap-3">
+        <a href="#" id="kakaoLoginBtn"
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#fae100] px-4 py-3 hover:bg-[#ebd300] transition-colors border border-[#fae100] border-opacity-0 hover:border-black/5">
+          <span
+            class="rounded-full w-5 h-5 bg-[#3c1e1e] text-[#fae100] text-[10px] flex items-center justify-center font-extrabold">K</span>
+          <span class="text-sm font-bold text-[#3c1e1e]">카카오 로그인</span>
+        </a>
+        <a href="#" id="naverLoginBtn"
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#03c75a] px-4 py-3 hover:bg-[#02b351] transition-colors">
+          <span
+            class="font-extrabold text-[#03c75a] bg-white rounded-sm w-5 h-5 flex items-center justify-center text-xs tracking-tighter">N</span>
+          <span class="text-sm font-bold text-white">네이버 로그인</span>
+        </a>
       </div>
     </div>
-  </body>
+
+    <!-- Footer Linking -->
+    <div class="pt-6 text-center border-t border-gray-100 mt-6">
+      <p class="text-sm text-text-muted">
+        아직 회원이 아니신가요?
+        <a href="register.html" class="font-bold text-primary hover:underline ml-1">회원가입하기</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast Popup -->
+  <div id="toast"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center justify-center gap-2 bg-text-main text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl transition-all duration-300 opacity-0 translate-y-8 pointer-events-none">
+    <span class="material-symbols-outlined text-lg text-green-400" id="toastIcon">check_circle</span>
+    <span id="toastMsg">처리되었습니다.</span>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- 토스트 알림 기능 ---
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      let toastTimeout;
+
+      function showToast(message, iconName = 'check_circle', iconColorClass = 'text-green-400', isError = false) {
+        toastMsg.textContent = message;
+        toastIcon.textContent = iconName;
+        toastIcon.className = `material-symbols-outlined text-lg ${iconColorClass}`;
+
+        if (isError) {
+          toast.classList.replace('bg-text-main', 'bg-red-600');
+        } else {
+          toast.classList.replace('bg-red-600', 'bg-text-main');
+        }
+
+        toast.classList.remove('opacity-0', 'translate-y-8');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-8');
+        }, 3000);
+      }
+
+      // --- 아이디 저장 및 로그인 폼 제출 인터랙션 ---
+      const loginForm = document.querySelector('form');
+      const loginBtnText = document.getElementById('loginBtnText');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const rememberMeCheckbox = document.getElementById('remember-me');
+
+      // 페이지 로드 시 저장된 이메일 불러오기
+      const savedEmail = localStorage.getItem('savedEmail');
+      if (savedEmail) {
+        emailInput.value = savedEmail;
+        rememberMeCheckbox.checked = true;
+      }
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // 기본 폼 이동 방지
+
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        if (email && password) {
+          // 아이디 저장 처리
+          if (rememberMeCheckbox.checked) {
+            localStorage.setItem('savedEmail', email);
+          } else {
+            localStorage.removeItem('savedEmail');
+          }
+
+          // 로딩 상태 시뮬레이션
+          const originalText = loginBtnText.textContent;
+          loginBtnText.textContent = '로그인 중...';
+
+          setTimeout(() => {
+            showToast('로그인에 성공했습니다.', 'check_circle', 'text-green-400');
+
+            // 1초 후 홈으로 이동 시뮬레이션
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 1000);
+          }, 800);
+        }
+      });
+
+      // --- 비밀번호 찾기 인터랙션 ---
+      // (href="find-password.html"로 직접 이동하도록 별도 preventDefault 제거)
+
+      // --- 소셜 로그인 인터랙션 ---
+      const kakaoLoginBtn = document.getElementById('kakaoLoginBtn');
+      const naverLoginBtn = document.getElementById('naverLoginBtn');
+
+      if (kakaoLoginBtn) {
+        kakaoLoginBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const originalHtml = kakaoLoginBtn.innerHTML;
+          kakaoLoginBtn.innerHTML = `<span class="text-sm font-bold text-[#3c1e1e]">카카오 연결 중...</span>`;
+
+          setTimeout(() => {
+            showToast('연결 성공. 카카오 계정으로 로그인합니다.', 'chat', 'text-yellow-400');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+          }, 800);
+        });
+      }
+
+      if (naverLoginBtn) {
+        naverLoginBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const originalHtml = naverLoginBtn.innerHTML;
+          naverLoginBtn.innerHTML = `<span class="text-sm font-bold text-white">네이버 연결 중...</span>`;
+
+          setTimeout(() => {
+            showToast('연결 성공. 네이버 계정으로 로그인합니다.', 'login', 'text-green-400');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+          }, 800);
+        });
+      }
+    });
+  </script>
+</body>
+
 </html>

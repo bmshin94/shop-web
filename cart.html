@@ -1,739 +1,990 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>장바구니 - Active Women's Premium Store</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#ec3713",
-              "primary-light": "#ffefe5",
-              "background-light": "#ffffff",
-              "background-alt": "#f8f6f6",
-              "background-dark": "#221310",
-              "text-main": "#181211",
-              "text-muted": "#896861",
-            },
-            fontFamily: {
-              display: [
-                "Pretendard",
-                "-apple-system",
-                "BlinkMacSystemFont",
-                "system-ui",
-                "Roboto",
-                "Helvetica Neue",
-                "Segoe UI",
-                "Apple SD Gothic Neo",
-                "Noto Sans KR",
-                "Malgun Gothic",
-                "sans-serif",
-              ],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>장바구니 - Active Women's Premium Store</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ec3713",
+            "primary-light": "#ffefe5",
+            "background-light": "#ffffff",
+            "background-alt": "#f8f6f6",
+            "background-dark": "#221310",
+            "text-main": "#181211",
+            "text-muted": "#896861",
+          },
+          fontFamily: {
+            display: [
+              "Pretendard",
+              "-apple-system",
+              "BlinkMacSystemFont",
+              "system-ui",
+              "Roboto",
+              "Helvetica Neue",
+              "Segoe UI",
+              "Apple SD Gothic Neo",
+              "Noto Sans KR",
+              "Malgun Gothic",
+              "sans-serif",
+            ],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
           },
         },
-      };
-    </script>
-    <style>
-      /* Tailwind 로드 전 텍스트 깜빡임(FOUC) 방지 */
-      .hidden {
-        display: none;
-      }
+      },
+    };
+  </script>
+  <style>
+    /* Tailwind 로드 전 텍스트 깜빡임(FOUC) 방지 */
+    .hidden {
+      display: none;
+    }
 
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
 
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
-  
-    <!-- Prevent FOUT and Layout Shift for Material Symbols -->
-    <style id="fout-guard">
-      .material-symbols-outlined { 
-        color: transparent !important; 
-        display: inline-block;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        vertical-align: bottom;
-      }
-    </style>
-    <script>
-      document.fonts.ready.then(() => {
-        const foutGuard = document.getElementById('fout-guard');
-        if (foutGuard) foutGuard.remove();
-      });
-    </script>
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+  <!-- Prevent FOUT and Layout Shift for Material Symbols -->
+  <style id="fout-guard">
+    .material-symbols-outlined {
+      color: transparent !important;
+      display: inline-block;
+      width: 1em;
+      overflow: hidden;
+      white-space: nowrap;
+      vertical-align: bottom;
+    }
+  </style>
+  <script>
+    document.fonts.ready.then(() => {
+      const foutGuard = document.getElementById('fout-guard');
+      if (foutGuard) foutGuard.remove();
+    });
+  </script>
 </head>
 
-  <body
-    class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white"
-  >
-    <div class="flex min-h-screen flex-col">
-      <header
-        class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md"
-      >
-        <div class="bg-background-alt py-1 text-xs text-text-muted">
-          <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
-            <a class="hover:text-primary" href="#">로그인</a>
-            <a class="hover:text-primary" href="#">회원가입</a>
-            <a class="hover:text-primary" href="#">고객센터</a>
-          </div>
+<body class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white">
+  <div class="flex min-h-screen flex-col">
+    <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+      <div class="bg-background-alt py-1 text-xs text-text-muted">
+        <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+          <a class="hover:text-primary" href="#">로그인</a>
+          <a class="hover:text-primary" href="#">회원가입</a>
+          <a class="hover:text-primary" href="#">고객센터</a>
         </div>
-        <div
-          class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8"
-        >
-          <div class="flex items-center gap-8 lg:gap-12">
-            <a class="flex items-center gap-2" href="index.html">
-              <div
-                class="flex size-8 items-center justify-center rounded-full bg-primary text-white"
-              >
-                <span class="material-symbols-outlined text-xl">stat_1</span>
-              </div>
-              <h1 class="text-xl font-extrabold tracking-tight text-text-main">
-                Active Women
-              </h1>
-            </a>
-            <div class="hidden md:flex flex-col relative group">
-              <div
-                class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50"
-              >
-                <input
-                  class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
-                  placeholder="찾으시는 상품을 검색해보세요"
-                  type="text"
-                />
-                <span
-                  class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary"
-                  >search</span
-                >
-              </div>
-              <div
-                class="absolute top-full left-4 mt-1 flex gap-2 text-xs text-text-muted"
-              >
-                <span class="font-bold text-primary">추천:</span>
-                <a class="hover:underline" href="#">#야구</a>
-                <a class="hover:underline" href="#">#풋살</a>
-                <a class="hover:underline" href="#">#러닝</a>
-              </div>
+      </div>
+      <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div class="flex items-center gap-8 lg:gap-12">
+          <a class="flex items-center gap-2" href="index.html">
+            <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+              <span class="material-symbols-outlined text-xl">stat_1</span>
+            </div>
+            <h1 class="text-xl font-extrabold tracking-tight text-text-main">
+              Active Women
+            </h1>
+          </a>
+          <div class="hidden md:flex flex-col relative group">
+            <div
+              class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 transition-colors focus-within:ring-2 focus-within:ring-primary/20 hover:bg-neutral-100 border border-transparent focus-within:border-primary/50">
+              <input
+                class="w-full border-none bg-transparent px-2 text-sm font-medium text-text-main placeholder:text-text-muted focus:ring-0"
+                placeholder="찾으시는 상품을 검색해보세요" type="text" />
+              <span class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+            </div>
+            <div class="absolute top-full left-4 mt-1 flex gap-2 text-xs text-text-muted">
+              <span class="font-bold text-primary">추천:</span>
+              <a class="hover:underline" href="#">#야구</a>
+              <a class="hover:underline" href="#">#풋살</a>
+              <a class="hover:underline" href="#">#러닝</a>
             </div>
           </div>
-          <nav class="hidden items-center gap-8 lg:flex">
-            <a
-              class="text-base font-bold text-text-main transition-colors hover:text-primary"
-              href="product-list.html"
-              >신상품</a
-            >
-            <a
-              class="text-base font-bold text-text-main transition-colors hover:text-primary"
-              href="product-list.html"
-              >베스트</a
-            >
-            <a
-              class="text-base font-bold text-text-main transition-colors hover:text-primary"
-              href="product-list.html"
-              >이벤트</a
-            >
-            <a
-              class="text-base font-bold text-text-main transition-colors hover:text-primary"
-              href="product-list.html"
-              >커뮤니티</a
-            >
-            <a
-              class="text-base font-bold text-primary transition-colors hover:text-red-700"
-              href="product-list.html"
-              >기획전</a
-            >
-          </nav>
-          <div class="flex items-center gap-2">
-            <button
-              class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary"
-            >
-              <span class="material-symbols-outlined">favorite</span>
-            </button>
-            <button
-              class="relative flex size-10 items-center justify-center rounded-full text-primary transition-colors hover:bg-background-alt"
-            >
-              <span class="material-symbols-outlined">shopping_cart</span>
-              <span
-                class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white"
-                >3</span
-              >
-            </button>
-            <button
-              class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary"
-            >
-              <span class="material-symbols-outlined">person</span>
-            </button>
-          </div>
         </div>
-      </header>
-
-      <main class="flex-1 bg-background-alt pb-20">
-        <!-- Page Title -->
-        <div class="pt-12 pb-8">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-text-main tracking-tight">
-              장바구니 <span class="text-primary ml-1">3</span>
-            </h2>
-          </div>
+        <nav class="hidden items-center gap-8 lg:flex">
+          <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+            href="product-list.html">신상품</a>
+          <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+            href="product-list.html">베스트</a>
+          <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+            href="product-list.html">이벤트</a>
+          <a class="text-base font-bold text-text-main transition-colors hover:text-primary"
+            href="product-list.html">커뮤니티</a>
+          <a class="text-base font-bold text-primary transition-colors hover:text-red-700"
+            href="product-list.html">기획전</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <button
+            class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+            <span class="material-symbols-outlined">favorite</span>
+          </button>
+          <button
+            class="relative flex size-10 items-center justify-center rounded-full text-primary transition-colors hover:bg-background-alt">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            <span
+              class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+          </button>
+          <button
+            class="flex size-10 items-center justify-center rounded-full text-text-main transition-colors hover:bg-background-alt hover:text-primary">
+            <span class="material-symbols-outlined">person</span>
+          </button>
         </div>
+      </div>
+    </header>
 
+    <main class="flex-1 bg-background-alt pb-20">
+      <!-- Page Title -->
+      <div class="pt-12 pb-8">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex flex-col lg:flex-row gap-8">
-            <!-- 장바구니 리스트 영역 -->
-            <div class="flex-grow">
-              <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8"
-              >
-                <!-- 전체선택 & 선택삭제 툴바 -->
-                <div
-                  class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6"
-                >
-                  <label class="flex items-center gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      class="rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary focus:ring-offset-0"
-                      checked
-                    />
-                    <span
-                      class="font-bold text-text-main group-hover:text-primary transition-colors"
-                      >전체 선택 (3/3)</span
-                    >
-                  </label>
-                  <button
-                    class="text-sm text-text-muted hover:text-primary font-bold transition-colors"
-                  >
-                    선택 삭제
-                  </button>
-                </div>
-
-                <div class="space-y-8">
-                  <!-- Cart Item 1 -->
-                  <div
-                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start border-b border-gray-50 pb-8"
-                  >
-                    <div class="flex items-center pt-1">
-                      <input
-                        type="checkbox"
-                        class="rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary"
-                        checked
-                      />
-                    </div>
-                    <div class="flex gap-4 sm:gap-6 w-full">
-                      <a
-                        href="product-detail.html"
-                        class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative"
-                      >
-                        <div
-                          class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                          style="
-                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDabAzzyO-1GPR9w9KUZy2t-akxd-pTry06ye-7EmfLIj4HsSh3Qsl3-4SPzOjkEiIvcTGGDyNJEuMpEpxJVMBh2D4z-w70xv-_n1ulP9ym_oYqWuFOnJqPl25Vm9FlyjgGTi65HS6qSzlRQgslgoXVASr5mvobAhP-rUuwV34o5MwDa2O-Tj9-CB71iqI7UuUDKfOzXILS0hUApxV--IBEjQ9t7EFGHTyyK8Vxetjz5EeEdY7nQBJbqJ9qIk1KAJSZqHHXH55EY1c&quot;);
-                          "
-                        ></div>
-                      </a>
-                      <div class="flex-grow flex flex-col justify-between">
-                        <div>
-                          <div class="flex justify-between items-start gap-4">
-                            <a
-                              href="product-detail.html"
-                              class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4"
-                              >위켄드 워리어 셋업</a
-                            >
-                            <button
-                              class="text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2"
-                            >
-                              <span class="material-symbols-outlined text-xl"
-                                >close</span
-                              >
-                            </button>
-                          </div>
-                          <div
-                            class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm"
-                          >
-                            <span class="text-text-muted font-medium"
-                              >단품: Black / M</span
-                            >
-                            <button
-                              class="text-xs font-bold text-primary hover:underline"
-                            >
-                              옵션 변경
-                            </button>
-                          </div>
-                        </div>
-                        <div class="flex justify-between items-end mt-4">
-                          <div
-                            class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9"
-                          >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >remove</span
-                              >
-                            </button>
-                            <span
-                              class="w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50"
-                              >1</span
-                            >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >add</span
-                              >
-                            </button>
-                          </div>
-                          <div class="text-right">
-                            <div
-                              class="text-xs text-gray-400 line-through mb-0.5"
-                            >
-                              ₩165,000
-                            </div>
-                            <div class="text-xl font-bold text-text-main">
-                              ₩148,500
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cart Item 2 -->
-                  <div
-                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start border-b border-gray-50 pb-8"
-                  >
-                    <div class="flex items-center pt-1">
-                      <input
-                        type="checkbox"
-                        class="rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary"
-                        checked
-                      />
-                    </div>
-                    <div class="flex gap-4 sm:gap-6 w-full">
-                      <a
-                        href="product-detail.html"
-                        class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative"
-                      >
-                        <div
-                          class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                          style="
-                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDG_KhKcmbL_tfD6o7Wodrv4S7ibX6ujwxndVGPgfKaIBYNTgJemxUf40EOkeIaRYUIpj4Ev6Ms7KW87nUBN0O2-_HjjU3XY6CIl9GHOnTsDi0DbDZZXY2loY2aWcN96JZOjSQ2uEKSZvAunpehA8VyNinHagNltBDPAkBIhe0i-DI1Zq8OGpc5uor1d9BwAoXZR_5E1hfFRSN4YmsMjijZ7Gly2NVRLkbKyBUnn8i98Zhc2BjTQt_-XWoDpQLGYPkEI9CwI5vRdtY&quot;);
-                          "
-                        ></div>
-                      </a>
-                      <div class="flex-grow flex flex-col justify-between">
-                        <div>
-                          <div class="flex justify-between items-start gap-4">
-                            <a
-                              href="product-detail.html"
-                              class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4"
-                              >모닝 런 글로우 자켓</a
-                            >
-                            <button
-                              class="text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2"
-                            >
-                              <span class="material-symbols-outlined text-xl"
-                                >close</span
-                              >
-                            </button>
-                          </div>
-                          <div
-                            class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm"
-                          >
-                            <span class="text-text-muted font-medium"
-                              >단품: White / S</span
-                            >
-                            <button
-                              class="text-xs font-bold text-primary hover:underline"
-                            >
-                              옵션 변경
-                            </button>
-                          </div>
-                        </div>
-                        <div class="flex justify-between items-end mt-4">
-                          <div
-                            class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9"
-                          >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >remove</span
-                              >
-                            </button>
-                            <span
-                              class="w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50"
-                              >1</span
-                            >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >add</span
-                              >
-                            </button>
-                          </div>
-                          <div class="text-right">
-                            <div class="text-xl font-bold text-text-main">
-                              ₩98,000
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cart Item 3 -->
-                  <div
-                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start"
-                  >
-                    <div class="flex items-center pt-1">
-                      <input
-                        type="checkbox"
-                        class="rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary"
-                        checked
-                      />
-                    </div>
-                    <div class="flex gap-4 sm:gap-6 w-full">
-                      <a
-                        href="product-detail.html"
-                        class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative"
-                      >
-                        <div
-                          class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                          style="
-                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDcCwiVYOZ2XgfbLcwNfv1CndtwSuCXp93p0COmlecQ1tiFvX1yHwnncV-Mk_jv50p4Xxpiiflipp5Eir5XRuvNHNisCCLSdPLL_Woyw8J9hJMROPJ1pFlO8i7_kvDB-t6Zg-TEaXfbOb2TCLJGkpDcSw5raqesusBSrsrN4BTI_-aA0Omr6D5iv310qKxBat9vEcf4kdLytn3w0R-cPV9qo2AahQmCb6qkGTUyW78SKki6dYgAhWn-k3DpIFl8lj3b_kmSpn4re1w&quot;);
-                          "
-                        ></div>
-                      </a>
-                      <div class="flex-grow flex flex-col justify-between">
-                        <div>
-                          <div class="flex justify-between items-start gap-4">
-                            <a
-                              href="product-detail.html"
-                              class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4"
-                              >에코 그립 요가 매트</a
-                            >
-                            <button
-                              class="text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2"
-                            >
-                              <span class="material-symbols-outlined text-xl"
-                                >close</span
-                              >
-                            </button>
-                          </div>
-                          <div
-                            class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm"
-                          >
-                            <span class="text-text-muted font-medium"
-                              >단품: Pink</span
-                            >
-                            <button
-                              class="text-xs font-bold text-primary hover:underline"
-                            >
-                              옵션 변경
-                            </button>
-                          </div>
-                        </div>
-                        <div class="flex justify-between items-end mt-4">
-                          <div
-                            class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9"
-                          >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >remove</span
-                              >
-                            </button>
-                            <span
-                              class="w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50"
-                              >1</span
-                            >
-                            <button
-                              class="w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors"
-                            >
-                              <span class="material-symbols-outlined text-sm"
-                                >add</span
-                              >
-                            </button>
-                          </div>
-                          <div class="text-right">
-                            <div class="text-xl font-bold text-text-main">
-                              ₩98,000
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 옵션 선택 상품 더 담기 유도 -->
-                <div
-                  class="mt-10 py-6 px-4 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between"
-                >
-                  <div class="flex items-center gap-3">
-                    <span
-                      class="material-symbols-outlined text-primary text-2xl"
-                      >local_shipping</span
-                    >
-                    <div>
-                      <h4 class="font-bold text-text-main text-sm">
-                        배송비 걱정 없어요!
-                      </h4>
-                      <p class="text-xs text-text-muted mt-0.5">
-                        현재 장바구니 결제 금액 50,000원 이상 무조건
-                        <strong>무료배송</strong>
-                      </p>
-                    </div>
-                  </div>
-                  <a
-                    href="product-list.html"
-                    class="text-sm font-bold text-primary hover:text-red-700 hover:underline"
-                    >상품 더 담기</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- 주문 결제 금액 영역 -->
-            <div class="w-full lg:w-[400px] flex-shrink-0">
-              <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 sticky top-[130px]"
-              >
-                <h3
-                  class="font-bold text-xl text-text-main border-b border-gray-200 pb-4 mb-6"
-                >
-                  주문 요약 (총 3건)
-                </h3>
-
-                <div class="space-y-4 text-base mb-8">
-                  <div class="flex justify-between text-text-muted font-medium">
-                    <span>상품 총 금액</span>
-                    <span class="text-text-main">₩361,000</span>
-                  </div>
-                  <div class="flex justify-between text-text-muted font-medium">
-                    <span>할인 적용 금액 (번들/회원)</span>
-                    <span class="text-red-500 font-bold">- ₩16,500</span>
-                  </div>
-                  <div class="flex justify-between text-text-muted font-medium">
-                    <span>배송비</span>
-                    <span class="text-text-main font-bold">무료</span>
-                  </div>
-                </div>
-
-                <div
-                  class="bg-background-alt p-4 rounded-xl mb-6 flex flex-col text-sm border border-gray-100"
-                >
-                  <div
-                    class="flex justify-between items-center font-bold text-text-main mb-2"
-                  >
-                    <span>쿠폰/적립금</span>
-                    <button
-                      class="text-primary hover:underline font-bold px-2 py-1 bg-white rounded border border-gray-200 shadow-sm text-xs"
-                    >
-                      적용 메뉴 ▾
-                    </button>
-                  </div>
-                  <div class="text-xs text-text-muted mt-1">
-                    ※ 결제(Checkout) 단계에서 보유 쿠폰과 적립금을 적용할 수
-                    있습니다.
-                  </div>
-                </div>
-
-                <div class="border-t-2 border-text-main pt-6 mb-8">
-                  <div class="flex justify-between items-end">
-                    <span class="font-bold text-text-main text-lg"
-                      >최종 결제 금액</span
-                    >
-                    <span
-                      class="font-extrabold text-3xl text-primary tracking-tight"
-                      >₩344,500</span
-                    >
-                  </div>
-                  <p class="text-right text-xs font-bold text-primary/80 mt-2">
-                    최대 3,445원 적립 예정
-                  </p>
-                </div>
-
-                <div class="space-y-3">
-                  <button
-                    class="w-full bg-primary text-white font-extrabold text-lg rounded-xl py-4 hover:bg-red-600 transition-colors shadow-lg hover:shadow-primary/30 focus:outline-none focus:ring-4 focus:ring-primary/20 transform hover:-translate-y-0.5 relative overflow-hidden group"
-                  >
-                    <span class="relative z-10">결제하기 (3)</span>
-                    <div
-                      class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out"
-                    ></div>
-                  </button>
-                  <!-- 네이버페이, 카카오페이 등 외부결제 버튼 공간 -->
-                  <div class="grid grid-cols-2 gap-2 mt-4">
-                    <button
-                      class="w-full bg-[#fae100] text-[#3c1e1e] font-bold text-sm rounded-lg py-3 hover:bg-[#ebd300] transition-colors relative"
-                    >
-                      <span
-                        class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full w-5 h-5 bg-[#3c1e1e] text-[#fae100] text-[10px] flex items-center justify-center font-extrabold"
-                        >K</span
-                      >
-                      <span class="pl-4">카카오페이</span>
-                    </button>
-                    <button
-                      class="w-full bg-[#03c75a] text-white font-bold text-sm rounded-lg py-3 hover:bg-[#02b351] transition-colors relative"
-                    >
-                      <span
-                        class="absolute left-4 top-1/2 -translate-y-1/2 font-extrabold text-[#03c75a] bg-white rounded-sm w-5 h-5 flex items-center justify-center text-[13px] tracking-tighter"
-                        >N</span
-                      >
-                      <span class="pl-4">네이버페이</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 class="text-3xl font-extrabold text-text-main tracking-tight">
+            장바구니 <span class="text-primary ml-1">3</span>
+          </h2>
         </div>
-      </main>
-      <footer class="border-t border-gray-200 bg-white pb-8 pt-16">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="grid gap-12 lg:grid-cols-4">
-            <div class="lg:col-span-1">
-              <div class="flex items-center gap-2 mb-4">
-                <div
-                  class="flex size-6 items-center justify-center rounded-full bg-primary text-white"
-                >
-                  <span class="material-symbols-outlined text-sm">stat_1</span>
-                </div>
-                <span class="text-lg font-bold text-text-main"
-                  >Active Women</span
-                >
-              </div>
-              <p
-                class="mb-6 text-sm leading-relaxed text-text-muted break-keep"
-              >
-                프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브
-                라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
-              </p>
-              <div class="flex gap-4">
-                <a class="text-text-muted hover:text-primary" href="#"
-                  ><span class="material-symbols-outlined">thumb_up</span></a
-                >
-                <a class="text-text-muted hover:text-primary" href="#"
-                  ><span class="material-symbols-outlined"
-                    >photo_camera</span
-                  ></a
-                >
-                <a class="text-text-muted hover:text-primary" href="#"
-                  ><span class="material-symbols-outlined">play_circle</span></a
-                >
-              </div>
+      </div>
+
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- 장바구니 리스트 영역 -->
+          <div class="flex-grow">
+            <!-- Empty Cart State -->
+            <div id="emptyCartState"
+              class="hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-16 flex-col items-center justify-center text-center">
+              <span class="material-symbols-outlined text-6xl text-gray-200 mb-4 block">shopping_cart</span>
+              <h3 class="text-xl font-bold text-text-main mb-2">장바구니에 담긴 상품이 없습니다.</h3>
+              <p class="text-sm text-text-muted mb-8">액티브 우먼의 다양한 상품을 만나보세요!</p>
+              <a href="product-list.html"
+                class="inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-red-600 transition-colors shadow-lg hover:shadow-primary/30">
+                쇼핑 계속하기
+              </a>
             </div>
-            <div>
-              <h4 class="mb-4 font-bold text-text-main">쇼핑하기</h4>
-              <ul class="space-y-3 text-sm text-text-muted">
-                <li><a class="hover:text-primary" href="#">신상품</a></li>
-                <li><a class="hover:text-primary" href="#">베스트 셀러</a></li>
-                <li><a class="hover:text-primary" href="#">스포츠웨어</a></li>
-                <li>
-                  <a class="hover:text-primary" href="#">뷰티 &amp; 케어</a>
-                </li>
-                <li><a class="hover:text-primary" href="#">액세서리</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="mb-4 font-bold text-text-main">고객지원</h4>
-              <ul class="space-y-3 text-sm text-text-muted">
-                <li>
-                  <a class="hover:text-primary" href="#">주문배송 조회</a>
-                </li>
-                <li>
-                  <a class="hover:text-primary" href="#">교환/반품 신청</a>
-                </li>
-                <li>
-                  <a class="hover:text-primary" href="#">사이즈 가이드</a>
-                </li>
-                <li><a class="hover:text-primary" href="#">1:1 문의</a></li>
-                <li>
-                  <a class="hover:text-primary" href="#">자주 묻는 질문</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="mb-4 font-bold text-text-main">뉴스레터</h4>
-              <p class="mb-4 text-sm text-text-muted">
-                새로운 드롭 소식과 혜택을 놓치지 마세요.
-              </p>
-              <form class="flex gap-2">
-                <input
-                  class="w-full rounded-lg border border-gray-200 bg-background-alt px-4 py-2 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary"
-                  placeholder="이메일 주소 입력"
-                  type="email"
-                />
-                <button
-                  class="rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-red-600"
-                  type="submit"
-                >
-                  <span class="material-symbols-outlined text-lg"
-                    >arrow_forward</span
-                  >
+
+            <div id="cartContentContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+              <!-- 전체선택 & 선택삭제 툴바 -->
+              <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input type="checkbox" id="selectAll"
+                    class="rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary focus:ring-offset-0"
+                    checked />
+                  <span id="selectAllText"
+                    class="font-bold text-text-main group-hover:text-primary transition-colors">전체 선택 (3/3)</span>
+                </label>
+                <button id="deleteSelectedBtn"
+                  class="text-sm text-text-muted hover:text-primary font-bold transition-colors">
+                  선택 삭제
                 </button>
-              </form>
+              </div>
+
+              <div id="cartItemList" class="space-y-8">
+                <!-- Cart Item 1 -->
+                <div class="cart-item flex flex-col sm:flex-row gap-4 sm:gap-6 items-start border-b border-gray-50 pb-8"
+                  data-id="1" data-original-price="165000" data-price="148500" data-qty="1">
+                  <div class="flex items-center pt-1">
+                    <input type="checkbox"
+                      class="item-checkbox rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary" checked />
+                  </div>
+                  <div class="flex gap-4 sm:gap-6 w-full">
+                    <a href="product-detail.html"
+                      class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative">
+                      <div
+                        class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                        style="
+                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDabAzzyO-1GPR9w9KUZy2t-akxd-pTry06ye-7EmfLIj4HsSh3Qsl3-4SPzOjkEiIvcTGGDyNJEuMpEpxJVMBh2D4z-w70xv-_n1ulP9ym_oYqWuFOnJqPl25Vm9FlyjgGTi65HS6qSzlRQgslgoXVASr5mvobAhP-rUuwV34o5MwDa2O-Tj9-CB71iqI7UuUDKfOzXILS0hUApxV--IBEjQ9t7EFGHTyyK8Vxetjz5EeEdY7nQBJbqJ9qIk1KAJSZqHHXH55EY1c&quot;);
+                          "></div>
+                    </a>
+                    <div class="flex-grow flex flex-col justify-between">
+                      <div>
+                        <div class="flex justify-between items-start gap-4">
+                          <a href="product-detail.html"
+                            class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4">위켄드 워리어
+                            셋업</a>
+                          <button class="btn-remove text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2">
+                            <span class="material-symbols-outlined text-xl">close</span>
+                          </button>
+                        </div>
+                        <div class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm">
+                          <span class="text-text-muted font-medium">단품: Black / M</span>
+                          <button class="btn-option text-xs font-bold text-primary hover:underline"
+                            data-product="위켄드 워리어 셋업">
+                            옵션 변경
+                          </button>
+                        </div>
+                      </div>
+                      <div class="flex justify-between items-end mt-4">
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9">
+                          <button
+                            class="qty-minus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">remove</span>
+                          </button>
+                          <span
+                            class="qty-display w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50">1</span>
+                          <button
+                            class="qty-plus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">add</span>
+                          </button>
+                        </div>
+                        <div class="text-right">
+                          <div class="item-original-price-display text-xs text-gray-400 line-through mb-0.5">
+                            ₩165,000
+                          </div>
+                          <div class="item-price-display text-xl font-bold text-text-main">
+                            ₩148,500
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cart Item 2 -->
+                <div class="cart-item flex flex-col sm:flex-row gap-4 sm:gap-6 items-start border-b border-gray-50 pb-8"
+                  data-id="2" data-original-price="98000" data-price="98000" data-qty="1">
+                  <div class="flex items-center pt-1">
+                    <input type="checkbox"
+                      class="item-checkbox rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary" checked />
+                  </div>
+                  <div class="flex gap-4 sm:gap-6 w-full">
+                    <a href="product-detail.html"
+                      class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative">
+                      <div
+                        class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                        style="
+                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDG_KhKcmbL_tfD6o7Wodrv4S7ibX6ujwxndVGPgfKaIBYNTgJemxUf40EOkeIaRYUIpj4Ev6Ms7KW87nUBN0O2-_HjjU3XY6CIl9GHOnTsDi0DbDZZXY2loY2aWcN96JZOjSQ2uEKSZvAunpehA8VyNinHagNltBDPAkBIhe0i-DI1Zq8OGpc5uor1d9BwAoXZR_5E1hfFRSN4YmsMjijZ7Gly2NVRLkbKyBUnn8i98Zhc2BjTQt_-XWoDpQLGYPkEI9CwI5vRdtY&quot;);
+                          "></div>
+                    </a>
+                    <div class="flex-grow flex flex-col justify-between">
+                      <div>
+                        <div class="flex justify-between items-start gap-4">
+                          <a href="product-detail.html"
+                            class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4">모닝 런 글로우
+                            자켓</a>
+                          <button class="btn-remove text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2">
+                            <span class="material-symbols-outlined text-xl">close</span>
+                          </button>
+                        </div>
+                        <div class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm">
+                          <span class="text-text-muted font-medium">단품: White / S</span>
+                          <button class="btn-option text-xs font-bold text-primary hover:underline"
+                            data-product="모닝 런 글로우 자켓">
+                            옵션 변경
+                          </button>
+                        </div>
+                      </div>
+                      <div class="flex justify-between items-end mt-4">
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9">
+                          <button
+                            class="qty-minus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">remove</span>
+                          </button>
+                          <span
+                            class="qty-display w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50">1</span>
+                          <button
+                            class="qty-plus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">add</span>
+                          </button>
+                        </div>
+                        <div class="text-right">
+                          <div class="item-original-price-display hidden text-xs text-gray-400 line-through mb-0.5">
+                          </div>
+                          <div class="item-price-display text-xl font-bold text-text-main">
+                            ₩98,000
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cart Item 3 -->
+                <div class="cart-item flex flex-col sm:flex-row gap-4 sm:gap-6 items-start" data-id="3"
+                  data-original-price="98000" data-price="98000" data-qty="1">
+                  <div class="flex items-center pt-1">
+                    <input type="checkbox"
+                      class="item-checkbox rounded border-gray-300 text-primary w-5 h-5 focus:ring-primary" checked />
+                  </div>
+                  <div class="flex gap-4 sm:gap-6 w-full">
+                    <a href="product-detail.html"
+                      class="w-24 h-32 sm:w-32 sm:h-40 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 block group relative">
+                      <div
+                        class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                        style="
+                            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDcCwiVYOZ2XgfbLcwNfv1CndtwSuCXp93p0COmlecQ1tiFvX1yHwnncV-Mk_jv50p4Xxpiiflipp5Eir5XRuvNHNisCCLSdPLL_Woyw8J9hJMROPJ1pFlO8i7_kvDB-t6Zg-TEaXfbOb2TCLJGkpDcSw5raqesusBSrsrN4BTI_-aA0Omr6D5iv310qKxBat9vEcf4kdLytn3w0R-cPV9qo2AahQmCb6qkGTUyW78SKki6dYgAhWn-k3DpIFl8lj3b_kmSpn4re1w&quot;);
+                          "></div>
+                    </a>
+                    <div class="flex-grow flex flex-col justify-between">
+                      <div>
+                        <div class="flex justify-between items-start gap-4">
+                          <a href="product-detail.html"
+                            class="font-bold text-lg text-text-main hover:text-primary transition-colors pr-4">에코 그립 요가
+                            매트</a>
+                          <button class="btn-remove text-gray-400 hover:text-text-main p-1 -mr-2 -mt-2">
+                            <span class="material-symbols-outlined text-xl">close</span>
+                          </button>
+                        </div>
+                        <div class="mt-2 p-3 bg-background-alt rounded-lg flex justify-between items-center text-sm">
+                          <span class="text-text-muted font-medium">단품: Pink</span>
+                          <button class="btn-option text-xs font-bold text-primary hover:underline"
+                            data-product="에코 그립 요가 매트">
+                            옵션 변경
+                          </button>
+                        </div>
+                      </div>
+                      <div class="flex justify-between items-end mt-4">
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden h-9">
+                          <button
+                            class="qty-minus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">remove</span>
+                          </button>
+                          <span
+                            class="qty-display w-10 h-full flex items-center justify-center border-x border-gray-200 text-sm font-bold bg-gray-50/50">1</span>
+                          <button
+                            class="qty-plus w-9 h-full flex items-center justify-center hover:bg-gray-50 text-text-main font-bold focus:outline-none transition-colors">
+                            <span class="material-symbols-outlined text-sm">add</span>
+                          </button>
+                        </div>
+                        <div class="text-right">
+                          <div class="item-original-price-display hidden text-xs text-gray-400 line-through mb-0.5">
+                          </div>
+                          <div class="item-price-display text-xl font-bold text-text-main">
+                            ₩98,000
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 옵션 선택 상품 더 담기 유도 -->
+              <div
+                class="mt-10 py-6 px-4 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-primary text-2xl">local_shipping</span>
+                  <div>
+                    <h4 class="font-bold text-text-main text-sm">
+                      배송비 걱정 없어요!
+                    </h4>
+                    <p class="text-xs text-text-muted mt-0.5">
+                      현재 장바구니 결제 금액 50,000원 이상 무조건
+                      <strong>무료배송</strong>
+                    </p>
+                  </div>
+                </div>
+                <a href="product-list.html" class="text-sm font-bold text-primary hover:text-red-700 hover:underline">상품
+                  더 담기</a>
+              </div>
             </div>
           </div>
-          <div
-            class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed"
-          >
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
-                <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
-                <p>
-                  통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자:
-                  이담당
-                </p>
-                <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
-                <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
-              </div>
-              <div class="md:text-right flex flex-col justify-between">
-                <div class="flex gap-2 justify-start md:justify-end mb-2">
-                  <a class="font-bold text-text-main" href="#">이용약관</a>
-                  <span class="text-gray-300">|</span>
-                  <a class="font-bold text-primary" href="#"
-                    >개인정보처리방침</a
-                  >
-                  <span class="text-gray-300">|</span>
-                  <a class="font-bold text-text-main" href="#"
-                    >사업자정보확인</a
-                  >
+
+          <!-- 주문 결제 금액 영역 -->
+          <div class="w-full lg:w-[400px] flex-shrink-0">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 sticky top-[130px]">
+              <h3 id="summaryItemCount" class="font-bold text-xl text-text-main border-b border-gray-200 pb-4 mb-6">
+                주문 요약 (총 3건)
+              </h3>
+
+              <div class="space-y-4 text-base mb-8">
+                <div class="flex justify-between text-text-muted font-medium">
+                  <span>상품 총 금액</span>
+                  <span id="summaryOriginalTotal" class="text-text-main">₩361,000</span>
                 </div>
-                <p>© 2024 Active Women Store. All rights reserved.</p>
-                <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
+                <div class="flex justify-between text-text-muted font-medium">
+                  <span>할인 적용 금액 (번들/회원)</span>
+                  <span id="summaryDiscount" class="text-red-500 font-bold">- ₩16,500</span>
+                </div>
+                <div class="flex justify-between text-text-muted font-medium">
+                  <span>배송비</span>
+                  <span id="summaryShipping" class="text-text-main font-bold">무료</span>
+                </div>
+              </div>
+
+              <div class="bg-background-alt p-4 rounded-xl mb-6 flex flex-col text-sm border border-gray-100">
+                <div class="flex justify-between items-center font-bold text-text-main mb-2">
+                  <span>쿠폰/적립금</span>
+                </div>
+                <div class="text-xs text-text-muted mt-1">
+                  ※ 결제(Checkout) 단계에서 보유 금액과 쿠폰을 <br />적용할 수 있습니다.
+                </div>
+              </div>
+
+              <div class="border-t-2 border-text-main pt-6 mb-8">
+                <div class="flex justify-between items-end">
+                  <span class="font-bold text-text-main text-lg">최종 결제 금액</span>
+                  <span id="summaryFinalTotal"
+                    class="font-extrabold text-3xl text-primary tracking-tight">₩344,500</span>
+                </div>
+                <p id="summaryPoints" class="text-right text-xs font-bold text-primary/80 mt-2">
+                  최대 3,445원 적립 예정
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                <button
+                  class="w-full bg-primary text-white font-extrabold text-lg rounded-xl py-4 hover:bg-red-600 transition-colors shadow-lg hover:shadow-primary/30 focus:outline-none focus:ring-4 focus:ring-primary/20 transform hover:-translate-y-0.5 relative overflow-hidden group">
+                  <span id="checkoutBtnText" class="relative z-10">결제하기 (3)</span>
+                  <div
+                    class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out">
+                  </div>
+                </button>
+                <!-- 네이버페이, 카카오페이 등 외부결제 버튼 공간 -->
+                <div class="grid grid-cols-2 gap-2 mt-4">
+                  <button
+                    class="w-full bg-[#fae100] text-[#3c1e1e] font-bold text-sm rounded-lg py-3 hover:bg-[#ebd300] transition-colors relative">
+                    <span
+                      class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full w-5 h-5 bg-[#3c1e1e] text-[#fae100] text-[10px] flex items-center justify-center font-extrabold">K</span>
+                    <span class="pl-4">카카오페이</span>
+                  </button>
+                  <button
+                    class="w-full bg-[#03c75a] text-white font-bold text-sm rounded-lg py-3 hover:bg-[#02b351] transition-colors relative">
+                    <span
+                      class="absolute left-4 top-1/2 -translate-y-1/2 font-extrabold text-[#03c75a] bg-white rounded-sm w-5 h-5 flex items-center justify-center text-[13px] tracking-tighter">N</span>
+                    <span class="pl-4">네이버페이</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </main>
+    <footer class="border-t border-gray-200 bg-white pb-8 pt-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-4">
+          <div class="lg:col-span-1">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="flex size-6 items-center justify-center rounded-full bg-primary text-white">
+                <span class="material-symbols-outlined text-sm">stat_1</span>
+              </div>
+              <span class="text-lg font-bold text-text-main">Active Women</span>
+            </div>
+            <p class="mb-6 text-sm leading-relaxed text-text-muted break-keep">
+              프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브
+              라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
+            </p>
+            <div class="flex gap-4">
+              <a class="text-text-muted hover:text-primary" href="#"><span
+                  class="material-symbols-outlined">thumb_up</span></a>
+              <a class="text-text-muted hover:text-primary" href="#"><span
+                  class="material-symbols-outlined">photo_camera</span></a>
+              <a class="text-text-muted hover:text-primary" href="#"><span
+                  class="material-symbols-outlined">play_circle</span></a>
+            </div>
+          </div>
+          <div>
+            <h4 class="mb-4 font-bold text-text-main">쇼핑하기</h4>
+            <ul class="space-y-3 text-sm text-text-muted">
+              <li><a class="hover:text-primary" href="#">신상품</a></li>
+              <li><a class="hover:text-primary" href="#">베스트 셀러</a></li>
+              <li><a class="hover:text-primary" href="#">스포츠웨어</a></li>
+              <li>
+                <a class="hover:text-primary" href="#">뷰티 &amp; 케어</a>
+              </li>
+              <li><a class="hover:text-primary" href="#">액세서리</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="mb-4 font-bold text-text-main">고객지원</h4>
+            <ul class="space-y-3 text-sm text-text-muted">
+              <li>
+                <a class="hover:text-primary" href="#">주문배송 조회</a>
+              </li>
+              <li>
+                <a class="hover:text-primary" href="#">교환/반품 신청</a>
+              </li>
+              <li>
+                <a class="hover:text-primary" href="#">사이즈 가이드</a>
+              </li>
+              <li><a class="hover:text-primary" href="#">1:1 문의</a></li>
+              <li>
+                <a class="hover:text-primary" href="#">자주 묻는 질문</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="mb-4 font-bold text-text-main">뉴스레터</h4>
+            <p class="mb-4 text-sm text-text-muted">
+              새로운 드롭 소식과 혜택을 놓치지 마세요.
+            </p>
+            <form class="flex gap-2">
+              <input
+                class="w-full rounded-lg border border-gray-200 bg-background-alt px-4 py-2 text-sm text-text-main focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="이메일 주소 입력" type="email" />
+              <button class="rounded-lg bg-primary px-4 py-2 font-bold text-white hover:bg-red-600" type="submit">
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
+              <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
+              <p>
+                통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자:
+                이담당
+              </p>
+              <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
+              <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
+            </div>
+            <div class="md:text-right flex flex-col justify-between">
+              <div class="flex gap-2 justify-start md:justify-end mb-2">
+                <a class="font-bold text-text-main" href="#">이용약관</a>
+                <span class="text-gray-300">|</span>
+                <a class="font-bold text-primary" href="#">개인정보처리방침</a>
+                <span class="text-gray-300">|</span>
+                <a class="font-bold text-text-main" href="#">사업자정보확인</a>
+              </div>
+              <p>© 2024 Active Women Store. All rights reserved.</p>
+              <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast 알림 -->
+  <div id="toast"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center justify-center gap-2 bg-text-main text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl transition-all duration-300 opacity-0 translate-y-8 pointer-events-none">
+    <span class="material-symbols-outlined text-lg text-green-400" id="toastIcon">check_circle</span>
+    <span id="toastMsg">처리되었습니다.</span>
+  </div>
+
+  <!-- 옵션 변경 모달 -->
+  <div id="optionModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity opacity-0" id="optionModalBg"></div>
+    <div
+      class="fixed top-1/2 left-1/2 w-[90%] sm:w-[400px] bg-white rounded-2xl p-6 shadow-2xl transition-all transform -translate-x-1/2 -translate-y-1/2 scale-95 opacity-0 duration-150"
+      id="optionModalContent">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-xl text-text-main">옵션 변경</h3>
+        <button id="closeOptionModal"
+          class="text-gray-400 hover:text-text-main bg-gray-50 hover:bg-gray-100 rounded-full p-1 transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="mb-5 text-sm font-bold text-text-muted bg-background-alt p-3 rounded-lg flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">shopping_bag</span>
+        <span id="optionModalProductName">상품명</span>
+      </div>
+
+      <!-- 옵션 폼 Dummy -->
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-bold text-text-main mb-3">색상 (Color)</label>
+          <div class="flex gap-3">
+            <button
+              class="w-10 h-10 rounded-full bg-black ring-2 ring-offset-2 ring-primary focus:outline-none transition-all shadow-sm"></button>
+            <button
+              class="w-10 h-10 rounded-full bg-white border border-gray-200 ring-2 ring-offset-2 ring-transparent opacity-60 hover:opacity-100 focus:outline-none transition-all shadow-sm"></button>
+            <button
+              class="w-10 h-10 rounded-full bg-pink-200 ring-2 ring-offset-2 ring-transparent opacity-60 hover:opacity-100 focus:outline-none transition-all shadow-sm"></button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-text-main mb-3">사이즈 (Size)</label>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 py-3 border border-gray-200 text-gray-400 rounded-xl hover:border-gray-300 hover:text-text-main font-bold transition-colors">S</button>
+            <button
+              class="flex-1 py-3 border-2 border-text-main bg-text-main text-white rounded-xl font-bold transition-colors">M</button>
+            <button
+              class="flex-1 py-3 border border-gray-200 text-gray-400 rounded-xl hover:border-gray-300 hover:text-text-main font-bold transition-colors">L</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="btnSaveOption"
+        class="w-full mt-8 bg-primary text-white font-extrabold py-4 rounded-xl hover:bg-red-600 transition-colors shadow-lg hover:shadow-primary/30">
+        옵션 변경하기
+      </button>
     </div>
-  </body>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 요약 영역 요소
+      const selectAllCheckbox = document.getElementById('selectAll');
+      const selectAllText = document.getElementById('selectAllText');
+      const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+
+      const summaryOriginalTotal = document.getElementById('summaryOriginalTotal');
+      const summaryDiscount = document.getElementById('summaryDiscount');
+      const summaryShipping = document.getElementById('summaryShipping');
+      const summaryFinalTotal = document.getElementById('summaryFinalTotal');
+      const summaryPoints = document.getElementById('summaryPoints');
+      const summaryItemCount = document.getElementById('summaryItemCount');
+      const checkoutBtnText = document.getElementById('checkoutBtnText');
+      const checkoutBtn = checkoutBtnText ? checkoutBtnText.parentElement : null;
+
+      // Empty State 영역
+      const cartContentContainer = document.getElementById('cartContentContainer');
+      const emptyCartState = document.getElementById('emptyCartState');
+
+      // 상단 배지 요소들
+      const headerBadge = document.querySelector('header button.relative .absolute');
+      const titleBadge = document.querySelector('h2 span.text-primary.ml-1');
+
+      // 장바구니 상품 상태 변수 저장할 배열
+      let cartItems = [];
+
+      // 토스트 메시지
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      let toastTimeout;
+
+      function showToast(message, icon = 'check_circle', iconColor = 'text-green-400') {
+        if (!toast) return;
+        clearTimeout(toastTimeout);
+        toastMsg.textContent = message;
+        toastIcon.textContent = icon;
+        toastIcon.className = `material-symbols-outlined text-lg ${iconColor}`;
+
+        toast.classList.remove('opacity-0', 'translate-y-8');
+        toast.classList.add('opacity-100', 'translate-y-0');
+
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', 'translate-y-8');
+        }, 3000);
+      }
+
+      // DOM으로 부터 초기 상태 생성 및 이벤트 연결
+      document.querySelectorAll('.cart-item').forEach(itemEl => {
+        const id = itemEl.getAttribute('data-id');
+        const originalPrice = parseInt(itemEl.getAttribute('data-original-price'), 10);
+        const price = parseInt(itemEl.getAttribute('data-price'), 10);
+        let qty = parseInt(itemEl.getAttribute('data-qty'), 10);
+
+        const qtySpan = itemEl.querySelector('.qty-display');
+        if (qtySpan) qty = parseInt(qtySpan.textContent, 10);
+
+        const checkbox = itemEl.querySelector('.item-checkbox');
+        const checked = checkbox ? checkbox.checked : true;
+
+        const itemState = { id, originalPrice, price, qty, checked, element: itemEl };
+        cartItems.push(itemState);
+
+        // 체크박스 클릭 이벤트
+        if (checkbox) {
+          checkbox.addEventListener('change', (e) => {
+            itemState.checked = e.target.checked;
+            updateSummary();
+          });
+        }
+
+        const btnMinus = itemEl.querySelector('.qty-minus');
+        const btnPlus = itemEl.querySelector('.qty-plus');
+        const btnRemove = itemEl.querySelector('.btn-remove');
+        const btnOption = itemEl.querySelector('.btn-option');
+        const priceDisplay = itemEl.querySelector('.item-price-display');
+        const originalPriceDisplay = itemEl.querySelector('.item-original-price-display');
+
+        // 수량 감소
+        if (btnMinus) {
+          btnMinus.addEventListener('click', () => {
+            if (itemState.qty > 1) {
+              itemState.qty--;
+              qtySpan.textContent = itemState.qty;
+              updateItemUI(itemState, originalPriceDisplay, priceDisplay);
+              updateSummary();
+            }
+          });
+        }
+
+        // 수량 증가
+        if (btnPlus) {
+          btnPlus.addEventListener('click', () => {
+            if (itemState.qty < 99) {
+              itemState.qty++;
+              qtySpan.textContent = itemState.qty;
+              updateItemUI(itemState, originalPriceDisplay, priceDisplay);
+              updateSummary();
+            }
+          });
+        }
+
+        // 단일 아이템 삭제
+        if (btnRemove) {
+          btnRemove.addEventListener('click', () => {
+            // 네이티브 confirm 창 제외, 부드러운 애니메이션 후 삭제
+            itemEl.classList.add('opacity-0', '-translate-x-full', 'transition-all', 'duration-300');
+            setTimeout(() => {
+              itemEl.remove();
+              cartItems = cartItems.filter(i => i.id !== id);
+              updateSummary();
+              showToast('상품이 장바구니에서 삭제되었습니다.', 'delete', 'text-red-400');
+            }, 300);
+          });
+        }
+
+        // 옵션 변경
+        if (btnOption) {
+          btnOption.addEventListener('click', () => {
+            const productName = btnOption.getAttribute('data-product') || '상품';
+            openOptionModal(productName, itemEl);
+          });
+        }
+      });
+
+      // ₩ 포맷터
+      function formatMoney(amount) {
+        return '₩' + amount.toLocaleString('ko-KR');
+      }
+
+      // 아이템 개별 금액 UI 업데이트
+      function updateItemUI(item, originalPriceDisplay, priceDisplay) {
+        if (priceDisplay) {
+          priceDisplay.textContent = formatMoney(item.price * item.qty);
+        }
+        if (originalPriceDisplay && !originalPriceDisplay.classList.contains('hidden')) {
+          originalPriceDisplay.textContent = formatMoney(item.originalPrice * item.qty);
+        }
+      }
+
+      // 금액 요약 데이터 및 전체 UI 업데이트
+      function updateSummary() {
+        const totalItemsInCart = cartItems.length;
+
+        // 장바구니가 비었을 때의 UI 업데이트
+        if (totalItemsInCart === 0) {
+          if (cartContentContainer) cartContentContainer.classList.add('hidden');
+          if (emptyCartState) {
+            emptyCartState.classList.remove('hidden');
+            emptyCartState.classList.add('flex');
+          }
+          if (checkoutBtn) {
+            checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            checkoutBtn.disabled = true;
+          }
+
+          if (summaryOriginalTotal) summaryOriginalTotal.textContent = '₩0';
+          if (summaryDiscount) summaryDiscount.textContent = '₩0';
+          if (summaryShipping) {
+            summaryShipping.textContent = '₩0';
+            summaryShipping.classList.remove('text-red-500', 'font-bold');
+          }
+          if (summaryFinalTotal) summaryFinalTotal.textContent = '₩0';
+          if (summaryPoints) summaryPoints.textContent = `최대 0원 적립 예정`;
+          if (summaryItemCount) summaryItemCount.textContent = `주문 요약 (총 0건)`;
+          if (checkoutBtnText) checkoutBtnText.textContent = `결제하기 (0)`;
+
+          if (headerBadge) {
+            headerBadge.textContent = '0';
+            headerBadge.style.display = 'none';
+          }
+          if (titleBadge) titleBadge.textContent = '0';
+
+          if (selectAllCheckbox) selectAllCheckbox.checked = false;
+          if (selectAllText) selectAllText.textContent = `전체 선택 (0/0)`;
+          return;
+        }
+
+        const selectedItems = cartItems.filter(i => i.checked);
+        const selectedCount = selectedItems.length;
+
+        // 전체선택 체크박스 UI 업데이트
+        if (selectAllCheckbox) {
+          selectAllCheckbox.checked = (selectedCount === totalItemsInCart && totalItemsInCart > 0);
+        }
+        if (selectAllText) {
+          selectAllText.textContent = `전체 선택 (${selectedCount}/${totalItemsInCart})`;
+        }
+
+        // 총 금액 계산 로직
+        let originalTotal = 0;
+        let finalTotal = 0;
+
+        selectedItems.forEach(item => {
+          originalTotal += (item.originalPrice * item.qty);
+          finalTotal += (item.price * item.qty);
+        });
+
+        let discount = originalTotal - finalTotal;
+        let shipping = (finalTotal >= 50000 || finalTotal === 0) ? 0 : 3000;
+        let finalPayment = finalTotal + shipping;
+        let points = Math.floor(finalPayment * 0.01); // 1% 포인트 적립
+
+        // 요약 패널 DOM 업데이트
+        if (summaryOriginalTotal) summaryOriginalTotal.textContent = formatMoney(originalTotal);
+        if (summaryDiscount) summaryDiscount.textContent = discount > 0 ? `- ${formatMoney(discount)}` : '₩0';
+
+        if (summaryShipping) {
+          if (shipping === 0) {
+            summaryShipping.textContent = '무료';
+            summaryShipping.classList.remove('text-red-500', 'font-bold');
+            if (finalTotal > 0) summaryShipping.classList.add('font-bold');
+          } else {
+            summaryShipping.textContent = '+ ' + formatMoney(shipping);
+            summaryShipping.classList.add('text-red-500', 'font-bold');
+          }
+        }
+
+        if (summaryFinalTotal) summaryFinalTotal.textContent = formatMoney(finalPayment);
+        if (summaryPoints) summaryPoints.textContent = `최대 ${points.toLocaleString('ko-KR')}원 적립 예정`;
+
+        if (summaryItemCount) summaryItemCount.textContent = `주문 요약 (총 ${selectedCount}건)`;
+        if (checkoutBtnText) checkoutBtnText.textContent = `결제하기 (${selectedCount})`;
+
+        if (checkoutBtn) {
+          if (selectedCount === 0) {
+            checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            checkoutBtn.disabled = true;
+          } else {
+            checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            checkoutBtn.disabled = false;
+          }
+        }
+
+        // 헤더 배지 업데이트
+        if (headerBadge) {
+          headerBadge.textContent = totalItemsInCart;
+          headerBadge.style.display = totalItemsInCart > 0 ? 'flex' : 'none';
+        }
+        if (titleBadge) titleBadge.textContent = totalItemsInCart;
+      }
+
+      // 전체 선택 / 해제 토글
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e) => {
+          const isChecked = e.target.checked;
+          cartItems.forEach(item => {
+            item.checked = isChecked;
+            const cb = item.element.querySelector('.item-checkbox');
+            if (cb) cb.checked = isChecked;
+          });
+          updateSummary();
+        });
+      }
+
+      // 선택 삭제 기능
+      if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', () => {
+          const itemsToDelete = cartItems.filter(i => i.checked);
+          if (itemsToDelete.length === 0) {
+            showToast('삭제할 상품을 선택해주세요.', 'info', 'text-blue-400');
+            return;
+          }
+
+          itemsToDelete.forEach(item => {
+            item.element.classList.add('opacity-0', '-translate-x-full', 'transition-all', 'duration-300');
+          });
+
+          setTimeout(() => {
+            itemsToDelete.forEach(item => {
+              item.element.remove();
+            });
+            cartItems = cartItems.filter(i => !i.checked);
+            updateSummary();
+            showToast(`선택한 ${itemsToDelete.length}개 상품이 삭제되었습니다.`, 'delete', 'text-red-400');
+          }, 300);
+        });
+      }
+
+      // 옵션 변경 모달 관련 로직
+      const optionModal = document.getElementById('optionModal');
+      const optionModalBg = document.getElementById('optionModalBg');
+      const optionModalContent = document.getElementById('optionModalContent');
+      const productNameEl = document.getElementById('optionModalProductName');
+      let currentEditingItemEl = null;
+
+      // 모달 내 버튼 액션
+      const colorBtns = document.querySelectorAll('#optionModalContent .flex.gap-3 button');
+      colorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          colorBtns.forEach(b => {
+            b.classList.remove('ring-primary');
+            b.classList.add('ring-transparent');
+          });
+          btn.classList.add('ring-primary');
+          btn.classList.remove('ring-transparent');
+        });
+      });
+
+      const sizeBtns = document.querySelectorAll('#optionModalContent .flex.gap-2 button');
+      sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          sizeBtns.forEach(b => {
+            b.className = 'flex-1 py-3 border border-gray-200 text-gray-400 rounded-xl hover:border-gray-300 hover:text-text-main font-bold transition-colors';
+          });
+          btn.className = 'flex-1 py-3 border-2 border-text-main bg-text-main text-white rounded-xl font-bold transition-colors';
+        });
+      });
+
+      function openOptionModal(productName, itemEl) {
+        currentEditingItemEl = itemEl;
+        if (productNameEl) productNameEl.textContent = productName;
+        optionModal.classList.remove('hidden');
+        // 강제 렌더링 트리거
+        void optionModal.offsetWidth;
+        if (optionModalBg) optionModalBg.classList.remove('opacity-0');
+        if (optionModalContent) {
+          optionModalContent.classList.remove('scale-95', 'opacity-0');
+          optionModalContent.classList.add('scale-100', 'opacity-100');
+        }
+      }
+
+      function closeOptionModal() {
+        if (optionModalBg) optionModalBg.classList.add('opacity-0');
+        if (optionModalContent) {
+          optionModalContent.classList.remove('scale-100', 'opacity-100');
+          optionModalContent.classList.add('scale-95', 'opacity-0');
+        }
+        setTimeout(() => {
+          optionModal.classList.add('hidden');
+          currentEditingItemEl = null;
+        }, 150);
+      }
+
+      const closeOptionModalBtn = document.getElementById('closeOptionModal');
+      const btnSaveOption = document.getElementById('btnSaveOption');
+
+      if (closeOptionModalBtn) closeOptionModalBtn.addEventListener('click', closeOptionModal);
+      if (optionModalBg) optionModalBg.addEventListener('click', closeOptionModal);
+      if (btnSaveOption) {
+        btnSaveOption.addEventListener('click', () => {
+          // 모달에서 선택한 사이즈 찾기
+          let selectedSize = '새로운 사이즈';
+          sizeBtns.forEach(b => {
+            if (b.classList.contains('bg-text-main')) selectedSize = b.textContent;
+          });
+
+          if (currentEditingItemEl) {
+            const optionSpan = currentEditingItemEl.querySelector('.btn-option').previousElementSibling;
+            if (optionSpan) {
+              optionSpan.textContent = `단품: 새로운 색상 / ${selectedSize}`;
+            }
+          }
+          closeOptionModal();
+          showToast('옵션이 성공적으로 변경되었습니다.');
+        });
+      }
+
+
+      // 초기 로드 시 총 금액 계산
+      updateSummary();
+    });
+  </script>
+</body>
+
 </html>

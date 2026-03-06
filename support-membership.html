@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>멤버십 혜택 안내 | 고객센터 - Active Women's Premium Store</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec3713",
+                        "primary-light": "#ffefe5",
+                        "background-light": "#ffffff",
+                        "background-alt": "#f8f6f6",
+                        "text-main": "#181211",
+                        "text-muted": "#896861",
+                        "kakao": "#FEE500",
+                    },
+                    fontFamily: {
+                        display: ["Pretendard", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-background-light text-text-main font-display antialiased selection:bg-primary selection:text-white">
+    <div class="flex min-h-screen flex-col">
+        <!-- HEADER -->
+        <header class="sticky top-0 z-50 w-full border-b border-background-alt bg-white/95 backdrop-blur-md">
+            <div class="bg-background-alt py-1 text-xs text-text-muted">
+                <div class="mx-auto flex max-w-7xl justify-end px-6 lg:px-8 gap-4">
+                    <a class="hover:text-primary" href="login.html">로그인</a>
+                    <a class="hover:text-primary" href="register.html">회원가입</a>
+                    <a class="text-primary font-bold" href="support.html">고객센터</a>
+                </div>
+            </div>
+            <div class="mx-auto flex h-[110px] max-w-7xl items-center justify-between px-6 lg:px-8">
+                <div class="flex items-center gap-8 lg:gap-12">
+                    <a class="flex items-center gap-2" href="index.html">
+                        <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
+                            <span class="material-symbols-outlined text-xl">stat_1</span>
+                        </div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-text-main">Active Women</h1>
+                    </a>
+                    <div class="hidden md:flex relative group">
+                        <div class="flex w-[380px] items-center rounded-full bg-background-alt px-4 py-2 border border-transparent focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50">
+                            <input class="w-full border-none bg-transparent px-2 text-sm text-text-main focus:ring-0" placeholder="찾으시는 상품을 검색해보세요" type="text" />
+                            <span class="material-symbols-outlined text-text-muted cursor-pointer hover:text-primary">search</span>
+                        </div>
+                    </div>
+                </div>
+                <nav class="hidden items-center gap-8 lg:flex">
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="product-list.html">신상품</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="product-list.html">베스트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="event.html">이벤트</a>
+                    <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="community.html">커뮤니티</a>
+                    <a class="text-base font-bold text-primary border-b-2 border-primary pb-1 -mb-[3px]" href="support.html">고객센터</a>
+                </nav>
+                <div class="flex items-center gap-2">
+                    <button class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">favorite</span></button>
+                    <a href="cart.html" class="relative flex size-10 items-center justify-center rounded-full hover:bg-background-alt">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span class="absolute right-0 top-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">3</span>
+                    </a>
+                    <a href="mypage.html" class="flex size-10 items-center justify-center rounded-full hover:bg-background-alt"><span class="material-symbols-outlined">person</span></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <!-- SIDEBAR - Sycned with support.html -->
+                <aside class="w-full lg:w-64 flex-shrink-0 space-y-8">
+                    <h2 class="text-3xl font-extrabold text-text-main mb-8 uppercase tracking-tighter">CS Center</h2>
+                    <nav class="flex flex-col gap-1">
+                        <a href="support.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            자주 묻는 질문 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                        <a href="support-notice.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            공지사항 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                        <a href="support-exchange.html" class="px-4 py-3 text-text-muted hover:bg-gray-50 hover:text-text-main rounded-xl font-bold transition-all flex items-center justify-between group">
+                            교환/반품 안내 <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">chevron_right</span>
+                        </a>
+                        <a href="support-membership.html" class="px-4 py-3 bg-text-main text-white rounded-xl font-bold transition-all shadow-md shadow-black/10 flex items-center justify-between">
+                            멤버십 혜택 안내 <span class="material-symbols-outlined text-sm">chevron_right</span>
+                        </a>
+                    </nav>
+
+                    <!-- Contact Panel -->
+                    <div class="p-6 bg-background-alt rounded-[2rem] border border-gray-100">
+                        <h3 class="font-bold text-text-main flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">support_agent</span> 고객상담센터
+                        </h3>
+                        <p class="text-3xl font-black text-primary mb-1">1544-0000</p>
+                        <a href="https://pf.kakao.com" target="_blank" class="w-full mt-8 py-4 bg-kakao text-background-dark rounded-2xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg transition-all">
+                            <span class="material-symbols-outlined text-lg">chat_bubble</span> 실시간 상담 시작
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- CONTENT -->
+                <div class="flex-1 space-y-12">
+                    <div class="bg-primary-light/20 p-10 rounded-[3.5rem] mb-12 border border-primary/5 text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 opacity-5"><span class="material-symbols-outlined text-9xl">workspace_premium</span></div>
+                        <span class="inline-block px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full mb-4 uppercase tracking-widest">Benefit Guide</span>
+                        <h2 class="text-4xl font-black text-text-main tracking-tight mb-4">Active Women Membership 💎</h2>
+                        <p class="text-text-muted text-sm max-w-md mx-auto break-keep">함께할수록 더 커지는 특별한 등급별 혜택을 확인해 보세요.</p>
+                    </div>
+
+                    <!-- Membership Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Silver -->
+                        <div class="p-8 bg-white border border-gray-100 rounded-[2.5rem] hover:shadow-xl transition-all text-center group">
+                            <div class="size-16 bg-gray-100 text-gray-400 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-light group-hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-4xl">grade</span>
+                            </div>
+                            <h4 class="text-xl font-black text-text-main mb-2">SILVER</h4>
+                            <p class="text-xs text-text-muted mb-8 italic">신규 가입 고객</p>
+                            <ul class="space-y-4 text-sm font-bold text-text-main text-left">
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 신규 가입 1만원 쿠폰</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 구매 금액 1% 적립</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 생일 축하 쿠폰 지급</li>
+                            </ul>
+                        </div>
+                        <!-- Gold -->
+                        <div class="p-8 bg-white border-2 border-primary rounded-[2.5rem] shadow-2xl text-center relative z-10 scale-105">
+                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase">Most Loved</div>
+                            <div class="size-16 bg-primary-light text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <span class="material-symbols-outlined text-4xl">workspace_premium</span>
+                            </div>
+                            <h4 class="text-xl font-black text-text-main mb-2">GOLD</h4>
+                            <p class="text-xs text-text-muted mb-8 italic">20만원 이상 구매</p>
+                            <ul class="space-y-4 text-sm font-bold text-text-main text-left">
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 상시 3% 추가 할인</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 구매 금액 3% 적립</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 무료배송 쿠폰 (월 1회)</li>
+                            </ul>
+                        </div>
+                        <!-- VIP -->
+                        <div class="p-8 bg-white border border-gray-100 rounded-[2.5rem] hover:shadow-xl transition-all text-center group">
+                            <div class="size-16 bg-background-dark text-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <span class="material-symbols-outlined text-4xl">diamond</span>
+                            </div>
+                            <h4 class="text-xl font-black text-text-main mb-2">VIP</h4>
+                            <p class="text-xs text-text-muted mb-8 italic">50만원 이상 구매</p>
+                            <ul class="space-y-4 text-sm font-bold text-text-main text-left">
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 상시 5% 추가 할인</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 구매 금액 5% 적립</li>
+                                <li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check</span> 전용 시크릿 세일 초대</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-gray-50 rounded-3xl border border-gray-100 text-center">
+                        <p class="text-sm text-text-muted italic">"자기가 어떤 등급이든, 카리나한테는 언제나 VIP인 거 알지? 💖"</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="border-t border-gray-200 bg-white py-12 mt-auto">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-400">© 2026 Active Women Store. All rights reserved.</div>
+        </footer>
+    </div>
+</body>
+</html>

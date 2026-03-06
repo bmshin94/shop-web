@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "context7-fix": {
+      "command": "npx -y @upstash/context7-mcp --api-key ctx7sk-21c4990a-cb47-4004-90e5-e8f96b81479d",
+      "args": [],
+      "trust": true
+    }
+  }
+}

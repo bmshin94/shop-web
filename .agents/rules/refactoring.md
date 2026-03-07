@@ -16,7 +16,7 @@ trigger: always_on
 - **비동기 처리 최적화:** 중첩된 AJAX 콜백(Callback Hell)은 `Promise` 체이닝이나 `async/await` 패턴으로 변경하여 동기식 흐름처럼 직관적으로 읽히게 만든다.
 - **하드코딩 제거:** 의미를 알 수 없는 매직 넘버(예: `status == 2`)나 API 엔드포인트 URL은 파일 최상단에 상수(Constant)로 정의하여 재사용한다.
 
-## 3. 뷰 및 마크업 리팩토링 (HTML / CSS / Bootstrap)
+## 3. 뷰 및 마크업 리팩토링 (HTML / CSS / Tailwind CSS)
 - **컴포넌트화:** HER FIELD 쇼핑몰 전역에서 반복되는 UI 요소(상품 카드, 사이즈 옵션 버튼, 페이지네이션 등)는 개별 HTML로 방치하지 않는다. 반드시 Laravel `Blade Components` 또는 `@include`로 모듈화하여 코드 중복을 제거한다.
 - **시맨틱 마크업:** 무분별한 `<div>` 사용을 줄이고, `<header>`, `<main>`, `<section>`, `<article>` 등 의미론적(Semantic) 태그를 적용하여 구조를 개선한다.
 

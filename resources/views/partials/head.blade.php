@@ -20,6 +20,18 @@
     vertical-align: bottom;
   }
 </style>
+
+<!-- Global Form Element Styles -->
+<style>
+  input[type="checkbox"]:focus, 
+  input[type="radio"]:focus {
+    --tw-ring-offset-width: 0px !important;
+    --tw-ring-width: 0px !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+</style>
+
 <script>
   document.fonts.ready.then(() => {
     const foutGuard = document.getElementById('fout-guard');

@@ -37,9 +37,9 @@
         </div>
       </div>
     </div>
-    <nav class="hidden items-center gap-8 lg:flex">
-      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/product-list">신상품</a>
-      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/product-list">베스트</a>
+      <nav class="hidden items-center gap-8 lg:flex">
+      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="{{ route('products.new') }}">신상품</a>
+      <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="{{ route('products.best') }}">베스트</a>
       <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/event">이벤트</a>
       <a class="text-base font-bold text-text-main transition-colors hover:text-primary" href="/community">커뮤니티</a>
       <a class="text-base font-bold text-primary transition-colors hover:text-red-700" href="/exhibition">기획전</a>
@@ -82,10 +82,10 @@
       
       <nav class="flex flex-col gap-1">
         <p class="mb-2 px-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">Menu</p>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/product-list">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="{{ route('products.new') }}">
           신상품 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
-        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/product-list">
+        <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="{{ route('products.best') }}">
           베스트 <span class="material-symbols-outlined text-sm opacity-30">chevron_right</span>
         </a>
         <a class="flex items-center justify-between rounded-lg px-2 py-3 text-lg font-bold text-text-main transition-colors hover:bg-background-alt hover:text-primary" href="/event">

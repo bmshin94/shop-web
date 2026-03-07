@@ -2,6 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ProductController;
+
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\ExhibitionController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\OperatorController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +23,80 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// --- 관리자 페이지 (Admin Dashboard) ---
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Guest (Not logged in) Admin Routes
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    });
+
+    // Authenticated Admin Routes
+    Route::middleware(['auth:admin', 'admin.permission'])->group(function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/trash', [EventController::class, 'trash'])->name('events.trash');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::patch('/events/{event}/restore', [EventController::class, 'restore'])->withTrashed()->name('events.restore');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::delete('/events/{event}/force', [EventController::class, 'forceDestroy'])->withTrashed()->name('events.force-destroy');
+    Route::get('/exhibitions', [ExhibitionController::class, 'index'])->name('exhibitions.index');
+    Route::get('/exhibitions/trash', [ExhibitionController::class, 'trash'])->name('exhibitions.trash');
+    Route::get('/exhibitions/create', [ExhibitionController::class, 'create'])->name('exhibitions.create');
+    Route::post('/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
+    Route::get('/exhibitions/{exhibition}/edit', [ExhibitionController::class, 'edit'])->name('exhibitions.edit');
+    Route::put('/exhibitions/{exhibition}', [ExhibitionController::class, 'update'])->name('exhibitions.update');
+    Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('exhibitions.restore');
+    Route::delete('/exhibitions/{exhibition}', [ExhibitionController::class, 'destroy'])->name('exhibitions.destroy');
+    Route::delete('/exhibitions/{exhibition}/force', [ExhibitionController::class, 'forceDestroy'])->withTrashed()->name('exhibitions.force-destroy');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/members/trash', [MemberController::class, 'trash'])->name('members.trash');
+    Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
+    Route::patch('/members/{member}', [MemberController::class, 'update'])->name('members.update');
+    Route::patch('/members/{member}/restore', [MemberController::class, 'restore'])->withTrashed()->name('members.restore');
+    Route::delete('/members/{member}', [MemberController::class, 'destroy'])->name('members.destroy');
+    Route::delete('/members/{member}/force', [MemberController::class, 'forceDestroy'])->withTrashed()->name('members.force-destroy');
+    Route::get('/operators', [OperatorController::class, 'index'])->name('operators.index');
+    Route::get('/operators/trash', [OperatorController::class, 'trash'])->name('operators.trash');
+    Route::get('/operators/create', [OperatorController::class, 'create'])->name('operators.create');
+    Route::post('/operators', [OperatorController::class, 'store'])->name('operators.store');
+    Route::get('/operators/{operator}', [OperatorController::class, 'show'])->name('operators.show');
+    Route::patch('/operators/{operator}', [OperatorController::class, 'update'])->name('operators.update');
+    Route::patch('/operators/{operator}/restore', [OperatorController::class, 'restore'])->withTrashed()->name('operators.restore');
+    Route::delete('/operators/{operator}', [OperatorController::class, 'destroy'])->name('operators.destroy');
+    Route::delete('/operators/{operator}/force', [OperatorController::class, 'forceDestroy'])->withTrashed()->name('operators.force-destroy');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/trash', [OrderController::class, 'trash'])->name('orders.trash');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::patch('/orders/{order}/restore', [OrderController::class, 'restore'])->withTrashed()->name('orders.restore');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::delete('/orders/{order}/force', [OrderController::class, 'forceDestroy'])->withTrashed()->name('orders.force-destroy');
+    Route::get('/products', [AdminController::class, 'productList'])->name('products.index');
+    Route::get('/products/create', [AdminController::class, 'productCreate'])->name('products.create');
+    Route::post('/products', [AdminController::class, 'productStore'])->name('products.store');
+    Route::get('/products/{product}', [AdminController::class, 'productShow'])->name('products.show');
+    Route::get('/products/{product}/edit', [AdminController::class, 'productEdit'])->name('products.edit');
+    Route::put('/products/{product}', [AdminController::class, 'productUpdate'])->name('products.update');
+    Route::delete('/products/{product}', [AdminController::class, 'productDestroy'])->name('products.destroy');
+    Route::get('/categories', [AdminController::class, 'categoryList'])->name('categories.index');
+    Route::get('/categories/create', [AdminController::class, 'categoryCreate'])->name('categories.create');
+    Route::post('/categories', [AdminController::class, 'categoryStore'])->name('categories.store');
+    Route::get('/categories/{category}/edit', [AdminController::class, 'categoryEdit'])->name('categories.edit');
+    Route::put('/categories/{category}', [AdminController::class, 'categoryUpdate'])->name('categories.update');
+    Route::delete('/categories/{category}', [AdminController::class, 'categoryDestroy'])->name('categories.destroy');
+    Route::post('/categories/reorder', [AdminController::class, 'categoryReorder'])->name('categories.reorder');
+    // 추가적인 관리자 라우트는 여기에 들어올 예정입니다 😊
+    });
+});
 
 Route::get('/', function () {
     return view('pages.index');
@@ -26,9 +111,9 @@ Route::get('/mypage', function () {
 })->name('mypage');
 
 // --- 1단계 배치 (상품/장바구니) ---
-Route::get('/product-list', function () {
-    return view('pages.product-list');
-})->name('product-list');
+Route::get('/product-list', [ProductController::class, 'index'])->name('product-list');
+Route::get('/products/new', [ProductController::class, 'newArrivals'])->name('products.new');
+Route::get('/products/best', [ProductController::class, 'bestProducts'])->name('products.best');
 
 Route::get('/product-detail', function () {
     return view('pages.product-detail');

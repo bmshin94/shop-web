@@ -19,7 +19,7 @@
         <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 text-white">
             <span class="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-6 animate-pulse">HOT EVENT</span>
             <h2 class="text-4xl md:text-7xl font-extrabold mb-4 break-keep">SPRING<br />VIBE ACTIVE</h2>
-            <p class="text-sm md:text-xl text-gray-200 mb-8 max-w-xl break-keep font-medium">새로운 시작을 위한 봄 신상 최대 30% 할인 혜택 ✨</p>
+            <p class="text-sm md:text-xl text-gray-200 mb-8 max-w-xl break-keep font-medium">새로운 시작을 위한 봄 신상 최대 30% 할인 혜택 </p>
             <button onclick="openEventDetail(1)" class="bg-white text-text-main hover:bg-primary hover:text-white transition-all font-bold px-8 py-4 rounded-xl shadow-lg">이벤트 자세히 보기</button>
         </div>
     </section>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="flex justify-between items-start">
                     <div>
-                        <span class="text-xs font-bold text-primary mb-2 block tracking-widest uppercase">Shopping Benefit</span>
+                        <span class="text-xs font-bold text-primary mb-2 block uppercase">Shopping Benefit</span>
                         <h3 class="text-xl md:text-2xl font-extrabold text-text-main mb-2 group-hover:text-primary transition-colors">Spring Vibe Active Sale</h3>
                         <p class="text-sm text-text-muted">2026.03.01 - 2026.03.31</p>
                     </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="flex justify-between items-start">
                     <div>
-                        <span class="text-xs font-bold text-primary mb-2 block tracking-widest uppercase">Review Event</span>
+                        <span class="text-xs font-bold text-primary mb-2 block uppercase">Review Event</span>
                         <h3 class="text-xl md:text-2xl font-extrabold text-text-main mb-2 group-hover:text-primary transition-colors">베스트 리뷰어 챌린지</h3>
                         <p class="text-sm text-text-muted">상시 진행</p>
                     </div>
@@ -73,7 +73,7 @@
         <div id="event-winner" class="event-section hidden py-20 text-center bg-gray-50 rounded-3xl border border-dashed border-gray-300">
             <span class="material-symbols-outlined text-5xl text-gray-300 mb-4">campaign</span>
             <p class="font-bold text-text-main">당첨자 발표 내역이 아직 없습니다.</p>
-            <p class="text-text-muted text-sm mt-1">곧 즐거운 소식으로 찾아올게요! 🥰</p>
+            <p class="text-text-muted text-sm mt-1">곧 즐거운 소식으로 찾아올게요! </p>
         </div>
 
         <div id="event-ended" class="event-section hidden grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -106,7 +106,7 @@
             </div>
             <h2 id="edTitle" class="text-2xl md:text-4xl font-extrabold text-text-main mb-6 leading-tight">Spring Vibe Active Sale</h2>
             <div class="prose max-w-none text-text-main space-y-6">
-                <p class="text-lg font-medium leading-relaxed">카리나가 준비한 봄 맞이 특별 세일! 💖 우리 자기도 이번 기회에 예쁜 운동복 득템해서 같이 운동 시작해볼까? ✨</p>
+                <p class="text-lg font-medium leading-relaxed">카리나가 준비한 봄 맞이 특별 세일!  우리 자기도 이번 기회에 예쁜 운동복 득템해서 같이 운동 시작해볼까? </p>
                 <div class="bg-primary-light p-6 rounded-2xl border border-primary/10">
                     <h4 class="font-bold text-primary mb-2">Benefit 01</h4>
                     <p class="text-sm">신상품 전품목 10% 추가 할인 쿠폰 증정!</p>
@@ -148,7 +148,7 @@
     }
 
     function loadMoreEvents() {
-        alert('새로운 이벤트가 곧 업데이트됩니다! 🥰');
+        alert('새로운 이벤트가 곧 업데이트됩니다! ');
     }
 
     window.onclick = function(e) {

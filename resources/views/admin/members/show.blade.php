@@ -40,35 +40,35 @@
             <h4 class="text-base font-extrabold text-text-main mb-5">회원 기본 정보</h4>
             <dl class="space-y-4 text-sm">
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">회원 ID</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">회원 ID</dt>
                     <dd class="mt-1 font-bold text-text-main">#{{ number_format($member->id) }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">회원명</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">회원명</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $member->name }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이메일</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">이메일</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $member->email }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이메일 인증</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">이메일 인증</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $member->email_verified_at ? '인증 완료' : '미인증' }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">연락처</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">연락처</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $member->phone ?: '-' }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">현재 상태</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">현재 상태</dt>
                     <dd class="mt-1"><x-admin.status-badge type="member" :value="$member->status" /></dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">가입일</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">가입일</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ optional($member->created_at)->format('Y.m.d H:i') }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">최근 로그인</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">최근 로그인</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ optional($member->last_login_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                 </div>
             </dl>

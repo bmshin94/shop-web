@@ -40,7 +40,7 @@
                 <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">shopping_bag</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">전체 주문</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">전체 주문</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['total_orders']) }}</p>
         </div>
@@ -49,7 +49,7 @@
                 <div class="size-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">calendar_month</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">오늘 주문</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">오늘 주문</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['today_orders']) }}</p>
         </div>
@@ -58,7 +58,7 @@
                 <div class="size-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">local_shipping</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">배송중</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">배송중</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['shipping_orders']) }}</p>
         </div>
@@ -67,7 +67,7 @@
                 <div class="size-12 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">task_alt</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">배송완료</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">배송완료</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['completed_orders']) }}</p>
         </div>
@@ -153,13 +153,13 @@
         </div>
 
         <div class="hidden lg:grid order-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">주문번호 / 주문자</div>
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">수령인 / 상품수</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">주문상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">결제상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">배송상태</div>
-            <div class="text-right text-[11px] font-bold text-text-muted uppercase tracking-widest">결제금액 / 주문일</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">주문번호 / 주문자</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">수령인 / 상품수</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">주문상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">결제상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">배송상태</div>
+            <div class="text-right text-[11px] font-bold text-text-muted uppercase">결제금액 / 주문일</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

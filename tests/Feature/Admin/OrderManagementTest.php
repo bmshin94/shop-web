@@ -4,12 +4,12 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class OrderManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @test */
     public function 관리자_주문목록은_검색어와_배송상태로_필터링된다(): void

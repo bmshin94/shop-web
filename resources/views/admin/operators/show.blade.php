@@ -40,35 +40,35 @@
             <h4 class="text-base font-extrabold text-text-main mb-5">운영자 기본 정보</h4>
             <dl class="space-y-4 text-sm">
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">운영자 ID</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">운영자 ID</dt>
                     <dd class="mt-1 font-bold text-text-main">#{{ number_format($operator->id) }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">운영자명</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">운영자명</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $operator->name }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이메일</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">이메일</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $operator->email }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">연락처</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">연락처</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ $operator->phone ?: '-' }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">현재 상태</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">현재 상태</dt>
                     <dd class="mt-1"><x-admin.status-badge type="operator" :value="$operator->status" /></dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">가입일</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">가입일</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ optional($operator->created_at)->format('Y.m.d H:i') }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">최근 로그인</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">최근 로그인</dt>
                     <dd class="mt-1 font-bold text-text-main">{{ optional($operator->last_login_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                 </div>
                 <div>
-                    <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">접근 가능 메뉴</dt>
+                    <dt class="text-[11px] font-bold text-text-muted uppercase">접근 가능 메뉴</dt>
                     <dd class="mt-2 flex flex-wrap gap-2">
                         @foreach($operator->resolvedMenuPermissions() as $menuKey)
                             <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-bold text-text-main">

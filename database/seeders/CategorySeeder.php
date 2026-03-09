@@ -13,10 +13,10 @@ class CategorySeeder extends Seeder
      */
     public function up(): void
     {
-        // 1. 기존 데이터 정리 (중복 방지를 위해 깨끗하게! 😊)
+        // 1. 기존 데이터 정리 (중복 방지를 위해 깨끗하게! )
         Category::query()->delete();
 
-        // 2. 대분류: 스포츠웨어 (ID: 1) 💖
+        // 2. 대분류: 스포츠웨어 (ID: 1) 
         $sportswear = Category::create([
             'name' => '스포츠웨어',
             'slug' => 'activewear',
@@ -55,7 +55,7 @@ class CategorySeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // 3. 대분류: 홈트 & 용품 (ID: 2) 😊
+        // 3. 대분류: 홈트 & 용품 (ID: 2) 
         $hometrain = Category::create([
             'name' => '홈트 & 용품',
             'slug' => 'home-training',
@@ -84,7 +84,7 @@ class CategorySeeder extends Seeder
             'is_active' => true,
         ]);
 
-        // 4. 대분류: 뷰티 & 케어 (ID: 3) ✨
+        // 4. 대분류: 뷰티 & 케어 (ID: 3) 
         $beauty = Category::create([
             'name' => '뷰티 & 케어',
             'slug' => 'beauty-care',

@@ -96,11 +96,11 @@
         </div>
 
         <div class="hidden lg:grid member-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">회원 정보</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">회원상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">가입일</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">삭제일</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">회원 정보</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">회원상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">가입일</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">삭제일</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

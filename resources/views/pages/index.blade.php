@@ -360,7 +360,7 @@
       $cartBadge.addClass('animate-bounce');
       setTimeout(() => $cartBadge.removeClass('animate-bounce'), 1000);
       
-      alert('장바구니에 상품을 담았어요! 😊💖');
+      alert('장바구니에 상품을 담았어요! ');
     });
 
     // 3. 실시간 인기 급상승 섹션 가로 스크롤 제어

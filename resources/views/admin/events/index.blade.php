@@ -37,7 +37,7 @@
                 <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">campaign</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">전체 이벤트</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">전체 이벤트</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['total_events']) }}</p>
         </div>
@@ -46,7 +46,7 @@
                 <div class="size-12 rounded-2xl bg-slate-100 text-slate-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">event_upcoming</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">진행예정</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">진행예정</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['upcoming_events']) }}</p>
         </div>
@@ -55,7 +55,7 @@
                 <div class="size-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">bolt</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">진행중</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">진행중</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['active_events']) }}</p>
         </div>
@@ -64,7 +64,7 @@
                 <div class="size-12 rounded-2xl bg-gray-100 text-gray-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">flag</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">종료</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">종료</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['ended_events']) }}</p>
         </div>
@@ -73,7 +73,7 @@
                 <div class="size-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">visibility_off</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">비노출</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">비노출</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['hidden_events']) }}</p>
         </div>
@@ -137,11 +137,11 @@
         </div>
 
         <div class="hidden lg:grid event-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이벤트 정보</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">기간</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">정렬</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">이벤트 정보</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">기간</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">정렬</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

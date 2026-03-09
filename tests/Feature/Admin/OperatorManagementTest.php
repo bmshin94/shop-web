@@ -3,13 +3,13 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Operator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class OperatorManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @test */
     public function admin_can_filter_operators_by_search_and_status(): void

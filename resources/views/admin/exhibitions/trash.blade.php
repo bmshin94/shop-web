@@ -92,11 +92,11 @@
         </div>
 
         <div class="hidden lg:grid exhibition-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">기획전 정보</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">정렬</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">삭제일</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">기획전 정보</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">정렬</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">삭제일</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

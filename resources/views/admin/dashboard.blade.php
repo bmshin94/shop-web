@@ -12,7 +12,7 @@
                 <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-[28px]">payments</span>
                 </div>
-                <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">오늘의 매출액</p>
+                <p class="text-[11px] font-bold text-text-muted uppercase">오늘의 매출액</p>
             </div>
             <div class="flex items-end justify-between">
                 <h4 class="text-2xl font-black text-text-main">₩1,250,000</h4>
@@ -28,7 +28,7 @@
                 <div class="size-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-[28px]">shopping_cart</span>
                 </div>
-                <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">오늘의 주문</p>
+                <p class="text-[11px] font-bold text-text-muted uppercase">오늘의 주문</p>
             </div>
             <div class="flex items-end justify-between">
                 <h4 class="text-2xl font-black text-text-main">42건</h4>
@@ -42,7 +42,7 @@
                 <div class="size-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-[28px]">group</span>
                 </div>
-                <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">신규 가입</p>
+                <p class="text-[11px] font-bold text-text-muted uppercase">신규 가입</p>
             </div>
             <div class="flex items-end justify-between">
                 <h4 class="text-2xl font-black text-text-main">12명</h4>
@@ -56,7 +56,7 @@
                 <div class="size-12 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-[28px]">question_answer</span>
                 </div>
-                <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">답변 대기 문의</p>
+                <p class="text-[11px] font-bold text-text-muted uppercase">답변 대기 문의</p>
             </div>
             <div class="flex items-end justify-between">
                 <h4 class="text-2xl font-black text-text-main">5건</h4>

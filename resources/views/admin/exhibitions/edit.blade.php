@@ -39,11 +39,11 @@
                 <h4 class="text-base font-extrabold text-text-main mb-5">기획전 요약</h4>
                 <dl class="space-y-4 text-sm">
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">상태</dt>
                         <dd class="mt-1"><x-admin.status-badge type="exhibition" :value="$exhibition->status" /></dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">기간</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">기간</dt>
                         <dd class="mt-1 font-bold text-text-main">
                             {{ optional($exhibition->start_at)->format('Y.m.d H:i') ?: '-' }}
                             <span class="text-text-muted">~</span>
@@ -51,15 +51,15 @@
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">정렬 순서</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">정렬 순서</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ number_format($exhibition->sort_order) }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">생성일</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">생성일</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ optional($exhibition->created_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">수정일</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">수정일</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ optional($exhibition->updated_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                     </div>
                 </dl>

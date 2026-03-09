@@ -15,7 +15,7 @@
     <div class="py-12 border-b border-gray-100 bg-background-alt">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-8">
             <h2 class="text-4xl font-extrabold text-text-main tracking-tight mb-4 uppercase">Season Exhibition</h2>
-            <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션 ✨</p>
+            <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션 </p>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
         <div class="relative aspect-banner rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-lg">
             <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2070" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
             <div class="absolute inset-0 bg-black/30 flex flex-col justify-center px-10 md:px-20 text-white">
-                <span class="text-xs font-bold mb-4 tracking-widest uppercase opacity-80">Collection 01</span>
+                <span class="text-xs font-bold mb-4 uppercase opacity-80">Collection 01</span>
                 <h3 class="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">24 SPRING<br />ATHLEISURE LOOK</h3>
                 <p class="max-w-md text-sm md:text-base mb-8 opacity-90 leading-relaxed break-keep">일상과 운동의 경계를 허무는 세련된 스타일. 지금 가장 사랑받는 애슬레저 아이템을 만나보세요.</p>
                 <div>
@@ -62,7 +62,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <div class="flex-1">
-                    <span class="text-xs font-bold text-primary mb-4 block tracking-widest uppercase">Essential Gear</span>
+                    <span class="text-xs font-bold text-primary mb-4 block uppercase">Essential Gear</span>
                     <h3 class="text-3xl md:text-5xl font-extrabold text-text-main mb-6 leading-tight">홈트 필수 기어 10선</h3>
                     <p class="text-text-muted mb-10 leading-relaxed break-keep">완벽한 홈 트레이닝을 위해 꼭 필요한 아이템들만 모았습니다. 당신의 홈짐을 완성해보세요.</p>
                     <button class="px-10 py-4 bg-text-main text-white font-bold rounded-2xl hover:bg-primary transition-all">기획전 바로가기</button>
@@ -78,7 +78,7 @@
     <!-- Exhibition 3 -->
     <section id="exhibit-3" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 scroll-mt-[180px]">
         <div class="text-center mb-12">
-            <h3 class="text-3xl font-extrabold text-text-main mb-4">주말 하이킹 기획전 🏔️</h3>
+            <h3 class="text-3xl font-extrabold text-text-main mb-4">주말 하이킹 기획전 </h3>
             <p class="text-text-muted">자연 속에서 즐기는 건강한 주말, 하이킹 필수템!</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">

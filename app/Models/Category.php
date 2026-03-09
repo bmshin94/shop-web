@@ -13,7 +13,7 @@ class Category extends Model
         'name',
         'slug',
         'parent_id',
-        'level', // 새로운 level 컬럼 허용! 😊
+        'level', // 새로운 level 컬럼 허용! 
         'sort_order',
         'is_active',
     ];
@@ -35,7 +35,7 @@ class Category extends Model
     }
 
     /**
-     * 상품 관계 정의 ✨
+     * 상품 관계 정의 
      */
     public function products()
     {
@@ -51,7 +51,7 @@ class Category extends Model
     }
 
     /**
-     * 대분류(1차)만 조회하는 스코프 (level 컬럼 사용! 🚀)
+     * 대분류(1차)만 조회하는 스코프 (level 컬럼 사용! )
      */
     public function scopeOnlyParents($query)
     {

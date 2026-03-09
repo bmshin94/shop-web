@@ -41,20 +41,20 @@
     <!-- 주문 요약 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">결제 금액</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">결제 금액</p>
             <p class="mt-3 text-3xl font-black text-text-main">₩{{ number_format($order->total_amount) }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">상품 합계</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">상품 합계</p>
             <p class="mt-3 text-3xl font-black text-text-main">₩{{ number_format($order->subtotal_amount) }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">배송비 / 할인</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">배송비 / 할인</p>
             <p class="mt-3 text-2xl font-black text-text-main">₩{{ number_format($order->shipping_amount) }}</p>
             <p class="mt-1 text-[12px] font-bold text-text-muted">할인 ₩{{ number_format($order->discount_amount) }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">수량 / 품목</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">수량 / 품목</p>
             <p class="mt-3 text-3xl font-black text-text-main">{{ number_format($order->items->sum('quantity')) }}개</p>
             <p class="mt-1 text-[12px] font-bold text-text-muted">{{ number_format($order->items->count()) }}개 품목</p>
         </div>
@@ -111,19 +111,19 @@
                     <h4 class="text-base font-extrabold text-text-main mb-5">주문자 정보</h4>
                     <dl class="space-y-4 text-sm">
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이름</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">이름</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->customer_name }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">연락처</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">연락처</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->customer_phone }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이메일</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">이메일</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->customer_email ?: '-' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">결제수단</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">결제수단</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->payment_method }}</dd>
                         </div>
                     </dl>
@@ -133,19 +133,19 @@
                     <h4 class="text-base font-extrabold text-text-main mb-5">배송지 정보</h4>
                     <dl class="space-y-4 text-sm">
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">수령인</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">수령인</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->recipient_name }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">연락처</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">연락처</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->recipient_phone }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">주소</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">주소</dt>
                             <dd class="mt-1 font-bold text-text-main">[{{ $order->postal_code ?: '-' }}] {{ $order->address_line1 }} {{ $order->address_line2 }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">배송 요청사항</dt>
+                            <dt class="text-[11px] font-bold text-text-muted uppercase">배송 요청사항</dt>
                             <dd class="mt-1 font-bold text-text-main">{{ $order->shipping_message ?: '-' }}</dd>
                         </div>
                     </dl>

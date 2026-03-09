@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\AdminMenu;
 
 class Operator extends Authenticatable
 {
@@ -40,15 +41,22 @@ class Operator extends Authenticatable
 
     /**
      * 운영자 권한으로 관리 가능한 메뉴 정의를 반환한다.
-     *
-     * @return array<string, array<string, mixed>>
+     * DB의 AdminMenu 테이블에서 permission_key가 있는 항목들을 가져온다.
      */
     public static function menuDefinitions(): array
     {
-        /** @var array<string, array<string, mixed>> $menus */
-        $menus = config('admin_permissions.menus', []);
-
-        return $menus;
+        return AdminMenu::active()
+            ->whereNotNull('permission_key')
+            ->get(['permission_key', 'name', 'description'])
+            ->mapWithKeys(function ($menu) {
+                return [
+                    $menu->permission_key => [
+                        'label' => $menu->name,
+                        'description' => $menu->description,
+                    ]
+                ];
+            })
+            ->toArray();
     }
 
     /**

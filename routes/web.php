@@ -3,13 +3,19 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\MemberController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\ExhibitionController;
-use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\MemberController as AdminMemberController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\AdminMenuController;
 use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
@@ -57,13 +63,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/exhibitions/{exhibition}/force', [ExhibitionController::class, 'forceDestroy'])->withTrashed()->name('exhibitions.force-destroy');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
-    Route::get('/members', [MemberController::class, 'index'])->name('members.index');
-    Route::get('/members/trash', [MemberController::class, 'trash'])->name('members.trash');
-    Route::get('/members/{member}', [MemberController::class, 'show'])->name('members.show');
-    Route::patch('/members/{member}', [MemberController::class, 'update'])->name('members.update');
-    Route::patch('/members/{member}/restore', [MemberController::class, 'restore'])->withTrashed()->name('members.restore');
-    Route::delete('/members/{member}', [MemberController::class, 'destroy'])->name('members.destroy');
-    Route::delete('/members/{member}/force', [MemberController::class, 'forceDestroy'])->withTrashed()->name('members.force-destroy');
+    Route::get('/members', [AdminMemberController::class, 'index'])->name('members.index');
+    Route::get('/members/trash', [AdminMemberController::class, 'trash'])->name('members.trash');
+    Route::get('/members/{member}', [AdminMemberController::class, 'show'])->name('members.show');
+    Route::patch('/members/{member}', [AdminMemberController::class, 'update'])->name('members.update');
+    Route::patch('/members/{member}/restore', [AdminMemberController::class, 'restore'])->withTrashed()->name('members.restore');
+    Route::delete('/members/{member}', [AdminMemberController::class, 'destroy'])->name('members.destroy');
+    Route::delete('/members/{member}/force', [AdminMemberController::class, 'forceDestroy'])->withTrashed()->name('members.force-destroy');
     Route::get('/operators', [OperatorController::class, 'index'])->name('operators.index');
     Route::get('/operators/trash', [OperatorController::class, 'trash'])->name('operators.trash');
     Route::get('/operators/create', [OperatorController::class, 'create'])->name('operators.create');
@@ -83,6 +89,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/products', [AdminController::class, 'productList'])->name('products.index');
     Route::get('/products/create', [AdminController::class, 'productCreate'])->name('products.create');
     Route::post('/products', [AdminController::class, 'productStore'])->name('products.store');
+    Route::get('/products/search', [AdminController::class, 'productSearch'])->name('products.search');
     Route::get('/products/{product}', [AdminController::class, 'productShow'])->name('products.show');
     Route::get('/products/{product}/edit', [AdminController::class, 'productEdit'])->name('products.edit');
     Route::put('/products/{product}', [AdminController::class, 'productUpdate'])->name('products.update');
@@ -94,30 +101,43 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::put('/categories/{category}', [AdminController::class, 'categoryUpdate'])->name('categories.update');
     Route::delete('/categories/{category}', [AdminController::class, 'categoryDestroy'])->name('categories.destroy');
     Route::post('/categories/reorder', [AdminController::class, 'categoryReorder'])->name('categories.reorder');
-    // 추가적인 관리자 라우트는 여기에 들어올 예정입니다 😊
+    Route::get('/products/search', [AdminController::class, 'productSearch'])->name('products.search');
+
+    // 색상 관리 라우트
+    Route::resource('/colors', ColorController::class)->except(['create', 'show'])->names('colors');
+
+    // 사이즈 관리 라우트
+    Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.index');
+    Route::post('/sizes', [SizeController::class, 'store'])->name('sizes.store');
+    Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
+    Route::post('/sizes/groups', [SizeController::class, 'storeGroup'])->name('sizes.groups.store');
+    Route::delete('/sizes/groups/{group}', [SizeController::class, 'destroyGroup'])->name('sizes.groups.destroy');
+
+    // 메뉴 관리 라우트
+    Route::resource('/menus', AdminMenuController::class)->names('menus');
+
+    // 추가적인 관리자 라우트는 여기에 들어올 예정입니다
     });
 });
+
+// --- 사용자 페이지 ---
 
 Route::get('/', function () {
     return view('pages.index');
 })->name('home');
 
-Route::get('/login', function () {
-    return view('pages.login');
-})->name('login');
-
-Route::get('/mypage', function () {
-    return view('pages.mypage');
-})->name('mypage');
+Route::middleware('auth')->group(function () {
+    Route::get('/mypage', [MemberController::class, 'index'])->name('mypage');
+    Route::get('/mypage/order-list', [MemberController::class, 'orderList'])->name('mypage.order-list');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
 // --- 1단계 배치 (상품/장바구니) ---
 Route::get('/product-list', [ProductController::class, 'index'])->name('product-list');
 Route::get('/products/new', [ProductController::class, 'newArrivals'])->name('products.new');
 Route::get('/products/best', [ProductController::class, 'bestProducts'])->name('products.best');
 
-Route::get('/product-detail', function () {
-    return view('pages.product-detail');
-})->name('product-detail');
+Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product-detail');
 
 Route::get('/cart', function () {
     return view('pages.cart');
@@ -127,16 +147,39 @@ Route::get('/checkout', function () {
     return view('pages.checkout');
 })->name('checkout');
 
-Route::get('/register', function () {
-    return view('pages.register');
-})->name('register');
+// 인증 및 검증 관련 (로그인하지 않은 사용자만 접근 가능)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('check-email');
+
+    // 비밀번호 찾기
+    Route::get('/find-password', [AuthController::class, 'showFindPasswordForm'])->name('password.find');
+    Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset.post');
+
+    // 아이디 찾기
+    Route::get('/find-email', [AuthController::class, 'showFindEmailForm'])->name('email.find');
+    Route::post('/find-email', [AuthController::class, 'findEmail'])->name('email.find.post');
+
+    // 소셜 로그인
+    Route::get('/login/{provider}', [AuthController::class, 'redirectToProvider'])->name('login.social');
+    Route::get('/login/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+
+    // 인증 발송 (가입/찾기 공용이므로 여기 포함)
+    Route::post('/sms/send', [VerificationController::class, 'sendCode'])->name('sms.send');
+    Route::post('/sms/verify', [VerificationController::class, 'verifyCode'])->name('sms.verify');
+    Route::post('/email/send', [VerificationController::class, 'sendEmailCode'])->name('email.send');
+    Route::post('/email/verify', [VerificationController::class, 'verifyEmailCode'])->name('email.verify');
+});
+
+// 로그인한 사용자 전용
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // --- 2단계 배치 (마이페이지 하위) ---
-Route::get('/mypage/order-list', function () {
-    return view('pages.mypage-order-list');
-})->name('mypage.order-list');
-
 Route::get('/mypage/order-detail', function () {
     return view('pages.mypage-order-detail');
 })->name('mypage.order-detail');
@@ -185,7 +228,6 @@ Route::get('/event', function () { return view('pages.event'); })->name('event')
 Route::get('/event/participate', function () { return view('pages.event-participate'); })->name('event.participate');
 
 Route::get('/exhibition', function () { return view('pages.exhibition'); })->name('exhibition');
-Route::get('/find-password', function () { return view('pages.find-password'); })->name('find-password');
 Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
 Route::get('/review/write', function () { return view('pages.review-write'); })->name('review.write');
 Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry');

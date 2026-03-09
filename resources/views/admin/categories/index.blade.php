@@ -10,7 +10,7 @@
     .drag-handle, .drag-handle-child { cursor: grab; }
     .drag-handle:active, .drag-handle-child:active { cursor: grabbing; }
     
-    /* 반응형 계층형 리스트 그리드 설정 ✨ */
+    /* 반응형 계층형 리스트 그리드 설정  */
     .category-row { 
         display: grid; 
         align-items: center;
@@ -79,13 +79,13 @@
     <div class="bg-white rounded-t-2xl lg:rounded-t-3xl border-x border-t border-gray-100 overflow-hidden shadow-sm">
         <div class="category-row bg-gray-50/50 border-b border-gray-100 px-4 lg:px-6 py-3 lg:py-4">
             <div class="flex justify-center"><span class="material-symbols-outlined text-gray-300 text-[18px]">drag_indicator</span></div>
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">카테고리명</div>
-            <div class="hidden md:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">구분</div>
-            <div class="hidden sm:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">상품수</div>
-            <div class="hidden lg:block text-[11px] font-bold text-text-muted uppercase tracking-widest">슬러그</div>
-            <div class="hidden lg:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">정렬</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">카테고리명</div>
+            <div class="hidden md:block text-center text-[11px] font-bold text-text-muted uppercase">구분</div>
+            <div class="hidden sm:block text-center text-[11px] font-bold text-text-muted uppercase">상품수</div>
+            <div class="hidden lg:block text-[11px] font-bold text-text-muted uppercase">슬러그</div>
+            <div class="hidden lg:block text-center text-[11px] font-bold text-text-muted uppercase">정렬</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
     </div>
 
@@ -303,12 +303,12 @@
     }
 
     $(document).ready(function() {
-        // 모달 외부 클릭 시 닫기 😊
+        // 모달 외부 클릭 시 닫기 
         $('#delete-modal').on('click', function(e) {
             if (e.target === this) closeDeleteModal();
         });
 
-        // 진짜 삭제 버튼 클릭! 🚀
+        // 진짜 삭제 버튼 클릭! 
         $('#confirm-delete-btn').on('click', function() {
             if (currentDeleteId) {
                 document.getElementById(`delete-form-${currentDeleteId}`).submit();

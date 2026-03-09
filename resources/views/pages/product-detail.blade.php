@@ -1,662 +1,695 @@
 @extends('layouts.app')
 
-@section('title', '상품 상세 - Active Women\'s Premium Store')
+@section('title', $product->name . ' - Active Women\'s Premium Store')
+
+@push('styles')
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
+    
+    .toast-enter { animation: toastIn 0.3s ease-out forwards; }
+    .toast-exit { animation: toastOut 0.3s ease-in forwards; }
+    
+    .tab-btn.active { border-color: #ec3713; color: #ec3713; }
+    .thumb-btn.active { border-color: #ec3713; opacity: 1; }
+</style>
+@endpush
 
 @section('content')
-    <main class="flex-1 bg-background-light">
-      <!-- Breadcrumb -->
-      <div class="bg-background-light py-4 border-b border-gray-100">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav class="flex text-xs text-text-muted" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-              <li class="inline-flex items-center">
-                <a href="/" class="hover:text-primary transition-colors">Home</a>
-              </li>
-              <li>
-                <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
-                  <a href="/product-list" class="hover:text-primary transition-colors">스포츠웨어</a>
-                </div>
-              </li>
-              <li>
-                <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
-                  <a href="/product-list" class="hover:text-primary transition-colors">탑 & 레깅스</a>
-                </div>
-              </li>
-              <li aria-current="page">
-                <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
-                  <span class="text-text-main font-bold">위켄드 워리어 셋업</span>
-                </div>
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-
-      <!-- Product Top Section (Gallery & Info) -->
-      <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          <!-- Product Gallery (Left) -->
-          <div class="flex flex-col-reverse lg:flex-row gap-4 mb-10 lg:mb-0">
-            <!-- Thumbnail list -->
-            <div
-              class="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto lg:w-20 xl:w-24 shrink-0 scrollbar-hide py-1">
-              <button
-                class="relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 border-primary shrink-0 transition-opacity hover:opacity-90">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDabAzzyO-1GPR9w9KUZy2t-akxd-pTry06ye-7EmfLIj4HsSh3Qsl3-4SPzOjkEiIvcTGGDyNJEuMpEpxJVMBh2D4z-w70xv-_n1ulP9ym_oYqWuFOnJqPl25Vm9FlyjgGTi65HS6qSzlRQgslgoXVASr5mvobAhP-rUuwV34o5MwDa2O-Tj9-CB71iqI7UuUDKfOzXILS0hUApxV--IBEjQ9t7EFGHTyyK8Vxetjz5EeEdY7nQBJbqJ9qIk1KAJSZqHHXH55EY1c"
-                  alt="Thumbnail 1" class="h-full w-full object-cover" />
-              </button>
-              <button
-                class="relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 border-transparent hover:border-gray-300 opacity-60 hover:opacity-100 transition-all shrink-0">
-                <div class="h-full w-full bg-stone-200"></div>
-              </button>
-              <button
-                class="relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 border-transparent hover:border-gray-300 opacity-60 hover:opacity-100 transition-all shrink-0">
-                <div class="h-full w-full bg-stone-300"></div>
-              </button>
-              <button
-                class="relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 border-transparent hover:border-gray-300 opacity-60 hover:opacity-100 transition-all shrink-0 flex items-center justify-center bg-gray-100">
-                <span class="material-symbols-outlined text-gray-400 text-3xl">play_circle</span>
-              </button>
-            </div>
-
-            <!-- Main Image -->
-            <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 group">
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDabAzzyO-1GPR9w9KUZy2t-akxd-pTry06ye-7EmfLIj4HsSh3Qsl3-4SPzOjkEiIvcTGGDyNJEuMpEpxJVMBh2D4z-w70xv-_n1ulP9ym_oYqWuFOnJqPl25Vm9FlyjgGTi65HS6qSzlRQgslgoXVASr5mvobAhP-rUuwV34o5MwDa2O-Tj9-CB71iqI7UuUDKfOzXILS0hUApxV--IBEjQ9t7EFGHTyyK8Vxetjz5EeEdY7nQBJbqJ9qIk1KAJSZqHHXH55EY1c"
-                alt="Main Product Image"
-                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in" />
-
-              <!-- Floating Actions -->
-              <div class="absolute right-4 top-4 flex flex-col gap-3">
-                <button
-                  class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:bg-primary hover:text-white transition-colors cursor-pointer z-10">
-                  <span class="material-symbols-outlined block text-xl">favorite</span>
-                </button>
-                <button
-                  class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:text-primary transition-colors cursor-pointer z-10">
-                  <span class="material-symbols-outlined block text-xl">share</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Product Info (Right) -->
-          <div class="flex flex-col mt-4 lg:mt-0">
-            <div class="mb-6">
-              <div class="flex items-center justify-between mb-2">
-                <a href="#" class="text-sm font-bold text-primary hover:underline transition-colors">ACTIVE WOMEN
-                  CLASSICS</a>
-                <div class="flex items-center gap-1 cursor-pointer group">
-                  <span
-                    class="material-symbols-outlined text-yellow-500 text-sm group-hover:text-yellow-600 transition-colors">star</span>
-                  <span class="text-sm font-bold text-text-main">4.8</span>
-                  <a href="#reviews" class="text-sm text-text-muted hover:underline ml-1">(리뷰 143건)</a>
-                </div>
-              </div>
-              <h1
-                class="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight mb-3 break-keep leading-tight">
-                위켄드 워리어 셋업
-              </h1>
-              <p class="text-base text-text-muted break-keep leading-relaxed">
-                주말 러닝부터 브런치 모임까지 하나로 끝내는, 극강의 편안함과
-                스타일을 갖춘 탑 & 레깅스 투피스.
-              </p>
-            </div>
-
-            <div class="mb-6 pb-6 border-b border-gray-100">
-              <div class="flex items-end gap-3 mb-3">
-                <span class="text-3xl font-extrabold text-red-500 tracking-tight">10%</span>
-                <div class="flex flex-col">
-                  <span class="text-sm text-text-muted line-through mb-0.5">₩165,000</span>
-                  <span class="text-3xl font-extrabold text-text-main tracking-tight">₩148,500</span>
-                </div>
-              </div>
-              <!-- Badges -->
-              <div class="flex flex-wrap gap-2">
-                <span
-                  class="inline-flex rounded-md bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700 border border-gray-200">무료배송</span>
-                <span
-                  class="inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary border border-primary/20">신규가입
-                  1만원 할인</span>
-              </div>
-            </div>
-
-            <!-- Options -->
-            <div class="space-y-6">
-              <!-- Color Option -->
-              <div>
-                <div class="flex justify-between items-center mb-3">
-                  <h3 class="text-sm font-bold text-text-main">
-                    색상:
-                    <span class="text-text-muted font-normal ml-1">오트밀 화이트</span>
-                  </h3>
-                </div>
-                <div class="flex flex-wrap gap-3">
-                  <button
-                    class="relative size-12 rounded-full ring-2 ring-primary ring-offset-2 overflow-hidden transition-all shadow-sm"
-                    title="오트밀 화이트">
-                    <span class="absolute inset-0 bg-[#f4f1eb]"></span>
-                  </button>
-                  <button
-                    class="relative size-12 rounded-full ring-1 ring-gray-200 hover:ring-2 hover:ring-black ring-offset-2 overflow-hidden transition-all shadow-sm"
-                    title="미드나잇 블랙">
-                    <span class="absolute inset-0 bg-[#1a1a1a]"></span>
-                  </button>
-                  <button
-                    class="relative size-12 rounded-full ring-1 ring-gray-200 hover:ring-2 hover:ring-slate-500 ring-offset-2 overflow-hidden transition-all shadow-sm"
-                    title="스틸 그레이">
-                    <span class="absolute inset-0 bg-[#6b7280]"></span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Size Option -->
-              <div>
-                <div class="flex justify-between items-center mb-3">
-                  <h3 class="text-sm font-bold text-text-main">사이즈</h3>
-                  <button class="text-xs text-text-muted underline hover:text-primary transition-colors">
-                    사이즈 가이드
-                  </button>
-                </div>
-                <div class="grid grid-cols-4 gap-3">
-                  <button
-                    class="flex h-12 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 font-bold text-gray-400 cursor-not-allowed"
-                    disabled>
-                    S <span class="text-[10px] font-normal ml-1">(품절)</span>
-                  </button>
-                  <button
-                    class="flex h-12 items-center justify-center rounded-lg border-2 border-primary bg-primary/5 font-bold text-primary shadow-sm">
-                    M
-                  </button>
-                  <button
-                    class="flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white font-bold text-text-main hover:border-text-main hover:bg-gray-50 transition-colors shadow-sm">
-                    L
-                  </button>
-                  <button
-                    class="flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white font-bold text-text-main hover:border-text-main hover:bg-gray-50 transition-colors shadow-sm">
-                    XL
-                  </button>
-                </div>
-              </div>
-
-              <!-- Quantity -->
-              <div class="flex items-center">
-                <h3 class="w-16 text-sm font-bold text-text-main">수량</h3>
-                <div id="qtyContainer"
-                  class="flex items-center rounded-lg border border-gray-300 p-1 w-32 justify-between bg-white shadow-sm">
-                  <button id="qtyMinus"
-                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">remove</span>
-                  </button>
-                  <span id="qtyDisplay" class="text-sm font-bold text-text-main text-center w-8">1</span>
-                  <button id="qtyPlus"
-                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">add</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Total & CTA -->
-            <div
-              class="mt-8 pt-6 border-t border-gray-200 bg-white sticky bottom-0 z-30 lg:static lg:bg-transparent pb-4 lg:pb-0">
-              <div class="flex justify-between items-end mb-4 lg:mb-6 px-4 lg:px-0">
-                <span class="text-base font-bold text-text-main">총 결제 금액</span>
-                <span id="totalPrice" class="text-3xl font-extrabold text-primary tracking-tight">₩148,500</span>
-              </div>
-              <div class="flex flex-col sm:flex-row gap-3 px-4 lg:px-0">
-                <button
-                  class="hidden sm:flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-primary bg-white text-base font-bold text-primary transition-colors hover:bg-primary/5 shadow-sm">
-                  장바구니 담기
-                </button>
-                <button
-                  class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-primary text-base font-extrabold text-white transition-colors hover:bg-red-600 shadow-lg shadow-primary/30">
-                  바로 구매하기
-                </button>
-              </div>
-              <!-- Naver Pay Dummy -->
-              <button
-                class="mt-3 hidden lg:flex h-14 w-full items-center justify-center rounded-xl bg-[#03C75A] text-base font-bold text-white transition-opacity hover:opacity-90 shadow-sm">
-                <span class="mr-2 font-extrabold italic font-sans text-xl tracking-tighter">N</span>
-                Pay 구매하기
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Detailed Information Tabs -->
-      <section class="border-t border-gray-200 mt-12 bg-white">
-        <div class="sticky top-[130px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <nav
-              class="-mb-px flex gap-8 whitespace-nowrap overflow-x-auto scrollbar-hide text-sm sm:text-base font-bold">
-              <button data-tab="details"
-                class="tab-btn border-b-2 border-primary py-4 text-primary whitespace-nowrap focus:outline-none">
-                상품 상세정보
-              </button>
-              <button data-tab="reviews"
-                class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
-                고객 리뷰
-                <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full bg-gray-100 font-normal">143</span>
-              </button>
-              <button data-tab="qna"
-                class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
-                Q & A
-              </button>
-              <button data-tab="shipping"
-                class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
-                배송/반품/교환
-              </button>
+<main class="flex-1 bg-background-light">
+    <!-- Breadcrumb -->
+    <div class="bg-background-light py-4 border-b border-gray-100">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <nav class="flex text-xs text-text-muted" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="/" class="hover:text-primary transition-colors">Home</a>
+                    </li>
+                    @if($product->category && $product->category->parent)
+                    <li>
+                        <div class="flex items-center">
+                            <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+                            <a href="{{ route('product-list', ['category' => $product->category->parent->slug]) }}" class="hover:text-primary transition-colors">{{ $product->category->parent->name }}</a>
+                        </div>
+                    </li>
+                    @endif
+                    @if($product->category)
+                    <li>
+                        <div class="flex items-center">
+                            <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+                            <a href="{{ route('product-list', ['category' => $product->category->slug]) }}" class="hover:text-primary transition-colors">{{ $product->category->name }}</a>
+                        </div>
+                    </li>
+                    @endif
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <span class="material-symbols-outlined text-[14px] mx-1">chevron_right</span>
+                            <span class="text-text-main font-bold line-clamp-1">{{ $product->name }}</span>
+                        </div>
+                    </li>
+                </ol>
             </nav>
-          </div>
+            <a href="{{ route('product-list', ['category' => $product->category->slug ?? '']) }}" class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-primary transition-colors group">
+                <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+                목록으로 돌아가기
+            </a>
         </div>
+    </div>
 
-        <!-- Tab Content Area -->
-        <div class="tab-content mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="details">
-          <!-- Mock Detail Content -->
-          <div class="text-center prose prose-gray max-w-none mx-auto">
-            <h2 class="text-3xl font-extrabold text-text-main mb-6 tracking-tight">
-              WEEKEND WARRIOR SETUP
-            </h2>
-            <p class="text-lg text-text-muted mb-12 break-keep leading-relaxed">
-              부드러운 터치감에 강력한 신축성을 더했습니다. 운동 중에도, 휴식
-              중에도 완벽한 핏을 경험하세요.
-            </p>
-
-            <figure class="mb-12 cursor-zoom-in">
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNV_-qqJpNJSfil1ngKQvNb1r7daZ2HnrJzBpcCE2WIus_n2dKQZYnXeDVlg5zsL-OVD5lO5iiEcI-xZS6PqRzKhzM0ISso0BRU2foFo_u6Z7eaIgNQDhkf_Krs5H2aEfXHaH0pK-gD5VYyplHz8tYNboPK_WqvgcFN_58Tec2EZawv2YOlmsRnn2MzMIdFjcI7GtaEAhX6ae0KX0HiHmxAmPPI6fdp7r7FIpGhPlZZsEKQj6q__bKZrPTpUnYw2DCW6rg51UIFFo"
-                alt="Lifestyle shot"
-                class="w-full rounded-2xl shadow-sm object-cover aspect-video hover:scale-[1.02] transition-transform duration-500" />
-            </figure>
-
-            <div class="grid sm:grid-cols-2 gap-8 text-left mb-16">
-              <div
-                class="bg-background-alt p-8 rounded-2xl border border-gray-100 shadow-sm transition-transform hover:-translate-y-1">
-                <span class="material-symbols-outlined text-4xl text-primary mb-4 block">tsunami</span>
-                <h3 class="text-xl font-bold mb-2 text-text-main">
-                  땀 흡수와 건조
-                </h3>
-                <p class="text-text-muted leading-relaxed">
-                  독자적인 에어로 드라이 기술로 격렬한 운동 후에도 항상 쾌적한
-                  상태를 유지합니다.
-                </p>
-              </div>
-              <div
-                class="bg-background-alt p-8 rounded-2xl border border-gray-100 shadow-sm transition-transform hover:-translate-y-1">
-                <span class="material-symbols-outlined text-4xl text-primary mb-4 block">line_weight</span>
-                <h3 class="text-xl font-bold mb-2 text-text-main">
-                  4-Way 스트레치
-                </h3>
-                <p class="text-text-muted leading-relaxed">
-                  어떤 움직임에도 제약 없는 완벽한 신축성을 자랑하는 하이테크
-                  원사 사용.
-                </p>
-              </div>
-            </div>
-
-            <!-- Product Specs Table -->
-            <h3 class="text-xl font-bold text-left mb-4 text-text-main border-b border-gray-200 pb-3">
-              제품 상세 스펙
-            </h3>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-sm text-text-main sm:text-base border-collapse">
-                <tbody class="divide-y divide-gray-200 border-b border-gray-200">
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <th class="py-4 font-bold w-1/3 sm:w-1/4 bg-gray-50 px-4 whitespace-nowrap">
-                      소재
-                    </th>
-                    <td class="py-4 px-4 text-text-muted leading-relaxed">
-                      Nylon 78%, Elastane 22%
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <th class="py-4 font-bold w-1/3 sm:w-1/4 bg-gray-50 px-4 whitespace-nowrap">
-                      핏
-                    </th>
-                    <td class="py-4 px-4 text-text-muted leading-relaxed">
-                      하이웨이스트 & 타이트 핏 (레깅스) / 컴포트 핏 (탑)
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <th class="py-4 font-bold w-1/3 sm:w-1/4 bg-gray-50 px-4 whitespace-nowrap">
-                      세탁 방법
-                    </th>
-                    <td class="py-4 px-4 text-text-muted leading-relaxed">
-                      찬물 단독 손세탁 권장 / 건조기 사용 금지
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <th class="py-4 font-bold w-1/3 sm:w-1/4 bg-gray-50 px-4 whitespace-nowrap">
-                      제조원/원산지
-                    </th>
-                    <td class="py-4 px-4 text-text-muted leading-relaxed">
-                      (주)액티브우먼 / 대한민국
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Reviews Content -->
-        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="reviews">
-          <h2 class="text-2xl font-bold text-text-main mb-8">고객 리뷰</h2>
-
-          <!-- [상태 1] 리뷰 데이터가 있는 경우 -->
-          <div id="reviewsHasData">
-            <div
-              class="flex flex-col md:flex-row gap-8 mb-12 items-center md:items-start border-b border-gray-100 pb-12">
-              <div class="text-center md:text-left flex-shrink-0">
-                <span class="text-5xl font-extrabold text-text-main">4.8</span>
-                <div class="flex mt-2 mb-1 justify-center md:justify-start">
-                  <span class="material-symbols-outlined text-yellow-500">star</span>
-                  <span class="material-symbols-outlined text-yellow-500">star</span>
-                  <span class="material-symbols-outlined text-yellow-500">star</span>
-                  <span class="material-symbols-outlined text-yellow-500">star</span>
-                  <span class="material-symbols-outlined text-yellow-500">star_half</span>
+    <!-- Product Top Section -->
+    <section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+        <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16 lg:items-stretch">
+            
+            <!-- Product Gallery (Left) -->
+            <!-- lg:self-start 를 추가하여 오른쪽 영역이 길어져도 이미지가 늘어나지 않게 고정합니다. -->
+            <div class="flex flex-col-reverse lg:flex-row gap-4 mb-10 lg:mb-0 lg:items-stretch lg:self-start">
+                <!-- Thumbnail list -->
+                <div class="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-hidden lg:w-20 xl:w-24 shrink-0 scrollbar-hide py-1">
+                    @forelse($product->images->sortBy('sort_order') as $index => $img)
+                    <button type="button"
+                        class="thumb-btn {{ $index === 0 ? 'active border-primary' : 'border-transparent opacity-60' }} relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 shrink-0 transition-all hover:opacity-100 shadow-sm">
+                        <img src="{{ Str::startsWith($img->image_path, 'http') ? $img->image_path : asset($img->image_path) }}" alt="Product Image {{ $index + 1 }}" class="h-full w-full object-cover" />
+                    </button>
+                    @empty
+                    <button type="button"
+                        class="thumb-btn active relative aspect-[3/4] w-20 lg:w-full overflow-hidden rounded-lg border-2 border-primary shrink-0 transition-all shadow-sm">
+                        <img src="{{ $product->image_url ?? 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=800&auto=format&fit=crop' }}" alt="Default Image" class="h-full w-full object-cover" />
+                    </button>
+                    @endforelse
                 </div>
-                <p class="text-sm font-bold text-text-muted">143개의 리뷰</p>
-              </div>
-              <div class="flex-grow w-full max-w-md space-y-2">
-                <div class="flex items-center text-sm">
-                  <span class="w-12 text-text-muted font-bold">5점</span>
-                  <div class="flex-grow bg-gray-100 h-2 mx-3 rounded-full overflow-hidden">
-                    <div class="bg-primary h-full w-[85%] rounded-full"></div>
-                  </div>
-                  <span class="w-8 text-right text-text-muted">121</span>
-                </div>
-                <div class="flex items-center text-sm">
-                  <span class="w-12 text-text-muted font-bold">4점</span>
-                  <div class="flex-grow bg-gray-100 h-2 mx-3 rounded-full overflow-hidden">
-                    <div class="bg-primary h-full w-[10%] rounded-full"></div>
-                  </div>
-                  <span class="w-8 text-right text-text-muted">15</span>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-8">
-              <div class="border-b border-gray-100 pb-8">
-                <div class="flex justify-between items-start mb-4">
-                  <div>
-                    <div class="flex mb-1">
-                      <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                      <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                      <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                      <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                      <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+
+                <!-- Main Image (썸네일 높이에 칼맞춤!) -->
+                <div class="relative flex-1 rounded-2xl overflow-hidden bg-gray-100 group shadow-sm lg:self-stretch lg:min-h-full">
+                    <div class="aspect-[3/4] lg:aspect-none lg:h-full w-full">
+                        <img id="main-product-image"
+                            src="{{ $product->image_url }}"
+                            alt="{{ $product->name }}"
+                            class="lg:absolute lg:inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in" />
                     </div>
-                    <span class="font-bold text-text-main mr-2">김*민</span>
-                    <span class="text-xs text-text-muted">2023.10.15</span>
-                  </div>
+
+                    <!-- Floating Actions (Wishlist & Share) -->
+                    <div class="absolute right-4 top-4 flex flex-col gap-3">
+                        <button type="button" id="wishlist-btn"
+                            class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:bg-primary hover:text-white transition-colors cursor-pointer z-10">
+                            <span class="material-symbols-outlined block text-xl">favorite</span>
+                        </button>
+                        <button type="button" id="share-btn"
+                            class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:text-primary transition-colors cursor-pointer z-10">
+                            <span class="material-symbols-outlined block text-xl">share</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="text-text-main leading-relaxed">
-                  운동할 때 정말 편하고 땀 흡수도 잘 됩니다. 핏도 예뻐서
-                  일상복으로도 자주 입게 되네요. 오트밀 컬러 화사하고 예뻐요!
-                </p>
-              </div>
             </div>
-            <div class="mt-8 text-center">
-              <button
-                class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-bold text-text-main hover:bg-gray-50 transition-colors">
-                리뷰 더 보기
-              </button>
-            </div>
-          </div>
 
-          <!-- 상태 구분선 -->
-          <div class="my-12 border-t-2 border-dashed border-gray-300 relative">
-            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-4 text-xs font-bold text-gray-400">⬇ 데이터
-              없는 경우 (Empty State) ⬇</span>
-          </div>
+            <!-- Product Info (Right) -->
+            <div class="flex flex-col mt-4 lg:mt-0 h-full">
+                <!-- Top Content Area -->
+                <div class="flex-1 pb-8">
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold text-primary uppercase tracking-wider">{{ $product->category->name ?? 'Premium Store' }}</span>
+                            <div class="flex items-center gap-1 cursor-pointer group">
+                                <span class="material-symbols-outlined text-yellow-500 text-sm group-hover:text-yellow-600 transition-colors">star</span>
+                                <span class="text-sm font-bold text-text-main">{{ number_format($product->average_rating, 1) }}</span>
+                                <a href="#reviews" id="top-review-link" class="text-sm text-text-muted hover:underline ml-1">(리뷰 {{ number_format($product->review_count) }}건)</a>
+                            </div>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight mb-3 break-keep leading-tight">
+                            {{ $product->name }}
+                        </h1>
+                        @if($product->brief_description)
+                        <p class="text-base text-text-muted break-keep leading-relaxed">
+                            {{ $product->brief_description }}
+                        </p>
+                        @endif
+                    </div>
 
-          <!-- [상태 2] 리뷰 데이터가 없는 경우 -->
-          <div id="reviewsEmpty">
-            <div class="flex flex-col items-center justify-center py-20 text-center">
-              <div class="flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
-                <span class="material-symbols-outlined text-5xl text-gray-300">rate_review</span>
-              </div>
-              <h3 class="text-xl font-bold text-text-main mb-2">아직 작성된 리뷰가 없습니다</h3>
-              <p class="text-sm text-text-muted mb-8 max-w-sm leading-relaxed">
-                이 상품을 구매하신 후 첫 번째 리뷰를 남겨주세요!<br>
-                소중한 후기는 다른 고객님들에게 큰 도움이 됩니다.
-              </p>
-              <a href="review-write.html"
-                class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span>
-                리뷰 작성하기
-              </a>
+                    <div class="mb-6 pb-6 border-b border-gray-100">
+                        <div class="flex items-end gap-3 mb-3">
+                            @if($product->sale_price && $product->discount_rate > 0)
+                            <span class="text-3xl font-extrabold text-red-500 tracking-tight">{{ $product->discount_rate }}%</span>
+                            @endif
+                            <div class="flex flex-col">
+                                @if($product->sale_price)
+                                <span class="text-sm text-text-muted line-through mb-0.5">₩{{ number_format($product->price) }}</span>
+                                <span class="text-3xl font-extrabold text-text-main tracking-tight">₩{{ number_format($product->sale_price) }}</span>
+                                @else
+                                <span class="text-3xl font-extrabold text-text-main tracking-tight">₩{{ number_format($product->price) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            @if($product->status === '품절')
+                            <span class="inline-flex rounded-md bg-red-600 px-2.5 py-1 text-xs font-black text-white shadow-sm">SOLD OUT</span>
+                            @endif
+                            @if($product->is_new)
+                            <span class="inline-flex rounded-md bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-600 border border-blue-100">NEW</span>
+                            @endif
+                            @if($product->is_best)
+                            <span class="inline-flex rounded-md bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-600 border border-amber-100">BEST</span>
+                            @endif
+                            <span class="inline-flex rounded-md bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700 border border-gray-200">무료배송</span>
+                        </div>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="space-y-6">
+                        <!-- Color Option -->
+                        @if($product->colors->count() > 0)
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-sm font-bold text-text-main">
+                                    색상:
+                                    <span id="colorLabel" class="text-text-muted font-normal ml-1">{{ $product->colors->first()->name }}</span>
+                                </h3>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                @foreach($product->colors as $index => $color)
+                                <button type="button"
+                                    class="color-btn relative size-12 rounded-full ring-offset-2 overflow-hidden transition-all shadow-sm {{ $index === 0 ? 'ring-2 ring-primary' : 'ring-1 ring-gray-200 hover:ring-2 hover:ring-primary' }}"
+                                    title="{{ $color->name }}" data-color-name="{{ $color->name }}">
+                                    <span class="absolute inset-0" style="background-color: {{ $color->hex_code }}"></span>
+                                </button>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Size Option -->
+                        @if($product->sizes->count() > 0)
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-sm font-bold text-text-main">사이즈</h3>
+                                <button type="button" id="sizeGuideBtn" class="text-xs text-text-muted underline hover:text-primary transition-colors">
+                                    사이즈 가이드
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-4 gap-3">
+                                @foreach($product->sizes as $size)
+                                <button type="button"
+                                    class="size-option-btn flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white font-bold text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+                                    {{ $size->name }}
+                                </button>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Quantity -->
+                        <div class="flex items-center">
+                            <h3 class="w-16 text-sm font-bold text-text-main">수량</h3>
+                            <div id="qtyContainer"
+                                class="flex items-center rounded-lg border border-gray-300 p-1 w-32 justify-between bg-white shadow-sm">
+                                <button type="button" id="qtyMinus"
+                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">remove</span>
+                                </button>
+                                <span id="qtyDisplay" class="text-sm font-bold text-text-main text-center w-8">1</span>
+                                <button type="button" id="qtyPlus"
+                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">add</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Action Area (모바일 장바구니 버튼 상시 노출!) -->
+                <div class="mt-8 pt-6 border-t border-gray-200 bg-white sticky bottom-0 z-30 lg:static lg:bg-transparent pb-4 lg:pb-0 lg:mt-auto">
+                    @if($product->status === '판매중')
+                    <div class="flex justify-between items-end mb-4 lg:mb-6 px-4 lg:px-0">
+                        <span class="text-base font-bold text-text-main">총 결제 금액</span>
+                        <span id="totalPrice" class="text-3xl font-extrabold text-primary tracking-tight">₩{{ number_format($product->sale_price ?? $product->price) }}</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 px-4 lg:px-0">
+                        <!-- hidden sm:flex 를 flex 로 변경하여 모바일에서도 장바구니 버튼 노출 -->
+                        <button type="button" id="addToCartBtn"
+                            class="flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-primary bg-white text-base font-bold text-primary transition-colors hover:bg-primary/5 shadow-sm">
+                            장바구니 담기
+                        </button>
+                        <button type="button" id="buyNowBtn"
+                            class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-primary text-base font-extrabold text-white transition-colors hover:bg-red-600 shadow-lg shadow-primary/30">
+                            바로 구매하기
+                        </button>
+                    </div>
+                    <!-- Naver Pay Button -->
+                    <button type="button"
+                        class="mt-3 hidden lg:flex h-14 w-full items-center justify-center rounded-xl bg-[#03C75A] text-base font-bold text-white transition-opacity hover:opacity-90 shadow-sm">
+                        <span class="mr-2 font-extrabold italic font-sans text-xl tracking-tighter text-white">N</span>
+                        <span class="text-white">Pay 구매하기</span>
+                    </button>
+                    @else
+                    <div class="px-4 lg:px-0">
+                        <button type="button" disabled
+                            class="flex h-14 w-full items-center justify-center rounded-xl bg-gray-200 text-base font-bold text-gray-500 cursor-not-allowed shadow-inner">
+                            상품이 품절되었습니다
+                        </button>
+                    </div>
+                    @endif
+                </div>
             </div>
-          </div>
+        </div>
+    </section>
+
+    <!-- Tabs Section -->
+    <section class="border-t border-gray-200 mt-12 bg-white">
+        <div class="sticky top-[88px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <nav class="-mb-px flex gap-8 whitespace-nowrap overflow-x-auto scrollbar-hide text-sm sm:text-base font-bold">
+                    <button type="button" data-tab="details" 
+                        class="tab-btn border-b-2 border-primary py-4 text-primary whitespace-nowrap focus:outline-none">
+                        상품 상세정보
+                    </button>
+                    <button type="button" data-tab="reviews" 
+                        class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
+                        고객 리뷰 <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full bg-gray-100 font-normal">{{ number_format($product->review_count) }}</span>
+                    </button>
+                    <button type="button" data-tab="qna" 
+                        class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
+                        Q & A
+                    </button>
+                    <button type="button" data-tab="shipping" 
+                        class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
+                        배송/반품/교환
+                    </button>
+                </nav>
+            </div>
         </div>
 
-        <!-- Q&A Content -->
+        <div class="tab-content mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="details">
+            <div class="prose prose-gray max-w-none mx-auto text-text-main leading-relaxed">
+                {!! $product->description !!}
+            </div>
+        </div>
+
+        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="reviews">
+            <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-text-main">고객 리뷰 <span class="text-primary ml-1">{{ number_format($product->review_count) }}</span></h2>
+                    <div class="flex items-center gap-1 mt-2">
+                        @php $fullStars = floor($product->average_rating); @endphp
+                        @for($i=1; $i<=5; $i++)
+                        <span class="material-symbols-outlined text-sm {{ $i <= $fullStars ? 'text-yellow-500' : 'text-gray-200' }}" 
+                              style="font-variation-settings: 'FILL' {{ $i <= $fullStars ? 1 : 0 }}">star</span>
+                        @endfor
+                        <span class="text-sm font-bold text-text-main ml-1">{{ number_format($product->average_rating, 1) }} / 5.0</span>
+                    </div>
+                </div>
+                <a href="{{ route('review.write') }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">리뷰 작성하기</a>
+            </div>
+
+            <div id="review-list">
+                @forelse($product->reviews->sortByDesc('created_at') as $index => $review)
+                <div class="review-item py-8 border-b border-gray-100 last:border-0 {{ $index >= 5 ? 'hidden' : '' }}">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="size-10 rounded-full bg-gray-100 flex items-center justify-center text-text-muted">
+                                <span class="material-symbols-outlined text-xl">person</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-text-main">{{ Str::mask($review->member->name, '*', 1) }}</p>
+                                <p class="text-xs text-text-muted">{{ $review->created_at->format('Y.m.d') }}</p>
+                            </div>
+
+                        </div>
+                        <div class="flex items-center gap-0.5">
+                            @for($i=1; $i<=5; $i++)
+                            <span class="material-symbols-outlined text-[14px] {{ $i <= $review->rating ? 'text-yellow-500' : 'text-gray-200' }}"
+                                  style="font-variation-settings: 'FILL' {{ $i <= $review->rating ? 1 : 0 }}">star</span>
+                            @endfor
+                        </div>
+                    </div>
+                    <h4 class="text-base font-bold text-text-main mb-2">{{ $review->title }}</h4>
+                    <p class="text-sm text-text-main leading-relaxed mb-4 break-keep">{{ $review->content }}</p>
+
+                    @if($review->images && count($review->images) > 0)
+                    <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                        @foreach($review->images as $img)
+                        <img src="{{ $img }}" alt="Review Image" class="size-20 rounded-lg object-cover border border-gray-100 cursor-zoom-in" 
+                             onclick="const zm = document.getElementById('imageZoomModal'); const zi = document.getElementById('zoomImage'); zi.src = this.src; zm.style.display = 'flex'; zm.classList.remove('hidden');" />
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+                @empty
+                <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-3xl border border-gray-100">
+                    <div class="flex items-center justify-center w-24 h-24 rounded-full bg-white mb-6 shadow-sm text-gray-300">
+                        <span class="material-symbols-outlined text-5xl">rate_review</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">아직 작성된 리뷰가 없습니다</h3>
+                    <p class="text-sm text-text-muted mb-8 max-w-sm leading-relaxed">이 상품을 구매하신 후 첫 번째 리뷰를 남겨주세요!</p>
+                    <a href="{{ route('review.write') }}" class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm">
+                        <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span> 리뷰 작성하기
+                    </a>
+                </div>
+                @endforelse
+            </div>
+
+            @if($product->review_count > 5)
+            <div class="mt-10 text-center">
+                <button type="button" id="loadMoreReviews" 
+                    class="inline-flex items-center px-8 py-4 bg-white border-2 border-gray-200 text-text-main text-sm font-bold rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
+                    리뷰 더보기 <span class="material-symbols-outlined ml-2 text-sm transition-transform">keyboard_arrow_down</span>
+                </button>
+            </div>
+            @endif
+            </div>
         <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="qna">
-          <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
-            <h2 class="text-2xl font-bold text-text-main">Q & A</h2>
-            <a href="qna-write.html"
-              class="px-4 py-2 bg-text-main text-white text-sm font-bold rounded hover:bg-primary transition-colors">
-              문의 작성하기
-            </a>
-          </div>
-
-          <!-- [상태 1] Q&A 데이터가 있는 경우 -->
-          <div id="qnaHasData">
-            <div class="space-y-4">
-              <details class="group bg-gray-50 rounded-lg">
-                <summary
-                  class="flex justify-between items-center font-bold cursor-pointer list-none p-5 text-text-main">
-                  <span>사이즈 문의드려요. 키 165cm에 52kg인데 M 사이즈
-                    맞을까요?</span>
-                  <span class="transition group-open:rotate-180 material-symbols-outlined">expand_more</span>
-                </summary>
-                <div class="text-text-muted p-5 pt-0 border-t border-gray-200 mt-2 bg-white rounded-b-lg">
-                  <p class="font-bold mb-2">
-                    A. 안녕하세요, Active Women입니다.
-                  </p>
-                  <p>
-                    고객님의 체형에는 M 사이즈가 예쁘게 맞으실 것으로 보입니다.
-                    체형에 따라 핏은 다를 수 있으니 상세 사이즈표를 참고
-                    부탁드립니다. 감사합니다.
-                  </p>
+            <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
+                <h2 class="text-2xl font-bold text-text-main">Q & A</h2>
+                <a href="{{ route('qna.write') }}" class="px-4 py-2 bg-text-main text-white text-sm font-bold rounded hover:bg-primary transition-colors">문의 작성하기</a>
+            </div>
+            <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-3xl border border-gray-100">
+                <div class="flex items-center justify-center w-24 h-24 rounded-full bg-white mb-6 shadow-sm text-gray-300">
+                    <span class="material-symbols-outlined text-5xl">forum</span>
                 </div>
-              </details>
+                <h3 class="text-xl font-bold text-text-main mb-2">등록된 문의가 없습니다</h3>
+                <p class="text-sm text-text-muted">궁금한 점이 있으시면 문의를 남겨주세요.</p>
             </div>
-          </div>
-
-          <!-- 상태 구분선 -->
-          <div class="my-12 border-t-2 border-dashed border-gray-300 relative">
-            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-4 text-xs font-bold text-gray-400">⬇ 데이터
-              없는 경우 (Empty State) ⬇</span>
-          </div>
-
-          <!-- [상태 2] Q&A 데이터가 없는 경우 -->
-          <div id="qnaEmpty">
-            <div class="flex flex-col items-center justify-center py-20 text-center">
-              <div class="flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
-                <span class="material-symbols-outlined text-5xl text-gray-300">forum</span>
-              </div>
-              <h3 class="text-xl font-bold text-text-main mb-2">등록된 문의가 없습니다</h3>
-              <p class="text-sm text-text-muted mb-8 max-w-sm leading-relaxed">
-                이 상품에 대해 궁금한 점이 있으시면<br>
-                문의를 남겨주세요. 빠르게 답변드리겠습니다.
-              </p>
-              <a href="qna-write.html"
-                class="inline-flex items-center px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-sm align-middle mr-1">edit_note</span>
-                문의 작성하기
-              </a>
-            </div>
-          </div>
         </div>
 
-        <!-- Shipping Content -->
         <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="shipping">
-          <h2 class="text-2xl font-bold text-text-main mb-8 border-b border-gray-200 pb-4">
-            배송/반품/교환 안내
-          </h2>
-          <div class="space-y-8 text-sm text-text-main leading-relaxed">
-            <div>
-              <h3 class="font-bold text-lg mb-3">배송 안내</h3>
-              <ul class="list-disc pl-5 space-y-1 text-text-muted">
-                <li>
-                  배송비: 기본 배송비 3,000원 (50,000원 이상 구매 시 무료배송)
-                </li>
-                <li>
-                  출고일: 평일 오후 2시 이전 결제 완료 건에 한해 당일 출고
-                </li>
-                <li>
-                  배송기간: 출고 후 1~3 영업일 이내 수령 가능 (제주/도서산간
-                  지역 추가 소요)
-                </li>
-              </ul>
+            <h2 class="text-2xl font-bold text-text-main mb-8 border-b border-gray-200 pb-4">배송/반품/교환 안내</h2>
+            <div class="space-y-8 text-sm text-text-main leading-relaxed">
+                <div>
+                    <h3 class="font-bold text-lg mb-3">배송 안내</h3>
+                    <ul class="list-disc pl-5 space-y-1 text-text-muted">
+                        <li>배송비: 기본 배송비 3,000원 (50,000원 이상 구매 시 무료배송)</li>
+                        <li>출고일: 평일 오후 2시 이전 결제 완료 건에 한해 당일 출고</li>
+                        <li>배송기간: 출고 후 1~3 영업일 이내 수령 가능</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-3">교환/반품 안내</h3>
+                    <ul class="list-disc pl-5 space-y-1 text-text-muted">
+                        <li>단순 변심에 의한 교환/반품은 상품 수령 후 7일 이내 가능 (배송비 고객 부담)</li>
+                        <li>상품 불량 및 오배송의 경우 수령 후 30일 이내 교환/반품 가능</li>
+                    </ul>
+                </div>
             </div>
-            <div>
-              <h3 class="font-bold text-lg mb-3">교환/반품 안내</h3>
-              <ul class="list-disc pl-5 space-y-1 text-text-muted">
-                <li>
-                  단순 변심에 의한 교환/반품은 상품 수령 후 7일 이내 가능
-                  (배송비 고객 부담)
-                </li>
-                <li>
-                  상품 불량 및 오배송의 경우 수령 후 30일 이내 교환/반품 가능
-                  (배송비 당사 부담)
-                </li>
-                <li>
-                  교환/반품 불가 사유: 상품 택(Tag) 제거, 오염/사용 흔적 발생,
-                  포장 훼손 시
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </section>
+    </section>
 
-      <!-- Recommended Related Products -->
-      <section class="bg-background-alt py-16 border-t border-gray-200">
+    <!-- Recommended Related Products -->
+    @if($relatedProducts->count() > 0)
+    <section class="bg-background-alt py-16 border-t border-gray-200">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="mb-10 flex items-center justify-between border-b border-gray-200 pb-4">
-            <div>
-              <h3 class="text-2xl font-bold tracking-tight text-text-main sm:text-3xl">
-                함께 스타일링하기 좋은 아이템
-              </h3>
-              <p class="mt-2 text-sm text-text-muted">
-                이 상품과 함께 구매된 상품들입니다.
-              </p>
-            </div>
-            <a class="group hidden sm:flex items-center text-sm font-bold text-text-muted transition-colors hover:text-primary"
-              href="#">
-              전체보기
-              <span
-                class="material-symbols-outlined ml-1 text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
-            </a>
-          </div>
-
-          <div class="grid gap-x-6 gap-y-10 grid-cols-2 lg:grid-cols-4">
-            <!-- Related Product 1 -->
-            <div class="group relative flex flex-col">
-              <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-                <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  data-alt="White sneakers on concrete" style="
-                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBidFzAz4iG1s-WKgcTwynKVQ_ZR-4gqctASr63hXIbNQ3HYVQJYS1EQdeK23UeapGCdpwohFzArAyvymPwarilN_Fqtm6o_FZgLUSfWxwsHUywpjpmDYOaMMgkRf6P8UjehaSYj-MUuPBEwKfFoYGrmWzI-HiK8OFqdANtgOmkytBWZWI5DJn8kHzUd1KuA7nJdCL7g-RE5b40xzTOhrpVNS6Hdjmaod7h2P8rE7vpepor6DRTbXQCKLR8Oqpx2C16ogFNQMXuEIQ&quot;);
-                    "></div>
-                <div
-                  class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-                  <span class="material-symbols-outlined block text-lg">favorite</span>
+            <div class="mb-10 flex items-center justify-between border-b border-gray-200 pb-4">
+                <div>
+                    <h3 class="text-2xl font-bold tracking-tight text-text-main sm:text-3xl">함께 스타일링하기 좋은 아이템</h3>
+                    <p class="mt-2 text-sm text-text-muted">이 상품과 함께 구매된 상품들입니다.</p>
                 </div>
-              </div>
-              <div class="mt-4 flex flex-1 flex-col">
-                <h4 class="text-base font-bold text-text-main group-hover:text-primary transition-colors">
-                  클라우드 러너 프로
-                </h4>
-                <p class="text-sm font-bold text-text-muted mb-1 mt-1">
-                  ₩159,000
-                </p>
-              </div>
             </div>
-
-            <!-- Related Product 2 -->
-            <div class="group relative flex flex-col">
-              <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-                <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  data-alt="Sports Watch" style="
-                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAsb-HQWEoNL8U4L728bwSh5o7A54Ni9rDVC8BMJdv_GNRcVxnKmJGGYR6JIc3PxXjO2busIWRNZ8ipOhfcmKc-5XAsMSPC8nIZfeVIGtILcKq1_GBJWw8yCa4C7_5TN5OB0Ci5j5AfoKIUSjitwW5QN3G9Lh-dpS2gGFPl3Y0kJXSGPEhkJJFGuXQnyEYU-rncMhE1dt4A-BWg4mONN4C5at3TDP2DvVjqx4F5nGzTn_3_xnEXTAMLg6jcE7L4eWvoxYiy14IJpI8&quot;);
-                    "></div>
-                <div
-                  class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-                  <span class="material-symbols-outlined block text-lg">favorite</span>
+            <div class="grid gap-x-6 gap-y-10 grid-cols-2 lg:grid-cols-4">
+                @foreach($relatedProducts as $rel)
+                <div class="group relative flex flex-col cursor-pointer" onclick="location.href='{{ route('product-detail', ['slug' => $rel['slug']]) }}'">
+                    <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100">
+                        <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            style="background-image: url('{{ $rel['image_url'] }}');"></div>
+                        <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
+                            <span class="material-symbols-outlined block text-lg">favorite</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex flex-1 flex-col px-1">
+                        <h4 class="text-base font-bold text-text-main group-hover:text-primary transition-colors">{{ $rel['name'] }}</h4>
+                        <p class="text-sm font-extrabold text-text-main mb-1 mt-1">₩{{ number_format($rel['price']) }}</p>
+                    </div>
                 </div>
-              </div>
-              <div class="mt-4 flex flex-1 flex-col">
-                <h4 class="text-base font-bold text-text-main group-hover:text-primary transition-colors">
-                  스마트 밴드 V3
-                </h4>
-                <p class="text-sm font-bold text-text-muted mb-1 mt-1">
-                  ₩219,000
-                </p>
-              </div>
+                @endforeach
             </div>
-
-            <!-- Related Product 3 -->
-            <div class="group relative flex flex-col hidden sm:flex">
-              <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-                <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  data-alt="Yoga mat" style="
-                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDcCwiVYOZ2XgfbLcwNfv1CndtwSuCXp93p0COmlecQ1tiFvX1yHwnncV-Mk_jv50p4Xxpiiflipp5Eir5XRuvNHNisCCLSdPLL_Woyw8J9hJMROPJ1pFlO8i7_kvDB-t6Zg-TEaXfbOb2TCLJGkpDcSw5raqesusBSrsrN4BTI_-aA0Omr6D5iv310qKxBat9vEcf4kdLytn3w0R-cPV9qo2AahQmCb6qkGTUyW78SKki6dYgAhWn-k3DpIFl8lj3b_kmSpn4re1w&quot;);
-                    "></div>
-                <div
-                  class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-                  <span class="material-symbols-outlined block text-lg">favorite</span>
-                </div>
-              </div>
-              <div class="mt-4 flex flex-1 flex-col">
-                <h4 class="text-base font-bold text-text-main group-hover:text-primary transition-colors">
-                  에코 그립 요가 매트
-                </h4>
-                <p class="text-sm font-bold text-text-muted mb-1 mt-1">
-                  ₩98,000
-                </p>
-              </div>
-            </div>
-
-            <!-- Related Product 4 -->
-            <div class="group relative flex flex-col hidden sm:flex">
-              <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-                <div class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  data-alt="Skincare" style="
-                      background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA_UoC5Rz9hIJrMW0TSR2dOYjaQNExC7fNGm3SJhmkIfuEz8uxDZSaNjFE5y9IpITmRWNEU_3hPtYjUTy22KvpOAyir30Njwy373-xEUNIXwd4XBOvZK2SIN-yZ2EhEPlOaR7SVkcL-MdV38V3dtjrY1FsvopAHWPLh99b3NHUObiFLuK6qEP3Xg_6MNXoGb2k_lotxdk4XNx-P8Kro1NY4rJKVh1KAakayDB84SptuCzHkVxvTFhQm47-lmbSxb8Sf5Xy6Ja8eTUM&quot;);
-                    "></div>
-                <div
-                  class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-                  <span class="material-symbols-outlined block text-lg">favorite</span>
-                </div>
-              </div>
-              <div class="mt-4 flex flex-1 flex-col">
-                <h4 class="text-base font-bold text-text-main group-hover:text-primary transition-colors">
-                  하이드레이션 부스트 미스트
-                </h4>
-                <p class="text-sm font-bold text-text-muted mb-1 mt-1">
-                  ₩36,000
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="mt-8 flex justify-center sm:hidden">
-            <button
-              class="w-full max-w-sm rounded-lg border border-gray-300 py-3 text-sm font-bold text-text-main hover:bg-gray-50 transition-colors">
-              더 보기
-            </button>
-          </div>
         </div>
-      </section>
-    </main>
+    </section>
+    @endif
+</main>
+
+<!-- Modals & Toasts -->
+<div id="imageZoomModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 backdrop-blur-sm cursor-zoom-out">
+    <button id="zoomClose" class="absolute top-5 right-5 z-10 flex size-10 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/40 transition-colors">
+        <span class="material-symbols-outlined text-2xl">close</span>
+    </button>
+    <img id="zoomImage" src="" alt="Zoomed" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl transition-transform duration-300" />
+</div>
+
+<!-- 사이즈 가이드 모달 부활! -->
+<div id="sizeGuideModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto animate-[scaleIn_0.25s_ease-out]">
+        <div class="sticky top-0 bg-white z-10 flex items-center justify-between p-6 border-b border-gray-100">
+            <h3 class="text-xl font-extrabold text-text-main">사이즈 가이드</h3>
+            <button id="sizeGuideClose" class="flex size-8 items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                <span class="material-symbols-outlined text-xl text-gray-500">close</span>
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-sm text-text-muted mb-4">* 단위: cm / 약간의 오차가 있을 수 있습니다.</p>
+            <table class="w-full text-sm text-center border-collapse">
+                <thead><tr class="bg-gray-50 border-b border-gray-200"><th class="py-3 px-2 font-bold text-text-main">사이즈</th><th class="py-3 px-2 font-bold text-text-main">가슴</th><th class="py-3 px-2 font-bold text-text-main">허리</th><th class="py-3 px-2 font-bold text-text-main">엉덩이</th><th class="py-3 px-2 font-bold text-text-main">기장</th></tr></thead>
+                <tbody class="divide-y divide-gray-100">
+                    <tr class="text-gray-400"><td class="py-3 px-2 font-bold">S</td><td class="py-3">78-82</td><td class="py-3">60-64</td><td class="py-3">86-90</td><td class="py-3">95</td></tr>
+                    <tr class="bg-primary/5 font-bold text-primary"><td class="py-3 px-2">M</td><td class="py-3">82-86</td><td class="py-3">64-68</td><td class="py-3">90-94</td><td class="py-3">97</td></tr>
+                    <tr><td class="py-3 px-2 font-bold text-text-main">L</td><td class="py-3 text-text-muted">86-90</td><td class="py-3 text-text-muted">68-72</td><td class="py-3 text-text-muted">94-98</td><td class="py-3 text-text-muted">99</td></tr>
+                    <tr><td class="py-3 px-2 font-bold text-text-main">XL</td><td class="py-3 text-text-muted">90-94</td><td class="py-3 text-text-muted">72-76</td><td class="py-3 text-text-muted">98-102</td><td class="py-3 text-text-muted">101</td></tr>
+                </tbody>
+            </table>
+            <div class="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <p class="text-sm text-amber-800"><span class="font-bold"> Tip:</span> 평소 55사이즈(S~M) 착용 시 <strong>M</strong>, 66사이즈(M~L) 착용 시 <strong>L</strong>을 추천드립니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9998] flex flex-col items-center gap-3 pointer-events-none"></div>
+
+<button id="backToTop" class="fixed bottom-6 right-6 z-[100] flex size-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none hover:bg-red-600">
+    <span class="material-symbols-outlined text-xl">arrow_upward</span>
+</button>
 @endsection
 
 @push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const BASE_PRICE = {{ $product->sale_price ?? $product->price }};
+        let quantity = 1;
+        let selectedSize = "";
 
+        function showToast(message, icon = "check_circle", color = "bg-text-main") {
+            const container = document.getElementById("toastContainer");
+            if (!container) return;
+            const toast = document.createElement("div");
+            toast.className = `flex items-center gap-3 ${color} text-white px-6 py-3.5 rounded-xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`;
+            toast.innerHTML = `<span class="material-symbols-outlined text-lg">${icon}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove("toast-enter");
+                toast.classList.add("toast-exit");
+                toast.addEventListener("animationend", () => toast.remove());
+            }, 2500);
+        }
+
+        function openModal(modal) {
+            if (!modal) return;
+            modal.style.display = "flex";
+            modal.classList.remove("hidden");
+            document.body.style.overflow = "hidden";
+        }
+        function closeModal(modal) {
+            if (!modal) return;
+            modal.style.display = "none";
+            modal.classList.add("hidden");
+            document.body.style.overflow = "";
+        }
+
+        // Tab Switching
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+        function activateTab(targetId) {
+            tabBtns.forEach(b => {
+                // 모든 버튼을 비활성 상태(Muted + Hover 효과 활성)로 초기화
+                b.classList.remove("border-primary", "text-primary");
+                b.classList.add("border-transparent", "text-text-muted");
+            });
+            tabContents.forEach(c => c.classList.add("hidden"));
+
+            const activeBtn = document.querySelector(`.tab-btn[data-tab="${targetId}"]`);
+            const activeContent = document.getElementById(targetId);
+            
+            if (activeBtn) {
+                // 선택된 버튼을 활성 상태(Primary + Hover 효과 무력화)로 변경
+                activeBtn.classList.add("border-primary", "text-primary");
+                activeBtn.classList.remove("border-transparent", "text-text-muted");
+            }
+            if (activeContent) activeContent.classList.remove("hidden");
+        }
+
+        // Top Review Link Click -> Activate Review Tab
+        const topReviewLink = document.getElementById("top-review-link");
+        if (topReviewLink) {
+            topReviewLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                activateTab("reviews");
+                document.getElementById("reviews").scrollIntoView({ behavior: "smooth" });
+            });
+        }
+
+        // Load More Reviews
+        const loadMoreBtn = document.getElementById("loadMoreReviews");
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener("click", () => {
+                const hiddenReviews = document.querySelectorAll(".review-item.hidden");
+                // 한 번에 5개씩 더 보여주기
+                for (let i = 0; i < 5 && i < hiddenReviews.length; i++) {
+                    hiddenReviews[i].classList.remove("hidden");
+                }
+                
+                // 더 이상 숨겨진 리뷰가 없으면 버튼 숨기기
+                if (document.querySelectorAll(".review-item.hidden").length === 0) {
+                    loadMoreBtn.parentElement.classList.add("hidden");
+                }
+            });
+        }
+        tabBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const targetId = btn.getAttribute("data-tab");
+                activateTab(targetId);
+                history.replaceState(null, "", "#" + targetId);
+                document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+
+        // Thumbnail Gallery
+        const thumbBtns = document.querySelectorAll(".thumb-btn");
+        const mainImg = document.getElementById("main-product-image");
+        thumbBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                thumbBtns.forEach(b => b.classList.remove("active", "border-primary", "opacity-100"));
+                btn.classList.add("active", "border-primary", "opacity-100");
+                const src = btn.querySelector("img").src;
+                if (mainImg) {
+                    mainImg.style.opacity = "0.5";
+                    setTimeout(() => { mainImg.src = src; mainImg.style.opacity = "1"; }, 150);
+                }
+            });
+        });
+
+        // Image Zoom
+        const zoomModal = document.getElementById("imageZoomModal");
+        const zoomImage = document.getElementById("zoomImage");
+        if (mainImg && zoomModal && zoomImage) {
+            mainImg.addEventListener("click", () => { zoomImage.src = mainImg.src; openModal(zoomModal); });
+            document.getElementById("zoomClose").addEventListener("click", () => closeModal(zoomModal));
+        }
+
+        // Color Selection
+        const colorBtns = document.querySelectorAll(".color-btn");
+        colorBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                colorBtns.forEach(b => b.classList.remove("ring-2", "ring-primary"));
+                btn.classList.add("ring-2", "ring-primary");
+                const label = document.getElementById("colorLabel");
+                if (label) label.textContent = btn.getAttribute("title");
+            });
+        });
+
+        // Size Selection
+        const sizeBtns = document.querySelectorAll(".size-option-btn");
+        sizeBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                sizeBtns.forEach(b => {
+                    b.classList.remove("border-2", "border-primary", "bg-primary/5", "text-primary", "shadow-sm");
+                    b.classList.add("border", "border-gray-300", "bg-white", "text-text-main");
+                });
+                btn.classList.remove("border", "border-gray-300", "bg-white", "text-text-main");
+                btn.classList.add("border-2", "border-primary", "bg-primary/5", "text-primary", "shadow-sm");
+                selectedSize = btn.textContent.trim();
+            });
+        });
+
+        // 8. Size Guide (이 로직이 빠졌었어!)
+        const sizeGuideModal = document.getElementById("sizeGuideModal");
+        const sgBtn = document.getElementById("sizeGuideBtn");
+        const sgClose = document.getElementById("sizeGuideClose");
+        if (sizeGuideModal && sgBtn) {
+            sgBtn.addEventListener("click", () => openModal(sizeGuideModal));
+        }
+        if (sizeGuideModal && sgClose) {
+            sgClose.addEventListener("click", () => closeModal(sizeGuideModal));
+        }
+        if (sizeGuideModal) {
+            sizeGuideModal.addEventListener("click", (e) => {
+                if (e.target === sizeGuideModal) closeModal(sizeGuideModal);
+            });
+        }
+
+        // 9. Quantity & Total
+        function updateQuantity(newQty) {
+            quantity = Math.max(1, Math.min(99, newQty));
+            const qDisp = document.getElementById("qtyDisplay");
+            const tPrice = document.getElementById("totalPrice");
+            if (qDisp) qDisp.textContent = quantity;
+            if (tPrice) tPrice.textContent = "₩" + (BASE_PRICE * quantity).toLocaleString();
+        }
+        const qPlus = document.getElementById("qtyPlus");
+        const qMinus = document.getElementById("qtyMinus");
+        if (qPlus) qPlus.addEventListener("click", () => updateQuantity(quantity + 1));
+        if (qMinus) qMinus.addEventListener("click", () => updateQuantity(quantity - 1));
+
+        // Wishlist Toggle
+        const wBtn = document.getElementById("wishlist-btn");
+        if (wBtn) {
+            wBtn.addEventListener("click", function() {
+                const icon = this.querySelector(".material-symbols-outlined");
+                const isActive = this.classList.contains("text-primary");
+                
+                if (isActive) {
+                    // 찜 해제 (검은색으로)
+                    this.classList.remove("text-primary");
+                    this.classList.add("text-text-main");
+                    icon.style.fontVariationSettings = "'FILL' 0";
+                    showToast("위시리스트에서 제거되었습니다", "heart_broken", "bg-gray-600");
+                } else {
+                    // 찜 하기 (빨간색으로)
+                    this.classList.add("text-primary");
+                    this.classList.remove("text-text-main");
+                    icon.style.fontVariationSettings = "'FILL' 1";
+                    showToast("위시리스트에 추가되었습니다", "favorite", "bg-primary");
+                }
+            });
+        }
+
+        // Share
+        const sBtn = document.getElementById("share-btn");
+        if (sBtn) {
+            sBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(location.href).then(() => {
+                    showToast("링크가 클립보드에 복사되었습니다", "content_copy", "bg-green-600");
+                });
+            });
+        }
+
+        // Add to Cart
+        const cBtn = document.getElementById("addToCartBtn");
+        if (cBtn) {
+            cBtn.addEventListener("click", () => {
+                if (!selectedSize) {
+                    showToast("사이즈를 선택해주세요", "error", "bg-red-500");
+                    return;
+                }
+                showToast("장바구니에 담았습니다", "shopping_cart");
+            });
+        }
+
+        // Other Utilities
+        const btt = document.getElementById("backToTop");
+        if (btt) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 600) btt.classList.replace("opacity-0", "opacity-100"), btt.classList.remove("pointer-events-none");
+                else btt.classList.replace("opacity-100", "opacity-0"), btt.classList.add("pointer-events-none");
+            });
+            btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        }
+    });
+</script>
 @endpush

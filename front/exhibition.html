@@ -105,7 +105,7 @@
             <div class="py-12 border-b border-gray-100 bg-background-alt">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center pt-8">
                     <h2 class="text-4xl font-extrabold text-text-main tracking-tight mb-4 uppercase">Season Exhibition</h2>
-                    <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션 ✨</p>
+                    <p class="text-text-muted text-base">Active Women이 큐레이션한 스페셜 테마 콜렉션 </p>
                 </div>
             </div>
 
@@ -178,7 +178,7 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] hidden items-center gap-2 bg-text-main text-white px-8 py-4 rounded-full shadow-2xl animate-in fade-in slide-in-from-bottom-10">
         <span id="toast-icon" class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">favorite</span>
-        <span id="toast-msg" class="font-bold">찜한 상품에 담겼어요! ❤️</span>
+        <span id="toast-msg" class="font-bold">찜한 상품에 담겼어요! </span>
     </div>
 
     <script>
@@ -210,19 +210,19 @@
             const isFavorite = btn.getAttribute('data-favorite') === 'true';
             
             if (isFavorite) {
-                // 찜 해제하기 💔
+                // 찜 해제하기 
                 btn.setAttribute('data-favorite', 'false');
                 icon.style.fontVariationSettings = "'FILL' 0";
                 icon.classList.remove('text-primary');
                 icon.classList.add('text-text-muted');
-                showToast("찜한 상품에서 해제되었어요! 💔", "heart_broken");
+                showToast("찜한 상품에서 해제되었어요! ", "heart_broken");
             } else {
-                // 찜 하기 ❤️
+                // 찜 하기 
                 btn.setAttribute('data-favorite', 'true');
                 icon.style.fontVariationSettings = "'FILL' 1";
                 icon.classList.remove('text-text-muted');
                 icon.classList.add('text-primary');
-                showToast("찜한 상품에 담겼어요! ❤️", "favorite");
+                showToast("찜한 상품에 담겼어요! ", "favorite");
             }
         }
 
@@ -278,7 +278,7 @@
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     const id = item.getAttribute('href').substring(1);
-                    updateNavStyle(id); // 클릭 즉시 스타일 변경! ✨
+                    updateNavStyle(id); // 클릭 즉시 스타일 변경! 
                     
                     const target = document.getElementById(id);
                     const top = target.getBoundingClientRect().top + window.pageYOffset - 160;
@@ -293,7 +293,7 @@
             btn.innerText = "로딩 중...";
             setTimeout(() => {
                 renderItems(id, 4);
-                btn.innerText = "모든 상품 확인 ✨";
+                btn.innerText = "모든 상품 확인 ";
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
                 btn.onclick = null;
             }, 600);

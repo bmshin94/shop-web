@@ -14,10 +14,10 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. 기존 상품 데이터 정리 (깔끔하게 새출발! 😊)
+        // 1. 기존 상품 데이터 정리 (깔끔하게 새출발! )
         Product::query()->delete();
 
-        // 2. 카테고리 정보 가져오기 ✨
+        // 2. 카테고리 정보 가져오기 
         $tops = Category::where('slug', 'tops')->first();
         $bottoms = Category::where('slug', 'bottoms')->first();
         $outer = Category::where('slug', 'outerwear')->first();
@@ -27,7 +27,7 @@ class ProductSeeder extends Seeder
         $sun = Category::where('slug', 'sun-cooling')->first();
         $supple = Category::where('slug', 'supplements')->first();
 
-        // 3. 상품 데이터 20개 생성 🚀
+        // 3. 상품 데이터 20개 생성 
         $items = [
             // 스포츠웨어 - 상의
             ['name' => '에어리 메쉬 브라탑', 'category' => $tops, 'price' => 45000, 'sale' => 39000],
@@ -60,8 +60,10 @@ class ProductSeeder extends Seeder
             ['name' => '비건 프로틴 파우더 1kg', 'category' => $supple, 'price' => 58000, 'sale' => 49000],
         ];
 
+        $colors = \App\Models\Color::all();
+
         foreach ($items as $index => $item) {
-            Product::create([
+            $product = Product::create([
                 'category_id' => $item['category']->id ?? 1,
                 'name' => $item['name'],
                 'slug' => Str::slug($item['name']) ?: str_replace(' ', '-', $item['name']),
@@ -72,9 +74,16 @@ class ProductSeeder extends Seeder
                 'is_new' => (rand(1, 10) > 7),
                 'is_best' => (rand(1, 10) > 7),
                 'description' => '이 상품은 ' . $item['name'] . '의 상세 설명입니다. 최고의 품질과 디자인을 경험해보세요.',
-                // 랜덤 이미지 (Unsplash 활용!) ✨
+                // 랜덤 이미지 (Unsplash 활용!) 
                 'image_url' => 'https://images.unsplash.com/photo-' . (1500000000000 + rand(1000000, 9999999)) . '?w=400&h=533&fit=crop',
             ]);
+
+            // 랜덤하게 1~3개의 색상 연결 
+            if ($colors->count() > 0) {
+                $product->colors()->attach(
+                    $colors->random(rand(1, min(3, $colors->count())))->pluck('id')->toArray()
+                );
+            }
         }
     }
 }

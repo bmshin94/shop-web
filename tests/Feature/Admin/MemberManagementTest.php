@@ -3,12 +3,12 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Member;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class MemberManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @test */
     public function admin_can_filter_members_by_search_and_status(): void

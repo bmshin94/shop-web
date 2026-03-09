@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-    /* 반응형 상품 리스트 그리드 설정 ✨ */
+    /* 반응형 상품 리스트 그리드 설정  */
     .product-row { 
         display: grid; 
         align-items: center;
@@ -41,105 +41,115 @@
         </div>
     </div>
 
-    <!-- Advanced Filter Card (Collapsible & Modern) ✨ -->
+    <!-- Advanced Filter Card (Open by default but Collapsible) -->
     <div class="bg-white rounded-2xl lg:rounded-3xl shadow-sm border border-gray-100 mb-6 overflow-hidden transition-all duration-300" id="filter-card">
-        <!-- Filter Header (Toggle Button) -->
-        <div class="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition-colors border-b border-transparent" id="filter-toggle">
+        <!-- Filter Header -->
+        <div class="px-6 py-5 flex items-center justify-between bg-gray-50/50 border-b border-gray-100 cursor-pointer hover:bg-gray-100/50 transition-colors" id="filter-toggle">
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-text-muted text-[20px]">tune</span>
-                <span class="text-[12px] font-bold text-text-main">상세 검색 필터</span>
+                <span class="material-symbols-outlined text-primary text-[24px]">tune</span>
+                <span class="text-base font-black text-text-main uppercase tracking-tight">상세 검색 필터</span>
                 @if(request()->anyFilled(['search', 'category_id', 'status', 'min_price', 'max_price', 'min_stock', 'max_stock', 'is_new', 'is_best']))
                     <span class="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full">적용중</span>
                 @endif
             </div>
-            <span class="material-symbols-outlined text-text-muted transition-transform duration-300" id="filter-arrow">expand_more</span>
+            <span class="material-symbols-outlined text-text-muted transition-transform duration-300 rotate-180" id="filter-arrow">expand_more</span>
         </div>
 
-        <!-- Filter Content -->
-        <div class="p-6 pt-2 hidden border-t border-gray-50" id="filter-content">
-            <form action="{{ route('admin.products.index') }}" method="GET" class="space-y-4">
+        <!-- Filter Content (Visible by default) -->
+        <div class="p-8 border-t border-gray-50" id="filter-content">
+            <form action="{{ route('admin.products.index') }}" method="GET" class="space-y-6">
                 
-                <!-- 1st Row: 텍스트 & 셀렉트 기반 핵심 필터 -->
-                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- 1st Row: 핵심 필터 (폰트 크기 업!) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- 상품명 -->
-                    <div class="relative">
-                        <span class="absolute left-3 top-3 text-text-muted material-symbols-outlined text-[18px]">search</span>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="상품명 검색" 
-                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-[12px] text-text-main focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-gray-400">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-muted ml-1">상품명 검색</label>
+                        <div class="relative group">
+                            <span class="absolute left-4 top-3.5 text-text-muted material-symbols-outlined text-[22px] group-focus-within:text-primary transition-colors">search</span>
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="상품명을 입력하세요" 
+                                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base font-bold text-text-main focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-gray-400">
+                        </div>
                     </div>
                     
                     <!-- 카테고리 -->
-                    <div class="relative">
-                        <select name="category_id" class="w-full pl-4 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-[12px] text-text-main focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none bg-none transition-all">
-                            <option value="" class="text-gray-400">모든 카테고리</option>
-                            @foreach($categories as $parent)
-                                <optgroup label="{{ $parent->name }}">
-                                    @foreach($parent->children as $child)
-                                        <option value="{{ $child->id }}" {{ request('category_id') == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                        <span class="absolute right-3 top-3 text-text-muted material-symbols-outlined text-[18px] pointer-events-none">expand_more</span>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-muted ml-1">카테고리 선택</label>
+                        <div class="relative">
+                            <select name="category_id" class="w-full pl-5 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base font-bold text-text-main focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none appearance-none bg-none transition-all cursor-pointer">
+                                <option value="">모든 카테고리</option>
+                                @foreach($categories as $parent)
+                                    <optgroup label="{{ $parent->name }}">
+                                        @foreach($parent->children as $child)
+                                            <option value="{{ $child->id }}" {{ request('category_id') == $child->id ? 'selected' : '' }}>{{ $child->name }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                            <span class="absolute right-4 top-4 text-text-muted material-symbols-outlined text-[22px] pointer-events-none">expand_more</span>
+                        </div>
                     </div>
 
                     <!-- 상태 -->
-                    <div class="relative">
-                        <select name="status" class="w-full pl-4 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-[12px] text-text-main focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none appearance-none bg-none transition-all">
-                            <option value="" class="text-gray-400">모든 상태</option>
-                            <option value="판매중" {{ request('status') == '판매중' ? 'selected' : '' }}>판매중</option>
-                            <option value="품절" {{ request('status') == '품절' ? 'selected' : '' }}>품절</option>
-                            <option value="숨김" {{ request('status') == '숨김' ? 'selected' : '' }}>숨김</option>
-                        </select>
-                        <span class="absolute right-3 top-3 text-text-muted material-symbols-outlined text-[18px] pointer-events-none">expand_more</span>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-muted ml-1">판매 상태</label>
+                        <div class="relative">
+                            <select name="status" class="w-full pl-5 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base font-bold text-text-main focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none appearance-none bg-none transition-all cursor-pointer">
+                                <option value="">모든 상태</option>
+                                <option value="판매중" {{ request('status') == '판매중' ? 'selected' : '' }}>판매중</option>
+                                <option value="품절" {{ request('status') == '품절' ? 'selected' : '' }}>품절</option>
+                                <option value="숨김" {{ request('status') == '숨김' ? 'selected' : '' }}>숨김</option>
+                            </select>
+                            <span class="absolute right-4 top-4 text-text-muted material-symbols-outlined text-[22px] pointer-events-none">expand_more</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2nd Row: 범위형 데이터 & 태그 & 액션 버튼 -->
-                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pt-4 border-t border-gray-50/50">
-                    <div class="flex flex-wrap items-center gap-4 lg:gap-6 w-full lg:w-auto">
+                <!-- 2nd Row: 범위형 데이터 & 태그 -->
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pt-6 border-t border-gray-50">
+                    <div class="flex flex-wrap items-center gap-8">
                         
                         <!-- 판매가 범위 -->
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] font-bold text-text-muted w-12">판매가</span>
-                            <div class="flex items-center gap-1">
-                                <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="최소" class="w-20 lg:w-24 px-3 py-2 bg-gray-50/50 border border-gray-200 rounded-lg text-[11px] focus:bg-white focus:border-primary outline-none text-center">
-                                <span class="text-gray-400 text-[10px]">~</span>
-                                <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="최대" class="w-20 lg:w-24 px-3 py-2 bg-gray-50/50 border border-gray-200 rounded-lg text-[11px] focus:bg-white focus:border-primary outline-none text-center">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-black text-text-main">판매가</span>
+                            <div class="flex items-center gap-2">
+                                <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="최소" class="w-28 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:bg-white focus:border-primary outline-none text-center">
+                                <span class="text-gray-400 font-bold">~</span>
+                                <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="최대" class="w-28 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:bg-white focus:border-primary outline-none text-center">
                             </div>
                         </div>
 
                         <!-- 재고 범위 -->
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] font-bold text-text-muted w-8">재고</span>
-                            <div class="flex items-center gap-1">
-                                <input type="number" name="min_stock" value="{{ request('min_stock') }}" placeholder="최소" class="w-16 lg:w-20 px-3 py-2 bg-gray-50/50 border border-gray-200 rounded-lg text-[11px] focus:bg-white focus:border-primary outline-none text-center">
-                                <span class="text-gray-400 text-[10px]">~</span>
-                                <input type="number" name="max_stock" value="{{ request('max_stock') }}" placeholder="최대" class="w-16 lg:w-20 px-3 py-2 bg-gray-50/50 border border-gray-200 rounded-lg text-[11px] focus:bg-white focus:border-primary outline-none text-center">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-black text-text-main">재고</span>
+                            <div class="flex items-center gap-2">
+                                <input type="number" name="min_stock" value="{{ request('min_stock') }}" placeholder="최소" class="w-24 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:bg-white focus:border-primary outline-none text-center">
+                                <span class="text-gray-400 font-bold">~</span>
+                                <input type="number" name="max_stock" value="{{ request('max_stock') }}" placeholder="최대" class="w-24 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:bg-white focus:border-primary outline-none text-center">
                             </div>
                         </div>
 
                         <!-- 구분 태그 -->
-                        <div class="flex items-center gap-3">
-                            <label class="flex items-center gap-1.5 cursor-pointer group">
-                                <input type="checkbox" name="is_new" value="1" {{ request('is_new') ? 'checked' : '' }} class="w-4 h-4 text-blue-500 rounded border-gray-300 focus:ring-0">
-                                <span class="text-[11px] font-bold text-text-muted group-hover:text-blue-500 transition-colors">NEW</span>
+                        <div class="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-2xl border border-gray-100">
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" name="is_new" value="1" {{ request('is_new') ? 'checked' : '' }} class="size-5 text-blue-500 rounded-lg border-gray-300 focus:ring-0">
+                                <span class="text-sm font-black text-text-muted group-hover:text-blue-500 transition-colors">NEW</span>
                             </label>
-                            <label class="flex items-center gap-1.5 cursor-pointer group">
-                                <input type="checkbox" name="is_best" value="1" {{ request('is_best') ? 'checked' : '' }} class="w-4 h-4 text-amber-500 rounded border-gray-300 focus:ring-0">
-                                <span class="text-[11px] font-bold text-text-muted group-hover:text-amber-500 transition-colors">BEST</span>
+                            <div class="w-px h-4 bg-gray-200"></div>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" name="is_best" value="1" {{ request('is_best') ? 'checked' : '' }} class="size-5 text-amber-500 rounded-lg border-gray-300 focus:ring-0">
+                                <span class="text-sm font-black text-text-muted group-hover:text-amber-500 transition-colors">BEST</span>
                             </label>
                         </div>
 
                     </div>
 
                     <!-- 검색 액션 -->
-                    <div class="flex items-center gap-2 w-full lg:w-auto mt-2 lg:mt-0">
-                        <a href="{{ route('admin.products.index') }}" class="px-4 py-2 bg-white border border-gray-200 text-text-muted rounded-xl text-[12px] font-bold text-center hover:bg-gray-50 transition-colors shadow-sm" title="초기화">
-                            <span class="material-symbols-outlined text-[16px] block">refresh</span>
+                    <div class="flex items-center gap-3 w-full lg:w-auto">
+                        <a href="{{ route('admin.products.index') }}" class="px-5 py-3 bg-white border border-gray-200 text-text-muted rounded-2xl font-bold hover:bg-gray-50 transition-all shadow-sm" title="초기화">
+                            <span class="material-symbols-outlined text-[20px] block">refresh</span>
                         </a>
-                        <button type="submit" class="flex-1 lg:flex-none px-8 py-2 bg-text-main text-white rounded-xl text-[12px] font-bold hover:bg-black transition-colors shadow-sm">
-                            검색
+                        <button type="submit" class="flex-1 lg:flex-none px-10 py-3 bg-text-main text-white rounded-2xl text-sm font-black hover:bg-black transition-all shadow-lg shadow-black/10 transform active:scale-95">
+                            검색하기
                         </button>
                     </div>
                 </div>
@@ -150,14 +160,14 @@
     <!-- Product Table Header -->
     <div class="bg-white rounded-t-2xl lg:rounded-t-3xl border-x border-t border-gray-100 overflow-hidden shadow-sm">
         <div class="product-row bg-gray-50/50 border-b border-gray-100 px-4 lg:px-6 py-3 lg:py-4">
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">이미지</div>
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">상품정보</div>
-            <div class="hidden md:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">카테고리</div>
-            <div class="hidden md:block text-right text-[11px] font-bold text-text-muted uppercase tracking-widest">판매가</div>
-            <div class="hidden lg:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">재고</div>
-            <div class="hidden lg:block text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">구분</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-center text-sm font-black text-text-main uppercase">이미지</div>
+            <div class="text-sm font-black text-text-main uppercase">상품정보</div>
+            <div class="hidden md:block text-center text-sm font-black text-text-main uppercase">카테고리</div>
+            <div class="hidden md:block text-right text-sm font-black text-text-main uppercase">판매가</div>
+            <div class="hidden lg:block text-center text-sm font-black text-text-main uppercase">재고</div>
+            <div class="hidden lg:block text-center text-sm font-black text-text-main uppercase">구분</div>
+            <div class="text-center text-sm font-black text-text-main uppercase">상태</div>
+            <div class="text-center text-sm font-black text-text-main uppercase">관리</div>
         </div>
     </div>
 
@@ -284,7 +294,7 @@
         @endforelse
     </div>
 
-    <!-- Pagination ✨ -->
+    <!-- Pagination  -->
     <div class="mt-10 mb-6">
         {{ $products->links() }}
     </div>
@@ -378,26 +388,36 @@
     }
 
     $(document).ready(function() {
-        // 모달 외부 클릭 시 닫기 😊
+        // 모달 외부 클릭 시 닫기
         $('#delete-modal').on('click', function(e) {
             if (e.target === this) closeDeleteModal();
         });
 
-        // 진짜 삭제 버튼 클릭! 🚀
+        // 진짜 삭제 버튼 클릭!
         $('#confirm-delete-btn').on('click', function() {
             if (currentDeleteId) {
                 document.getElementById(`delete-form-${currentDeleteId}`).submit();
             }
         });
 
-        // 검색 필터 아코디언 토글 로직 ✨
-        const $filterCard = $('#filter-card');
         const $filterToggle = $('#filter-toggle');
         const $filterContent = $('#filter-content');
         const $filterArrow = $('#filter-arrow');
 
+        // 초기 상태 로드 (localStorage)
+        const isFilterCollapsed = localStorage.getItem('admin_product_filter_collapsed');
+        if (isFilterCollapsed === 'true') {
+            $filterContent.hide();
+            $filterArrow.removeClass('rotate-180');
+            $filterToggle.removeClass('border-gray-50').addClass('border-transparent');
+        }
+
+        // 검색 필터 아코디언 토글 로직
         $filterToggle.on('click', function() {
-            $filterContent.slideToggle(300);
+            $filterContent.slideToggle(300, function() {
+                // 애니메이션 완료 후 상태 저장
+                localStorage.setItem('admin_product_filter_collapsed', $filterContent.is(':hidden'));
+            });
             $filterArrow.toggleClass('rotate-180');
             $(this).toggleClass('border-transparent border-gray-50');
         });

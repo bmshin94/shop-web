@@ -53,6 +53,7 @@ class Order extends Model
     ];
 
     protected $fillable = [
+        'member_id',
         'order_number',
         'customer_name',
         'customer_email',
@@ -80,6 +81,7 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'member_id' => 'integer',
         'subtotal_amount' => 'integer',
         'shipping_amount' => 'integer',
         'discount_amount' => 'integer',
@@ -89,6 +91,14 @@ class Order extends Model
         'delivered_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * 주문한 회원
+     */
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
 
     public function items(): HasMany
     {

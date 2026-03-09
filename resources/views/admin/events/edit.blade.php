@@ -42,19 +42,19 @@
     <!-- 상단 요약 카드 (운영자 관리 화면 참고) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이벤트 ID</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">이벤트 ID</p>
             <p class="mt-3 text-2xl font-black text-text-main">#{{ number_format($event->id) }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">시작 일시</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">시작 일시</p>
             <p class="mt-3 text-lg font-black text-text-main">{{ optional($event->start_at)->format('Y.m.d H:i') ?: '-' }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">종료 일시</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">종료 일시</p>
             <p class="mt-3 text-lg font-black text-text-main">{{ optional($event->end_at)->format('Y.m.d H:i') ?: '-' }}</p>
         </div>
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <p class="text-[11px] font-bold text-text-muted uppercase tracking-widest">현재 상태</p>
+            <p class="text-[11px] font-bold text-text-muted uppercase">현재 상태</p>
             <p class="mt-3 text-lg font-black text-text-main">{{ $event->status }}</p>
         </div>
     </div>
@@ -76,15 +76,15 @@
                 <h4 class="text-base font-extrabold text-text-main mb-5">이벤트 기본 정보</h4>
                 <dl class="space-y-4 text-sm">
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">이벤트명</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">이벤트명</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ $event->title }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">상태</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">상태</dt>
                         <dd class="mt-1"><x-admin.status-badge type="event" :value="$event->status" /></dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">기간</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">기간</dt>
                         <dd class="mt-1 font-bold text-text-main">
                             {{ optional($event->start_at)->format('Y.m.d H:i') ?: '-' }}
                             <span class="text-text-muted">~</span>
@@ -92,15 +92,15 @@
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">정렬 순서</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">정렬 순서</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ number_format($event->sort_order) }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">생성일</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">생성일</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ optional($event->created_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase tracking-widest">수정일</dt>
+                        <dt class="text-[11px] font-bold text-text-muted uppercase">수정일</dt>
                         <dd class="mt-1 font-bold text-text-main">{{ optional($event->updated_at)->format('Y.m.d H:i') ?: '-' }}</dd>
                     </div>
                 </dl>

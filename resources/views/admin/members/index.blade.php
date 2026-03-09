@@ -37,7 +37,7 @@
                 <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">group</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">전체 회원</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">전체 회원</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['total_members']) }}</p>
         </div>
@@ -46,7 +46,7 @@
                 <div class="size-12 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">person_check</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">활성</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">활성</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['active_members']) }}</p>
         </div>
@@ -55,7 +55,7 @@
                 <div class="size-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">bedtime</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">휴면</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">휴면</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['dormant_members']) }}</p>
         </div>
@@ -64,7 +64,7 @@
                 <div class="size-12 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">person_off</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">정지</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">정지</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['suspended_members']) }}</p>
         </div>
@@ -73,7 +73,7 @@
                 <div class="size-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[28px]">person_add</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase tracking-widest">최근 7일 가입</span>
+                <span class="text-[11px] font-bold text-text-muted uppercase">최근 7일 가입</span>
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['new_members_7d']) }}</p>
         </div>
@@ -137,11 +137,11 @@
         </div>
 
         <div class="hidden lg:grid member-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">회원 정보</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">회원상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">가입일</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">최근 로그인</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">회원 정보</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">회원상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">가입일</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">최근 로그인</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

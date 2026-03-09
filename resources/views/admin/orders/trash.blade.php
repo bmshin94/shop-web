@@ -118,12 +118,12 @@
         </div>
 
         <div class="hidden lg:grid order-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
-            <div class="text-[11px] font-bold text-text-muted uppercase tracking-widest">주문번호 / 주문자</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">주문상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">결제상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">배송상태</div>
-            <div class="text-right text-[11px] font-bold text-text-muted uppercase tracking-widest">삭제일 / 금액</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase tracking-widest">관리</div>
+            <div class="text-[11px] font-bold text-text-muted uppercase">주문번호 / 주문자</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">주문상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">결제상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">배송상태</div>
+            <div class="text-right text-[11px] font-bold text-text-muted uppercase">삭제일 / 금액</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
 
         <div class="divide-y divide-gray-50">

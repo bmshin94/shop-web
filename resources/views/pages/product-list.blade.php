@@ -14,7 +14,7 @@
           @if($loop->last)
           <span class="text-text-main font-bold">{{ $item }}</span>
           @else
-          <a href="#" class="hover:text-primary">{{ $item }}</a>
+          <a href="/" class="hover:text-primary">{{ $item }}</a>
           @endif
         </li>
         @endforeach
@@ -23,7 +23,7 @@
     <div class="flex items-end justify-between">
       <h2 class="text-3xl font-extrabold text-text-main tracking-tight">
         {{ $pageTitle }}
-        <span class="text-lg font-medium text-text-muted ml-2">({{ count($products) }})</span>
+        <span class="text-lg font-medium text-text-muted ml-2">({{ $products->total() }})</span>
       </h2>
       <!-- Mobile Filter Toggle -->
       <button
@@ -46,52 +46,46 @@
           </h3>
           <ul id="category-filter" class="space-y-3 text-sm text-text-muted">
             <li>
-              <a href="#" data-filter-type="category" data-filter-value="전체보기"
-                class="filter-category active font-bold text-primary flex justify-between items-center">
+              <a href="#" data-filter-type="category" data-filter-value=""
+                class="filter-category {{ !request('category') ? 'active font-bold text-primary' : '' }} flex justify-between items-center transition-colors hover:text-primary">
                 전체보기
-                <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs">{{ count($products) }}</span>
               </a>
             </li>
-            <li>
-              <a href="#" data-filter-type="category" data-filter-value="스포츠 브라"
-                class="filter-category hover:text-primary flex justify-between items-center">
-                스포츠 브라 <span class="text-xs">45</span>
-              </a>
+            @foreach($globalCategories ?? [] as $parentCat)
+            <li class="pt-2">
+              <p class="text-xs font-black text-text-main uppercase tracking-wider mb-2">{{ $parentCat->name }}</p>
+              <ul class="pl-2 space-y-2">
+                @foreach($parentCat->children as $childCat)
+                <li>
+                  <a href="#" data-filter-type="category" data-filter-value="{{ $childCat->slug }}"
+                    class="filter-category {{ request('category') == $childCat->slug ? 'active font-bold text-primary' : '' }} flex justify-between items-center transition-colors hover:text-primary">
+                    {{ $childCat->name }}
+                  </a>
+                </li>
+                @endforeach
+              </ul>
             </li>
-            <li>
-              <a href="#" data-filter-type="category" data-filter-value="반팔/긴팔 탑"
-                class="filter-category hover:text-primary flex justify-between items-center">
-                반팔/긴팔 탑 <span class="text-xs">32</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" data-filter-type="category" data-filter-value="레깅스/타이츠"
-                class="filter-category hover:text-primary flex justify-between items-center">
-                레깅스/타이츠 <span class="text-xs">47</span>
-              </a>
-            </li>
+            @endforeach
           </ul>
         </div>
 
-        <!-- Color Filter -->
+        <!-- Color Filter (Real DB Colors) -->
         <div>
           <h3 class="mb-4 text-base font-bold text-text-main border-b border-gray-200 pb-2">
             색상
           </h3>
           <div id="color-filter" class="flex flex-wrap gap-2">
             @php
-              $filterColors = [
-                ['name' => 'Black', 'class' => 'bg-black'],
-                ['name' => 'White', 'class' => 'bg-white border border-gray-200'],
-                ['name' => 'Red', 'class' => 'bg-primary'],
-                ['name' => 'Blue', 'class' => 'bg-blue-500'],
-                ['name' => 'Pink', 'class' => 'bg-pink-300'],
-                ['name' => 'Green', 'class' => 'bg-green-500'],
-              ];
+              $dbColors = \App\Models\Color::orderBy('name')->get();
+              $selectedColors = request('colors', []);
             @endphp
-            @foreach($filterColors as $color)
-            <button data-filter-type="color" data-filter-value="{{ $color['name'] }}"
-              class="filter-color size-8 rounded-full {{ $color['class'] }} ring-2 ring-transparent ring-offset-2 hover:ring-gray-300 transition-all"></button>
+            @foreach($dbColors as $color)
+            @php $isSelected = in_array($color->name, $selectedColors); @endphp
+            <button data-filter-type="color" data-filter-value="{{ $color->name }}"
+              title="{{ $color->name }}"
+              class="filter-color size-8 rounded-full ring-2 {{ $isSelected ? 'ring-primary' : 'ring-transparent' }} ring-offset-2 hover:ring-gray-300 transition-all shadow-sm border border-gray-100" 
+              style="background-color: {{ $color->hex_code }}"
+              data-selected="{{ $isSelected ? 'true' : 'false' }}"></button>
             @endforeach
           </div>
         </div>
@@ -102,11 +96,13 @@
             가격대
           </h3>
           <div id="price-filter" class="space-y-3">
+            @php $selectedPrices = request('price_range', []); @endphp
             @foreach(['~ 5만원', '5만원 ~ 10만원', '10만원 이상'] as $priceRange)
-            <label class="flex items-center gap-2 cursor-pointer">
+            <label class="flex items-center gap-2 cursor-pointer group">
               <input type="checkbox" data-filter-type="price" data-filter-value="{{ $priceRange }}"
+                {{ in_array($priceRange, $selectedPrices) ? 'checked' : '' }}
                 class="filter-price rounded border-gray-300 text-primary focus:ring-primary" />
-              <span class="text-sm text-text-muted">{{ $priceRange }}</span>
+              <span class="text-sm text-text-muted group-hover:text-text-main transition-colors">{{ $priceRange }}</span>
             </label>
             @endforeach
           </div>
@@ -119,15 +115,14 @@
       <!-- Top Toolbar -->
       <div class="mb-6 flex items-center justify-between">
         <div id="active-filters" class="flex flex-wrap gap-2">
-          <!-- 필터 태그가 JS로 동적 생성됩니다 -->
         </div>
         <div class="relative">
-          <select
+          <select id="sort-filter"
             class="appearance-none rounded-lg border border-gray-200 bg-white px-4 py-2 pr-10 text-sm font-medium text-text-main focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer">
-            <option>신상품순</option>
-            <option>인기순</option>
-            <option>낮은 가격순</option>
-            <option>높은 가격순</option>
+            <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>신상품순</option>
+            <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>인기순</option>
+            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>낮은 가격순</option>
+            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>높은 가격순</option>
           </select>
         </div>
       </div>
@@ -137,83 +132,84 @@
         @forelse($products as $product)
         <!-- Product Card -->
         <div class="group relative flex flex-col">
-          <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200">
-            <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-              style="background-image: url('{{ $product['image_url'] }}');"></div>
+          <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
+            <a href="{{ route('product-detail', ['slug' => $product['slug']]) }}">
+              <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 {{ $product['is_sold_out'] ? 'grayscale-[0.5] opacity-60' : '' }}"
+                style="background-image: url('{{ $product['image_url'] }}');"></div>
+            </a>
             
-            <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10">
+            @if($product['is_sold_out'])
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span class="bg-black/60 text-white px-4 py-2 rounded-lg text-sm font-black border border-white/20 backdrop-blur-sm">SOLD OUT</span>
+            </div>
+            @endif
+            
+            <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
               <span class="material-symbols-outlined block text-lg">favorite</span>
             </div>
 
             @if($product['is_best'])
-            <span class="absolute left-0 top-3 rounded-r bg-primary px-3 py-1 text-xs font-bold text-white shadow-md">BEST {{ $product['best_rank'] }}</span>
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+              <span class="inline-flex items-center gap-1 rounded-full bg-background-dark/90 backdrop-blur-md px-3 py-1 text-[10px] font-black text-yellow-400 shadow-xl tracking-tighter">
+                <span class="material-symbols-outlined text-[12px] filled" style="font-variation-settings: 'FILL' 1;">star</span>
+                BEST{{ isset($product['best_rank']) ? ' ' . $product['best_rank'] : '' }}
+              </span>
             @endif
 
-            @if($product['overlay_tag'])
-            <div class="absolute bottom-3 left-3 flex gap-1">
-              <span class="rounded bg-black/70 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">{{ $product['overlay_tag'] }}</span>
+            @if($product['is_new'])
+              @if(!$product['is_best']) <div class="absolute top-3 left-3 flex flex-col gap-1.5"> @endif
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/90 backdrop-blur-md px-3 py-1 text-[10px] font-black text-white shadow-xl shadow-primary/20 tracking-tighter">
+                <span class="size-1.5 rounded-full bg-white animate-pulse"></span>
+                NEW
+              </span>
+            </div>
+            @elseif($product['is_best'])
             </div>
             @endif
           </div>
 
-          <div class="mt-4 flex flex-1 flex-col">
-            <h4 class="text-base font-bold text-text-main">
-              {{ $product['name'] }}
+          <div class="mt-4 flex flex-1 flex-col px-1">
+            <h4 class="text-base font-bold text-text-main hover:text-primary transition-colors">
+              <a href="{{ route('product-detail', ['slug' => $product['slug']]) }}">{{ $product['name'] }}</a>
             </h4>
-            <p class="text-xs text-text-muted mb-1">
+            @if($product['description'])
+            <p class="text-xs text-text-muted mt-1 mb-2 line-clamp-1">
               {{ $product['description'] }}
             </p>
+            @endif
 
             <!-- Color Options -->
             @if(count($product['colors']) > 0)
-            <div class="flex gap-1 py-1 mb-1">
-              @foreach($product['colors'] as $colorClass)
-              <span class="size-3 rounded-full {{ $colorClass }} ring-1 ring-gray-200"></span>
+            <div class="flex gap-1 py-1 mb-2">
+              @foreach($product['colors'] as $hexCode)
+              <span class="size-3 rounded-full ring-1 ring-gray-200 shadow-sm" style="background-color: {{ $hexCode }}"></span>
               @endforeach
             </div>
             @endif
 
-            <div class="mt-1 flex items-center justify-between">
+            <div class="mt-2 flex items-center justify-between">
               <div class="flex flex-col">
                 @if($product['discount_rate'])
                 <span class="text-xs text-red-500 font-bold">
                   {{ $product['discount_rate'] }}%
-                  <span class="text-text-muted font-normal line-through ml-1">₩{{ number_format($product['original_price']) }}</span>
+                  <span class="text-text-muted font-normal line-through ml-1 opacity-50">₩{{ number_format($product['original_price']) }}</span>
                 </span>
                 @endif
-                <span class="text-lg font-bold text-text-main">₩{{ number_format($product['price']) }}</span>
+                <span class="text-lg font-bold text-text-main tracking-tight">₩{{ number_format($product['price']) }}</span>
               </div>
             </div>
-
-            @if(count($product['tags']) > 0)
-            <div class="mt-2 flex gap-1">
-              @foreach($product['tags'] as $tag)
-              <span class="inline-block rounded-sm bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{{ $tag }}</span>
-              @endforeach
-            </div>
-            @endif
           </div>
         </div>
         @empty
         <div class="col-span-full py-24 text-center">
-            <p class="text-text-muted">상품이 없습니다. 😊</p>
+            <p class="text-text-muted">조건에 맞는 상품이 없습니다.</p>
         </div>
         @endforelse
       </div>
 
       <!-- Pagination -->
-      <div class="mt-16 flex items-center justify-center gap-2">
-        <button class="flex size-10 items-center justify-center text-gray-400 hover:text-primary disabled:opacity-50" disabled>
-          <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="flex size-10 items-center justify-center rounded-full bg-primary font-bold text-white">1</button>
-        <button class="flex size-10 items-center justify-center rounded-full text-text-main hover:bg-gray-100">2</button>
-        <button class="flex size-10 items-center justify-center rounded-full text-text-main hover:bg-gray-100">3</button>
-        <span class="px-2 text-gray-400">...</span>
-        <button class="flex size-10 items-center justify-center rounded-full text-text-main hover:bg-gray-100">12</button>
-        <button class="flex size-10 items-center justify-center text-text-main hover:text-primary">
-          <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+      <div class="mt-16">
+        {{ $products->links() }}
       </div>
     </div>
   </div>
@@ -222,43 +218,106 @@
 
 @push('scripts')
 <script>
-  (function () {
-    const activeFiltersContainer = document.getElementById('active-filters');
-    const activeFilters = new Map();
+    (function () {
+      const activeFiltersContainer = document.getElementById('active-filters');
+      
+      function applyFilters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        activeFiltersContainer.innerHTML = '';
 
-    function addFilterTag(type, value) {
-      const key = type + ':' + value;
-      if (activeFilters.has(key)) return;
-      const tag = document.createElement('span');
-      tag.className = 'inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-text-main animate-fade-in';
-      tag.dataset.filterKey = key;
-      tag.innerHTML = value + '<button class="material-symbols-outlined text-[14px] hover:text-primary ml-0.5" type="button">close</button>';
-      tag.querySelector('button').addEventListener('click', () => removeFilter(type, value));
-      activeFiltersContainer.appendChild(tag);
-      activeFilters.set(key, { type, value, element: tag });
-    }
+        const cat = urlParams.get('category');
+        if (cat) {
+            const catEl = document.querySelector(`.filter-category[data-filter-value="${cat}"]`);
+            if (catEl) addFilterTag('category', catEl.textContent.trim(), cat);
+        }
 
-    function removeFilter(type, value) {
-      const key = type + ':' + value;
-      const filter = activeFilters.get(key);
-      if (filter) {
-        filter.element.remove();
-        activeFilters.delete(key);
+        urlParams.getAll('colors[]').forEach(color => {
+            addFilterTag('colors', color, color);
+        });
+
+        urlParams.getAll('price_range[]').forEach(price => {
+            addFilterTag('price_range', price, price);
+        });
       }
-      // UI 상태 복구 로직 (생략 - 필요 시 추가)
-    }
 
-    document.querySelectorAll('.filter-category').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        const value = this.dataset.filterValue;
-        activeFilters.forEach((f, k) => { if (f.type === 'category') removeFilter('category', f.value); });
-        document.querySelectorAll('.filter-category').forEach(l => l.classList.remove('active', 'font-bold', 'text-primary'));
-        this.classList.add('active', 'font-bold', 'text-primary');
-        if (value !== '전체보기') addFilterTag('category', value);
+      function addFilterTag(type, label, value) {
+        const tag = document.createElement('span');
+        tag.className = 'inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-text-main animate-fade-in border border-gray-200';
+        tag.innerHTML = label + '<button class="material-symbols-outlined text-[14px] hover:text-primary ml-0.5" type="button">close</button>';
+        tag.querySelector('button').addEventListener('click', () => removeFilter(type, value));
+        activeFiltersContainer.appendChild(tag);
+      }
+
+      function removeFilter(type, value) {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (type === 'category') urlParams.delete('category');
+        else if (type === 'colors') {
+            const current = urlParams.getAll('colors[]').filter(v => v !== value);
+            urlParams.delete('colors[]');
+            current.forEach(v => urlParams.append('colors[]', v));
+        } else if (type === 'price_range') {
+            const current = urlParams.getAll('price_range[]').filter(v => v !== value);
+            urlParams.delete('price_range[]');
+            current.forEach(v => urlParams.append('price_range[]', v));
+        }
+        urlParams.delete('page');
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+      }
+
+      function updateFilter(type, value, active) {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (type === 'category') {
+            if (value) urlParams.set('category', value);
+            else urlParams.delete('category');
+        } else if (type === 'colors[]') {
+            if (active) urlParams.append('colors[]', value);
+            else {
+                const current = urlParams.getAll('colors[]').filter(v => v !== value);
+                urlParams.delete('colors[]');
+                current.forEach(v => urlParams.append('colors[]', v));
+            }
+        } else if (type === 'price_range[]') {
+            if (active) {
+                // 중복 방지
+                const current = urlParams.getAll('price_range[]');
+                if (!current.includes(value)) urlParams.append('price_range[]', value);
+            } else {
+                const current = urlParams.getAll('price_range[]').filter(v => v !== value);
+                urlParams.delete('price_range[]');
+                current.forEach(v => urlParams.append('price_range[]', v));
+            }
+        }
+        urlParams.delete('page');
+        window.location.href = window.location.pathname + '?' + urlParams.toString();
+      }
+
+      document.querySelectorAll('.filter-category').forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          updateFilter('category', this.dataset.filterValue);
+        });
       });
-    });
-    // 나머지 필터 JS는 HTML과 동일하게 구현 가능
-  })();
+
+      document.querySelectorAll('.filter-color').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const isSelected = this.dataset.selected === 'true';
+          updateFilter('colors[]', this.dataset.filterValue, !isSelected);
+        });
+      });
+
+      document.querySelectorAll('.filter-price').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+          updateFilter('price_range[]', this.dataset.filterValue, this.checked);
+        });
+      });
+
+      document.getElementById('sort-filter').addEventListener('change', function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          urlParams.set('sort', this.value);
+          window.location.href = window.location.pathname + '?' + urlParams.toString();
+      });
+
+      applyFilters();
+    })();
 </script>
 @endpush

@@ -19,7 +19,7 @@ class OperatorSeeder extends Seeder
             'name' => '최고관리자',
             'email' => 'admin@admin.com',
             'phone' => '010-0000-0000',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('m1124981'),
             'status' => '활성',
             'menu_permissions' => null, // 전체 권한
         ]);

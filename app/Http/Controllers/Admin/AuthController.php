@@ -33,11 +33,14 @@ class AuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // 마지막 로그인 시간 업데이트
+            // 마지막 로그인 시간 업데이트 및 세션 키 설정 
             $operator = Auth::guard('admin')->user();
             if ($operator) {
                 $operator->last_login_at = now();
                 $operator->save();
+
+                // 기존 권한 미들웨어가 사용하는 세션 키 동기화
+                $request->session()->put('admin_operator_id', $operator->id);
             }
 
             return redirect()->intended(route('admin.dashboard'));

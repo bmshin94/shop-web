@@ -34,6 +34,7 @@ class AdminMenuSeeder extends Seeder
             ['name' => '주문/배송 관리', 'description' => '주문 상태 및 배송 상태 관리', 'icon' => 'shopping_cart', 'route' => 'admin.orders.index', 'permission_key' => 'orders', 'sort_order' => 14],
             ['name' => '회원 관리', 'description' => '회원 조회 및 상태 변경', 'icon' => 'group', 'route' => 'admin.members.index', 'permission_key' => 'members', 'sort_order' => 15],
             ['name' => '쿠폰 관리', 'description' => '쿠폰 생성 및 발급 내역 관리', 'icon' => 'confirmation_number', 'route' => 'admin.coupons.index', 'permission_key' => 'coupons', 'sort_order' => 16],
+            ['name' => '적립금 관리', 'description' => '회원 적립금 변동 내역 및 지급/차감', 'icon' => 'monetization_on', 'route' => 'admin.points.index', 'permission_key' => 'points', 'sort_order' => 17],
         ];
 
         foreach ($mallMenus as $menu) {
@@ -43,11 +44,11 @@ class AdminMenuSeeder extends Seeder
         // 3. 운영 관리 그룹
         $opGroup = '운영 관리';
         $opMenus = [
-            ['name' => '메뉴 관리', 'description' => '관리자 사이드바 메뉴 관리', 'icon' => 'menu_open', 'route' => 'admin.menus.index', 'permission_key' => 'menus', 'sort_order' => 17],
-            ['name' => '운영자 관리', 'description' => '운영자 계정/권한 관리', 'icon' => 'badge', 'route' => 'admin.operators.index', 'permission_key' => 'operators', 'sort_order' => 18],
+            ['name' => '메뉴 관리', 'description' => '관리자 사이드바 메뉴 관리', 'icon' => 'menu_open', 'route' => 'admin.menus.index', 'permission_key' => 'menus', 'sort_order' => 18],
+            ['name' => '운영자 관리', 'description' => '운영자 계정/권한 관리', 'icon' => 'badge', 'route' => 'admin.operators.index', 'permission_key' => 'operators', 'sort_order' => 19],
             ['name' => '이벤트 관리', 'description' => '이벤트 등록/노출 상태 관리', 'icon' => 'campaign', 'route' => 'admin.events.index', 'permission_key' => 'events', 'sort_order' => 20],
             ['name' => '기획전 관리', 'description' => '기획전 등록/노출 상태 관리', 'icon' => 'storefront', 'route' => 'admin.exhibitions.index', 'permission_key' => 'exhibitions', 'sort_order' => 21],
-            ['name' => '고객센터 문의', 'description' => '고객 문의 내역 관리', 'icon' => 'support_agent', 'route' => null, 'permission_key' => 'qna', 'sort_order' => 22],
+            ['name' => '고객센터 문의', 'description' => '고객 문의 내역 관리', 'icon' => 'support_agent', 'route' => 'admin.inquiries.index', 'permission_key' => 'qna', 'sort_order' => 22],
             ['name' => '기본 설정', 'description' => '사이트 기본 운영 설정', 'icon' => 'settings', 'route' => 'admin.settings.index', 'permission_key' => 'settings', 'sort_order' => 23],
         ];
 

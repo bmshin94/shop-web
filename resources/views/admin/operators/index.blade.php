@@ -118,8 +118,8 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
-                <input type="date" name="joined_from" value="{{ request('joined_from') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                <input type="date" name="joined_to" value="{{ request('joined_to') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                <input type="text" name="joined_from" value="{{ request('joined_from') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                <input type="text" name="joined_to" value="{{ request('joined_to') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
             </div>
         </form>
     </div>

@@ -91,10 +91,12 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center bg-gray-50 rounded-xl px-3 py-1.5 border border-gray-100 focus-within:border-primary/30 transition-all w-full lg:w-auto">
-                                <input type="text" name="start_date" value="{{ $startDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-medium focus:ring-0 outline-none w-full sm:w-24 text-center">
-                                <span class="text-gray-300 mx-2">~</span>
-                                <input type="text" name="end_date" value="{{ $endDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-medium focus:ring-0 outline-none w-full sm:w-24 text-center">
+                            <div class="flex items-center bg-gray-50 rounded-xl px-3 py-1.5 border border-gray-100 group focus-within:border-primary/20 transition-all w-full lg:w-auto gap-2">
+                                <span class="material-symbols-outlined text-[16px] text-text-muted group-focus-within:text-primary transition-colors pointer-events-none">calendar_today</span>
+                                <input type="text" name="start_date" value="{{ $startDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-bold focus:ring-0 outline-none w-full sm:w-24 text-center">
+                                <span class="text-gray-300">~</span>
+                                <input type="text" name="end_date" value="{{ $endDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-bold focus:ring-0 outline-none w-full sm:w-24 text-center">
+                                <span class="material-symbols-outlined text-[16px] text-text-muted group-focus-within:text-primary transition-colors pointer-events-none">calendar_month</span>
                             </div>
                         </div>
                         

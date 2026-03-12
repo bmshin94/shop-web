@@ -4,7 +4,7 @@
 
 @section('content')
 <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-    <!-- Breadcrumb -->
+    {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-sm text-text-muted mb-6">
         <a href="/" class="hover:text-primary transition-colors">Home</a>
         <span class="material-symbols-outlined text-xs">chevron_right</span>
@@ -13,49 +13,75 @@
         <span class="font-bold text-text-main">적립금 내역</span>
     </nav>
 
-    <!-- Page Title -->
+    {{-- Page Title --}}
     <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">적립금 내역</h2>
 
     <div class="flex flex-col lg:flex-row gap-8 items-start">
-        <!-- LNB (Left Navigation Bar) -->
+        {{-- LNB (Left Navigation Bar) --}}
         @include('partials.mypage-sidebar')
 
-        <!-- Main Dashboard Content -->
+        {{-- Main Dashboard Content --}}
         <div class="flex-1 w-full space-y-8">
+            {{-- Point Summary Card --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-8">
-                <div class="flex items-center justify-end mb-6 border-b border-gray-100 pb-6">
-                    <p class="text-3xl font-extrabold text-primary">12,500<span class="text-lg text-text-main font-bold ml-1">원</span></p>
+                <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-6">
+                    <p class="text-lg font-bold text-text-main">현재 보유 적립금</p>
+                    <p class="text-3xl font-extrabold text-primary">{{ number_format($currentPoints) }}<span class="text-lg text-text-main font-bold ml-1">원</span></p>
                 </div>
                 <div class="flex justify-between items-center text-sm">
                     <span class="font-medium text-text-muted">30일 내 소멸 예정 적립금</span>
-                    <span class="font-bold text-text-main">0원</span>
+                    <span class="font-bold text-text-main">{{ number_format($expiringPoints) }}원</span>
                 </div>
             </div>
             
-            <h4 class="text-md font-bold text-primary mb-4 mt-8"><span class="material-symbols-outlined align-middle text-sm mr-1">check_circle</span>[상태 1] 데이터가 있는 경우</h4>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-12">
-                <h4 class="text-lg font-bold text-text-main mb-4">적립/사용 내역</h4>
+            {{-- History Section --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                <h4 class="text-lg font-bold text-text-main mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">history</span> 적립/사용 내역
+                </h4>
+                
                 <div class="border-t border-gray-100 divide-y divide-gray-100">
-                    <div class="py-4 flex justify-between items-center">
+                    @forelse($histories as $history)
+                    <div class="py-5 flex justify-between items-center group hover:bg-gray-50/50 transition-colors">
                         <div>
-                            <p class="font-bold text-sm text-text-main mb-1">상품 구매 확정 적립</p>
-                            <p class="text-xs text-text-muted">2026.02.20</p>
+                            <p class="font-bold text-sm text-text-main mb-1 group-hover:text-primary transition-colors">{{ $history->reason }}</p>
+                            <p class="text-xs text-text-muted font-medium">{{ $history->created_at->format('Y.m.d H:i') }}</p>
                         </div>
-                        <span class="font-bold text-primary">+2,500원</span>
-                    </div>
-                    <div class="py-4 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-sm text-text-main mb-1">신규 가입 환영 적립금</p>
-                            <p class="text-xs text-text-muted">2026.01.10</p>
+                        <div class="text-right">
+                            <p class="font-black text-sm {{ $history->amount > 0 ? 'text-primary' : 'text-text-main' }}">
+                                {{ $history->amount > 0 ? '+' : '' }}{{ number_format($history->amount) }}원
+                            </p>
+                            <p class="text-[10px] text-text-muted font-bold mt-0.5">잔액 {{ number_format($history->balance_after) }}원</p>
                         </div>
-                        <span class="font-bold text-primary">+10,000원</span>
                     </div>
+                    @empty
+                    <div class="py-20 text-center">
+                        <div class="size-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
+                            <span class="material-symbols-outlined text-gray-300 text-3xl">database_off</span>
+                        </div>
+                        <p class="text-text-muted font-bold">적립금 내역이 없습니다.</p>
+                    </div>
+                    @endforelse
                 </div>
+
+                {{-- Pagination --}}
+                @if($histories->hasPages())
+                <div class="mt-8">
+                    {{ $histories->links() }}
+                </div>
+                @endif
             </div>
 
-            <h4 class="text-md font-bold text-gray-500 mb-4"><span class="material-symbols-outlined align-middle text-sm mr-1">cancel</span>[상태 2] 데이터가 없는 경우</h4>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 text-center py-10">
-                <p class="text-text-muted font-medium">적립금 내역이 없습니다.</p>
+            {{-- Caution Note --}}
+            <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                <h5 class="text-sm font-black text-text-main mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gray-400 text-lg">info</span> 적립금 이용 안내
+                </h5>
+                <ul class="space-y-2 text-xs text-text-muted font-medium leading-relaxed">
+                    <li>• 적립금은 상품 구매 시 현금처럼 사용할 수 있습니다.</li>
+                    <li>• 적립금의 유효기간은 적립일로부터 1년이며, 기간 내 미사용 시 자동 소멸됩니다.</li>
+                    <li>• 1회 결제 시 사용 가능한 최소/최대 적립금은 정책에 따라 다를 수 있습니다.</li>
+                </ul>
             </div>
         </div>
     </div>

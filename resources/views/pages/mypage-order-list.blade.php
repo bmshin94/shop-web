@@ -2,36 +2,6 @@
 
 @section('title', '주문/배송 조회 | 마이페이지 - Active Women\'s Premium Store')
 
-@push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<style>
-    /* Flatpickr Custom Theme */
-    .flatpickr-calendar {
-        border-radius: 20px !important;
-        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1) !important;
-        border: 1px solid #f3f4f6 !important;
-        padding: 8px !important;
-    }
-    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
-    .flatpickr-day.selected:hover, .flatpickr-day.nextMonthDay.selected, 
-    .flatpickr-day.prevMonthDay.selected {
-        background: #ec3713 !important;
-        border-color: #ec3713 !important;
-        font-weight: 700 !important;
-    }
-    .flatpickr-months .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months {
-        font-weight: 800 !important;
-        color: #181211 !important;
-    }
-    .flatpickr-weekday {
-        color: #896861 !important;
-        font-weight: 700 !important;
-        font-size: 11px !important;
-    }
-    .flatpickr-innerContainer { margin-top: 10px; }
-</style>
-@endpush
-
 @section('content')
 <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
     <!-- Breadcrumb -->
@@ -242,7 +212,7 @@
         document.querySelectorAll('.btn-period').forEach(btn => {
             btn.addEventListener('click', function() {
                 const months = parseInt(this.dataset.months);
-                monthsInput.value = months; // Hidden 필드에 저장 ✨
+                monthsInput.value = months; // Hidden 필드에 저장
 
                 const now = new Date();
                 const startDate = new Date();

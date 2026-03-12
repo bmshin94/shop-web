@@ -164,7 +164,11 @@
                         <a href="{{ route('admin.coupons.edit', $coupon->id) }}" class="inline-flex size-9 items-center justify-center bg-white border border-gray-200 rounded-xl text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">edit</span>
                         </a>
-                        <form action="{{ route('admin.coupons.destroy', $coupon->id) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');" class="inline-block">
+                        <form action="{{ route('admin.coupons.destroy', $coupon->id) }}" method="POST" 
+                              class="js-confirm-submit inline-block" 
+                              data-confirm-title="쿠폰 삭제" 
+                              data-confirm-message="정말 이 쿠폰을 삭제하시겠습니까?<br>삭제된 쿠폰은 휴지통으로 이동하며, 발급된 내역은 유지되지만 신규 발급은 중단됩니다."
+                              data-confirm-text="삭제하기">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="inline-flex size-9 items-center justify-center bg-white border border-gray-200 rounded-xl text-red-500 hover:border-red-500 hover:bg-red-50 transition-all shadow-sm">
@@ -182,7 +186,7 @@
                         {{ $activeFilterCount > 0 ? '조건에 맞는 쿠폰이 없습니다.' : '등록된 쿠폰이 없습니다.' }}
                     </p>
                     <p class="mt-2 text-[12px] font-bold text-text-muted">
-                        우측 상단의 '새 쿠폰 등록' 버튼을 눌러 첫 번째 혜택을 만들어보세요! 😊
+                        우측 상단의 '새 쿠폰 등록' 버튼을 눌러 첫 번째 혜택을 만들어보세요.
                     </p>
                 </div>
             @endforelse

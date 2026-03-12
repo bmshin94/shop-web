@@ -4,47 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Services\MemberService;
 use App\Services\CheckoutService;
+use App\Http\Requests\Mypage\CouponRegisterRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Inquiry;
 
 class MemberController extends Controller
 {
     protected $memberService;
     protected $checkoutService;
 
-    /**
-     * MemberController 생성자
-     */
     public function __construct(MemberService $memberService, CheckoutService $checkoutService)
     {
+        $this->middleware('auth');
         $this->memberService = $memberService;
         $this->checkoutService = $checkoutService;
     }
 
     /**
-     * 마이페이지 메인 (대시보드)
+     * 마이페이지 메인 대시보드
      */
-    public function index()
+    public function index(): View
     {
         $member = Auth::user();
         $data = $this->memberService->getDashboardData($member);
+
         return view('pages.mypage', $data);
     }
 
     /**
-     * 주문/배송 조회 목록
+     * 주문 목록 조회 페이지
      */
-    public function orderList(Request $request)
+    public function orderList(Request $request): View
     {
         $member = Auth::user();
         $data = $this->memberService->getOrderListData($member, $request);
+
         return view('pages.mypage-order-list', $data);
     }
 
     /**
-     * 취소/반품/교환 내역 조회
+     * 취소/반품 내역 페이지
      */
-    public function cancelList(Request $request)
+    public function cancelList(Request $request): View
     {
         $member = Auth::user();
         $data = $this->memberService->getCancelListData($member, $request);
@@ -53,9 +59,9 @@ class MemberController extends Controller
     }
 
     /**
-     * 환불/입금 내역 조회
+     * 환불/입금 내역 페이지
      */
-    public function refundList(Request $request)
+    public function refundList(Request $request): View
     {
         $member = Auth::user();
         $data = $this->memberService->getRefundListData($member, $request);
@@ -64,9 +70,42 @@ class MemberController extends Controller
     }
 
     /**
-     * 보유 쿠폰 조회
+     * 영수증/계산서 발급 조회 페이지
      */
-    public function couponList(Request $request)
+    public function receiptList(Request $request): View
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getReceiptListData($member, $request);
+
+        return view('pages.mypage-receipt', $data);
+    }
+
+    /**
+     * 찜 목록 조회 페이지
+     */
+    public function wishlist(): View
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getWishlistData($member);
+
+        return view('pages.mypage-wishlist', $data);
+    }
+
+    /**
+     * 적립금 내역 페이지
+     */
+    public function pointList(): View
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getPointListData($member);
+
+        return view('pages.mypage-point', $data);
+    }
+
+    /**
+     * 쿠폰함 페이지
+     */
+    public function couponList(Request $request): View
     {
         $member = Auth::user();
         $data = $this->memberService->getCouponListData($member, $request);
@@ -75,13 +114,11 @@ class MemberController extends Controller
     }
 
     /**
-     * 쿠폰 등록 처리 (AJAX)
+     * 쿠폰 등록 처리
      */
-    public function registerCoupon(Request $request)
+    public function registerCoupon(Request $request): JsonResponse
     {
-        $request->validate([
-            'code' => 'required|string|max:50'
-        ]);
+        $request->validate(['code' => 'required|string']);
 
         try {
             $member = Auth::user();
@@ -98,20 +135,201 @@ class MemberController extends Controller
     }
 
     /**
-     * 영수증/계산서 발급 조회
+     * 최근 본 상품 목록 조회 ✨ (비로그인 지원!)
      */
-    public function receiptList(Request $request)
+    public function recentViewList(): View
     {
         $member = Auth::user();
-        $data = $this->memberService->getReceiptListData($member, $request);
+        $data = $this->memberService->getRecentViewData($member);
 
-        return view('pages.mypage-receipt', $data);
+        return view('pages.mypage-recent', $data);
     }
 
     /**
-     * 상품 리뷰 관리 페이지
+     * 최근 본 상품 전체 삭제 ✨ (비로그인 지원!)
      */
-    public function reviewList()
+    public function clearRecentViews(): JsonResponse
+    {
+        try {
+            $member = Auth::user();
+            $this->memberService->clearRecentViews($member);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '최근 본 상품 내역이 모두 삭제되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '삭제 처리 중 오류가 발생했습니다.'
+            ], 500);
+        }
+    }
+
+    /**
+     * 최근 본 상품 선택 삭제 ✨
+     */
+    public function deleteSelectedRecentViews(Request $request): JsonResponse
+    {
+        try {
+            $member = Auth::user();
+            $ids = $request->input('ids', []);
+
+            if (empty($ids)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => '삭제할 상품을 선택해주세요.'
+                ], 422);
+            }
+
+            $this->memberService->deleteSelectedRecentViews($member, $ids);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '선택한 상품이 삭제되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '삭제 처리 중 오류가 발생했습니다.'
+            ], 500);
+        }
+    }
+
+    /**
+     * 비밀번호 재확인 폼 ✨
+     */
+    public function confirmPasswordForm(): View|RedirectResponse
+    {
+        // 이미 확인했다면 바로 수정 페이지로! 😊
+        if (session()->get('auth.password_confirmed_at')) {
+            return redirect()->route('mypage.profile-edit');
+        }
+
+        return view('pages.mypage-profile-confirm');
+    }
+
+    /**
+     * 비밀번호 재확인 처리 ✨
+     */
+    public function confirmPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if (!Hash::check($request->password, Auth::user()->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => '비밀번호가 일치하지 않습니다.'
+            ], 422);
+        }
+
+        // 확인 시간 세션 저장 ⏰
+        session()->put('auth.password_confirmed_at', time());
+
+        return response()->json([
+            'success' => true,
+            'redirect' => route('mypage.profile-edit')
+        ]);
+    }
+
+    /**
+     * 회원정보 수정 폼 ✨
+     */
+    public function profileEditForm(): View|RedirectResponse
+    {
+        // 비밀번호 확인 안 됐으면 쫓아내기! 🕵️‍♀️
+        if (!session()->has('auth.password_confirmed_at')) {
+            return redirect()->route('mypage.profile');
+        }
+
+        $member = Auth::user();
+        return view('pages.mypage-profile-edit', compact('member'));
+    }
+
+    /**
+     * 회원정보 수정 처리 ✨
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $member = Auth::user();
+
+        $request->validate([
+            'phone' => 'required|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed',
+            'postal_code' => 'nullable|string|max:10',
+            'address_line1' => 'nullable|string|max:255',
+            'address_line2' => 'nullable|string|max:255',
+            'marketing_sms' => 'nullable|boolean',
+            'marketing_email' => 'nullable|boolean',
+        ]);
+
+        try {
+            $data = $request->only(['phone', 'postal_code', 'address_line1', 'address_line2']);
+            
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+
+            $member->update(array_merge($data, [
+                'marketing_sms' => $request->boolean('marketing_sms'),
+                'marketing_email' => $request->boolean('marketing_email'),
+            ]));
+
+            return response()->json([
+                'success' => true,
+                'message' => '회원정보가 성공적으로 수정되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => '수정 중 오류가 발생했습니다.'
+            ], 500);
+        }
+    }
+
+    /**
+     * 1:1 문의 내역 조회 ✨
+     */
+    public function inquiryList(): View
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getInquiryData($member);
+
+        return view('pages.mypage-inquiry', $data);
+    }
+
+    /**
+     * 1:1 문의 등록 처리 ✨
+     */
+    public function storeInquiry(Request $request): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        try {
+            $member = Auth::user();
+            $this->memberService->createInquiry($member, $request->only('title', 'content'));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '문의가 정상적으로 등록되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '문의 등록 중 오류가 발생했습니다.'
+            ], 500);
+        }
+    }
+
+    /**
+     * 상품 리뷰 관리 페이지 ✨
+     */
+    public function reviewList(): View
     {
         $member = Auth::user();
         $data = $this->memberService->getReviewListData($member);
@@ -121,7 +339,7 @@ class MemberController extends Controller
     /**
      * 주문 상세 조회
      */
-    public function orderDetail($orderNumber)
+    public function orderDetail($orderNumber): View
     {
         $member = Auth::user();
         $order = $member->orders()
@@ -135,7 +353,7 @@ class MemberController extends Controller
     /**
      * 주문 취소 처리
      */
-    public function cancelOrder(Request $request, $orderNumber)
+    public function cancelOrder(Request $request, $orderNumber): JsonResponse
     {
         $member = Auth::user();
         $order = $member->orders()->where('order_number', $orderNumber)->firstOrFail();

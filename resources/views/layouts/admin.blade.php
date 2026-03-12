@@ -10,6 +10,9 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
+    
+    <!-- Flatpickr CSS (라이브러리 스타일 우선 로드) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <script>
         tailwind.config = {
@@ -37,10 +40,9 @@
         /* Sidebar Transitions */
         #admin-sidebar { 
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease-in-out, opacity 0.3s; 
-            width: 16rem; /* Default w-64 */
+            width: 16rem; 
         }
         
-        /* Desktop Collapsed State */
         .sidebar-collapsed #admin-sidebar { 
             width: 0 !important; 
             opacity: 0;
@@ -58,14 +60,8 @@
                 z-index: 50;
             }
             #admin-sidebar.show-mobile { transform: translateX(0); }
-            .sidebar-collapsed #admin-sidebar { width: 16rem !important; opacity: 1; pointer-events: auto; } /* Mobile doesn't use collapsed state */
+            .sidebar-collapsed #admin-sidebar { width: 16rem !important; opacity: 1; pointer-events: auto; }
         }
-
-        /* Toast Animations */
-        @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(20px); } }
-        .toast-enter { animation: toastIn 0.3s ease-out forwards; }
-        .toast-exit { animation: toastOut 0.3s ease-in forwards; }
 
         input[type="checkbox"]:focus, input[type="radio"]:focus {
             --tw-ring-offset-width: 0px !important;
@@ -74,6 +70,101 @@
             box-shadow: none !important;
             border-color: #d1d5db !important;
         }
+
+        /* Flatpickr Global Custom Theme - Tailwind 간섭 방지 초강력 보정 */
+        .flatpickr-calendar {
+            border-radius: 24px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid #f1f5f9 !important;
+            min-width: 320px !important;
+            background: #fff !important;
+            padding: 12px !important;
+        }
+        .flatpickr-months {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 50px !important;
+            position: relative !important;
+        }
+        .flatpickr-month {
+            height: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: transparent !important;
+            color: #1e293b !important;
+            fill: #1e293b !important;
+            position: static !important;
+        }
+        .flatpickr-prev-month, .flatpickr-next-month {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            padding: 8px !important;
+            cursor: pointer !important;
+            z-index: 10 !important;
+            height: 34px !important;
+            width: 34px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 10px !important;
+            transition: all 0.2s !important;
+        }
+        .flatpickr-prev-month:hover, .flatpickr-next-month:hover {
+            background: #f1f5f9 !important;
+        }
+        .flatpickr-prev-month { left: 10px !important; }
+        .flatpickr-next-month { right: 10px !important; }
+        .flatpickr-current-month {
+            font-weight: 800 !important;
+            font-size: 16px !important;
+            color: #1e293b !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            position: static !important;
+            width: auto !important;
+            height: auto !important;
+            line-height: 1 !important;
+            padding: 0 !important;
+            text-align: center !important;
+        }
+        .flatpickr-current-month .cur-month {
+            font-weight: 800 !important;
+            margin: 0 !important;
+        }
+        .numInputWrapper {
+            width: 75px !important;
+            display: inline-block !important;
+        }
+        .flatpickr-innerContainer {
+            display: block !important;
+        }
+        .flatpickr-rContainer {
+            display: block !important;
+            width: 100% !important;
+        }
+        .flatpickr-weekdays {
+            display: flex !important;
+            width: 100% !important;
+            margin-top: 10px !important;
+            margin-bottom: 8px !important;
+        }
+
+        /* Toast Animations */
+        @keyframes toast-in {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toast-out {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100%); opacity: 0; }
+        }
+        .toast-enter { animation: toast-in 0.3s ease-out forwards; }
+        .toast-exit { animation: toast-out 0.3s ease-in forwards; }
     </style>
     @stack('styles')
 </head>
@@ -89,12 +180,11 @@
     @endphp
 
     <div id="admin-layout" class="flex min-h-screen relative">
-        <!-- Mobile Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[40] hidden opacity-0 transition-opacity duration-300"></div>
 
         <!-- Sidebar -->
         <aside id="admin-sidebar" class="bg-admin-sidebar text-white flex flex-col flex-shrink-0 overflow-hidden shadow-2xl lg:shadow-none">
-            <div class="w-64 flex flex-col h-full"> {{-- Inner fixed width container to prevent content squishing --}}
+            <div class="w-64 flex flex-col h-full">
                 <div class="p-6 border-b border-white/10 flex items-center justify-between">
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                         <div class="flex size-8 items-center justify-center rounded-full bg-primary text-white">
@@ -172,76 +262,99 @@
         </main>
     </div>
 
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-8 text-center">
+                <div class="size-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-6">
+                    <span id="alert-icon" class="material-symbols-outlined text-3xl text-primary">info</span>
+                </div>
+                <h3 id="alert-title" class="text-lg font-black text-text-main mb-2">알림</h3>
+                <p id="alert-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
+            </div>
+            <div class="p-4 bg-gray-50 flex gap-3">
+                <button onclick="closeAlert()" class="flex-1 py-3 bg-text-main text-white text-sm font-black rounded-xl hover:bg-black transition-all">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="p-8 text-center">
+                <div class="size-16 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-6">
+                    <span class="material-symbols-outlined text-3xl text-primary">help</span>
+                </div>
+                <h3 id="confirm-title" class="text-lg font-black text-text-main mb-2">확인</h3>
+                <p id="confirm-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
+            </div>
+            <div class="p-4 bg-gray-50 flex gap-3">
+                <button id="confirm-cancel" class="flex-1 py-3 bg-white border border-gray-200 text-text-muted text-sm font-black rounded-xl hover:bg-gray-100 transition-all">취소</button>
+                <button id="confirm-accept" class="flex-1 py-3 bg-primary text-white text-sm font-black rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20">확인</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
-    <div id="toastContainer" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[9999] flex flex-col items-center gap-3 pointer-events-none"></div>
-
-    <!-- Alerts & Confirms -->
-    <div id="alert-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden">
-            <div class="p-8 text-center">
-                <div id="alert-icon-wrapper" class="size-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-6"><span id="alert-icon" class="material-symbols-outlined text-[32px]">info</span></div>
-                <h4 id="alert-title" class="text-xl font-bold text-text-main mb-2">알림</h4>
-                <p id="alert-message" class="text-[11px] font-bold text-text-muted tracking-tight leading-relaxed"></p>
-            </div>
-            <div class="border-t border-gray-100"><button onclick="closeAlert()" class="w-full px-6 py-4 text-sm font-bold text-primary hover:bg-gray-50 transition-colors">확인</button></div>
-        </div>
-    </div>
-
-    <div id="confirm-modal" class="fixed inset-0 z-[10001] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden">
-            <div class="p-8 text-center">
-                <div class="size-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-6"><span class="material-symbols-outlined text-[32px]">warning</span></div>
-                <h4 id="confirm-title" class="text-xl font-bold text-text-main mb-2">확인</h4>
-                <p id="confirm-message" class="text-[12px] font-bold text-text-muted tracking-tight leading-relaxed"></p>
-            </div>
-            <div class="grid grid-cols-2 border-t border-gray-100">
-                <button id="confirm-cancel" type="button" class="px-6 py-4 text-sm font-bold text-text-muted hover:bg-gray-50 transition-colors border-r border-gray-100">취소</button>
-                <button id="confirm-accept" type="button" class="px-6 py-4 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors">확인</button>
-            </div>
-        </div>
-    </div>
+    <div id="toastContainer" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[110] flex flex-col gap-3 pointer-events-none"></div>
 
     <!-- jQuery & Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
     <script>
         let confirmResolver = null;
+        
+        // Flatpickr 전역 초기화
+        function initGlobalDatepickers() {
+            flatpickr(".datepicker", {
+                locale: "ko",
+                dateFormat: "Y-m-d",
+                disableMobile: "true",
+                animate: true
+            });
+        }
+
         function showAlert(message, title = "알림", icon = "info") { $('#alert-title').text(title); $('#alert-message').html(message); $('#alert-icon').text(icon); $('#alert-modal').removeClass('hidden').addClass('flex'); $('body').addClass('overflow-hidden'); }
         function closeAlert() { $('#alert-modal').removeClass('flex').addClass('hidden'); $('body').removeClass('overflow-hidden'); }
-        function showConfirm(message, options = {}) { $('#confirm-title').text(options.title || "확인"); $('#confirm-message').text(message); $('#confirm-accept').text(options.confirmText || "확인"); $('#confirm-modal').removeClass('hidden').addClass('flex'); $('body').addClass('overflow-hidden'); return new Promise((resolve) => { confirmResolver = resolve; }); }
+        function showConfirm(message, options = {}) { $('#confirm-title').text(options.title || "확인"); $('#confirm-message').html(message); $('#confirm-accept').text(options.confirmText || "확인"); $('#confirm-modal').removeClass('hidden').addClass('flex'); $('body').addClass('overflow-hidden'); return new Promise((resolve) => { confirmResolver = resolve; }); }
         function closeConfirm(result) { $('#confirm-modal').removeClass('flex').addClass('hidden'); $('body').removeClass('overflow-hidden'); if (confirmResolver) { confirmResolver(result); confirmResolver = null; } }
         function showToast(message, icon = "check_circle", color = "bg-[#181211]") { const container = document.getElementById("toastContainer"); const toast = document.createElement("div"); toast.className = `flex items-center gap-3 ${color} text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`; toast.innerHTML = `<span class="material-symbols-outlined text-xl">${icon}</span><span>${message}</span>`; container.appendChild(toast); setTimeout(() => { toast.classList.remove("toast-enter"); toast.classList.add("toast-exit"); toast.addEventListener("animationend", () => toast.remove()); }, 3000); }
 
         $(document).ready(function() {
+            initGlobalDatepickers();
             const $layout = $('#admin-layout');
             const $sidebar = $('#admin-sidebar');
             const $overlay = $('#sidebar-overlay');
             const $toggleIcon = $('#desktop-toggle-icon');
 
-            // 1. 초기 상태 설정
-            const sidebarState = localStorage.getItem('admin_sidebar_collapsed');
-            if (sidebarState === 'true' && window.innerWidth >= 1024) {
-                $layout.addClass('sidebar-collapsed');
-                $toggleIcon.text('menu');
-            }
-
-            // 2. 데스크탑 토글
+            // 사이드바 토글 로직
             $('#toggle-sidebar-desktop').on('click', function() {
                 const isCollapsed = $layout.toggleClass('sidebar-collapsed').hasClass('sidebar-collapsed');
                 localStorage.setItem('admin_sidebar_collapsed', isCollapsed);
                 $toggleIcon.text(isCollapsed ? 'menu' : 'menu_open');
             });
 
-            // 3. 모바일 토글
-            function openSidebar() { $sidebar.addClass('show-mobile'); $overlay.removeClass('hidden').addClass('block'); setTimeout(() => $overlay.removeClass('opacity-0').addClass('opacity-100'), 10); $('body').addClass('overflow-hidden'); }
-            function closeSidebar() { $sidebar.removeClass('show-mobile'); $overlay.removeClass('opacity-100').addClass('opacity-0'); setTimeout(() => $overlay.removeClass('block').addClass('hidden'), 300); $('body').removeClass('overflow-hidden'); }
-            $('#open-sidebar').on('click', openSidebar);
-            $('#close-sidebar, #sidebar-overlay').on('click', closeSidebar);
+            $('#open-sidebar').on('click', function() { $sidebar.addClass('show-mobile'); $overlay.removeClass('hidden').addClass('block'); setTimeout(() => $overlay.removeClass('opacity-0').addClass('opacity-100'), 10); });
+            $('#close-sidebar, #sidebar-overlay').on('click', function() { $sidebar.removeClass('show-mobile'); $overlay.removeClass('opacity-100').addClass('opacity-0'); setTimeout(() => $overlay.removeClass('block').addClass('hidden'), 300); });
 
+            // 공용 컨펌 모달 핸들러
             $('#confirm-cancel').on('click', () => closeConfirm(false));
             $('#confirm-accept').on('click', () => closeConfirm(true));
             $('#confirm-modal').on('click', function(e) { if (e.target === this) closeConfirm(false); });
             $(document).on('keydown', function(e) { if (e.key === 'Escape' && $('#confirm-modal').hasClass('flex')) closeConfirm(false); });
-            $(document).on('submit', 'form.js-confirm-submit', function(e) { e.preventDefault(); const form = this; showConfirm($(this).data('confirm-message') || '이 작업을 진행하시겠습니까?', { title: $(this).data('confirm-title'), confirmText: $(this).data('confirm-text') }).then((res) => { if (res) form.submit(); }); });
+            
+            // 클래스 기반 자동 모달 제출 핸들러
+            $(document).on('submit', 'form.js-confirm-submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                showConfirm($(this).data('confirm-message') || '이 작업을 진행하시겠습니까?', { 
+                    title: $(this).data('confirm-title'), 
+                    confirmText: $(this).data('confirm-text') 
+                }).then((res) => { 
+                    if (res) form.submit(); 
+                });
+            });
 
             @if(session('success')) showToast("{{ session('success') }}", "check_circle", "bg-[#181211]"); @endif
             @if(session('error')) showToast("{{ session('error') }}", "error", "bg-[#ec3713]"); @endif

@@ -12,7 +12,7 @@
                     <li><a href="/" class="hover:text-primary transition-colors">Home</a></li>
                     <li class="flex items-center">
                         <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
-                        <a href="{{ route('product-detail') }}" class="hover:text-primary transition-colors">상품 상세</a>
+                        <a href="{{ route('product-detail', ['slug' => 'fake-product']) }}" class="hover:text-primary transition-colors">상품 상세</a>
                     </li>
                     <li class="flex items-center">
                         <span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
@@ -92,7 +92,7 @@
 
             <!-- Buttons -->
             <div class="flex gap-4 pt-4">
-                <a href="{{ route('product-detail') }}" class="flex-1 py-5 bg-white border-2 border-gray-200 text-text-main font-bold rounded-2xl hover:bg-gray-50 transition-all text-center">취소</a>
+                <a href="{{ route('product-detail', ['slug' => 'fake-product']) }}" class="flex-1 py-5 bg-white border-2 border-gray-200 text-text-main font-bold rounded-2xl hover:bg-gray-50 transition-all text-center">취소</a>
                 <button type="submit" class="flex-[2] py-5 bg-primary text-white font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20 transform hover:-translate-y-1">문의 등록하기 </button>
             </div>
         </form>

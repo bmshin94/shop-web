@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // 적립금 자동 소멸 명령어 등록 (매일 자정 실행)
+        // $schedule->command('points:expire')->daily();
     }
 
     /**

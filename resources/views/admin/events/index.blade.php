@@ -110,9 +110,16 @@
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
-                <input type="date" name="start_from" value="{{ request('start_from') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                <input type="date" name="start_to" value="{{ request('start_to') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+            <div class="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-gray-100">
+                <div class="relative flex-1 group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px] group-focus-within:text-primary transition-colors pointer-events-none">calendar_today</span>
+                    <input type="text" name="start_from" value="{{ request('start_from') }}" placeholder="이벤트 시작일" class="datepicker w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all font-medium">
+                </div>
+                <span class="text-gray-300 hidden sm:block">~</span>
+                <div class="relative flex-1 group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px] group-focus-within:text-primary transition-colors pointer-events-none">calendar_month</span>
+                    <input type="text" name="start_to" value="{{ request('start_to') }}" placeholder="이벤트 종료일" class="datepicker w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all font-medium">
+                </div>
             </div>
         </form>
     </div>

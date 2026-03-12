@@ -72,7 +72,9 @@
           <div class="grid grid-cols-3 gap-10">
             @foreach($globalCategories ?? [] as $category)
             <div>
-              <h3 class="mb-5 text-[11px] font-bold text-primary uppercase tracking-[0.2em] border-b border-primary/10 pb-2">{{ $category->name }}</h3>
+              <a href="{{ route('product-list', ['category' => $category->slug]) }}" class="block mb-5 text-[11px] font-bold text-primary uppercase tracking-[0.2em] border-b border-primary/10 pb-2 hover:text-text-main transition-colors">
+                {{ $category->name }}
+              </a>
               <ul class="space-y-3.5">
                 @foreach($category->children as $child)
                 <li>
@@ -143,7 +145,10 @@
           <div class="space-y-6">
             @foreach($globalCategories ?? [] as $category)
             <div class="space-y-3">
-              <p class="px-1 text-xs font-bold text-primary uppercase tracking-wider">{{ $category->name }}</p>
+              <a href="{{ route('product-list', ['category' => $category->slug]) }}" class="flex items-center justify-between px-1 group">
+                <span class="text-xs font-bold text-primary uppercase tracking-wider group-hover:text-text-main transition-colors">{{ $category->name }}</span>
+                <span class="material-symbols-outlined text-sm text-primary opacity-40 group-hover:opacity-100">arrow_forward_ios</span>
+              </a>
               <div class="grid grid-cols-2 gap-2">
                 @foreach($category->children as $child)
                 <a class="rounded-xl px-3 py-2.5 text-[13px] font-bold text-text-main bg-gray-50 hover:bg-primary-light hover:text-primary transition-colors" href="{{ route('product-list', ['category' => $child->slug]) }}">
@@ -186,3 +191,36 @@
     </div>
   </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenuOverlay.classList.replace('opacity-0', 'opacity-100');
+                    mobileMenuContent.classList.replace('-translate-x-full', 'translate-x-0');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+
+            const closeMenu = () => {
+                mobileMenuOverlay.classList.replace('opacity-100', 'opacity-0');
+                mobileMenuContent.classList.replace('translate-x-0', '-translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                document.body.style.overflow = '';
+            };
+
+            mobileMenuClose.addEventListener('click', closeMenu);
+            mobileMenuOverlay.addEventListener('click', closeMenu);
+        }
+    });
+</script>

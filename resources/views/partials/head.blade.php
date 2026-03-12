@@ -1,6 +1,7 @@
 <meta charset="utf-8" />
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 <title>@yield('title', 'Active Women\'s Premium Store')</title>
 
 <!-- Fonts -->
@@ -39,3 +40,31 @@
     if (foutGuard) foutGuard.remove();
   });
 </script>
+
+<!-- Flatpickr Global Style -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    /* Flatpickr Global Custom Theme */
+    .flatpickr-calendar {
+        border-radius: 20px !important;
+        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1) !important;
+        border: 1px solid #f3f4f6 !important;
+        min-width: 307px !important;
+    }
+    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
+    .flatpickr-day.selected:hover, .flatpickr-day.nextMonthDay.selected, 
+    .flatpickr-day.prevMonthDay.selected {
+        background: #ec3713 !important;
+        border-color: #ec3713 !important;
+        font-weight: 700 !important;
+    }
+    .flatpickr-months .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months {
+        font-weight: 800 !important;
+        color: #181211 !important;
+    }
+    .flatpickr-weekday {
+        color: #896861 !important;
+        font-weight: 700 !important;
+        font-size: 11px !important;
+    }
+</style>

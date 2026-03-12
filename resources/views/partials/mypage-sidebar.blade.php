@@ -26,15 +26,12 @@
             <h3 class="text-base lg:text-lg font-bold text-text-main mb-3 lg:mb-4 flex items-center gap-2 border-t lg:border-none pt-5 lg:pt-0">
                 <span class="material-symbols-outlined text-primary text-xl lg:text-2xl">redeem</span> 혜택 관리
             </h3>
-            <ul class="grid grid-cols-3 lg:grid-cols-1 gap-2 lg:space-y-3">
+            <ul class="grid grid-cols-2 lg:grid-cols-1 gap-2 lg:space-y-3">
                 <li><a href="{{ route('mypage.coupon') }}" class="flex flex-col lg:flex-row justify-center lg:justify-between items-center px-2 py-3 lg:p-0 rounded-xl lg:rounded-none bg-gray-50 lg:bg-transparent text-[11px] lg:text-sm font-medium {{ request()->routeIs('mypage.coupon') ? 'text-primary font-bold bg-primary-light lg:bg-transparent' : 'text-text-main' }}">
-                    <span>보유 쿠폰</span> <span class="text-primary font-bold lg:ml-1">{{ $couponCount ?? 0 }}장</span>
+                    <span>보유 쿠폰</span> <span class="text-primary font-bold lg:ml-1">@if(Auth::check()){{ number_format(Auth::user()->coupons()->whereNull('used_at')->count()) }}@else 0 @endif장</span>
                 </a></li>
                 <li><a href="{{ route('mypage.point') }}" class="flex flex-col lg:flex-row justify-center lg:justify-between items-center px-2 py-3 lg:p-0 rounded-xl lg:rounded-none bg-gray-50 lg:bg-transparent text-[11px] lg:text-sm font-medium {{ request()->routeIs('mypage.point') ? 'text-primary font-bold bg-primary-light lg:bg-transparent' : 'text-text-main' }}">
-                    <span>적립금</span> <span class="text-primary font-bold lg:ml-1">1.2만</span>
-                </a></li>
-                <li><a href="{{ route('mypage.deposit') }}" class="flex flex-col lg:flex-row justify-center lg:justify-between items-center px-2 py-3 lg:p-0 rounded-xl lg:rounded-none bg-gray-50 lg:bg-transparent text-[11px] lg:text-sm font-medium {{ request()->routeIs('mypage.deposit') ? 'text-primary font-bold bg-primary-light lg:bg-transparent' : 'text-text-main' }}">
-                    <span>예치금</span>
+                    <span>적립금</span> <span class="text-primary font-bold lg:ml-1">@if(Auth::check()){{ number_format(Auth::user()->points ?? 0) }}@else 0 @endif원</span>
                 </a></li>
             </ul>
         </div>

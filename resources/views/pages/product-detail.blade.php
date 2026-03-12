@@ -786,12 +786,20 @@
                     }
                     showToast(data.message, data.status === 'added' ? "favorite" : "heart_broken", data.status === 'added' ? "bg-primary" : "bg-gray-600");
                     
-                    // 찜 카운트 업데이트
+                    // 찜 카운트 업데이트 (wishlistCount 사용)
                     const wishlistBadges = document.querySelectorAll(".header-wishlist-count");
-                    wishlistBadges.forEach(badge => {
-                        badge.textContent = data.count;
-                        data.count > 0 ? badge.classList.remove("hidden") : badge.classList.add("hidden");
-                    });
+                    if (data.wishlistCount !== undefined) {
+                        wishlistBadges.forEach(badge => {
+                            badge.textContent = data.wishlistCount;
+                            if (data.wishlistCount > 0) {
+                                badge.classList.remove("hidden");
+                                badge.classList.add("flex");
+                            } else {
+                                badge.classList.remove("flex");
+                                badge.classList.add("hidden");
+                            }
+                        });
+                    }
                 });
             });
         }

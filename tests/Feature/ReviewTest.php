@@ -5,12 +5,14 @@ namespace Tests\Feature;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\Review;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ReviewTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $member;
     protected $product;
@@ -27,21 +29,22 @@ class ReviewTest extends TestCase
     {
         $this->actingAs($this->member);
 
+        // 작성 가능한 리뷰 데이터를 위해 주문 및 배송완료 처리 ✨
+        $order = Order::factory()->create([
+            'member_id' => $this->member->id,
+            'order_status' => '배송완료'
+        ]);
+        OrderItem::factory()->create([
+            'order_id' => $order->id,
+            'product_id' => $this->product->id
+        ]);
+
         $response = $this->get(route('mypage.review'));
 
         $response->assertStatus(200)
-            ->assertSee('상품 리뷰 관리');
-    }
-
-    /** @test */
-    public function member_can_access_review_write_page()
-    {
-        $this->actingAs($this->member);
-
-        $response = $this->get(route('review.write', ['product_id' => $this->product->id]));
-
-        $response->assertStatus(200)
-            ->assertSee($this->product->name);
+            ->assertSee('상품 리뷰 관리')
+            ->assertViewHas('availableReviews')
+            ->assertViewHas('writtenReviews');
     }
 
     /** @test */
@@ -70,9 +73,9 @@ class ReviewTest extends TestCase
     }
 
     /** @test */
-    public function guest_cannot_access_review_write_page()
+    public function guest_cannot_access_review_list_page()
     {
-        $response = $this->get(route('review.write', ['product_id' => $this->product->id]));
+        $response = $this->get(route('mypage.review'));
         $response->assertRedirect(route('login'));
     }
 }

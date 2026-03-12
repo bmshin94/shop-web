@@ -21,7 +21,9 @@ use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\InquiryController; // InquiryController 추가! ✨
+use App\Http\Controllers\Admin\CouponController as AdminCouponController;
+use App\Http\Controllers\Admin\PointController as AdminPointController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 /*
@@ -63,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
     Route::get('/exhibitions/{exhibition}/edit', [ExhibitionController::class, 'edit'])->name('exhibitions.edit');
     Route::put('/exhibitions/{exhibition}', [ExhibitionController::class, 'update'])->name('exhibitions.update');
-    Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('events.restore');
+    Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('exhibitions.restore');
     Route::delete('/exhibitions/{exhibition}', [ExhibitionController::class, 'destroy'])->name('exhibitions.destroy');
     Route::delete('/exhibitions/{exhibition}/force', [ExhibitionController::class, 'forceDestroy'])->withTrashed()->name('exhibitions.force-destroy');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
@@ -92,8 +94,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::delete('/orders/{order}/force', [OrderController::class, 'forceDestroy'])->withTrashed()->name('orders.force-destroy');
 
+    // 적립금 관리
+    Route::get('/points', [AdminPointController::class, 'index'])->name('points.index');
+    Route::get('/points/search-members', [AdminPointController::class, 'searchMembers'])->name('points.search-members');
+    Route::post('/points', [AdminPointController::class, 'store'])->name('points.store');
+
     // 쿠폰 관리
-    Route::resource('coupons', CouponController::class);
+    Route::resource('coupons', AdminCouponController::class);
 
     Route::get('/products', [AdminController::class, 'productList'])->name('products.index');
     Route::get('/products/create', [AdminController::class, 'productCreate'])->name('products.create');
@@ -111,6 +118,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/categories/{category}', [AdminController::class, 'categoryDestroy'])->name('categories.destroy');
     Route::post('/categories/reorder', [AdminController::class, 'categoryReorder'])->name('categories.reorder');
     Route::get('/products/search', [AdminController::class, 'productSearch'])->name('products.search');
+
+    // 문의 관리 ✨
+    Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
+    Route::get('/inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
+    Route::patch('/inquiries/{inquiry}/answer', [InquiryController::class, 'updateAnswer'])->name('inquiries.answer');
+    Route::delete('/inquiries/{inquiry}', [InquiryController::class, 'destroy'])->name('inquiries.destroy');
 
     // 색상 관리 라우트
     Route::resource('/colors', ColorController::class)->except(['create', 'show'])->names('colors');
@@ -146,6 +159,8 @@ Route::middleware('auth')->group(function () {
 
     // 찜하기
     Route::post('/wishlist/{product}/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::post('/wishlist/delete-selected', [WishlistController::class, 'destroySelected'])->name('wishlist.delete-selected');
+    Route::delete('/wishlist/clear', [WishlistController::class, 'clearAll'])->name('wishlist.clear');
 
     // 장바구니
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -161,20 +176,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/review/write', [ReviewController::class, 'create'])->name('review.write');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
 
-    // 마이페이지 추가
-    Route::get('/mypage/profile-edit', function () { return view('pages.mypage-profile-edit'); })->name('mypage.profile-edit');
-    Route::get('/mypage/profile', function () { return redirect()->route('mypage.profile-edit'); })->name('mypage.profile');
+    // 회원정보 수정 ✨
+    Route::get('/mypage/profile', [MemberController::class, 'confirmPasswordForm'])->name('mypage.profile');
+    Route::post('/mypage/profile/confirm', [MemberController::class, 'confirmPassword'])->name('mypage.profile.confirm');
+    Route::get('/mypage/profile-edit', [MemberController::class, 'profileEditForm'])->name('mypage.profile-edit');
+    Route::patch('/mypage/profile-edit', [MemberController::class, 'updateProfile'])->name('mypage.profile.update');
+
     Route::get('/mypage/review', [MemberController::class, 'reviewList'])->name('mypage.review');
     Route::get('/mypage/cancel-list', [MemberController::class, 'cancelList'])->name('mypage.cancel-list');
     Route::get('/mypage/refund-list', [MemberController::class, 'refundList'])->name('mypage.refund-list');
-    Route::get('/mypage/wishlist', function () { return view('pages.mypage-wishlist'); })->name('mypage.wishlist');
-    Route::get('/mypage/recent', function () { return view('pages.mypage-recent'); })->name('mypage.recent');
+    Route::get('/mypage/wishlist', [MemberController::class, 'wishlist'])->name('mypage.wishlist');
+    Route::get('/mypage/recent', [MemberController::class, 'recentViewList'])->name('mypage.recent');
+    Route::delete('/mypage/recent/selected', [MemberController::class, 'deleteSelectedRecentViews'])->name('mypage.recent.delete-selected');
+    Route::delete('/mypage/recent/clear', [MemberController::class, 'clearRecentViews'])->name('mypage.recent.clear');
     Route::get('/mypage/receipt', [MemberController::class, 'receiptList'])->name('mypage.receipt');
     Route::get('/mypage/withdraw', function () { return view('pages.mypage-withdraw'); })->name('mypage.withdraw');
+    Route::get('/mypage/inquiry', [MemberController::class, 'inquiryList'])->name('mypage.inquiry');
+    Route::post('/mypage/inquiry', [MemberController::class, 'storeInquiry'])->name('mypage.inquiry.store');
     Route::get('/mypage/coupon', [MemberController::class, 'couponList'])->name('mypage.coupon');
     Route::post('/mypage/coupon/register', [MemberController::class, 'registerCoupon'])->name('mypage.coupon.register');
-    Route::get('/mypage/point', function () { return view('pages.mypage-point'); })->name('mypage.point');
-    Route::get('/mypage/deposit', function () { return view('pages.mypage-deposit'); })->name('mypage.deposit');
+    Route::get('/mypage/point', [MemberController::class, 'pointList'])->name('mypage.point');
 });
 
 
@@ -227,4 +248,4 @@ Route::get('/event/participate', function () { return view('pages.event-particip
 
 Route::get('/exhibition', function () { return view('pages.exhibition'); })->name('exhibition');
 Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
-Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry');
+// Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry'); // 삭제! ✨

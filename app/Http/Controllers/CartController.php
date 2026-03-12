@@ -14,7 +14,7 @@ class CartController extends Controller
     }
 
     /**
-     * 장바구니 목록 (추후 작업)
+     * 장바구니 목록
      */
     public function index()
     {
@@ -32,7 +32,7 @@ class CartController extends Controller
             'color' => 'nullable|string',
             'size' => 'nullable|string',
             'quantity' => 'required|integer|min:1',
-            'force' => 'nullable|boolean' // 중복 무시하고 추가할지 여부
+            'force' => 'nullable|boolean'
         ]);
 
         $memberId = auth()->id();

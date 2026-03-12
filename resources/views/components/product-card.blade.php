@@ -13,10 +13,14 @@
         </div>
         @endif
         
-        <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-            <span class="material-symbols-outlined block text-lg {{ $product->is_wishlisted ? 'filled text-primary' : '' }}" 
-                  style="{{ $product->is_wishlisted ? "font-variation-settings: 'FILL' 1;" : '' }}">favorite</span>
-        </div>
+        <button type="button" 
+                class="btn-toggle-wishlist absolute right-3 top-3 rounded-full bg-white/90 p-2 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 z-20 shadow-md group/heart" 
+                data-id="{{ $product->id }}">
+            <span class="material-symbols-outlined block text-[20px] transition-colors {{ $product->is_wishlisted ? 'filled text-red-500' : 'text-gray-400 group-hover/heart:text-red-500' }}" 
+                  style="{{ $product->is_wishlisted ? "font-variation-settings: 'FILL' 1;" : '' }}">
+                favorite
+            </span>
+        </button>
 
         <div class="absolute top-3 left-3 flex flex-col gap-1.5">
             @if($product->is_best)

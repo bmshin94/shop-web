@@ -74,8 +74,8 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
-                <input type="date" name="start_from" value="{{ request('start_from') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                <input type="date" name="start_to" value="{{ request('start_to') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                <input type="text" name="start_from" value="{{ request('start_from') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                <input type="text" name="start_to" value="{{ request('start_to') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
             </div>
         </form>
     </div>

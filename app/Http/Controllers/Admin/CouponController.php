@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CouponRequest;
 use App\Services\Admin\CouponService;
 use Illuminate\Http\Request;
 
@@ -35,19 +36,9 @@ class CouponController extends Controller
     /**
      * 쿠폰 저장
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50|unique:coupons,code',
-            'type' => 'required|in:discount,shipping',
-            'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'starts_at' => 'nullable|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
-        ]);
-
-        $this->couponService->createCoupon($request->all());
+        $this->couponService->createCoupon($request->validated());
 
         return redirect()->route('admin.coupons.index')->with('success', '쿠폰이 성공적으로 생성되었습니다.');
     }
@@ -64,19 +55,9 @@ class CouponController extends Controller
     /**
      * 쿠폰 업데이트
      */
-    public function update(Request $request, $id)
+    public function update(CouponRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'nullable|string|max:50|unique:coupons,code,' . $id,
-            'type' => 'required|in:discount,shipping',
-            'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric|min:0',
-            'starts_at' => 'nullable|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
-        ]);
-
-        $this->couponService->updateCoupon($id, $request->all());
+        $this->couponService->updateCoupon($id, $request->validated());
 
         return redirect()->route('admin.coupons.index')->with('success', '쿠폰 정보가 수정되었습니다.');
     }

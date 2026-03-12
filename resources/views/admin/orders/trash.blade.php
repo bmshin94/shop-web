@@ -87,8 +87,8 @@
 
             <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pt-4 border-t border-gray-100">
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <input type="date" name="date_from" value="{{ request('date_from') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                    <input type="date" name="date_to" value="{{ request('date_to') }}" class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                    <input type="text" name="date_from" value="{{ request('date_from') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                    <input type="text" name="date_to" value="{{ request('date_to') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
                 </div>
                 <div class="flex items-center gap-2">
                     <a href="{{ route('admin.orders.trash') }}" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-text-muted hover:bg-gray-50 transition-colors">

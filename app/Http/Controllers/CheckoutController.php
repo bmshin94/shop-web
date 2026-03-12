@@ -66,18 +66,12 @@ class CheckoutController extends Controller
                 ];
                 $totalProductPrice = $price * $buyNow['quantity'];
             }
-        } else {
-            // 장바구니에서 온 경우 (추후 구현)
-            // return redirect()->route('cart.index')->with('error', '결제할 상품이 없습니다.');
         }
 
         if (empty($checkoutItems)) {
             return redirect()->route('home');
         }
 
-        // 배송비 계산 (Product 모델의 로직 활용 가능하면 좋음)
-        // 일단은 기본 정책 적용 (5만원 이상 무료, 미만 3000원)
-        // 실제로는 개별 상품의 shipping_type을 따져야 하지만, 바로구매는 단일 상품이므로 간단함.
         $shippingFee = 0;
         if ($buyNow) {
             $product = $checkoutItems[0]['product'];
@@ -126,7 +120,6 @@ class CheckoutController extends Controller
         $request->validate([
             'imp_uid' => 'required|string',
             'merchant_uid' => 'required|string',
-            // 폼 데이터들도 함께 전송받음
             'recipient_name' => 'required|string|max:50',
             'recipient_phone' => 'required|string|max:20',
             'recipient_zipcode' => 'required|string|max:10',
@@ -139,8 +132,6 @@ class CheckoutController extends Controller
 
         try {
             $member = Auth::user();
-            
-            // 서비스 단에서 아임포트 토큰 발급 -> 결제 금액 조회 -> 금액 비교 후 주문 생성까지 한 번에 처리
             $order = $checkoutService->verifyAndProcessCheckout($member, $request->all());
 
             return response()->json([

@@ -26,17 +26,26 @@ class ProductService
         $query = Product::with(['category', 'colors'])->selling();
         
         $pageTitle = 'ALL PRODUCTS';
-        $breadcrumb = ['Home', '전체보기'];
+        $breadcrumb = [
+            ['name' => 'Home', 'url' => route('home')],
+            ['name' => '전체보기', 'url' => route('product-list')]
+        ];
 
         // 1. 타입별 기본 필터링
         if ($type === 'new') {
             $query->where('is_new', true);
             $pageTitle = 'NEW ARRIVALS';
-            $breadcrumb = ['Home', '신상품'];
+            $breadcrumb = [
+                ['name' => 'Home', 'url' => route('home')],
+                ['name' => '신상품', 'url' => route('products.new')]
+            ];
         } elseif ($type === 'best') {
             $query->where('is_best', true);
             $pageTitle = 'BEST PRODUCTS';
-            $breadcrumb = ['Home', '베스트'];
+            $breadcrumb = [
+                ['name' => 'Home', 'url' => route('home')],
+                ['name' => '베스트', 'url' => route('products.best')]
+            ];
         }
 
         // 2. 카테고리 필터 및 브레드크럼 설정
@@ -47,18 +56,28 @@ class ProductService
                     $childIds = $category->children()->pluck('id')->toArray();
                     $categoryIds = array_merge([$category->id], $childIds);
                     $query->whereIn('category_id', $categoryIds);
+                    
+                    $breadcrumb = [
+                        ['name' => 'Home', 'url' => route('home')],
+                        ['name' => $category->name, 'url' => route('product-list', ['category' => $category->slug])]
+                    ];
                 } else {
                     $query->where('category_id', $category->id);
+                    $parent = $category->parent;
+                    $breadcrumb = [
+                        ['name' => 'Home', 'url' => route('home')],
+                        ['name' => $parent->name, 'url' => route('product-list', ['category' => $parent->slug])],
+                        ['name' => $category->name, 'url' => route('product-list', ['category' => $category->slug])]
+                    ];
                 }
                 $pageTitle = strtoupper($category->name);
-                $breadcrumb = $category->parent ? ['Home', $category->parent->name, $category->name] : ['Home', $category->name];
             }
         }
 
-        // 3. 색상 필터
+        // 3. 색상 필터 ✨ (ID 대신 이름으로 검색!)
         if (!empty($selectedColors)) {
             $query->whereHas('colors', function (Builder $q) use ($selectedColors) {
-                $q->whereIn('colors.id', $selectedColors);
+                $q->whereIn('colors.name', $selectedColors);
             });
         }
 
@@ -126,6 +145,29 @@ class ProductService
             ->withAvg('reviews', 'rating')
             ->where('slug', $slug)
             ->firstOrFail();
+
+        // 최근 본 상품 기록! ✨
+        if (auth()->check()) {
+            // 1. 로그인 회원: DB 저장/갱신
+            \App\Models\RecentView::updateOrCreate(
+                ['member_id' => auth()->id(), 'product_id' => $product->id],
+                ['viewed_at' => now()]
+            );
+        } else {
+            // 2. 비로그인 게스트: 쿠키 저장 🍪
+            $recentCookie = request()->cookie('recent_views', '[]');
+            $viewedIds = json_decode($recentCookie, true) ?: [];
+            
+            // 현재 상품 ID를 배열 맨 앞으로 보내고 중복 제거! 😊
+            array_unshift($viewedIds, $product->id);
+            $viewedIds = array_unique($viewedIds);
+            
+            // 최대 20개까지만 유지! ✨
+            $viewedIds = array_slice($viewedIds, 0, 20);
+            
+            // 쿠키에 30일 동안 저장 예약! ✌️
+            \Illuminate\Support\Facades\Cookie::queue('recent_views', json_encode($viewedIds), 60 * 24 * 30);
+        }
 
         // 연관 상품 가공
         $relatedProducts = $product->relatedProducts->map(function($p) {

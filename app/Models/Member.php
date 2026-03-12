@@ -47,6 +47,14 @@ class Member extends Authenticatable
     ];
 
     /**
+     * 활성 상태인 회원만 조회하는 스코프
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', '활성');
+    }
+
+    /**
      * 회원의 주문 목록
      */
     public function orders()
@@ -60,7 +68,7 @@ class Member extends Authenticatable
     public function coupons(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Coupon::class, 'coupon_member')
-            ->withPivot('used_at', 'assigned_at')
+            ->withPivot('id', 'used_at', 'assigned_at') // id 추가 완료
             ->withTimestamps();
     }
 
@@ -86,10 +94,34 @@ class Member extends Authenticatable
     }
 
     /**
+     * 회원의 적립금 변동 이력
+     */
+    public function pointHistories()
+    {
+        return $this->hasMany(PointHistory::class);
+    }
+
+    /**
      * 회원의 장바구니 목록
      */
     public function carts()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    /**
+     * 회원의 최근 본 상품 목록 ✨
+     */
+    public function recentViews()
+    {
+        return $this->hasMany(RecentView::class);
+    }
+
+    /**
+     * 회원의 1:1 문의 목록 ✨
+     */
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
     }
 }

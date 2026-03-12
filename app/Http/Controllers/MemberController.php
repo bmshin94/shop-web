@@ -2,47 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MemberService;
+use App\Services\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Order;
 
 class MemberController extends Controller
 {
+    protected $memberService;
+    protected $checkoutService;
+
+    /**
+     * MemberController 생성자
+     */
+    public function __construct(MemberService $memberService, CheckoutService $checkoutService)
+    {
+        $this->memberService = $memberService;
+        $this->checkoutService = $checkoutService;
+    }
+
     /**
      * 마이페이지 메인 (대시보드)
      */
     public function index()
     {
         $member = Auth::user();
-        
-        // 1. 주문 현황 요약 (취소 제외)
-        $orderStats = [
-            'pending' => $member->orders()->where('payment_status', '결제대기')->count(),
-            'preparing' => $member->orders()->where('order_status', '상품준비중')->count(),
-            'shipping' => $member->orders()->where('order_status', '배송중')->count(),
-            'delivered' => $member->orders()->where('order_status', '배송완료')->count(),
-        ];
-
-        // 2. 최근 주문 목록 (최근 5건)
-        $recentOrders = $member->orders()
-            ->with('items.product')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        // 3. 총 주문 횟수
-        $totalOrderCount = $member->orders()->count();
-
-        // 4. 쿠폰 개수 (아직 쿠폰 시스템이 없으므로 가상 데이터)
-        $couponCount = 0;
-
-        return view('pages.mypage', compact(
-            'member', 
-            'orderStats', 
-            'recentOrders', 
-            'totalOrderCount', 
-            'couponCount'
-        ));
+        $data = $this->memberService->getDashboardData($member);
+        return view('pages.mypage', $data);
     }
 
     /**
@@ -51,19 +37,118 @@ class MemberController extends Controller
     public function orderList(Request $request)
     {
         $member = Auth::user();
-        $query = $member->orders()->with('items.product')->latest();
+        $data = $this->memberService->getOrderListData($member, $request);
+        return view('pages.mypage-order-list', $data);
+    }
 
-        // 1. 상태 필터 (메인 대시보드에서 넘어온 경우)
-        if ($request->filled('status')) {
-            $query->where('order_status', $request->status);
+    /**
+     * 취소/반품/교환 내역 조회
+     */
+    public function cancelList(Request $request)
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getCancelListData($member, $request);
+
+        return view('pages.mypage-cancel-list', $data);
+    }
+
+    /**
+     * 환불/입금 내역 조회
+     */
+    public function refundList(Request $request)
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getRefundListData($member, $request);
+
+        return view('pages.mypage-refund-list', $data);
+    }
+
+    /**
+     * 보유 쿠폰 조회
+     */
+    public function couponList(Request $request)
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getCouponListData($member, $request);
+
+        return view('pages.mypage-coupon', $data);
+    }
+
+    /**
+     * 쿠폰 등록 처리 (AJAX)
+     */
+    public function registerCoupon(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50'
+        ]);
+
+        try {
+            $member = Auth::user();
+            $this->memberService->registerCoupon($member, $request->code);
+            
+            return response()->json([
+                'message' => '쿠폰이 성공적으로 등록되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * 영수증/계산서 발급 조회
+     */
+    public function receiptList(Request $request)
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getReceiptListData($member, $request);
+
+        return view('pages.mypage-receipt', $data);
+    }
+
+    /**
+     * 상품 리뷰 관리 페이지
+     */
+    public function reviewList()
+    {
+        $member = Auth::user();
+        $data = $this->memberService->getReviewListData($member);
+        return view('pages.mypage-review', $data);
+    }
+
+    /**
+     * 주문 상세 조회
+     */
+    public function orderDetail($orderNumber)
+    {
+        $member = Auth::user();
+        $order = $member->orders()
+            ->with(['items.product'])
+            ->where('order_number', $orderNumber)
+            ->firstOrFail();
+
+        return view('pages.mypage-order-detail', compact('member', 'order'));
+    }
+
+    /**
+     * 주문 취소 처리
+     */
+    public function cancelOrder(Request $request, $orderNumber)
+    {
+        $member = Auth::user();
+        $order = $member->orders()->where('order_number', $orderNumber)->firstOrFail();
+
+        if (!in_array($order->order_status, ['주문접수', '상품준비중'])) {
+            return response()->json(['message' => '이미 배송이 시작되어 취소할 수 없습니다.'], 422);
         }
 
-        // 2. 기간 필터 (기본 1개월)
-        $months = $request->get('months', 1);
-        $query->where('ordered_at', '>=', now()->subMonths($months));
-
-        $orders = $query->paginate(10)->withQueryString();
-
-        return view('pages.mypage-order-list', compact('member', 'orders', 'months'));
+        try {
+            $this->checkoutService->cancelOrder($order, $request->input('reason', '사용자 직접 취소'));
+            return response()->json(['message' => '주문이 정상적으로 취소되었습니다.']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

@@ -53,4 +53,43 @@ class Member extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * 회원의 보유 쿠폰 목록 (다대다)
+     */
+    public function coupons(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Coupon::class, 'coupon_member')
+            ->withPivot('used_at', 'assigned_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * 현재 사용 가능한 쿠폰 목록
+     */
+    public function activeCoupons()
+    {
+        return $this->coupons()
+            ->whereNull('coupon_member.used_at')
+            ->where(function($query) {
+                $query->whereNull('ends_at')
+                      ->orWhere('ends_at', '>=', now());
+            });
+    }
+
+    /**
+     * 회원의 찜 목록
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * 회원의 장바구니 목록
+     */
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

@@ -22,10 +22,10 @@ class SettingManagementTest extends TestCase
     public function 관리자_기본_설정을_저장할_수_있다(): void
     {
         $payload = [
-            'mall_name' => 'HER FIELD LAB',
+            'mall_name' => 'Active Women LAB',
             'customer_center_phone' => '02-1234-5678',
             'customer_center_email' => 'help@herfield.test',
-            'business_name' => 'HER FIELD Co.',
+            'business_name' => 'Active Women Co.',
             'business_number' => '123-45-67890',
             'shipping_fee' => 4000,
             'free_shipping_threshold' => 70000,
@@ -39,7 +39,7 @@ class SettingManagementTest extends TestCase
         $response->assertRedirect(route('admin.settings.index'));
         $this->assertDatabaseHas('site_settings', [
             'setting_key' => 'mall_name',
-            'setting_value' => 'HER FIELD LAB',
+            'setting_value' => 'Active Women LAB',
         ]);
         $this->assertDatabaseHas('site_settings', [
             'setting_key' => 'shipping_fee',

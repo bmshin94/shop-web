@@ -250,7 +250,14 @@
                     </div>
                     <div class="border-t border-gray-100 pt-4 flex items-start justify-between gap-4">
                         <div>
-                            <p class="font-bold text-text-main">출고 처리</p>
+                            <p class="font-bold text-text-main">상품 준비</p>
+                            <p class="mt-1 text-[12px] font-bold text-text-muted">주문 확인 후 상품을 준비하기 시작한 시각입니다.</p>
+                        </div>
+                        <span class="text-[12px] font-bold text-text-main">{{ ($order->order_status !== '주문접수' ? optional($order->updated_at)->format('Y.m.d H:i') : '-') }}</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="font-bold text-text-main">배송 시작</p>
                             <p class="mt-1 text-[12px] font-bold text-text-muted">배송 시작 시 자동 기록됩니다.</p>
                         </div>
                         <span class="text-[12px] font-bold text-text-main">{{ optional($order->shipped_at)->format('Y.m.d H:i') ?: '-' }}</span>
@@ -261,6 +268,13 @@
                             <p class="mt-1 text-[12px] font-bold text-text-muted">배송완료로 변경되면 자동 기록됩니다.</p>
                         </div>
                         <span class="text-[12px] font-bold text-text-main">{{ optional($order->delivered_at)->format('Y.m.d H:i') ?: '-' }}</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="font-bold text-text-main">구매 확정</p>
+                            <p class="mt-1 text-[12px] font-bold text-text-muted">사용자가 구매확정을 누른 시각입니다.</p>
+                        </div>
+                        <span class="text-[12px] font-bold text-text-main">{{ ($order->order_status === '구매확정' ? optional($order->updated_at)->format('Y.m.d H:i') : '-') }}</span>
                     </div>
                 </div>
             </div>

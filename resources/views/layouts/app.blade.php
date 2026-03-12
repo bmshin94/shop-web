@@ -41,12 +41,19 @@
         $menuContent.removeClass('translate-x-0').addClass('-translate-x-full');
         setTimeout(() => {
           $mobileMenu.addClass('hidden');
+          $('body').removeClass('overflow-hidden');
         }, 300);
-        $('body').removeClass('overflow-hidden');
       }
 
       $('#mobile-menu-btn').on('click', openMobileMenu);
       $('#mobile-menu-close, #mobile-menu-overlay').on('click', closeMobileMenu);
+
+      // 메뉴 내부 링크 클릭 시 자동 닫기
+      $mobileMenu.find('a').on('click', function() {
+        if (!$(this).attr('onclick')) {
+          closeMobileMenu();
+        }
+      });
 
       // 검색창 포커스 효과
       $('header input[type="text"]').on('focus', function() {

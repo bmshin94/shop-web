@@ -167,6 +167,38 @@
                 </div>
             </div>
 
+            <!-- Section 2.5: Shipping Settings -->
+            <div class="space-y-6">
+                <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <span class="material-symbols-outlined text-primary">local_shipping</span>
+                    <h4 class="text-lg font-bold text-text-main">배송 설정</h4>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <label class="text-sm font-bold text-text-main">배송비 구분 <span class="text-primary">*</span></label>
+                        <div class="flex flex-wrap gap-4">
+                            @foreach(['기본', '무료', '고정'] as $type)
+                                <label class="flex-1 flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-2xl border border-gray-200 cursor-pointer hover:bg-white hover:border-primary transition-all group">
+                                    <input type="radio" name="shipping_type" value="{{ $type }}" {{ old('shipping_type', $product->shipping_type) == $type ? 'checked' : '' }} class="shipping-type-radio w-5 h-5 text-primary border-gray-300 focus:ring-primary/20">
+                                    <span class="text-sm font-bold text-text-muted group-hover:text-text-main">{{ $type }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                        <p class="text-[11px] text-text-muted font-bold ml-1">
+                            * 기본: 쇼핑몰 기본 배송 정책 적용 | 무료: 금액 상관없이 무료 | 고정: 설정된 금액 부과
+                        </p>
+                    </div>
+                    <div id="shipping-fee-container" class="space-y-3 {{ old('shipping_type', $product->shipping_type) == '고정' ? '' : 'hidden' }}">
+                        <label class="text-sm font-bold text-text-main">배송비 금액 <span class="text-primary">*</span></label>
+                        <div class="relative">
+                            <input type="text" name="shipping_fee" value="{{ old('shipping_fee', $product->shipping_fee) }}" inputmode="numeric" class="w-full pl-10 pr-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-base focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none format-number">
+                            <span class="absolute left-4 top-4 text-text-muted font-bold">₩</span>
+                        </div>
+                        @error('shipping_fee') <p class="text-[11px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
             <!-- Section 3: Status & Badges -->
             <div class="space-y-6">
                 <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
@@ -739,6 +771,15 @@
             // 검색창 초기화 및 닫기
             $resultsWrapper.removeClass('flex').addClass('hidden');
             $searchInput.val('');
+        });
+
+        // 배송비 설정 토글
+        $('.shipping-type-radio').on('change', function() {
+            if ($(this).val() === '고정') {
+                $('#shipping-fee-container').removeClass('hidden');
+            } else {
+                $('#shipping-fee-container').addClass('hidden');
+            }
         });
 
         // 3. 상품 추가 함수

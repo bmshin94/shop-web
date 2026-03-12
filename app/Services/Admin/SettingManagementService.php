@@ -10,10 +10,10 @@ class SettingManagementService
      * 기본 설정의 기본값을 정의한다.
      */
     private const DEFAULT_SETTINGS = [
-        'mall_name' => 'HER FIELD',
+        'mall_name' => 'Active Women',
         'customer_center_phone' => '1588-0000',
         'customer_center_email' => 'support@herfield.example',
-        'business_name' => 'HER FIELD',
+        'business_name' => 'Active Women',
         'business_number' => '',
         'shipping_fee' => 3000,
         'free_shipping_threshold' => 50000,

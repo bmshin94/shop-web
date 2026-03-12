@@ -49,6 +49,7 @@ class AdminProductTest extends TestCase
             'price' => $product->price,
             'stock_quantity' => $product->stock_quantity,
             'status' => '판매중',
+            'shipping_type' => '기본',
             'images' => [
                 0 => $newFile // 0번 슬롯 교체
             ]
@@ -83,6 +84,7 @@ class AdminProductTest extends TestCase
             'price' => 10000,
             'stock_quantity' => 100,
             'status' => '판매중',
+            'shipping_type' => '기본',
             'colors' => [$color->id],
             'sizes' => [$size1->id, $size2->id],
         ];
@@ -116,6 +118,7 @@ class AdminProductTest extends TestCase
             'price' => 20000,
             'stock_quantity' => 50,
             'status' => '판매중',
+            'shipping_type' => '기본',
             'sizes' => [$size2->id], // size1을 빼고 size2만 선택
         ];
 
@@ -145,6 +148,7 @@ class AdminProductTest extends TestCase
             'price' => 15000,
             'stock_quantity' => 10,
             'status' => '판매중',
+            'shipping_type' => '기본',
             'related_products' => [$related1->id, $related2->id],
         ];
 

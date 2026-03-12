@@ -297,7 +297,7 @@
           return;
         }
 
-        $.post('{{ route("sms.send") }}', { phone: phone })
+        $.post('{{ route("verify.phone.send") }}', { phone: phone })
           .done(function(res) {
             $(this).text('재발송').addClass('text-primary');
             showToast(res.message, 'sms', 'text-white');
@@ -336,7 +336,7 @@
           return;
         }
 
-        $.post('{{ route("sms.verify") }}', { phone: phone, code: code })
+        $.post('{{ route("verify.phone.confirm") }}', { phone: phone, code: code })
           .done(function(res) {
             if (res.success) {
               isPhoneAuthenticated = true;

@@ -21,6 +21,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                // 관리자 가드인 경우 관리자 대시보드로 이동
+                if ($guard === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+                
+                // 그 외(일반 회원 등)는 설정된 HOME 경로로 이동
                 return redirect(RouteServiceProvider::HOME);
             }
         }

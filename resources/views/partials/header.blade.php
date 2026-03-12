@@ -102,18 +102,12 @@
       <a href="/mypage/wishlist"
         class="relative flex size-11 items-center justify-center rounded-xl text-text-main transition-all hover:bg-primary-light hover:text-primary active:scale-95" title="찜한 상품">
         <span class="material-symbols-outlined text-[24px]">favorite</span>
-        <span
-          class="absolute top-0 right-0 flex size-[18px] items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white ring-1 ring-white shadow-sm shrink-0">
-          5
-        </span>
+        <span class="header-wishlist-count absolute top-0 right-0 {{ auth()->check() && auth()->user()->wishlists()->count() > 0 ? 'flex' : 'hidden' }} size-[18px] items-center justify-center rounded-full bg-primary text-[9px] leading-none font-bold text-white ring-1 ring-white shadow-sm shrink-0">@auth{{ auth()->user()->wishlists()->count() }}@else 0 @endauth</span>
       </a>
-      <a href="/cart"
+      <a href="{{ route('cart.index') }}"
         class="relative flex size-11 items-center justify-center rounded-xl text-text-main transition-all hover:bg-primary-light hover:text-primary active:scale-95" title="장바구니">
         <span class="material-symbols-outlined text-[24px]">shopping_cart</span>
-        <span
-          class="absolute top-0 right-0 flex size-[18px] items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white ring-1 ring-white shadow-sm shrink-0">
-          3
-        </span>
+        <span class="header-cart-count absolute top-0 right-0 {{ auth()->check() && auth()->user()->carts()->count() > 0 ? 'flex' : 'hidden' }} size-[18px] items-center justify-center rounded-full bg-primary text-[9px] leading-none font-bold text-white ring-1 ring-white shadow-sm shrink-0">@auth{{ auth()->user()->carts()->count() }}@else 0 @endauth</span>
       </a>
       <a href="/mypage"
         class="flex size-11 items-center justify-center rounded-xl text-text-main transition-all hover:bg-primary-light hover:text-primary active:scale-95" title="마이페이지">

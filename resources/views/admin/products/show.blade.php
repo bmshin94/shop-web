@@ -131,7 +131,7 @@
                         <!-- Stock & System Info -->
                         <div class="space-y-4 sm:border-l border-gray-50 sm:pl-6">
                             <div>
-                                <p class="text-[11px] font-bold text-text-muted mb-1.5 uppercase">재고 현황</p>
+                                <p class="text-[11px] font-bold text-text-muted mb-1 uppercase">재고 현황</p>
                                 <div class="flex items-center gap-2">
                                     <div class="px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-[16px] {{ $product->stock_quantity <= 5 ? 'text-red-500' : 'text-text-main' }}">inventory_2</span>
@@ -140,6 +140,15 @@
                                     @if($product->stock_quantity <= 5)
                                         <span class="text-[10px] font-bold text-red-500 tracking-tight">재고 부족 임박!</span>
                                     @endif
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-text-muted mb-1 uppercase">배송 설정</p>
+                                <div class="flex items-center gap-2">
+                                    <div class="px-3 py-1.5 bg-gray-50 rounded-lg border border-gray-100 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[16px] text-text-main">local_shipping</span>
+                                        <span class="text-[12px] font-bold text-text-main">{{ $product->shipping_type }} ({{ $product->shipping_info }})</span>
+                                    </div>
                                 </div>
                             </div>
                             <div>

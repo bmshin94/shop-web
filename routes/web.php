@@ -6,6 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CheckoutController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController;
@@ -17,6 +21,7 @@ use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 /*
@@ -58,7 +63,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
     Route::get('/exhibitions/{exhibition}/edit', [ExhibitionController::class, 'edit'])->name('exhibitions.edit');
     Route::put('/exhibitions/{exhibition}', [ExhibitionController::class, 'update'])->name('exhibitions.update');
-    Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('exhibitions.restore');
+    Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('events.restore');
     Route::delete('/exhibitions/{exhibition}', [ExhibitionController::class, 'destroy'])->name('exhibitions.destroy');
     Route::delete('/exhibitions/{exhibition}/force', [ExhibitionController::class, 'forceDestroy'])->withTrashed()->name('exhibitions.force-destroy');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
@@ -86,6 +91,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/orders/{order}/restore', [OrderController::class, 'restore'])->withTrashed()->name('orders.restore');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::delete('/orders/{order}/force', [OrderController::class, 'forceDestroy'])->withTrashed()->name('orders.force-destroy');
+
+    // 쿠폰 관리
+    Route::resource('coupons', CouponController::class);
+
     Route::get('/products', [AdminController::class, 'productList'])->name('products.index');
     Route::get('/products/create', [AdminController::class, 'productCreate'])->name('products.create');
     Route::post('/products', [AdminController::class, 'productStore'])->name('products.store');
@@ -111,6 +120,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/sizes', [SizeController::class, 'store'])->name('sizes.store');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     Route::post('/sizes/groups', [SizeController::class, 'storeGroup'])->name('sizes.groups.store');
+    Route::patch('/sizes/groups/{group}', [SizeController::class, 'updateGroup'])->name('sizes.groups.update');
     Route::delete('/sizes/groups/{group}', [SizeController::class, 'destroyGroup'])->name('sizes.groups.destroy');
 
     // 메뉴 관리 라우트
@@ -129,96 +139,84 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/mypage', [MemberController::class, 'index'])->name('mypage');
     Route::get('/mypage/order-list', [MemberController::class, 'orderList'])->name('mypage.order-list');
+    Route::get('/mypage/orders/{order_number}', [MemberController::class, 'orderDetail'])->name('mypage.order-detail');
+    Route::post('/mypage/orders/{order_number}/cancel', [MemberController::class, 'cancelOrder'])->name('mypage.order-cancel');
+    Route::get('/mypage/orders/{order_number}/receipt', [MemberController::class, 'printReceipt'])->name('mypage.order-receipt');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // 찜하기
+    Route::post('/wishlist/{product}/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
+    // 장바구니
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+
+    // 결제 / 바로구매
+    Route::post('/buy-now', [CheckoutController::class, 'buyNow'])->name('buy-now');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/verify', [CheckoutController::class, 'verifyPayment'])->name('checkout.verify');
+
+    // 리뷰 작성
+    Route::get('/review/write', [ReviewController::class, 'create'])->name('review.write');
+    Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+
+    // 마이페이지 추가
+    Route::get('/mypage/profile-edit', function () { return view('pages.mypage-profile-edit'); })->name('mypage.profile-edit');
+    Route::get('/mypage/profile', function () { return redirect()->route('mypage.profile-edit'); })->name('mypage.profile');
+    Route::get('/mypage/review', [MemberController::class, 'reviewList'])->name('mypage.review');
+    Route::get('/mypage/cancel-list', [MemberController::class, 'cancelList'])->name('mypage.cancel-list');
+    Route::get('/mypage/refund-list', [MemberController::class, 'refundList'])->name('mypage.refund-list');
+    Route::get('/mypage/wishlist', function () { return view('pages.mypage-wishlist'); })->name('mypage.wishlist');
+    Route::get('/mypage/recent', function () { return view('pages.mypage-recent'); })->name('mypage.recent');
+    Route::get('/mypage/receipt', [MemberController::class, 'receiptList'])->name('mypage.receipt');
+    Route::get('/mypage/withdraw', function () { return view('pages.mypage-withdraw'); })->name('mypage.withdraw');
+    Route::get('/mypage/coupon', [MemberController::class, 'couponList'])->name('mypage.coupon');
+    Route::post('/mypage/coupon/register', [MemberController::class, 'registerCoupon'])->name('mypage.coupon.register');
+    Route::get('/mypage/point', function () { return view('pages.mypage-point'); })->name('mypage.point');
+    Route::get('/mypage/deposit', function () { return view('pages.mypage-deposit'); })->name('mypage.deposit');
 });
+
 
 // --- 1단계 배치 (상품/장바구니) ---
 Route::get('/product-list', [ProductController::class, 'index'])->name('product-list');
 Route::get('/products/new', [ProductController::class, 'newArrivals'])->name('products.new');
 Route::get('/products/best', [ProductController::class, 'bestProducts'])->name('products.best');
-
 Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product-detail');
-
-Route::get('/cart', function () {
-    return view('pages.cart');
-})->name('cart');
-
-Route::get('/checkout', function () {
-    return view('pages.checkout');
-})->name('checkout');
 
 // 인증 및 검증 관련 (로그인하지 않은 사용자만 접근 가능)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('check-email');
-
-    // 비밀번호 찾기
-    Route::get('/find-password', [AuthController::class, 'showFindPasswordForm'])->name('password.find');
-    Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset.post');
-
-    // 아이디 찾기
+    
+    // 아이디 / 비밀번호 찾기
     Route::get('/find-email', [AuthController::class, 'showFindEmailForm'])->name('email.find');
     Route::post('/find-email', [AuthController::class, 'findEmail'])->name('email.find.post');
+    Route::get('/find-password', [AuthController::class, 'showFindPasswordForm'])->name('password.find');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.reset.post');
 
     // 소셜 로그인
-    Route::get('/login/{provider}', [AuthController::class, 'redirectToProvider'])->name('login.social');
-    Route::get('/login/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+    Route::get('/auth/{provider}/redirect', [AuthController::class, 'redirectToProvider'])->name('login.social');
+    Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('login.social.callback');
 
-    // 인증 발송 (가입/찾기 공용이므로 여기 포함)
-    Route::post('/sms/send', [VerificationController::class, 'sendCode'])->name('sms.send');
-    Route::post('/sms/verify', [VerificationController::class, 'verifyCode'])->name('sms.verify');
-    Route::post('/email/send', [VerificationController::class, 'sendEmailCode'])->name('email.send');
-    Route::post('/email/verify', [VerificationController::class, 'verifyEmailCode'])->name('email.verify');
+    // 휴대폰 인증
+    Route::post('/verify-phone/send', [VerificationController::class, 'sendCode'])->name('verify.phone.send');
+    Route::post('/verify-phone/confirm', [VerificationController::class, 'verifyCode'])->name('verify.phone.confirm');
+
+    // 이메일 인증 (비밀번호 찾기용)
+    Route::post('/verify-email/send', [VerificationController::class, 'sendEmailCode'])->name('email.send');
+    Route::post('/verify-email/confirm', [VerificationController::class, 'verifyEmailCode'])->name('email.verify');
 });
 
-// 로그인한 사용자 전용
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-// --- 2단계 배치 (마이페이지 하위) ---
-Route::get('/mypage/order-detail', function () {
-    return view('pages.mypage-order-detail');
-})->name('mypage.order-detail');
-
-Route::get('/mypage/claim-list', function () {
-    return view('pages.mypage-claim-list');
-})->name('mypage.claim-list');
-
-Route::get('/mypage/refund-list', function () {
-    return view('pages.mypage-refund-list');
-})->name('mypage.refund-list');
-
-Route::get('/mypage/coupon', function () {
-    return view('pages.mypage-coupon');
-})->name('mypage.coupon');
-
-Route::get('/mypage/point', function () {
-    return view('pages.mypage-point');
-})->name('mypage.point');
-
-Route::get('/mypage/deposit', function () {
-    return view('pages.mypage-deposit');
-})->name('mypage.deposit');
-
-// --- 3단계 배치 (마이페이지 나머지 + 고객센터) ---
-Route::get('/mypage/profile', function () { return view('pages.mypage-profile'); })->name('mypage.profile');
-Route::get('/mypage/profile-edit', function () { return view('pages.mypage-profile-edit'); })->name('mypage.profile-edit');
-Route::get('/mypage/review', function () { return view('pages.mypage-review'); })->name('mypage.review');
-Route::get('/mypage/wishlist', function () { return view('pages.mypage-wishlist'); })->name('mypage.wishlist');
-Route::get('/mypage/recent', function () { return view('pages.mypage-recent'); })->name('mypage.recent');
-Route::get('/mypage/receipt', function () { return view('pages.mypage-receipt'); })->name('mypage.receipt');
-Route::get('/mypage/withdraw', function () { return view('pages.mypage-withdraw'); })->name('mypage.withdraw');
-
+// 공통 페이지 (인증 여부와 상관없이 접근 가능)
 Route::get('/support', function () { return view('pages.support'); })->name('support');
 Route::get('/support/notice', function () { return view('pages.support-notice'); })->name('support.notice');
 Route::get('/support/membership', function () { return view('pages.support-membership'); })->name('support.membership');
 Route::get('/support/exchange', function () { return view('pages.support-exchange'); })->name('support.exchange');
 
-// --- 4단계 배치 (커뮤니티, 이벤트, 기타) ---
 Route::get('/community', function () { return view('pages.community'); })->name('community');
 Route::get('/community/notice', function () { return view('pages.community-notice'); })->name('community.notice');
 Route::get('/community/membership', function () { return view('pages.community-membership'); })->name('community.membership');
@@ -229,5 +227,4 @@ Route::get('/event/participate', function () { return view('pages.event-particip
 
 Route::get('/exhibition', function () { return view('pages.exhibition'); })->name('exhibition');
 Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
-Route::get('/review/write', function () { return view('pages.review-write'); })->name('review.write');
 Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry');

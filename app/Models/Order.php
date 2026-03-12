@@ -31,6 +31,7 @@ class Order extends Model
         '상품준비중',
         '배송중',
         '배송완료',
+        '구매확정',
         '취소완료',
     ];
 
@@ -65,6 +66,8 @@ class Order extends Model
         'address_line2',
         'shipping_message',
         'payment_method',
+        'imp_uid',
+        'merchant_uid',
         'payment_status',
         'order_status',
         'shipping_status',

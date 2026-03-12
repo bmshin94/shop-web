@@ -19,6 +19,8 @@ class Product extends Model
         'sale_price',
         'stock_quantity',
         'status',
+        'shipping_type',
+        'shipping_fee',
         'image_url',
         'is_new',
         'is_best',
@@ -60,6 +62,14 @@ class Product extends Model
     }
 
     /**
+     * 상품이 속한 첫 번째 사이즈 그룹 (가이드용)
+     */
+    public function getSizeGroupAttribute()
+    {
+        return $this->sizes->first()?->group;
+    }
+
+    /**
      * 상품 이미지 관계 정의 
      */
     public function images()
@@ -68,11 +78,50 @@ class Product extends Model
     }
 
     /**
-     * 리뷰 관계 정의 
+     * 상품의 리뷰 목록
      */
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * 상품을 찜한 정보
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * 현재 로그인한 사용자가 이 상품을 찜했는지 여부
+     */
+    public function getIsWishlistedAttribute()
+    {
+        if (!auth()->check()) return false;
+        return $this->wishlists()->where('member_id', auth()->id())->exists();
+    }
+
+    /**
+     * 배송비 정보 텍스트 반환
+     */
+    public function getShippingInfoAttribute()
+    {
+        if ($this->shipping_type === '무료') {
+            return '무료배송';
+        }
+
+        if ($this->shipping_type === '고정') {
+            return '배송비 ₩' . number_format($this->shipping_fee);
+        }
+
+        // 기본 설정 (예: 3,000원, 5만원 이상 무료)
+        $price = $this->sale_price ?? $this->price;
+        if ($price >= 50000) {
+            return '무료배송';
+        }
+
+        return '배송비 ₩3,000';
     }
 
     /**

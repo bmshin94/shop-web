@@ -34,6 +34,40 @@ class SizeController extends Controller
     }
 
     /**
+     * 사이즈 그룹 수정
+     */
+    public function updateGroup(Request $request, SizeGroup $group)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:size_groups,name,' . $group->id,
+            'size_guide_headers' => 'nullable|string',
+            'size_guide_rows' => 'nullable|string',
+        ]);
+
+        $data = $request->only('name');
+
+        if ($request->filled('size_guide_headers')) {
+            $headers = array_map('trim', explode(',', $request->size_guide_headers));
+            $rowsInput = array_map('trim', explode("\n", $request->size_guide_rows));
+            $rows = [];
+            foreach ($rowsInput as $row) {
+                if (empty($row)) continue;
+                $rows[] = array_map('trim', explode(',', $row));
+            }
+            $data['size_guide'] = [
+                'headers' => $headers,
+                'rows' => $rows
+            ];
+        } else {
+            $data['size_guide'] = null;
+        }
+
+        $group->update($data);
+
+        return redirect()->route('admin.sizes.index')->with('success', '사이즈 그룹 정보가 수정되었습니다.');
+    }
+
+    /**
      * 사이즈 그룹 삭제
      */
     public function destroyGroup(SizeGroup $group)

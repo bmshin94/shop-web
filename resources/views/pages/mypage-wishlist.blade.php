@@ -4,8 +4,17 @@
 
 @section('content')
 <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-text-muted mb-6">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <a href="{{ route('mypage') }}" class="hover:text-primary transition-colors">마이페이지</a>
+        <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <span class="font-bold text-text-main">찜한 상품</span>
+    </nav>
+
     <!-- Page Title -->
-    <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">마이페이지</h2>
+    <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">찜한 상품</h2>
 
     <div class="flex flex-col lg:flex-row gap-8 items-start">
         <!-- LNB (Left Navigation Bar) -->
@@ -14,8 +23,7 @@
         <!-- Main Dashboard Content -->
         <div class="flex-1 w-full space-y-8">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-text-main">찜한 상품</h3>
+                <div class="flex justify-end items-center mb-6">
                     <button class="text-sm border border-gray-300 text-text-main rounded px-3 py-1.5 hover:bg-gray-50 font-bold transition-colors">선택 삭제</button>
                 </div>
 

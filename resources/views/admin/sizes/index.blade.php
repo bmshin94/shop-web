@@ -31,6 +31,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button onclick="openEditGroupModal({{ $group->id }}, '{{ $group->name }}', {{ json_encode($group->size_guide) }})" class="p-2 hover:bg-gray-100 rounded-lg transition-colors text-text-muted" title="그룹 수정 및 가이드 관리">
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
                     <button onclick="openAddSizeModal({{ $group->id }}, '{{ $group->name }}')" class="p-2 hover:bg-primary-light hover:text-primary rounded-lg transition-colors text-text-muted" title="사이즈 추가">
                         <span class="material-symbols-outlined">add</span>
                     </button>
@@ -73,6 +76,35 @@
             <p class="text-lg font-bold text-text-muted">사이즈 그룹을 먼저 추가해주세요.</p>
         </div>
         @endforelse
+    </div>
+</div>
+
+<!-- Edit Group Modal -->
+<div id="edit-group-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden">
+        <form id="edit-group-form" action="" method="POST" class="p-8">
+            @csrf
+            @method('PATCH')
+            <h4 class="text-xl font-bold text-text-main mb-6">사이즈 그룹 수정 및 가이드 관리</h4>
+            <div class="space-y-6 mb-8">
+                <div>
+                    <label class="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2 ml-1">그룹 명칭</label>
+                    <input type="text" name="name" id="edit-group-name" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2 ml-1">사이즈 가이드 헤더 (콤마 구분)</label>
+                    <input type="text" name="size_guide_headers" id="edit-guide-headers" placeholder="예: 사이즈, 가슴, 허리, 기장" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2 ml-1">사이즈 가이드 데이터 (행 구분: 줄바꿈, 열 구분: 콤마)</label>
+                    <textarea name="size_guide_rows" id="edit-guide-rows" rows="5" placeholder="예: S, 80, 60, 95&#10;M, 85, 65, 97" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"></textarea>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button type="button" onclick="$('#edit-group-modal').addClass('hidden').removeClass('flex')" class="px-6 py-4 bg-gray-100 text-text-muted text-sm font-bold rounded-xl hover:bg-gray-200 transition-colors">취소</button>
+                <button type="submit" class="px-6 py-4 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-primary/20">수정하기</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -126,6 +158,22 @@
 
 @push('scripts')
 <script>
+    function openEditGroupModal(id, name, guide) {
+        const $form = $('#edit-group-form');
+        $form.attr('action', `/admin/sizes/groups/${id}`);
+        $('#edit-group-name').val(name);
+        
+        if (guide) {
+            $('#edit-guide-headers').val(guide.headers.join(', '));
+            $('#edit-guide-rows').val(guide.rows.map(row => row.join(', ')).join('\n'));
+        } else {
+            $('#edit-guide-headers').val('');
+            $('#edit-guide-rows').val('');
+        }
+        
+        $('#edit-group-modal').removeClass('hidden').addClass('flex');
+    }
+
     function openAddSizeModal(groupId, groupName) {
         $('#modal-group-id').val(groupId);
         $('#modal-group-name').text(groupName + ' 그룹에 사이즈 추가');

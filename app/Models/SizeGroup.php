@@ -9,7 +9,11 @@ class SizeGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'size_guide'];
+
+    protected $casts = [
+        'size_guide' => 'array',
+    ];
 
     /**
      * 이 그룹에 속한 사이즈들

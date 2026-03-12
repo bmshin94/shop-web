@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 로그인 - HER FIELD</title>
+    <title>관리자 로그인 - Active Women</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Google Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -29,7 +29,7 @@
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-light text-primary mb-4 shadow-sm border border-red-100">
                     <span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
                 </div>
-                <h1 class="text-3xl font-black text-text-main tracking-tight font-display mb-1">HER FIELD</h1>
+                <h1 class="text-3xl font-black text-text-main tracking-tight font-display mb-1">Active Women</h1>
                 <p class="text-sm font-semibold text-text-muted tracking-wide uppercase">Admin System Login</p>
             </div>
 
@@ -96,7 +96,7 @@
         
         <!-- Footer -->
         <div class="bg-gray-50/80 py-5 text-center border-t border-gray-100/50">
-            <p class="text-[12px] font-bold text-gray-400">&copy; {{ date('Y') }} HER FIELD. All rights reserved.</p>
+            <p class="text-[12px] font-bold text-gray-400">&copy; {{ date('Y') }} Active Women. All rights reserved.</p>
         </div>
     </div>
 

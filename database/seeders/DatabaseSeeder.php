@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            AdminMenuSeeder::class,
             CategorySeeder::class,
             ColorSeeder::class,
             ProductSeeder::class,
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             ExhibitionSeeder::class,
             ReviewSeeder::class,
+            CouponSeeder::class,
         ]);
     }
 }

@@ -94,8 +94,8 @@
                     <!-- Floating Actions (Wishlist & Share) -->
                     <div class="absolute right-4 top-4 flex flex-col gap-3">
                         <button type="button" id="wishlist-btn"
-                            class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:bg-primary hover:text-white transition-colors cursor-pointer z-10">
-                            <span class="material-symbols-outlined block text-xl">favorite</span>
+                            class="flex size-10 items-center justify-center rounded-full bg-white/90 shadow-md hover:bg-primary hover:text-white transition-colors cursor-pointer z-10 {{ $product->is_wishlisted ? 'text-primary' : 'text-text-main' }}">
+                            <span class="material-symbols-outlined block text-xl" style="font-variation-settings: 'FILL' {{ $product->is_wishlisted ? 1 : 0 }}">favorite</span>
                         </button>
                         <button type="button" id="share-btn"
                             class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:text-primary transition-colors cursor-pointer z-10">
@@ -152,7 +152,7 @@
                             @if($product->is_best)
                             <span class="inline-flex rounded-md bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-600 border border-amber-100">BEST</span>
                             @endif
-                            <span class="inline-flex rounded-md bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700 border border-gray-200">무료배송</span>
+                            <span class="inline-flex rounded-md bg-gray-100 px-2.5 py-1 text-xs font-bold text-gray-700 border border-gray-200">{{ $product->shipping_info }}</span>
                         </div>
                     </div>
 
@@ -221,9 +221,12 @@
                 <!-- Bottom Action Area (모바일 장바구니 버튼 상시 노출!) -->
                 <div class="mt-8 pt-6 border-t border-gray-200 bg-white sticky bottom-0 z-30 lg:static lg:bg-transparent pb-4 lg:pb-0 lg:mt-auto">
                     @if($product->status === '판매중')
-                    <div class="flex justify-between items-end mb-4 lg:mb-6 px-4 lg:px-0">
-                        <span class="text-base font-bold text-text-main">총 결제 금액</span>
-                        <span id="totalPrice" class="text-3xl font-extrabold text-primary tracking-tight">₩{{ number_format($product->sale_price ?? $product->price) }}</span>
+                    <div class="flex flex-col mb-4 lg:mb-6 px-4 lg:px-0">
+                        <div class="flex justify-between items-end">
+                            <span class="text-base font-bold text-text-main">총 결제 금액</span>
+                            <span id="totalPrice" class="text-3xl font-extrabold text-primary tracking-tight">₩{{ number_format(($product->sale_price ?? $product->price)) }}</span>
+                        </div>
+                        <p id="shippingFeeInfo" class="text-right text-[11px] font-bold text-text-muted mt-1 hidden"></p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3 px-4 lg:px-0">
                         <!-- hidden sm:flex 를 flex 로 변경하여 모바일에서도 장바구니 버튼 노출 -->
@@ -257,7 +260,7 @@
 
     <!-- Tabs Section -->
     <section class="border-t border-gray-200 mt-12 bg-white">
-        <div class="sticky top-[88px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div class="sticky top-[116px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <nav class="-mb-px flex gap-8 whitespace-nowrap overflow-x-auto scrollbar-hide text-sm sm:text-base font-bold">
                     <button type="button" data-tab="details" 
@@ -280,13 +283,13 @@
             </div>
         </div>
 
-        <div class="tab-content mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="details">
+        <div class="tab-content mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]" id="details">
             <div class="prose prose-gray max-w-none mx-auto text-text-main leading-relaxed">
                 {!! $product->description !!}
             </div>
         </div>
 
-        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="reviews">
+        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]" id="reviews">
             <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-text-main">고객 리뷰 <span class="text-primary ml-1">{{ number_format($product->review_count) }}</span></h2>
@@ -299,7 +302,7 @@
                         <span class="text-sm font-bold text-text-main ml-1">{{ number_format($product->average_rating, 1) }} / 5.0</span>
                     </div>
                 </div>
-                <a href="{{ route('review.write') }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">리뷰 작성하기</a>
+                <a href="{{ route('review.write', ['product_id' => $product->id]) }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">리뷰 작성하기</a>
             </div>
 
             <div id="review-list">
@@ -342,7 +345,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-text-main mb-2">아직 작성된 리뷰가 없습니다</h3>
                     <p class="text-sm text-text-muted mb-8 max-w-sm leading-relaxed">이 상품을 구매하신 후 첫 번째 리뷰를 남겨주세요!</p>
-                    <a href="{{ route('review.write') }}" class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm">
+                    <a href="{{ route('review.write', ['product_id' => $product->id]) }}" class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm">
                         <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span> 리뷰 작성하기
                     </a>
                 </div>
@@ -358,7 +361,7 @@
             </div>
             @endif
             </div>
-        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="qna">
+        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]" id="qna">
             <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
                 <h2 class="text-2xl font-bold text-text-main">Q & A</h2>
                 <a href="{{ route('qna.write') }}" class="px-4 py-2 bg-text-main text-white text-sm font-bold rounded hover:bg-primary transition-colors">문의 작성하기</a>
@@ -372,7 +375,7 @@
             </div>
         </div>
 
-        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px]" id="shipping">
+        <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]" id="shipping">
             <h2 class="text-2xl font-bold text-text-main mb-8 border-b border-gray-200 pb-4">배송/반품/교환 안내</h2>
             <div class="space-y-8 text-sm text-text-main leading-relaxed">
                 <div>
@@ -444,18 +447,81 @@
             </button>
         </div>
         <div class="p-6">
-            <p class="text-sm text-text-muted mb-4">* 단위: cm / 약간의 오차가 있을 수 있습니다.</p>
-            <table class="w-full text-sm text-center border-collapse">
-                <thead><tr class="bg-gray-50 border-b border-gray-200"><th class="py-3 px-2 font-bold text-text-main">사이즈</th><th class="py-3 px-2 font-bold text-text-main">가슴</th><th class="py-3 px-2 font-bold text-text-main">허리</th><th class="py-3 px-2 font-bold text-text-main">엉덩이</th><th class="py-3 px-2 font-bold text-text-main">기장</th></tr></thead>
-                <tbody class="divide-y divide-gray-100">
-                    <tr class="text-gray-400"><td class="py-3 px-2 font-bold">S</td><td class="py-3">78-82</td><td class="py-3">60-64</td><td class="py-3">86-90</td><td class="py-3">95</td></tr>
-                    <tr class="bg-primary/5 font-bold text-primary"><td class="py-3 px-2">M</td><td class="py-3">82-86</td><td class="py-3">64-68</td><td class="py-3">90-94</td><td class="py-3">97</td></tr>
-                    <tr><td class="py-3 px-2 font-bold text-text-main">L</td><td class="py-3 text-text-muted">86-90</td><td class="py-3 text-text-muted">68-72</td><td class="py-3 text-text-muted">94-98</td><td class="py-3 text-text-muted">99</td></tr>
-                    <tr><td class="py-3 px-2 font-bold text-text-main">XL</td><td class="py-3 text-text-muted">90-94</td><td class="py-3 text-text-muted">72-76</td><td class="py-3 text-text-muted">98-102</td><td class="py-3 text-text-muted">101</td></tr>
-                </tbody>
-            </table>
+            @if($product->size_group && $product->size_group->size_guide)
+                <p class="text-sm text-text-muted mb-4">* 단위: cm / 약간의 오차가 있을 수 있습니다.</p>
+                <div class="overflow-x-auto scrollbar-hide">
+                    <table class="w-full text-sm text-center border-collapse min-w-[400px]">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                @foreach($product->size_group->size_guide['headers'] as $header)
+                                    <th class="py-3 px-2 font-bold text-text-main">{{ $header }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($product->size_group->size_guide['rows'] as $row)
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    @foreach($row as $cell)
+                                        <td class="py-3 px-2 text-text-muted font-medium">{{ $cell }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="py-12 text-center">
+                    <span class="material-symbols-outlined text-4xl text-gray-200 mb-2">ruler</span>
+                    <p class="text-sm text-text-muted italic">등록된 사이즈 가이드 정보가 없습니다.</p>
+                </div>
+            @endif
+            
             <div class="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
-                <p class="text-sm text-amber-800"><span class="font-bold"> Tip:</span> 평소 55사이즈(S~M) 착용 시 <strong>M</strong>, 66사이즈(M~L) 착용 시 <strong>L</strong>을 추천드립니다.</p>
+                <p class="text-sm text-amber-800"><span class="font-bold"> Tip:</span> 평소 착용하시는 사이즈와 실측 데이터를 비교하여 선택해주세요.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 장바구니 성공 안내 모달 -->
+<div id="cartSuccessModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-[scaleIn_0.2s_ease-out]">
+        <button type="button" data-modal-close class="absolute top-4 right-4 size-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+        <div class="p-8 text-center">
+            <div class="size-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-3xl">shopping_basket</span>
+            </div>
+            <h4 class="text-xl font-bold text-text-main mb-2">장바구니 담기 완료</h4>
+            <p class="text-sm text-text-muted leading-relaxed mb-8">
+                선택하신 상품이 장바구니에 담겼습니다.<br>지금 확인하시겠습니까?
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+                <button type="button" data-modal-close class="px-6 py-4 bg-gray-100 text-text-muted text-sm font-bold rounded-2xl hover:bg-gray-200 transition-colors">쇼핑 계속하기</button>
+                <a href="{{ route('cart.index') }}" class="px-6 py-4 bg-text-main text-white text-sm font-bold rounded-2xl hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">장바구니 확인</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 장바구니 중복 확인 모달 -->
+<div id="cartConfirmModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-[scaleIn_0.2s_ease-out]">
+        <button type="button" data-modal-close class="absolute top-4 right-4 size-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+        <div class="p-8 text-center">
+            <div class="size-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-3xl">shopping_cart_checkout</span>
+            </div>
+            <h4 class="text-xl font-bold text-text-main mb-2">장바구니 확인</h4>
+            <p class="text-sm text-text-muted leading-relaxed mb-8">
+                이미 장바구니에 동일한 상품이 있습니다.<br>선택하신 수량을 추가하시겠습니까?
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+                <button type="button" id="cartConfirmCancel" data-modal-close class="px-6 py-4 bg-gray-100 text-text-muted text-sm font-bold rounded-2xl hover:bg-gray-200 transition-colors">취소</button>
+                <button type="button" id="cartConfirmProceed" class="px-6 py-4 bg-primary text-white text-sm font-bold rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20">수량 추가</button>
             </div>
         </div>
     </div>
@@ -474,6 +540,7 @@
         const BASE_PRICE = {{ $product->sale_price ?? $product->price }};
         let quantity = 1;
         let selectedSize = "";
+        let selectedColor = "{{ $product->colors->first()?->name ?? '' }}"; // 초기값 설정
 
         function showToast(message, icon = "check_circle", color = "bg-text-main") {
             const container = document.getElementById("toastContainer");
@@ -489,6 +556,7 @@
             }, 2500);
         }
 
+        // Modal Functions (전역에서 접근 가능하도록 상단 배치)
         function openModal(modal) {
             if (!modal) return;
             modal.style.display = "flex";
@@ -501,13 +569,31 @@
             modal.classList.add("hidden");
             document.body.style.overflow = "";
         }
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+
+        // 모달 닫기 버튼들 이벤트 연결
+        document.querySelectorAll('[data-modal-close]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.fixed');
+                closeModal(modal);
+            });
+        });
+
+        // 모달 외부 클릭 시 닫기 통합 관리
+        [document.getElementById('cartSuccessModal'), document.getElementById('cartConfirmModal'), document.getElementById('sizeGuideModal')].forEach(modal => {
+            if (modal) {
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal) closeModal(modal);
+                });
+            }
+        });
 
         // Tab Switching
         const tabBtns = document.querySelectorAll(".tab-btn");
         const tabContents = document.querySelectorAll(".tab-content");
         function activateTab(targetId) {
             tabBtns.forEach(b => {
-                // 모든 버튼을 비활성 상태(Muted + Hover 효과 활성)로 초기화
                 b.classList.remove("border-primary", "text-primary");
                 b.classList.add("border-transparent", "text-text-muted");
             });
@@ -517,11 +603,28 @@
             const activeContent = document.getElementById(targetId);
             
             if (activeBtn) {
-                // 선택된 버튼을 활성 상태(Primary + Hover 효과 무력화)로 변경
                 activeBtn.classList.add("border-primary", "text-primary");
                 activeBtn.classList.remove("border-transparent", "text-text-muted");
             }
             if (activeContent) activeContent.classList.remove("hidden");
+        }
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const targetId = btn.getAttribute("data-tab");
+                activateTab(targetId);
+                history.replaceState(null, "", "#" + targetId);
+                // 스크롤은 수동 클릭 시에만 부드럽게 이동
+                document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+
+        // 초기 해시 체크
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            if (['details', 'reviews', 'qna', 'shipping'].includes(hash)) {
+                activateTab(hash);
+            }
         }
 
         // Top Review Link Click -> Activate Review Tab
@@ -539,25 +642,14 @@
         if (loadMoreBtn) {
             loadMoreBtn.addEventListener("click", () => {
                 const hiddenReviews = document.querySelectorAll(".review-item.hidden");
-                // 한 번에 5개씩 더 보여주기
                 for (let i = 0; i < 5 && i < hiddenReviews.length; i++) {
                     hiddenReviews[i].classList.remove("hidden");
                 }
-                
-                // 더 이상 숨겨진 리뷰가 없으면 버튼 숨기기
                 if (document.querySelectorAll(".review-item.hidden").length === 0) {
                     loadMoreBtn.parentElement.classList.add("hidden");
                 }
             });
         }
-        tabBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const targetId = btn.getAttribute("data-tab");
-                activateTab(targetId);
-                history.replaceState(null, "", "#" + targetId);
-                document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
-            });
-        });
 
         // Thumbnail Gallery
         const thumbBtns = document.querySelectorAll(".thumb-btn");
@@ -588,8 +680,9 @@
             btn.addEventListener("click", () => {
                 colorBtns.forEach(b => b.classList.remove("ring-2", "ring-primary"));
                 btn.classList.add("ring-2", "ring-primary");
+                selectedColor = btn.getAttribute("data-color-name");
                 const label = document.getElementById("colorLabel");
-                if (label) label.textContent = btn.getAttribute("title");
+                if (label) label.textContent = selectedColor;
             });
         });
 
@@ -607,7 +700,7 @@
             });
         });
 
-        // 8. Size Guide (이 로직이 빠졌었어!)
+        // 8. Size Guide
         const sizeGuideModal = document.getElementById("sizeGuideModal");
         const sgBtn = document.getElementById("sizeGuideBtn");
         const sgClose = document.getElementById("sizeGuideClose");
@@ -617,20 +710,45 @@
         if (sizeGuideModal && sgClose) {
             sgClose.addEventListener("click", () => closeModal(sizeGuideModal));
         }
-        if (sizeGuideModal) {
-            sizeGuideModal.addEventListener("click", (e) => {
-                if (e.target === sizeGuideModal) closeModal(sizeGuideModal);
-            });
-        }
 
         // 9. Quantity & Total
         function updateQuantity(newQty) {
             quantity = Math.max(1, Math.min(99, newQty));
+            const totalItemPrice = BASE_PRICE * quantity;
+            let shippingFee = 0;
+
+            const shippingType = "{{ $product->shipping_type }}";
+            const fixedFee = {{ $product->shipping_fee ?? 0 }};
+
+            if (shippingType === '무료') {
+                shippingFee = 0;
+            } else if (shippingType === '고정') {
+                shippingFee = fixedFee;
+            } else {
+                // 기본 (5만원 이상 무료, 미만 시 3,000원)
+                shippingFee = totalItemPrice >= 50000 ? 0 : 3000;
+            }
+
             const qDisp = document.getElementById("qtyDisplay");
             const tPrice = document.getElementById("totalPrice");
+            const sInfo = document.getElementById("shippingFeeInfo");
+
             if (qDisp) qDisp.textContent = quantity;
-            if (tPrice) tPrice.textContent = "₩" + (BASE_PRICE * quantity).toLocaleString();
+            if (tPrice) tPrice.textContent = "₩" + (totalItemPrice + shippingFee).toLocaleString();
+            
+            if (sInfo) {
+                if (shippingFee > 0) {
+                    sInfo.textContent = `(배송비 ₩${shippingFee.toLocaleString()} 포함)`;
+                    sInfo.classList.remove('hidden');
+                } else {
+                    sInfo.textContent = "(무료배송 적용됨)";
+                    sInfo.classList.remove('hidden');
+                }
+            }
         }
+        
+        // 초기 실행 (배송비 포함 금액 표시)
+        updateQuantity(1);
         const qPlus = document.getElementById("qtyPlus");
         const qMinus = document.getElementById("qtyMinus");
         if (qPlus) qPlus.addEventListener("click", () => updateQuantity(quantity + 1));
@@ -640,22 +758,41 @@
         const wBtn = document.getElementById("wishlist-btn");
         if (wBtn) {
             wBtn.addEventListener("click", function() {
+                @guest
+                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
+                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
+                    return;
+                @endguest
+
                 const icon = this.querySelector(".material-symbols-outlined");
-                const isActive = this.classList.contains("text-primary");
                 
-                if (isActive) {
-                    // 찜 해제 (검은색으로)
-                    this.classList.remove("text-primary");
-                    this.classList.add("text-text-main");
-                    icon.style.fontVariationSettings = "'FILL' 0";
-                    showToast("위시리스트에서 제거되었습니다", "heart_broken", "bg-gray-600");
-                } else {
-                    // 찜 하기 (빨간색으로)
-                    this.classList.add("text-primary");
-                    this.classList.remove("text-text-main");
-                    icon.style.fontVariationSettings = "'FILL' 1";
-                    showToast("위시리스트에 추가되었습니다", "favorite", "bg-primary");
-                }
+                fetch("{{ route('wishlist.toggle', $product) }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'added') {
+                        this.classList.add("text-primary");
+                        this.classList.remove("text-text-main");
+                        icon.style.fontVariationSettings = "'FILL' 1";
+                    } else {
+                        this.classList.remove("text-primary");
+                        this.classList.add("text-text-main");
+                        icon.style.fontVariationSettings = "'FILL' 0";
+                    }
+                    showToast(data.message, data.status === 'added' ? "favorite" : "heart_broken", data.status === 'added' ? "bg-primary" : "bg-gray-600");
+                    
+                    // 찜 카운트 업데이트
+                    const wishlistBadges = document.querySelectorAll(".header-wishlist-count");
+                    wishlistBadges.forEach(badge => {
+                        badge.textContent = data.count;
+                        data.count > 0 ? badge.classList.remove("hidden") : badge.classList.add("hidden");
+                    });
+                });
             });
         }
 
@@ -673,11 +810,138 @@
         const cBtn = document.getElementById("addToCartBtn");
         if (cBtn) {
             cBtn.addEventListener("click", () => {
+                @guest
+                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
+                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
+                    return;
+                @endguest
+
+                @if($product->colors->count() > 0)
+                if (!selectedColor) {
+                    showToast("색상을 선택해주세요", "error", "bg-red-500");
+                    return;
+                }
+                @endif
+
+                @if($product->sizes->count() > 0)
                 if (!selectedSize) {
                     showToast("사이즈를 선택해주세요", "error", "bg-red-500");
                     return;
                 }
-                showToast("장바구니에 담았습니다", "shopping_cart");
+                @endif
+
+                const addToCart = (force = false) => {
+                    fetch("{{ route('cart.store') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            product_id: {{ $product->id }},
+                            color: selectedColor,
+                            size: selectedSize,
+                            quantity: quantity,
+                            force: force
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'duplicate') {
+                            const cartModal = document.getElementById("cartConfirmModal");
+                            openModal(cartModal);
+                            
+                            // 모달 버튼 이벤트 바인딩 (일회성)
+                            const proceedBtn = document.getElementById("cartConfirmProceed");
+                            const cancelBtn = document.getElementById("cartConfirmCancel");
+                            
+                            const onProceed = () => {
+                                closeModal(cartModal);
+                                addToCart(true);
+                                cleanup();
+                            };
+                            const onCancel = () => {
+                                closeModal(cartModal);
+                                cleanup();
+                            };
+                            const cleanup = () => {
+                                proceedBtn.removeEventListener("click", onProceed);
+                                cancelBtn.removeEventListener("click", onCancel);
+                            };
+                            
+                            proceedBtn.addEventListener("click", onProceed);
+                            cancelBtn.addEventListener("click", onCancel);
+
+                        } else if (data.status === 'success') {
+                            // 토스트 대신 성공 모달 띄우기
+                            openModal(document.getElementById("cartSuccessModal"));
+                            
+                            // 장바구니 아이콘 카운트 업데이트 (Header)
+                            const cartBadges = document.querySelectorAll(".header-cart-count");
+                            cartBadges.forEach(badge => {
+                                badge.textContent = data.cart_count;
+                                badge.classList.remove("hidden");
+                            });
+                        } else {
+                            showToast("처리에 실패했습니다", "error", "bg-red-500");
+                        }
+                    });
+                };
+
+                addToCart();
+            });
+        }
+
+        // Buy Now
+        const buyNowBtn = document.getElementById("buyNowBtn");
+        if (buyNowBtn) {
+            buyNowBtn.addEventListener("click", () => {
+                @guest
+                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
+                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
+                    return;
+                @endguest
+
+                @if($product->colors->count() > 0)
+                if (!selectedColor) {
+                    showToast("색상을 선택해주세요", "error", "bg-red-500");
+                    return;
+                }
+                @endif
+
+                @if($product->sizes->count() > 0)
+                if (!selectedSize) {
+                    showToast("사이즈를 선택해주세요", "error", "bg-red-500");
+                    return;
+                }
+                @endif
+
+                fetch("{{ route('buy-now') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: {{ $product->id }},
+                        color: selectedColor,
+                        size: selectedSize,
+                        quantity: quantity
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.redirect) {
+                        location.href = data.redirect;
+                    } else {
+                        showToast("처리에 실패했습니다", "error", "bg-red-500");
+                    }
+                })
+                .catch(err => {
+                    showToast("오류가 발생했습니다", "error", "bg-red-500");
+                });
             });
         }
 

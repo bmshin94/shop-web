@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
 
+use Illuminate\Support\Str;
+
 class AuthController extends Controller
 {
     /**
@@ -20,6 +22,13 @@ class AuthController extends Controller
      */
     public function showLoginForm()
     {
+        // 이전 페이지가 로그인 페이지가 아니고, 우리 사이트 내부 페이지라면 intended로 설정
+        $previousUrl = url()->previous();
+        if (!Auth::check() && !session()->has('url.intended')) {
+            if ($previousUrl !== route('login') && Str::contains($previousUrl, url('/'))) {
+                session(['url.intended' => $previousUrl]);
+            }
+        }
         return view('pages.login');
     }
 
@@ -117,7 +126,7 @@ class AuthController extends Controller
         Auth::login($member);
         $member->update(['last_login_at' => now()]);
 
-        return redirect()->route('home');
+        return redirect()->intended(route('home'));
     }
 
     /**
@@ -274,7 +283,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => '가입이 완료되었습니다! 프리미엄 혜택을 환영합니다.',
-            'redirect' => route('home'),
+            'redirect' => session()->pull('url.intended', route('home')),
         ]);
     }
 

@@ -130,76 +130,7 @@
       <!-- Grid -->
       <div class="grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         @forelse($products as $product)
-        <!-- Product Card -->
-        <div class="group relative flex flex-col">
-          <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
-            <a href="{{ route('product-detail', ['slug' => $product['slug']]) }}">
-              <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 {{ $product['is_sold_out'] ? 'grayscale-[0.5] opacity-60' : '' }}"
-                style="background-image: url('{{ $product['image_url'] }}');"></div>
-            </a>
-            
-            @if($product['is_sold_out'])
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span class="bg-black/60 text-white px-4 py-2 rounded-lg text-sm font-black border border-white/20 backdrop-blur-sm">SOLD OUT</span>
-            </div>
-            @endif
-            
-            <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 shadow-sm">
-              <span class="material-symbols-outlined block text-lg">favorite</span>
-            </div>
-
-            @if($product['is_best'])
-            <div class="absolute top-3 left-3 flex flex-col gap-1.5">
-              <span class="inline-flex items-center gap-1 rounded-full bg-background-dark/90 backdrop-blur-md px-3 py-1 text-[10px] font-black text-yellow-400 shadow-xl tracking-tighter">
-                <span class="material-symbols-outlined text-[12px] filled" style="font-variation-settings: 'FILL' 1;">star</span>
-                BEST{{ isset($product['best_rank']) ? ' ' . $product['best_rank'] : '' }}
-              </span>
-            @endif
-
-            @if($product['is_new'])
-              @if(!$product['is_best']) <div class="absolute top-3 left-3 flex flex-col gap-1.5"> @endif
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-primary/90 backdrop-blur-md px-3 py-1 text-[10px] font-black text-white shadow-xl shadow-primary/20 tracking-tighter">
-                <span class="size-1.5 rounded-full bg-white animate-pulse"></span>
-                NEW
-              </span>
-            </div>
-            @elseif($product['is_best'])
-            </div>
-            @endif
-          </div>
-
-          <div class="mt-4 flex flex-1 flex-col px-1">
-            <h4 class="text-base font-bold text-text-main hover:text-primary transition-colors">
-              <a href="{{ route('product-detail', ['slug' => $product['slug']]) }}">{{ $product['name'] }}</a>
-            </h4>
-            @if($product['description'])
-            <p class="text-xs text-text-muted mt-1 mb-2 line-clamp-1">
-              {{ $product['description'] }}
-            </p>
-            @endif
-
-            <!-- Color Options -->
-            @if(count($product['colors']) > 0)
-            <div class="flex gap-1 py-1 mb-2">
-              @foreach($product['colors'] as $hexCode)
-              <span class="size-3 rounded-full ring-1 ring-gray-200 shadow-sm" style="background-color: {{ $hexCode }}"></span>
-              @endforeach
-            </div>
-            @endif
-
-            <div class="mt-2 flex items-center justify-between">
-              <div class="flex flex-col">
-                @if($product['discount_rate'])
-                <span class="text-xs text-red-500 font-bold">
-                  {{ $product['discount_rate'] }}%
-                  <span class="text-text-muted font-normal line-through ml-1 opacity-50">₩{{ number_format($product['original_price']) }}</span>
-                </span>
-                @endif
-                <span class="text-lg font-bold text-text-main tracking-tight">₩{{ number_format($product['price']) }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          <x-product-card :product="$product" />
         @empty
         <div class="col-span-full py-24 text-center">
             <p class="text-text-muted">조건에 맞는 상품이 없습니다.</p>

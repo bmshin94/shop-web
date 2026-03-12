@@ -161,7 +161,7 @@
             clearErrors();
             $(this).prop('disabled', true).text('발송 중...');
 
-            $.post('{{ route("sms.send") }}', { phone: phone })
+            $.post('{{ route("verify.phone.send") }}', { phone: phone })
                 .done(function(res) {
                     showToast(res.message, 'sms', 'text-white');
                     $('#btnSendSms').prop('disabled', false).text('재발송').addClass('text-primary');
@@ -208,7 +208,7 @@
             $btn.prop('disabled', true).text('처리 중...');
 
             // 1. 휴대폰 인증 확인
-            $.post('{{ route("sms.verify") }}', { phone: phone, code: code })
+            $.post('{{ route("verify.phone.confirm") }}', { phone: phone, code: code })
                 .done(function(res) {
                     if (res.success) {
                         // 2. 인증 성공 시 이메일 찾기 요청

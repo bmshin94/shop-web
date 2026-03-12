@@ -131,24 +131,29 @@ class OrderManagementService
         $orderStatus = (string) $payload['order_status'];
         $paymentStatus = (string) $payload['payment_status'];
 
-        // 1. 배송이 시작된 주문은 출고 시각을 자동 기록한다.
-        if (in_array($shippingStatus, Order::SHIPPING_STARTED_STATUSES, true) && $order->shipped_at === null) {
+        // 1. 배송 시작 시각 자동 기록 (배송상태 또는 주문상태가 배송중 이상일 때)
+        if ((in_array($shippingStatus, Order::SHIPPING_STARTED_STATUSES, true) || in_array($orderStatus, ['배송중', '배송완료', '구매확정'], true)) 
+            && $order->shipped_at === null) {
             $payload['shipped_at'] = now();
         }
 
-        // 2. 배송 진행 상태는 주문상태를 배송중으로 동기화한다.
-        if (in_array($shippingStatus, ['출고완료', '배송중'], true) && $orderStatus !== '취소완료') {
+        // 2. 배송 진행 상태는 주문상태를 배송중으로 동기화 (취소/완료 상태 아닐 때)
+        if (in_array($shippingStatus, ['출고완료', '배송중'], true) && !in_array($orderStatus, ['취소완료', '배송완료', '구매확정'], true)) {
             $payload['order_status'] = '배송중';
         }
 
-        // 3. 배송완료는 주문상태와 완료 시각을 함께 확정한다.
-        if ($shippingStatus === '배송완료') {
-            $payload['order_status'] = '배송완료';
-            $payload['shipped_at'] = $order->shipped_at ?? now();
-            $payload['delivered_at'] = now();
+        // 3. 배송완료 및 구매확정 시 완료 시각 자동 기록
+        if (in_array($orderStatus, ['배송완료', '구매확정'], true) || $shippingStatus === '배송완료') {
+            if ($orderStatus !== '구매확정' && $shippingStatus === '배송완료') {
+                $payload['order_status'] = '배송완료';
+            }
+            $payload['shipped_at'] = $order->shipped_at ?? ($payload['shipped_at'] ?? now());
+            if ($order->delivered_at === null) {
+                $payload['delivered_at'] = now();
+            }
         }
 
-        // 4. 취소 주문은 배송 정보와 결제상태를 안전하게 정리한다.
+        // 4. 취소 주문은 배송 정보와 결제상태를 안전하게 정리
         if ($orderStatus === '취소완료' || in_array($paymentStatus, Order::PAYMENT_CANCELLED_STATUSES, true)) {
             $payload['order_status'] = '취소완료';
             $payload['shipping_status'] = '배송대기';
@@ -162,9 +167,12 @@ class OrderManagementService
             }
         }
 
-        // 5. 배송완료가 해제되면 완료 시각을 제거해 이력을 맞춘다.
-        if ($order->shipping_status === '배송완료' && $payload['shipping_status'] !== '배송완료') {
+        // 5. 상태가 뒤로 돌아갈 때(배송완료 -> 배송중 등) 시간 데이터 정리
+        if ($order->order_status === '배송완료' && in_array($orderStatus, ['주문접수', '상품준비중', '배송중'], true)) {
             $payload['delivered_at'] = null;
+        }
+        if ($order->order_status === '배송중' && in_array($orderStatus, ['주문접수', '상품준비중'], true)) {
+            $payload['shipped_at'] = null;
         }
 
         return $payload;

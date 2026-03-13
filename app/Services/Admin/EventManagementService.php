@@ -18,6 +18,7 @@ class EventManagementService
     public function paginateEvents(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Event::query()
+            ->withCount('participations')
             ->latest('start_at')
             ->latest('id');
 
@@ -51,12 +52,20 @@ class EventManagementService
      */
     public function getSummaryStats(): array
     {
+        $now = now();
         return [
             'total_events' => Event::count(),
-            'upcoming_events' => Event::where('status', '진행예정')->count(),
-            'active_events' => Event::where('status', '진행중')->count(),
-            'ended_events' => Event::where('status', '종료')->count(),
-            'hidden_events' => Event::where('status', '비노출')->count(),
+            'upcoming_events' => Event::where('start_at', '>', $now)->count(),
+            'active_events' => Event::where(function ($query) use ($now) {
+                    $query->whereNull('start_at')->orWhere('start_at', '<=', $now);
+                })
+                ->where(function ($query) use ($now) {
+                    $query->whereNull('end_at')->orWhere('end_at', '>=', $now);
+                })
+                ->count(),
+            'ended_events' => Event::whereNotNull('end_at')
+                ->where('end_at', '<', $now)
+                ->count(),
         ];
     }
 
@@ -68,7 +77,15 @@ class EventManagementService
      */
     public function createEvent(array $payload): Event
     {
-        return Event::query()->create($payload);
+        if (isset($payload['banner_image'])) {
+            $payload['banner_image_url'] = request()->file('banner_image')->store('events', 'public');
+            unset($payload['banner_image']);
+        }
+
+        /** @var Event $event */
+        $event = Event::query()->create($payload);
+
+        return $event;
     }
 
     /**
@@ -80,7 +97,19 @@ class EventManagementService
      */
     public function updateEvent(Event $event, array $payload): Event
     {
+        $winnerIds = $payload['winner_ids'] ?? [];
+        unset($payload['winner_ids']);
+
+        if (isset($payload['banner_image'])) {
+            if ($event->banner_image_url) {
+                \Storage::disk('public')->delete($event->banner_image_url);
+            }
+            $payload['banner_image_url'] = request()->file('banner_image')->store('events', 'public');
+            unset($payload['banner_image']);
+        }
+
         $event->update($payload);
+        $event->winners()->sync($winnerIds);
 
         return $event->refresh();
     }
@@ -147,7 +176,25 @@ class EventManagementService
         }
 
         if (! empty($filters['status'])) {
-            $query->where('status', $filters['status']);
+            $now = now();
+            $status = $filters['status'];
+
+            if ($status === '진행예정') {
+                $query->where('start_at', '>', $now);
+            } elseif ($status === '진행중') {
+                $query->where(function ($q) use ($now) {
+                        $q->whereNull('start_at')->orWhere('start_at', '<=', $now);
+                    })
+                    ->where(function ($q) use ($now) {
+                        $q->whereNull('end_at')->orWhere('end_at', '>=', $now);
+                    });
+            } elseif ($status === '종료') {
+                $query->whereNotNull('end_at')->where('end_at', '<', $now);
+            }
+        }
+
+        if (! empty($filters['type'])) {
+            $query->where('type', $filters['type']);
         }
 
         if (! empty($filters['start_from'])) {

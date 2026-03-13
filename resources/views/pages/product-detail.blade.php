@@ -122,7 +122,7 @@
                             {{ $product->name }}
                         </h1>
                         @if($product->brief_description)
-                        <p class="text-base text-text-muted break-keep leading-relaxed">
+                        <p class="text-base text-text-muted break-keep leading-relaxed whitespace-pre-wrap">
                             {{ $product->brief_description }}
                         </p>
                         @endif
@@ -327,7 +327,7 @@
                         </div>
                     </div>
                     <h4 class="text-base font-bold text-text-main mb-2">{{ $review->title }}</h4>
-                    <p class="text-sm text-text-main leading-relaxed mb-4 break-keep">{{ $review->content }}</p>
+                    <p class="text-sm text-text-main leading-relaxed mb-4 break-keep whitespace-pre-wrap">{{ $review->content }}</p>
 
                     @if($review->images && count($review->images) > 0)
                     <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">

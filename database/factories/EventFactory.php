@@ -27,13 +27,13 @@ class EventFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(100, 999),
-            'status' => fake()->randomElement(Event::STATUSES),
             'banner_image_url' => 'https://images.unsplash.com/photo-1500000000000?w=1200&h=628&fit=crop',
             'summary' => fake()->sentence(),
             'description' => fake()->paragraphs(2, true),
             'start_at' => $startAt,
             'end_at' => $endAt,
             'sort_order' => fake()->numberBetween(0, 50),
+            'type' => Event::TYPE_GENERAL,
         ];
     }
 }

@@ -7,13 +7,13 @@
     .event-row {
         display: grid;
         align-items: center;
-        grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
+        grid-template-columns: 1.5fr 0.8fr 1fr 0.6fr;
         gap: 12px;
     }
 
     @media (min-width: 1024px) {
         .event-row {
-            grid-template-columns: 1.7fr 0.9fr 0.7fr 1.1fr 220px;
+            grid-template-columns: 1.7fr 0.9fr 1.1fr 0.7fr 180px;
             gap: 16px;
         }
     }
@@ -25,6 +25,7 @@
     $activeFilterCount = collect([
         request('search'),
         request('status'),
+        request('type'),
         request('start_from'),
         request('start_to'),
     ])->filter(fn ($value) => filled($value))->count();
@@ -44,7 +45,7 @@
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
         <form action="{{ route('admin.events.trash') }}" method="GET" class="space-y-4">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 <div class="lg:col-span-2 relative">
                     <span class="material-symbols-outlined absolute left-3 top-3 text-text-muted text-[18px]">search</span>
                     <input
@@ -59,6 +60,15 @@
                         <option value="">모든 상태</option>
                         @foreach($statusOptions as $status)
                             <option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>{{ $status }}</option>
+                        @endforeach
+                    </select>
+                    <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>
+                </div>
+                <div class="relative">
+                    <select name="type" class="w-full px-4 py-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 appearance-none outline-none">
+                        <option value="">모든 유형</option>
+                        @foreach($typeOptions as $type)
+                            <option value="{{ $type }}" {{ request('type') === $type ? 'selected' : '' }}>{{ $type }}</option>
                         @endforeach
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>

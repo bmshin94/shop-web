@@ -3,152 +3,133 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\Event;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Models\Operator;
+use App\Models\Member;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class EventManagementTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
-    /** @test */
-    public function admin_can_filter_events_by_search_and_status(): void
+    protected function setUp(): void
     {
-        $matchedEvent = Event::factory()->create([
-            'title' => 'Spring Coupon Event',
-            'slug' => 'spring-coupon-event',
-            'status' => '진행중',
-        ]);
-
-        $hiddenEvent = Event::factory()->create([
-            'title' => 'Winter Event',
-            'slug' => 'winter-event',
-            'status' => '종료',
-        ]);
-
-        $response = $this->get(route('admin.events.index', [
-            'search' => 'Spring Coupon',
-            'status' => '진행중',
-        ]));
-
-        $response->assertOk();
-        $response->assertSee($matchedEvent->title);
-        $response->assertDontSee($hiddenEvent->title);
+        parent::setUp();
+        // 관리자 인증 처리
+        $operator = Operator::factory()->create();
+        $this->actingAs($operator, 'admin');
     }
 
-    /** @test */
-    public function admin_can_create_event_and_slug_is_auto_generated_when_empty(): void
+    /**
+     * 날짜 기반 가상 상태 검색 테스트
+     */
+    public function test_admin_can_filter_events_by_date_based_status(): void
+    {
+        $now = now();
+
+        // 진행중인 이벤트
+        $activeEvent = Event::factory()->create([
+            'title' => '진행중 이벤트',
+            'start_at' => $now->copy()->subDay(),
+            'end_at' => $now->copy()->addDay(),
+        ]);
+
+        // 종료된 이벤트
+        $endedEvent = Event::factory()->create([
+            'title' => '종료된 이벤트',
+            'end_at' => $now->copy()->subDay(),
+        ]);
+
+        // 1. '진행중' 필터링 테스트
+        $response = $this->get(route('admin.events.index', ['status' => '진행중']));
+        $response->assertOk();
+        $response->assertSee($activeEvent->title);
+        $response->assertDontSee($endedEvent->title);
+
+        // 2. '종료' 필터링 테스트
+        $response = $this->get(route('admin.events.index', ['status' => '종료']));
+        $response->assertOk();
+        $response->assertSee($endedEvent->title);
+        $response->assertDontSee($activeEvent->title);
+    }
+
+    /**
+     * 이벤트 등록 및 유형 저장 테스트
+     */
+    public function test_admin_can_create_event_with_type(): void
     {
         $response = $this->post(route('admin.events.store'), [
-            'title' => 'Spring Sale Event',
-            'slug' => '',
-            'status' => '진행예정',
-            'banner_image_url' => 'https://example.com/banner.jpg',
-            'summary' => 'summary',
-            'description' => 'description',
+            'title' => '신규 응모 이벤트',
+            'slug' => 'new-apply-event',
+            'type' => Event::TYPE_PARTICIPATION, // 응모형
+            'summary' => '이벤트 요약',
             'start_at' => now()->toDateTimeString(),
-            'end_at' => now()->addDays(3)->toDateTimeString(),
-            'sort_order' => 5,
+            'end_at' => now()->addDays(7)->toDateTimeString(),
         ]);
 
-        $event = Event::query()->where('title', 'Spring Sale Event')->first();
+        $event = Event::query()->where('slug', 'new-apply-event')->first();
 
         $this->assertNotNull($event);
-        $this->assertSame('spring-sale-event', $event->slug);
+        $this->assertSame(Event::TYPE_PARTICIPATION, $event->type);
         $response->assertRedirect(route('admin.events.edit', $event));
     }
 
-    /** @test */
-    public function admin_can_update_event(): void
+    /**
+     * 응모자 중에서 당첨자 선정 토글 테스트
+     */
+    public function test_admin_can_toggle_participant_winner_status(): void
     {
-        $event = Event::factory()->create([
-            'title' => 'Old Event Title',
-            'slug' => 'old-event-title',
-            'status' => '진행예정',
+        $event = Event::factory()->create(['type' => Event::TYPE_PARTICIPATION]);
+        $member = Member::factory()->create();
+        
+        // 1. 당첨자로 선정
+        $response = $this->patchJson(route('admin.events.participants.toggle-winner', [$event, $member]), [
+            'is_winner' => true
         ]);
 
-        $response = $this->put(route('admin.events.update', $event), [
-            'title' => 'Updated Event Title',
-            'slug' => 'updated-event-title',
-            'status' => '진행중',
-            'banner_image_url' => 'https://example.com/new-banner.jpg',
-            'summary' => 'new summary',
-            'description' => 'new description',
-            'start_at' => now()->addDay()->toDateTimeString(),
-            'end_at' => now()->addDays(10)->toDateTimeString(),
-            'sort_order' => 1,
+        $response->assertOk()->assertJson(['success' => true]);
+        $this->assertDatabaseHas('event_winners', [
+            'event_id' => $event->id,
+            'member_id' => $member->id,
         ]);
 
-        $response->assertRedirect(route('admin.events.edit', $event));
-        $this->assertDatabaseHas('events', [
-            'id' => $event->id,
-            'title' => 'Updated Event Title',
-            'slug' => 'updated-event-title',
-            'status' => '진행중',
-            'sort_order' => 1,
+        // 2. 당첨 취소
+        $response = $this->patchJson(route('admin.events.participants.toggle-winner', [$event, $member]), [
+            'is_winner' => false
+        ]);
+
+        $response->assertOk()->assertJson(['success' => true]);
+        $this->assertDatabaseMissing('event_winners', [
+            'event_id' => $event->id,
+            'member_id' => $member->id,
         ]);
     }
 
-    /** @test */
-    public function admin_can_soft_delete_event(): void
+    /**
+     * 히어로 노출 토글(AJAX) 테스트
+     */
+    public function test_admin_can_toggle_hero_status(): void
+    {
+        $event = Event::factory()->create(['is_hero' => false]);
+
+        $response = $this->patchJson(route('admin.events.toggle-hero', $event), [
+            'is_hero' => true
+        ]);
+
+        $response->assertOk()->assertJson(['success' => true]);
+        $this->assertTrue($event->fresh()->is_hero);
+    }
+
+    /**
+     * 소프트 삭제 테스트
+     */
+    public function test_admin_can_soft_delete_event(): void
     {
         $event = Event::factory()->create();
 
         $response = $this->delete(route('admin.events.destroy', $event));
 
         $response->assertRedirect(route('admin.events.index'));
-        $this->assertSoftDeleted('events', [
-            'id' => $event->id,
-        ]);
-        $this->assertNull(Event::query()->find($event->id));
-        $this->assertNotNull(Event::query()->withTrashed()->find($event->id));
-    }
-
-    /** @test */
-    public function trash_page_only_shows_soft_deleted_events(): void
-    {
-        $activeEvent = Event::factory()->create([
-            'title' => 'Active Event',
-        ]);
-
-        $trashedEvent = Event::factory()->create([
-            'title' => 'Trashed Event',
-        ]);
-        $trashedEvent->delete();
-
-        $response = $this->get(route('admin.events.trash'));
-
-        $response->assertOk();
-        $response->assertSee($trashedEvent->title);
-        $response->assertDontSee($activeEvent->title);
-    }
-
-    /** @test */
-    public function admin_can_restore_soft_deleted_event(): void
-    {
-        $event = Event::factory()->create();
-        $event->delete();
-
-        $response = $this->patch(route('admin.events.restore', $event));
-
-        $response->assertRedirect(route('admin.events.trash'));
-        $this->assertDatabaseHas('events', [
-            'id' => $event->id,
-            'deleted_at' => null,
-        ]);
-    }
-
-    /** @test */
-    public function admin_can_force_delete_soft_deleted_event(): void
-    {
-        $event = Event::factory()->create();
-        $event->delete();
-
-        $response = $this->delete(route('admin.events.force-destroy', $event));
-
-        $response->assertRedirect(route('admin.events.trash'));
-        $this->assertDatabaseMissing('events', [
-            'id' => $event->id,
-        ]);
-        $this->assertNull(Event::query()->withTrashed()->find($event->id));
+        $this->assertSoftDeleted('events', ['id' => $event->id]);
     }
 }

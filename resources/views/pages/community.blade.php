@@ -100,7 +100,7 @@
         <div class="md:flex-1 bg-black flex items-center justify-center h-full"><img id="ootdMImg" src="" class="max-w-full max-h-full object-contain" /></div>
         <div class="w-full md:w-[400px] flex flex-col bg-white">
             <div class="p-4 border-b flex items-center justify-between"><div class="flex items-center gap-3"><div class="size-8 rounded-full bg-primary text-white flex items-center justify-center text-[10px] font-bold">AW</div><span id="ootdMUser" class="font-bold text-sm"></span></div><button onclick="closeModal('ootdModal')" class="text-xl">×</button></div>
-            <div class="flex-1 p-6 overflow-y-auto"><p class="text-sm leading-relaxed text-text-main">오늘도 오운완! ‍ 핏이 너무 예쁜 액티브우먼 셋업 입고 기분 좋게 운동했어요!  #액티브우먼OOTD #데일리룩</p></div>
+            <div class="flex-1 p-6 overflow-y-auto"><p class="text-sm leading-relaxed text-text-main whitespace-pre-wrap">오늘도 오운완! ‍ 핏이 너무 예쁜 액티브우먼 셋업 입고 기분 좋게 운동했어요!  #액티브우먼OOTD #데일리룩</p></div>
             <div class="p-4 border-t bg-gray-50"><p class="text-xs font-bold text-primary"> <span id="ootdMLikes"></span> Likes</p></div>
         </div>
     </div>
@@ -110,7 +110,7 @@
     <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
         <h2 id="noticeMTitle" class="text-xl md:text-2xl font-bold text-text-main mb-4 leading-tight"></h2>
         <p id="noticeMDate" class="text-xs text-gray-400 mb-8 pb-4 border-b border-gray-50"></p>
-        <div class="text-sm text-text-main leading-relaxed space-y-4"><p>공지사항의 상세 내용입니다. 항상 저희 Active Women을 이용해주셔서 감사합니다! </p></div>
+        <div class="text-sm text-text-main leading-relaxed space-y-4 whitespace-pre-wrap"><p>공지사항의 상세 내용입니다. 항상 저희 Active Women을 이용해주셔서 감사합니다! </p></div>
         <button onclick="closeModal('noticeModal')" class="w-full mt-10 py-4 bg-gray-100 text-text-main font-bold rounded-2xl">확인</button>
     </div>
 </div>

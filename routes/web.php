@@ -10,9 +10,10 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\EventController; // 사용자용 EventController 추가! ✨
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\ExhibitionController;
 use App\Http\Controllers\Admin\MemberController as AdminMemberController;
 use App\Http\Controllers\Admin\SizeController;
@@ -50,15 +51,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/events', [EventController::class, 'index'])->name('events.index');
-    Route::get('/events/trash', [EventController::class, 'trash'])->name('events.trash');
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::patch('/events/{event}/restore', [EventController::class, 'restore'])->withTrashed()->name('events.restore');
-    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
-    Route::delete('/events/{event}/force', [EventController::class, 'forceDestroy'])->withTrashed()->name('events.force-destroy');
+    Route::get('/events', [AdminEventController::class, 'index'])->name('events.index');
+    Route::get('/events/trash', [AdminEventController::class, 'trash'])->name('events.trash');
+    Route::get('/events/search-members', [AdminEventController::class, 'searchMembers'])->name('events.search-members');
+    Route::get('/events/{event}/participants', [AdminEventController::class, 'participants'])->name('events.participants');
+    Route::get('/events/{event}/participants/export', [AdminEventController::class, 'exportParticipants'])->name('events.participants.export');
+    Route::patch('/events/{event}/participants/{member}/toggle-winner', [AdminEventController::class, 'toggleParticipantWinner'])->name('events.participants.toggle-winner');
+    Route::get('/events/create', [AdminEventController::class, 'create'])->name('events.create');
+    Route::post('/events', [AdminEventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [AdminEventController::class, 'edit'])->name('events.edit');
+    Route::patch('/events/{event}/toggle-hero', [AdminEventController::class, 'toggleHero'])->name('events.toggle-hero');
+    Route::put('/events/{event}', [AdminEventController::class, 'update'])->name('events.update');
+    Route::patch('/events/{event}/restore', [AdminEventController::class, 'restore'])->withTrashed()->name('events.restore');
+    Route::delete('/events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
+    Route::delete('/events/{event}/force', [AdminEventController::class, 'forceDestroy'])->withTrashed()->name('events.force-destroy');
     Route::get('/exhibitions', [ExhibitionController::class, 'index'])->name('exhibitions.index');
     Route::get('/exhibitions/trash', [ExhibitionController::class, 'trash'])->name('exhibitions.trash');
     Route::get('/exhibitions/create', [ExhibitionController::class, 'create'])->name('exhibitions.create');
@@ -242,8 +248,11 @@ Route::get('/community', function () { return view('pages.community'); })->name(
 Route::get('/community/notice', function () { return view('pages.community-notice'); })->name('community.notice');
 Route::get('/community/membership', function () { return view('pages.community-membership'); })->name('community.membership');
 Route::get('/community/exchange', function () { return view('pages.community-exchange'); })->name('community.exchange');
-
-Route::get('/event', function () { return view('pages.event'); })->name('event');
+// 이벤트 페이지 관련
+Route::get('/event', [EventController::class, 'index'])->name('event.index');
+Route::get('/event/more', [EventController::class, 'loadMore'])->name('event.more');
+Route::post('/event/{event}/participate', [EventController::class, 'participate'])->name('event.participate.submit')->middleware('auth');
+Route::delete('/event/{event}/participate', [EventController::class, 'cancelParticipation'])->name('event.participate.cancel')->middleware('auth');
 Route::get('/event/participate', function () { return view('pages.event-participate'); })->name('event.participate');
 
 Route::get('/exhibition', function () { return view('pages.exhibition'); })->name('exhibition');

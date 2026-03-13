@@ -29,13 +29,14 @@ class StoreEventRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:120'],
             'slug' => ['required', 'string', 'max:160', Rule::unique('events', 'slug')],
-            'status' => ['required', Rule::in(Event::STATUSES)],
-            'banner_image_url' => ['nullable', 'url', 'max:2048'],
+            'type' => ['required', Rule::in(Event::TYPES)],
+            'banner_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
             'summary' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'start_at' => ['nullable', 'date'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'is_hero' => ['nullable', 'boolean'],
         ];
     }
 
@@ -49,13 +50,14 @@ class StoreEventRequest extends FormRequest
         return [
             'title' => '이벤트명',
             'slug' => '슬러그',
-            'status' => '상태',
-            'banner_image_url' => '배너 이미지 URL',
+            'type' => '이벤트 유형',
+            'banner_image' => '배너 이미지',
             'summary' => '요약',
             'description' => '상세 설명',
             'start_at' => '시작 일시',
             'end_at' => '종료 일시',
             'sort_order' => '정렬 순서',
+            'is_hero' => '히어로 영역 노출',
         ];
     }
 
@@ -73,13 +75,13 @@ class StoreEventRequest extends FormRequest
         $this->merge([
             'title' => $title,
             'slug' => $slug,
-            'status' => trim((string) $this->input('status')),
-            'banner_image_url' => $this->normalizeNullableText($this->input('banner_image_url')),
+            'type' => trim((string) $this->input('type')),
             'summary' => $this->normalizeNullableText($this->input('summary')),
             'description' => $this->normalizeNullableText($this->input('description')),
             'start_at' => $this->normalizeNullableText($this->input('start_at')),
             'end_at' => $this->normalizeNullableText($this->input('end_at')),
             'sort_order' => $this->normalizeSortOrder($this->input('sort_order')),
+            'is_hero' => $this->boolean('is_hero'),
         ]);
     }
 

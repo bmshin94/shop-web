@@ -129,4 +129,12 @@ class Member extends Authenticatable
     {
         return $this->hasMany(Inquiry::class);
     }
+
+    /**
+     * 회원의 이벤트 참여 목록
+     */
+    public function eventParticipations()
+    {
+        return $this->hasMany(EventParticipation::class);
+    }
 }

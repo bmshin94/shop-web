@@ -21,6 +21,30 @@ class EventController extends Controller
     }
 
     /**
+     * 당첨자 등록을 위한 회원 검색 (AJAX)
+     */
+    public function searchMembers(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $keyword = $request->query('keyword');
+
+        if (empty($keyword)) {
+            return response()->json([]);
+        }
+
+        $members = \App\Models\Member::query()
+            ->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('phone', 'like', "%{$keyword}%");
+            })
+            ->active()
+            ->limit(10)
+            ->get(['id', 'name', 'email']);
+
+        return response()->json($members);
+    }
+
+    /**
      * 관리자 이벤트 목록을 조회한다.
      *
      * @param  Request  $request
@@ -31,18 +55,21 @@ class EventController extends Controller
         $filters = $request->only([
             'search',
             'status',
+            'type',
             'start_from',
             'start_to',
         ]);
 
         $events = $this->eventManagementService->paginateEvents($filters, self::DEFAULT_PER_PAGE);
+        $events->appends($request->all()); // 검색 조건 유지! ✨
         $stats = $this->eventManagementService->getSummaryStats();
 
         return view('admin.events.index', [
             'events' => $events,
             'stats' => $stats,
             'trashedEventsCount' => Event::onlyTrashed()->count(),
-            'statusOptions' => Event::STATUSES,
+            'statusOptions' => ['진행중', '진행예정', '종료'],
+            'typeOptions' => Event::TYPES,
         ]);
     }
 
@@ -53,9 +80,7 @@ class EventController extends Controller
      */
     public function create(): View
     {
-        return view('admin.events.create', [
-            'statusOptions' => Event::STATUSES,
-        ]);
+        return view('admin.events.create');
     }
 
     /**
@@ -83,7 +108,6 @@ class EventController extends Controller
     {
         return view('admin.events.edit', [
             'event' => $event,
-            'statusOptions' => Event::STATUSES,
         ]);
     }
 
@@ -99,8 +123,61 @@ class EventController extends Controller
         $this->eventManagementService->updateEvent($event, $request->validated());
 
         return redirect()
-            ->route('admin.events.edit', $event)
+            ->route('admin.events.edit', array_merge(['event' => $event->id], $request->query()))
             ->with('success', '이벤트 정보가 업데이트되었습니다.');
+    }
+
+    /**
+     * 히어로 영역 노출 여부를 토글한다.
+     */
+    public function toggleHero(Request $request, Event $event): \Illuminate\Http\JsonResponse
+    {
+        $isHero = $request->boolean('is_hero');
+        $this->eventManagementService->updateEvent($event, ['is_hero' => $isHero]);
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * 이벤트 응모자 목록을 조회한다.
+     */
+    public function participants(Event $event): View
+    {
+        $participants = $event->participations()
+            ->with('member')
+            ->latest()
+            ->paginate(20);
+
+        $participants->appends(request()->all()); // 검색 조건 유지! ✨
+
+        // 현재 당첨자 ID 목록 조회
+        $winnerIds = $event->winners()->pluck('members.id')->toArray();
+
+        return view('admin.events.participants', compact('event', 'participants', 'winnerIds'));
+    }
+
+    /**
+     * 이벤트 응모자 목록을 CSV로 내보낸다.
+     */
+    public function exportParticipants(Event $event)
+    {
+        // ... (기존 코드와 동일)
+    }
+
+    /**
+     * 응모자 중에서 당첨 여부를 토글한다.
+     */
+    public function toggleParticipantWinner(Request $request, Event $event, \App\Models\Member $member): \Illuminate\Http\JsonResponse
+    {
+        $isWinner = $request->boolean('is_winner');
+
+        if ($isWinner) {
+            $event->winners()->syncWithoutDetaching([$member->id]);
+        } else {
+            $event->winners()->detach($member->id);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -131,15 +208,18 @@ class EventController extends Controller
         $filters = $request->only([
             'search',
             'status',
+            'type',
             'start_from',
             'start_to',
         ]);
 
         $events = $this->eventManagementService->paginateTrashedEvents($filters, self::DEFAULT_PER_PAGE);
+        $events->appends($request->all()); // 검색 조건 유지! ✨
 
         return view('admin.events.trash', [
             'events' => $events,
-            'statusOptions' => Event::STATUSES,
+            'statusOptions' => ['진행중', '진행예정', '종료'],
+            'typeOptions' => Event::TYPES,
         ]);
     }
 

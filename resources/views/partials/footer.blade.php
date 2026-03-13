@@ -9,7 +9,7 @@
           <span class="text-lg font-bold text-text-main">Active Women</span>
         </div>
         <p class="mb-6 text-sm leading-relaxed text-text-muted break-keep">
-          프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브 라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.
+          {{ $siteSettings['footer_description'] ?? '프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브 라이프스타일. 퍼포먼스를 위한 디자인, 당신을 위한 스타일.' }}
         </p>
         <div class="flex gap-4">
           <a class="text-text-muted hover:text-primary" href="#"><span class="material-symbols-outlined">thumb_up</span></a>
@@ -53,11 +53,11 @@
     <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
       <div class="grid md:grid-cols-2 gap-4">
         <div>
-          <p class="font-bold text-text-main mb-2">(주)액티브우먼</p>
-          <p>대표이사: 김액티브 | 사업자등록번호: 123-45-67890</p>
-          <p>통신판매업신고: 2024-서울강남-1234 | 개인정보관리책임자: 이담당</p>
-          <p>주소: 서울특별시 강남구 테헤란로 123, 액티브타워 10층</p>
-          <p class="mt-2">고객센터: 1544-0000 (평일 09:00 - 18:00)</p>
+          <p class="font-bold text-text-main mb-2">{{ $siteSettings['company_name'] ?? '(주)액티브우먼' }}</p>
+          <p>대표이사: {{ $siteSettings['ceo_name'] ?? '김액티브' }} | 사업자등록번호: {{ $siteSettings['business_number'] ?? '123-45-67890' }}</p>
+          <p>통신판매업신고: {{ $siteSettings['ecommerce_number'] ?? '2024-서울강남-1234' }} | 개인정보관리책임자: {{ $siteSettings['privacy_officer'] ?? '이담당' }}</p>
+          <p>주소: {{ $siteSettings['address'] ?? '서울특별시 강남구 테헤란로 123, 액티브타워 10층' }}</p>
+          <p class="mt-2">고객센터: {{ $siteSettings['customer_center'] ?? '1544-0000 (평일 09:00 - 18:00)' }}</p>
         </div>
         <div class="md:text-right flex flex-col justify-between">
           <div class="flex gap-2 justify-start md:justify-end mb-2">

@@ -24,8 +24,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
 
-        // 모든 뷰에서 카테고리 데이터를 사용할 수 있도록 공유합니다. 
+        // 모든 뷰에서 카테고리 데이터 및 사이트 설정 데이터를 사용할 수 있도록 공유합니다. 
         View::composer('*', function ($view) {
+            // 1. 카테고리 로드
             $categories = Category::active()
                 ->onlyParents()
                 ->with(['children' => function ($query) {
@@ -34,7 +35,11 @@ class AppServiceProvider extends ServiceProvider
                 ->orderBy('sort_order')
                 ->get();
             
-            $view->with('globalCategories', $categories);
+            // 2. 사이트 설정 로드 (캐싱을 적용하면 성능에 좋지만, 일단 모델에서 바로 호출)
+            $siteSettings = \App\Models\SiteSetting::pluck('setting_value', 'setting_key')->toArray();
+            
+            $view->with('globalCategories', $categories)
+                 ->with('siteSettings', $siteSettings);
         });
     }
 }

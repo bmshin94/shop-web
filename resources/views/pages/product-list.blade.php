@@ -236,12 +236,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- Footer --}}
-        <div class="p-6 bg-gray-50 border-t border-gray-100 flex gap-3">
-            <button onclick="location.href='{{ url()->current() }}'" class="flex-1 h-12 rounded-xl bg-white border border-gray-200 text-sm font-bold text-text-muted shadow-sm">초기화</button>
-            <button id="filter-drawer-close-btn" class="flex-1 h-12 rounded-xl bg-text-main text-sm font-bold text-white shadow-lg">결과 보기</button>
-        </div>
     </div>
 </div>
 @endsection
@@ -272,7 +266,7 @@ $(document).ready(function() {
     }
 
     $('#btn-mobile-filter').on('click', openFilterDrawer);
-    $('#filter-drawer-close, #filter-drawer-overlay, #filter-drawer-close-btn').on('click', closeFilterDrawer);
+    $('#filter-drawer-close, #filter-drawer-overlay').on('click', closeFilterDrawer);
 
     const $activeFiltersContainer = $('#active-filters');
     

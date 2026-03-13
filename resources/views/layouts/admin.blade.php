@@ -313,6 +313,15 @@
                 disableMobile: "true",
                 animate: true
             });
+            
+            flatpickr(".datepicker-datetime", {
+                locale: "ko",
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                disableMobile: "true",
+                animate: true
+            });
         }
 
         function showAlert(message, title = "알림", icon = "info") { $('#alert-title').text(title); $('#alert-message').html(message); $('#alert-icon').text(icon); $('#alert-modal').removeClass('hidden').addClass('flex'); $('body').addClass('overflow-hidden'); }

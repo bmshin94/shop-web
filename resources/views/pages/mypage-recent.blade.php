@@ -87,11 +87,10 @@
                                         <a href="{{ route('product-detail', ['slug' => $product->slug]) }}">{{ $product->name }}</a>
                                     </h4>
                                     @if($product->brief_description)
-                                    <p class="text-[11px] text-text-muted mt-1 line-clamp-1 opacity-70">
+                                    <p class="text-[11px] text-text-muted mt-1 line-clamp-1 opacity-70 whitespace-pre-wrap">
                                         {{ $product->brief_description }}
                                     </p>
                                     @endif
-
                                     {{-- 컬러 옵션 --}}
                                     @if($product->colors->count() > 0)
                                     <div class="flex gap-1 py-1 mt-2">

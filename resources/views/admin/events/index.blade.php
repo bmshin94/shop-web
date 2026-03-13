@@ -7,13 +7,13 @@
     .event-row {
         display: grid;
         align-items: center;
-        grid-template-columns: 1.5fr 0.8fr 1fr 0.6fr;
+        grid-template-columns: 1.5fr 0.5fr 0.6fr 0.5fr 0.6fr 1fr 0.4fr;
         gap: 12px;
     }
 
     @media (min-width: 1024px) {
         .event-row {
-            grid-template-columns: 1.7fr 0.9fr 1.1fr 0.7fr 180px;
+            grid-template-columns: 1.7fr 0.6fr 0.7fr 0.6fr 0.7fr 1.1fr 0.5fr 180px;
             gap: 16px;
         }
     }
@@ -25,13 +25,14 @@
     $activeFilterCount = collect([
         request('search'),
         request('status'),
+        request('type'),
         request('start_from'),
         request('start_to'),
     ])->filter(fn ($value) => filled($value))->count();
 @endphp
 
 <div class="space-y-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 lg:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <div class="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
@@ -68,20 +69,11 @@
             </div>
             <p class="text-3xl font-black text-text-main">{{ number_format($stats['ended_events']) }}</p>
         </div>
-        <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-                <div class="size-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-[28px]">visibility_off</span>
-                </div>
-                <span class="text-[11px] font-bold text-text-muted uppercase">비노출</span>
-            </div>
-            <p class="text-3xl font-black text-text-main">{{ number_format($stats['hidden_events']) }}</p>
-        </div>
     </div>
 
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
         <form action="{{ route('admin.events.index') }}" method="GET" class="space-y-4">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 <div class="lg:col-span-2 relative">
                     <span class="material-symbols-outlined absolute left-3 top-3 text-text-muted text-[18px]">search</span>
                     <input
@@ -96,6 +88,15 @@
                         <option value="">모든 상태</option>
                         @foreach($statusOptions as $status)
                             <option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>{{ $status }}</option>
+                        @endforeach
+                    </select>
+                    <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>
+                </div>
+                <div class="relative">
+                    <select name="type" class="w-full px-4 py-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 appearance-none outline-none">
+                        <option value="">모든 유형</option>
+                        @foreach($typeOptions as $type)
+                            <option value="{{ $type }}" {{ request('type') === $type ? 'selected' : '' }}>{{ $type }}</option>
                         @endforeach
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>
@@ -145,7 +146,10 @@
 
         <div class="hidden lg:grid event-row px-6 py-4 bg-gray-50/70 border-b border-gray-100">
             <div class="text-[11px] font-bold text-text-muted uppercase">이벤트 정보</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">유형</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">상태</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">응모자</div>
+            <div class="text-center text-[11px] font-bold text-text-muted uppercase">히어로</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">기간</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">정렬</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
@@ -155,7 +159,7 @@
             @forelse($events as $event)
                 <div class="event-row px-4 lg:px-6 py-4 hover:bg-gray-50/60 transition-colors">
                     <div class="min-w-0">
-                        <a href="{{ route('admin.events.edit', $event) }}" class="text-sm font-extrabold text-text-main hover:text-primary transition-colors block truncate">
+                        <a href="{{ route('admin.events.edit', array_merge(['event' => $event->id], request()->query())) }}" class="text-sm font-extrabold text-text-main hover:text-primary transition-colors block truncate">
                             {{ $event->title }}
                         </a>
                         <p class="mt-1 text-[12px] font-bold text-text-muted truncate">/{{ $event->slug }}</p>
@@ -163,15 +167,41 @@
                     </div>
 
                     <div class="text-left lg:text-center">
+                        <span class="px-2 py-1 {{ $event->type === '응모형' ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500' }} text-[10px] font-bold rounded-md">
+                            {{ $event->type }}
+                        </span>
+                    </div>
+
+                    <div class="text-left lg:text-center">
                         <x-admin.status-badge type="event" :value="$event->status" />
                     </div>
 
                     <div class="text-left lg:text-center">
+                        @if($event->type === '응모형')
+                        <a href="{{ route('admin.events.participants', array_merge(['event' => $event->id], request()->query())) }}" class="text-sm font-black text-primary hover:underline">
+                            {{ number_format($event->participations_count ?? 0) }}명
+                        </a>
+                        @else
+                        <span class="text-sm font-bold text-gray-300">-</span>
+                        @endif
+                    </div>
+
+                    <div class="flex justify-center">
+                        <label class="relative inline-flex items-center cursor-pointer group">
+                            <input type="checkbox" 
+                                   class="sr-only peer js-toggle-hero" 
+                                   data-id="{{ $event->id }}"
+                                   {{ $event->is_hero ? 'checked' : '' }}>
+                            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+
+                    <div class="text-left lg:text-center">
                         <p class="text-[12px] font-bold text-text-main">
-                            {{ optional($event->start_at)->format('Y.m.d H:i') ?: '-' }}
+                            {{ optional($event->start_at)->format('Y.m.d') ?: '-' }}
                         </p>
                         <p class="mt-1 text-[12px] font-bold text-text-muted">
-                            ~ {{ optional($event->end_at)->format('Y.m.d H:i') ?: '-' }}
+                            ~ {{ optional($event->end_at)->format('Y.m.d') ?: '-' }}
                         </p>
                     </div>
 
@@ -180,7 +210,7 @@
                     </div>
 
                     <div class="flex lg:justify-center gap-2">
-                        <a href="{{ route('admin.events.edit', $event) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-[12px] font-bold text-text-main hover:border-primary hover:text-primary transition-colors">
+                        <a href="{{ route('admin.events.edit', array_merge(['event' => $event->id], request()->query())) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-[12px] font-bold text-text-main hover:border-primary hover:text-primary transition-colors">
                             수정
                         </a>
                         <form
@@ -219,3 +249,33 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('.js-toggle-hero').on('change', function() {
+            const $this = $(this);
+            const id = $this.data('id');
+            const isHero = $this.is(':checked');
+
+            $.ajax({
+                url: `/admin/events/${id}/toggle-hero`,
+                method: 'PATCH',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    is_hero: isHero ? 1 : 0
+                },
+                success: function(res) {
+                    if (res.success) {
+                        showToast(isHero ? '히어로 영역에 노출되었습니다.' : '히어로 영역 노출이 해제되었습니다.');
+                    }
+                },
+                error: function() {
+                    $this.prop('checked', !isHero); // Revert on error
+                    showAlert('상태 변경 중 오류가 발생했습니다.', '오류', 'error');
+                }
+            });
+        });
+    });
+</script>
+@endpush

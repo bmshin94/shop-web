@@ -193,14 +193,14 @@
         $mobileMenu.removeClass('hidden');
         setTimeout(() => {
           $menuOverlay.removeClass('opacity-0').addClass('opacity-100');
-          $menuContent.removeClass('translate-x-full').addClass('translate-x-0');
+          $menuContent.removeClass('-translate-x-full').addClass('translate-x-0');
         }, 10);
         $('body').addClass('overflow-hidden');
       });
 
       const closeMobileMenu = () => {
         $menuOverlay.removeClass('opacity-100').addClass('opacity-0');
-        $menuContent.removeClass('translate-x-0').addClass('translate-x-full');
+        $menuContent.removeClass('translate-x-0').addClass('-translate-x-full');
         setTimeout(() => {
           $mobileMenu.addClass('hidden');
           $('body').removeClass('overflow-hidden');

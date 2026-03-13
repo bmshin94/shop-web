@@ -14,7 +14,7 @@
     </nav>
 
     <!-- Page Title -->
-    <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">마이페이지</h2>
+    <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">회원정보 수정</h2>
 
     <div class="flex flex-col lg:flex-row gap-8 items-start">
         <!-- LNB (Left Navigation Bar) -->
@@ -22,8 +22,8 @@
 
         <!-- Main Dashboard Content -->
         <div class="flex-1 w-full space-y-8">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 lg:p-12 mb-8 max-w-3xl mx-auto">
-                <div class="text-center mb-10">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 lg:p-10 mb-8 max-w-3xl mx-auto">
+                <div class="text-center py-10">
                     <div class="size-16 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-6">
                         <span class="material-symbols-outlined text-4xl text-primary">lock</span>
                     </div>
@@ -31,7 +31,7 @@
                     <p class="text-text-muted text-sm leading-relaxed">고객님의 소중한 개인정보를 보호하기 위해<br>비밀번호를 다시 한번 확인합니다. ✨</p>
                 </div>
                 
-                <form id="confirmForm" class="space-y-6 text-left">
+                <form id="confirmForm" class="space-y-6 text-left border-t border-gray-50 pt-10">
                     @csrf
                     <div>
                         <label class="block text-xs font-black text-text-muted uppercase mb-2 tracking-tighter">이메일 (아이디)</label>

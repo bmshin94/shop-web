@@ -25,7 +25,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
                 
                 <!-- Tabs -->
-                <div class="flex border-b border-gray-200 mb-8 relative">
+                <div class="flex border-b border-gray-200 mb-4 relative">
                     <button id="tabBtnAvailable" onclick="switchTab('available')" class="pb-3 px-6 text-sm font-bold border-b-2 border-primary text-primary transition-colors">
                         작성 가능한 리뷰 <span class="badge ml-1 bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full inline-flex leading-none align-middle items-center justify-center">{{ $availableReviews->total() }}</span>
                     </button>

@@ -31,6 +31,11 @@ class Member extends Authenticatable
         'avatar',
         'last_login_at',
         'email_verified_at',
+        'postal_code',
+        'address_line1',
+        'address_line2',
+        'marketing_sms',
+        'marketing_email',
     ];
 
     protected $hidden = [

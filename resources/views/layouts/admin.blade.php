@@ -173,8 +173,8 @@
     @php
         $operatorId = session('admin_operator_id');
         $currentOperator = is_numeric($operatorId) ? \App\Models\Operator::query()->find((int) $operatorId) : null;
-        $canAccessMenu = static function (string $menuKey) use ($currentOperator): bool {
-            if (! $currentOperator) { return true; }
+        $canAccessMenu = static function (?string $menuKey) use ($currentOperator): bool {
+            if (! $currentOperator || ! $menuKey) { return true; }
             return $currentOperator->hasMenuAccess($menuKey);
         };
     @endphp

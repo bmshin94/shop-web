@@ -11,6 +11,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController; // 사용자용 EventController 추가! ✨
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\OotdController;
+use App\Http\Controllers\SupportController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
@@ -21,6 +24,10 @@ use App\Http\Controllers\Admin\AdminMenuController;
 use App\Http\Controllers\Admin\OperatorController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\MagazineController as AdminMagazineController;
+use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
+use App\Http\Controllers\Admin\OotdController as AdminOotdController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\InquiryController; // InquiryController 추가! ✨
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
@@ -143,6 +150,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/sizes/groups/{group}', [SizeController::class, 'updateGroup'])->name('sizes.groups.update');
     Route::delete('/sizes/groups/{group}', [SizeController::class, 'destroyGroup'])->name('sizes.groups.destroy');
 
+    // 매거진 관리 라우트 ✨💖
+    Route::resource('/magazines', AdminMagazineController::class)->names('magazines');
+    Route::resource('/notices', AdminNoticeController::class)->names('notices');
+    Route::resource('/ootds', AdminOotdController::class)->names('ootds');
+    Route::resource('/faqs', AdminFaqController::class)->names('faqs');
+
     // 메뉴 관리 라우트
     Route::resource('/menus', AdminMenuController::class)->names('menus');
 
@@ -207,6 +220,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/coupon', [MemberController::class, 'couponList'])->name('mypage.coupon');
     Route::post('/mypage/coupon/register', [MemberController::class, 'registerCoupon'])->name('mypage.coupon.register');
     Route::get('/mypage/point', [MemberController::class, 'pointList'])->name('mypage.point');
+
+    // OOTD 등록, 좋아요, 수정, 삭제 ✨💖
+    Route::get('/community/ootd/create', [OotdController::class, 'create'])->name('ootd.create');
+    Route::post('/community/ootd', [OotdController::class, 'store'])->name('ootd.store');
+    Route::post('/community/ootd/{ootd}/like', [OotdController::class, 'toggleLike'])->name('ootd.like');
+    Route::get('/community/ootd/{ootd}/edit', [OotdController::class, 'edit'])->name('ootd.edit');
+    Route::put('/community/ootd/{ootd}', [OotdController::class, 'update'])->name('ootd.update');
+    Route::delete('/community/ootd/{ootd}', [OotdController::class, 'destroy'])->name('ootd.destroy');
 });
 
 
@@ -246,13 +267,17 @@ Route::middleware('guest')->group(function () {
 });
 
 // 공통 페이지 (인증 여부와 상관없이 접근 가능)
-Route::get('/support', function () { return view('pages.support'); })->name('support');
-Route::get('/support/notice', function () { return view('pages.support-notice'); })->name('support.notice');
+Route::get('/support', [SupportController::class, 'index'])->name('support');
+Route::get('/support/notice', [SupportController::class, 'notices'])->name('support.notice');
 Route::get('/support/membership', function () { return view('pages.support-membership'); })->name('support.membership');
 Route::get('/support/exchange', function () { return view('pages.support-exchange'); })->name('support.exchange');
 
-Route::get('/community', function () { return view('pages.community'); })->name('community');
+Route::get('/community', [CommunityController::class, 'index'])->name('community');
+Route::get('/community/magazine/more', [CommunityController::class, 'moreMagazines'])->name('magazine.more-data');
+Route::get('/community/ootd/more', [CommunityController::class, 'moreOotds'])->name('ootd.more-data');
+Route::get('/community/notice/more', [CommunityController::class, 'moreNotices'])->name('notice.more-data'); // 공지사항 더보기 추가! ✨
 Route::get('/community/notice', function () { return view('pages.community-notice'); })->name('community.notice');
+
 Route::get('/community/membership', function () { return view('pages.community-membership'); })->name('community.membership');
 Route::get('/community/exchange', function () { return view('pages.community-exchange'); })->name('community.exchange');
 // 이벤트 페이지 관련

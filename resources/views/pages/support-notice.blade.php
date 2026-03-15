@@ -48,13 +48,31 @@
             </div>
 
             <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
-                <ul class="divide-y divide-gray-100" id="notice-list"></ul>
+                <ul class="divide-y divide-gray-100" id="notice-list">
+                    @forelse($notices as $notice)
+                    <li onclick="openNotice({{ json_encode(['title' => $notice->title, 'date' => ($notice->published_at ? $notice->published_at->format('Y.m.d') : $notice->created_at->format('Y.m.d')), 'content' => $notice->content]) }})" 
+                        class="py-6 px-8 flex justify-between items-center hover:bg-gray-50 cursor-pointer group transition-all {{ $notice->is_important ? 'bg-primary/5' : '' }}">
+                        <div class="flex items-center gap-4">
+                            @if($notice->is_important)
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-primary text-white">중요</span>
+                            @else
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500">{{ $notice->type }}</span>
+                            @endif
+                            <span class="font-bold text-text-main group-hover:text-primary transition-colors">{{ $notice->title }}</span>
+                        </div>
+                        <span class="text-gray-400 text-sm font-medium">{{ $notice->published_at ? $notice->published_at->format('Y.m.d') : $notice->created_at->format('Y.m.d') }}</span>
+                    </li>
+                    @empty
+                    <li class="py-20 text-center text-text-muted">
+                        등록된 공지사항이 없습니다. ✨
+                    </li>
+                    @endforelse
+                </ul>
             </div>
 
             <!-- Pagination -->
-            <div class="mt-12 flex justify-center gap-2">
-                <button class="size-10 rounded-xl border border-gray-200 flex items-center justify-center text-primary font-bold bg-primary-light">1</button>
-                <button class="size-10 rounded-xl border border-transparent text-text-muted hover:bg-gray-50 font-bold transition-all">2</button>
+            <div class="mt-12">
+                {{ $notices->links('vendor.pagination.tailwind') }}
             </div>
         </div>
     </div>
@@ -68,49 +86,33 @@
             <button onclick="closeModal()" class="text-gray-400 hover:text-text-main"><span class="material-symbols-outlined">close</span></button>
         </div>
         <p id="noticeMDate" class="text-xs text-gray-400 mb-8 pb-4 border-b border-gray-50"></p>
-        <div class="text-sm text-text-main leading-relaxed space-y-4">
-            <p>안녕하세요. Active Women입니다. </p>
-            <p>항상 저희를 아껴주시는 고객님들을 위해 준비한 공지사항입니다! 내용을 잘 확인해 주시길 바랄게요. </p>
-        </div>
-        <button onclick="closeModal()" class="w-full mt-10 py-4 bg-gray-100 text-text-main font-bold rounded-2xl">확인</button>
+        <div id="noticeMContent" class="text-sm text-text-main leading-relaxed space-y-4 whitespace-pre-wrap"></div>
+        <button onclick="closeModal()" class="w-full mt-10 py-4 bg-gray-100 text-text-main font-bold rounded-2xl hover:bg-gray-200 transition-all">확인</button>
     </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
-    const nots = [
-        { type: "공지", title: "개인정보처리방침 개정 안내", date: "2026.03.01" },
-        { type: "일반", title: "스토어 앱 v2.1.0 업데이트 안내", date: "2026.02.26" },
-        { type: "안내", title: "삼일절 고객센터 휴무 안내", date: "2026.02.20" },
-        { type: "공지", title: "신규 결제 수단 런칭 이벤트", date: "2026.02.10" },
-        { type: "안내", title: "설 연휴 배송 일정 공지", date: "2026.01.25" }
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const list = document.getElementById('notice-list');
-        if (list) {
-            list.innerHTML = nots.map(n => `
-                <li onclick="openNotice('${n.title}', '${n.date}')" class="py-6 px-8 flex justify-between hover:bg-gray-50 cursor-pointer group transition-all">
-                    <div class="flex items-center gap-4">
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500">${n.type}</span>
-                        <span class="font-bold text-text-main group-hover:text-primary transition-colors">${n.title}</span>
-                    </div>
-                    <span class="text-gray-400 text-sm font-medium">${n.date}</span>
-                </li>
-            `).join('');
-        }
-    });
-
-    function openNotice(t, d) {
-        document.getElementById('noticeMTitle').innerText = t;
-        document.getElementById('noticeMDate').innerText = d;
+    function openNotice(data) {
+        document.getElementById('noticeMTitle').innerText = data.title;
+        document.getElementById('noticeMDate').innerText = data.date;
+        document.getElementById('noticeMContent').innerHTML = data.content || '내용이 없습니다.';
+        
         const m = document.getElementById('noticeModal');
-        m.classList.remove('hidden'); m.classList.add('flex');
+        m.classList.remove('hidden'); 
+        m.classList.add('flex');
     }
+
     function closeModal() {
         const m = document.getElementById('noticeModal');
-        m.classList.add('hidden'); m.classList.remove('flex');
+        m.classList.add('hidden'); 
+        m.classList.remove('flex');
+    }
+
+    // 모달 외부 클릭 시 닫기 ✨
+    window.onclick = (e) => {
+        if(e.target.id === 'noticeModal') closeModal();
     }
 </script>
 @endpush

@@ -464,8 +464,11 @@ class MemberService
     public function createInquiry(Member $member, array $data): Inquiry
     {
         return $member->inquiries()->create([
+            'product_id' => $data['product_id'] ?? null,
             'title' => $data['title'],
             'content' => $data['content'],
+            'is_private' => $data['is_private'] ?? false, // 비밀글 설정! 🔒✨
+            'images' => $data['images'] ?? null,
             'status' => '답변대기'
         ]);
     }

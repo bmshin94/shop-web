@@ -372,6 +372,16 @@ $(document).ready(function() {
         window.location.href = window.location.pathname + '?' + urlParams.toString();
     });
 
+    // 검색어 하이라이트 처리 ✨🌈
+    const keyword = "{{ $keyword ?? '' }}";
+    if (keyword) {
+        $('.product-card-name').each(function() {
+            const name = $(this).text();
+            const highlighted = name.replace(new RegExp(keyword, 'gi'), match => `<mark class="bg-primary/10 text-primary p-0">${match}</mark>`);
+            $(this).html(highlighted);
+        });
+    }
+
     applyFilters();
 });
 </script>

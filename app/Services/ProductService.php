@@ -140,7 +140,7 @@ class ProductService
      */
     public function getProductDetail(string $slug): array
     {
-        $product = Product::with(['category.parent', 'colors', 'images', 'reviews.member', 'sizes.group', 'relatedProducts'])
+        $product = Product::with(['category.parent', 'colors', 'images', 'reviews.member', 'sizes.group', 'relatedProducts', 'inquiries.member'])
             ->withCount('reviews')
             ->withAvg('reviews', 'rating')
             ->where('slug', $slug)
@@ -183,5 +183,132 @@ class ProductService
             'product' => $product,
             'relatedProducts' => $relatedProducts,
         ];
+    }
+
+    /**
+     * 통합 검색 처리 ✨🔍💖
+     */
+    public function searchProducts(Request $request): array
+    {
+        $keyword = $request->query('q');
+        $categorySlug = $request->query('category');
+        $selectedColors = $request->query('colors', []);
+        $selectedPrices = $request->query('price_range', []);
+        $sort = $request->query('sort', 'latest');
+
+        $query = Product::with(['category', 'images', 'colors'])->selling();
+
+        // 1. 검색어 기본 필터링 🔍
+        if ($keyword) {
+            $this->logSearchKeyword($keyword);
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                  ->orWhere('brief_description', 'like', "%{$keyword}%")
+                  ->orWhereHas('category', function ($cq) use ($keyword) {
+                      $cq->where('name', 'like', "%{$keyword}%");
+                  });
+            });
+        }
+
+        // 2. 카테고리 필터 ✨
+        if ($categorySlug) {
+            $category = Category::where('slug', $categorySlug)->first();
+            if ($category) {
+                if ($category->level === 1) {
+                    $categoryIds = array_merge([$category->id], $category->children()->pluck('id')->toArray());
+                    $query->whereIn('category_id', $categoryIds);
+                } else {
+                    $query->where('category_id', $category->id);
+                }
+            }
+        }
+
+        // 3. 색상 필터 ✨
+        if (!empty($selectedColors)) {
+            $query->whereHas('colors', function ($q) use ($selectedColors) {
+                $q->whereIn('colors.name', $selectedColors);
+            });
+        }
+
+        // 4. 가격 필터 ✨
+        if (!empty($selectedPrices)) {
+            $query->where(function ($q) use ($selectedPrices) {
+                foreach ($selectedPrices as $range) {
+                    if (str_contains($range, '~') && !str_contains($range, '+')) {
+                        $parts = explode('~', $range);
+                        $minVal = (int)filter_var($parts[0], FILTER_SANITIZE_NUMBER_INT) * 10000;
+                        $maxVal = (int)filter_var($parts[1], FILTER_SANITIZE_NUMBER_INT) * 10000;
+                        $q->orWhereBetween('price', [$minVal, $maxVal]);
+                    } elseif (str_contains($range, '이상')) {
+                        $val = (int)filter_var($range, FILTER_SANITIZE_NUMBER_INT) * 10000;
+                        $q->orWhere('price', '>=', $val);
+                    }
+                }
+            });
+        }
+
+        // 5. 정렬 처리
+        switch ($sort) {
+            case 'price_low': $query->orderBy('price', 'asc'); break;
+            case 'price_high': $query->orderBy('price', 'desc'); break;
+            case 'popular': $query->withCount('reviews')->orderBy('reviews_count', 'desc'); break;
+            default: $query->latest(); break;
+        }
+
+        $products = $query->paginate(12)->withQueryString();
+
+        return [
+            'products' => $products,
+            'pageTitle' => "SEARCH RESULT: \"{$keyword}\"",
+            'keyword' => $keyword,
+            'categorySlug' => $categorySlug,
+            'selectedColors' => $selectedColors,
+            'selectedPrices' => $selectedPrices,
+            'sort' => $sort,
+            'breadcrumb' => [
+                ['name' => 'Home', 'url' => route('home')],
+                ['name' => 'Search', 'url' => '#'],
+            ]
+        ];
+    }
+
+    /**
+     * 실시간 검색 제안 (Autocomplete) ✨🚀
+     */
+    public function getSearchSuggestions(string $keyword)
+    {
+        if (empty($keyword)) return collect();
+
+        return Product::selling()
+            ->where('name', 'like', "%{$keyword}%")
+            ->latest()
+            ->take(5)
+            ->get(['id', 'name', 'slug', 'sale_price', 'price']);
+    }
+
+    /**
+     * 검색어 로그 저장 ✨📝
+     */
+    private function logSearchKeyword(string $keyword)
+    {
+        if (empty($keyword)) return;
+
+        \App\Models\SearchLog::create([
+            'keyword' => trim($keyword),
+            'member_id' => auth()->id(),
+            'ip_address' => request()->ip(),
+        ]);
+    }
+
+    /**
+     * 인기 검색어 조회 🔥📈
+     */
+    public function getPopularKeywords(int $limit = 5)
+    {
+        return \App\Models\SearchLog::select('keyword', \Illuminate\Support\Facades\DB::raw('count(*) as count'))
+            ->groupBy('keyword')
+            ->orderByDesc('count')
+            ->take($limit)
+            ->get();
     }
 }

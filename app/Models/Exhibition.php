@@ -38,6 +38,16 @@ class Exhibition extends Model
     ];
 
     /**
+     * 진행 중인 기획전만 조회하는 스코프 ✨💖
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', '진행중')
+            ->where('start_at', '<=', now())
+            ->where('end_at', '>=', now());
+    }
+
+    /**
      * 기획전에 포함된 상품 목록
      */
     public function products()

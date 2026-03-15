@@ -78,6 +78,14 @@ class Product extends Model
     }
 
     /**
+     * 상품의 문의 목록 ✨💖
+     */
+    public function inquiries()
+    {
+        return $this->hasMany(Inquiry::class);
+    }
+
+    /**
      * 상품의 리뷰 목록
      */
     public function reviews()

@@ -14,7 +14,7 @@
       <span class="flex items-center gap-1 text-text-main">
         <span class="font-black text-primary">{{ Auth::user()->name }}</span>님 환영합니다
       </span>
-      <a class="hover:text-primary transition-colors flex items-center gap-1" href="{{ route('mypage') }}">
+      <a class="hover:text-primary transition-colors flex items-center gap-1 {{ request()->is('mypage*') ? 'text-primary' : '' }}" href="{{ route('mypage') }}">
         <span class="material-symbols-outlined text-[14px]">person</span> 마이페이지
       </a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
@@ -24,7 +24,7 @@
         <span class="material-symbols-outlined text-[14px]">logout</span> 로그아웃
       </a>
       @endauth
-      <a class="hover:text-primary transition-colors flex items-center gap-1" href="/support">
+      <a class="hover:text-primary transition-colors flex items-center gap-1 {{ request()->is('support*') ? 'text-primary' : '' }}" href="/support">
         <span class="material-symbols-outlined text-[14px]">help</span> 고객센터
       </a>
     </div>
@@ -49,12 +49,27 @@
       </a>
 
       <!-- Search Bar (Desktop) -->
-      <div class="hidden lg:flex items-center relative">
-        <div class="flex w-[280px] xl:w-[320px] items-center rounded-2xl bg-gray-100/80 px-4 py-2.5 transition-all focus-within:ring-4 focus-within:ring-primary/10 hover:bg-gray-200/50 border border-transparent focus-within:border-primary/30 focus-within:bg-white shadow-sm group/search">
+      <div class="hidden lg:flex items-center relative" id="desktopSearchContainer">
+        <form action="{{ route('products.search') }}" method="GET" class="flex w-[280px] xl:w-[320px] items-center rounded-2xl bg-gray-100/80 px-4 py-2.5 transition-all focus-within:ring-4 focus-within:ring-primary/10 hover:bg-gray-200/50 border border-transparent focus-within:border-primary/30 focus-within:bg-white shadow-sm group/search">
           <span class="material-symbols-outlined text-text-muted group-focus-within/search:text-primary transition-colors">search</span>
           <input
+            name="q" id="desktopSearchInput" autocomplete="off"
             class="w-full border-none bg-transparent px-3 text-[13px] font-bold text-text-main placeholder:text-text-muted focus:ring-0"
             placeholder="어떤 스타일을 찾으시나요?" type="text" />
+        </form>
+
+        <!-- 실시간 검색 제안 드롭다운 ✨🚀 -->
+        <div id="desktopSearchSuggestions" class="invisible absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[110] opacity-0 transition-all duration-300 -translate-y-2">
+          <div class="p-4 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+            <span class="text-[10px] font-black text-primary uppercase tracking-widest">Suggestions ✨</span>
+            <span class="text-[9px] text-text-muted">연관 상품 검색 결과</span>
+          </div>
+          <div id="desktopSuggestionList" class="max-h-[400px] overflow-y-auto">
+            <!-- AJAX 결과가 들어갈 자리 😊 -->
+          </div>
+          <div class="p-3 bg-gray-50 text-center">
+            <a href="#" id="viewAllSearch" class="text-[11px] font-bold text-text-muted hover:text-primary transition-colors">전체 결과 보기 🔍</a>
+          </div>
         </div>
       </div>
     </div>
@@ -63,7 +78,7 @@
     <nav class="hidden items-center gap-1 lg:flex">
       <!-- Categories  -->
       <div class="group relative py-6">
-        <button class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[15px] font-bold text-text-main transition-all hover:text-primary hover:bg-primary-light/50">
+        <button class="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[15px] font-bold transition-all hover:text-primary hover:bg-primary-light/50 {{ request()->is('product-list*') && !request()->routeIs('products.new') && !request()->routeIs('products.best') ? 'text-primary bg-primary-light/30' : 'text-text-main' }}">
           <span class="material-symbols-outlined text-xl">grid_view</span>
           카테고리
         </button>
@@ -92,11 +107,11 @@
       </div>
 
       @foreach(['신상품' => 'products.new', '베스트' => 'products.best'] as $label => $route)
-      <a class="px-4 py-2 rounded-xl text-[15px] font-bold text-text-main transition-all hover:text-primary hover:bg-primary-light/50" href="{{ route($route) }}">{{ $label }}</a>
+      <a class="px-4 py-2 rounded-xl text-[15px] font-bold transition-all hover:text-primary hover:bg-primary-light/50 {{ request()->routeIs($route) ? 'text-primary bg-primary-light/30' : 'text-text-main' }}" href="{{ route($route) }}">{{ $label }}</a>
       @endforeach
-      <a class="px-4 py-2 rounded-xl text-[15px] font-bold text-text-main transition-all hover:text-primary hover:bg-primary-light/50" href="/event">이벤트</a>
-      <a class="px-4 py-2 rounded-xl text-[15px] font-bold text-text-main transition-all hover:text-primary hover:bg-primary-light/50" href="/community">커뮤니티</a>
-      <a class="px-4 py-2 rounded-xl text-[15px] font-bold text-primary transition-all hover:bg-primary-light" href="/exhibition">기획전</a>
+      <a class="px-4 py-2 rounded-xl text-[15px] font-bold transition-all hover:text-primary hover:bg-primary-light/50 {{ request()->is('event*') ? 'text-primary bg-primary-light/30' : 'text-text-main' }}" href="/event">이벤트</a>
+      <a class="px-4 py-2 rounded-xl text-[15px] font-bold transition-all hover:text-primary hover:bg-primary-light/50 {{ request()->is('community*') ? 'text-primary bg-primary-light/30' : 'text-text-main' }}" href="/community">커뮤니티</a>
+      <a class="px-4 py-2 rounded-xl text-[15px] font-bold transition-all hover:text-primary hover:bg-primary-light/50 {{ request()->is('exhibition*') ? 'text-primary bg-primary-light/30' : 'text-text-main' }}" href="/exhibition">기획전</a>
     </nav>
 
     <!-- Action Icons -->
@@ -222,5 +237,78 @@
             mobileMenuClose.addEventListener('click', closeMenu);
             mobileMenuOverlay.addEventListener('click', closeMenu);
         }
+
+        // --- Real-time Search Suggestions ✨🔍 ---
+        const $searchInput = $('#desktopSearchInput');
+        const $suggestions = $('#desktopSearchSuggestions');
+        const $suggestionList = $('#desktopSuggestionList');
+        const $viewAllBtn = $('#viewAllSearch');
+        let searchTimeout;
+
+        $searchInput.on('input', function() {
+            const query = $(this).val().trim();
+            clearTimeout(searchTimeout);
+
+            if (query.length < 1) {
+                hideSuggestions();
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                fetchSuggestions(query);
+            }, 300);
+        });
+
+        function fetchSuggestions(query) {
+            $.ajax({
+                url: "{{ route('products.autocomplete') }}",
+                data: { q: query },
+                success: function(data) {
+                    if (data.length > 0) {
+                        renderSuggestions(data, query);
+                        showSuggestions();
+                    } else {
+                        hideSuggestions();
+                    }
+                }
+            });
+        }
+
+        function renderSuggestions(products, query) {
+            let html = '';
+            products.forEach(p => {
+                const price = new Intl.NumberFormat().format(p.sale_price || p.price);
+                // 검색어 하이라이트! ✨🌈
+                const highlightedName = p.name.replace(new RegExp(query, 'gi'), match => `<mark class="bg-primary/10 text-primary p-0">${match}</mark>`);
+                
+                html += `
+                    <a href="/product-detail/${p.slug}" class="flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group/item">
+                        <div class="size-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                            <img src="${p.image_url || 'https://via.placeholder.com/100'}" class="size-full object-cover">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-text-main truncate group-hover/item:text-primary transition-colors">${highlightedName}</p>
+                            <p class="text-xs font-bold text-text-muted mt-0.5">₩${price}</p>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-300 text-sm opacity-0 group-hover/item:opacity-100 transition-all">arrow_forward</span>
+                    </a>
+                `;
+            });
+            $suggestionList.html(html);
+            $viewAllBtn.attr('href', `{{ route('products.search') }}?q=${encodeURIComponent(query)}`);
+        }
+
+        function showSuggestions() {
+            $suggestions.removeClass('invisible opacity-0 -translate-y-2').addClass('visible opacity-100 translate-y-0');
+        }
+
+        function hideSuggestions() {
+            $suggestions.removeClass('visible opacity-100 translate-y-0').addClass('invisible opacity-0 -translate-y-2');
+        }
+
+        // 클릭 외부 시 닫기
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('#desktopSearchContainer').length) hideSuggestions();
+        });
     });
 </script>

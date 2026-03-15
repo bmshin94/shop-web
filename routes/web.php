@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\MemberController;
@@ -58,6 +59,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    // 검색 로그 관리 ✨📊
+    // 리뷰 관리 ✨🛍️
+    Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
+    Route::get('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'show'])->name('reviews.show');
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('/search-logs', [\App\Http\Controllers\Admin\SearchLogController::class, 'index'])->name('search-logs.index');
+    Route::delete('/search-logs/{search_log}', [\App\Http\Controllers\Admin\SearchLogController::class, 'destroy'])->name('search-logs.destroy');
+    Route::post('/search-logs/clear', [\App\Http\Controllers\Admin\SearchLogController::class, 'clearAll'])->name('search-logs.clear');
+
     Route::get('/events', [AdminEventController::class, 'index'])->name('events.index');
     Route::get('/events/trash', [AdminEventController::class, 'trash'])->name('events.trash');
     Route::get('/events/search-members', [AdminEventController::class, 'searchMembers'])->name('events.search-members');
@@ -165,9 +176,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // --- 사용자 페이지 ---
 
-Route::get('/', function () {
-    return view('pages.index');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/mypage', [MemberController::class, 'index'])->name('mypage');
@@ -217,6 +226,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/withdraw', function () { return view('pages.mypage-withdraw'); })->name('mypage.withdraw');
     Route::get('/mypage/inquiry', [MemberController::class, 'inquiryList'])->name('mypage.inquiry');
     Route::post('/mypage/inquiry', [MemberController::class, 'storeInquiry'])->name('mypage.inquiry.store');
+    Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
+    Route::get('/qna/{inquiry}/edit', [MemberController::class, 'editInquiry'])->name('qna.edit');
+    Route::post('/qna/{inquiry}/update', [MemberController::class, 'updateInquiry'])->name('qna.update');
+    Route::delete('/qna/{inquiry}', [MemberController::class, 'destroyInquiry'])->name('qna.destroy');
     Route::get('/mypage/coupon', [MemberController::class, 'couponList'])->name('mypage.coupon');
     Route::post('/mypage/coupon/register', [MemberController::class, 'registerCoupon'])->name('mypage.coupon.register');
     Route::get('/mypage/point', [MemberController::class, 'pointList'])->name('mypage.point');
@@ -231,11 +244,14 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// --- 1단계 배치 (상품/장바구니) ---
+// --- 상품 관련 ---
 Route::get('/product-list', [ProductController::class, 'index'])->name('product-list');
 Route::get('/products/new', [ProductController::class, 'newArrivals'])->name('products.new');
 Route::get('/products/best', [ProductController::class, 'bestProducts'])->name('products.best');
 Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product-detail');
+Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('products.autocomplete');
+
 Route::get('/products/bulk-quick-view', [ProductController::class, 'getBulkQuickViewData'])->name('product-bulk-quick-view');
 Route::get('/products/{id}/quick-view', [ProductController::class, 'getQuickViewData'])->name('product-quick-view');
 
@@ -291,5 +307,4 @@ Route::get('/event/participate', function () { return view('pages.event-particip
 Route::get('/exhibition', [\App\Http\Controllers\ExhibitionController::class, 'index'])->name('exhibition.index');
 Route::get('/exhibition/{slug}', [\App\Http\Controllers\ExhibitionController::class, 'show'])->name('exhibition.show');
 
-Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
 // Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry'); // 삭제! ✨

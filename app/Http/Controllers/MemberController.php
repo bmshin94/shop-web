@@ -306,23 +306,138 @@ class MemberController extends Controller
     public function storeInquiry(Request $request): JsonResponse
     {
         $request->validate([
+            'product_id' => 'nullable|exists:products,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'is_private' => 'nullable|boolean', // 비밀글 여부 ✨
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $member = Auth::user();
-            $this->memberService->createInquiry($member, $request->only('title', 'content'));
+            $data = $request->only('product_id', 'title', 'content');
+            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! ✨🔒
+
+            // 사진 업로드 처리 📸✨
+            if ($request->hasFile('images')) {
+                $imagePaths = [];
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('inquiries', 'public');
+                    $imagePaths[] = \Illuminate\Support\Facades\Storage::url($path);
+                }
+                $data['images'] = $imagePaths;
+            }
+
+            $this->memberService->createInquiry($member, $data);
 
             return response()->json([
                 'status' => 'success',
-                'message' => '문의가 정상적으로 등록되었습니다.'
+                'message' => '문의가 등록되었습니다! 😊✨'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => '문의 등록 중 오류가 발생했습니다.'
             ], 500);
+        }
+    }
+
+    /**
+     * 문의 수정 페이지 ✨
+     */
+    public function editInquiry(Inquiry $inquiry): View
+    {
+        // 본인 글인지 확인! 🕵️‍♀️
+        if ($inquiry->member_id !== Auth::id()) {
+            abort(403, '본인의 문의만 수정할 수 있어요! 😊');
+        }
+
+        return view('pages.qna-edit', compact('inquiry'));
+    }
+
+    /**
+     * 문의 수정 처리 ✨
+     */
+    public function updateInquiry(Request $request, Inquiry $inquiry): JsonResponse
+    {
+        // 본인 글인지 확인! 🕵️‍♀️
+        if ($inquiry->member_id !== Auth::id()) {
+            return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'is_private' => 'nullable|boolean', // 비밀글 여부 ✨
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $data = $request->only('title', 'content');
+            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! ✨🔒
+
+            // 1. 기존 이미지 삭제 처리 🧹✨
+            $currentImages = $inquiry->images ?? [];
+            if ($request->has('delete_images')) {
+                foreach ($request->delete_images as $deletePath) {
+                    // 서버 스토리지에서 파일 삭제! ✂️
+                    $storagePath = str_replace('/storage/', '', $deletePath);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($storagePath);
+                    
+                    // 현재 이미지 배열에서 제외! 😊
+                    $currentImages = array_filter($currentImages, fn($img) => $img !== $deletePath);
+                }
+            }
+
+            // 2. 새 사진 업로드 📸✨
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('inquiries', 'public');
+                    $currentImages[] = \Illuminate\Support\Facades\Storage::url($path);
+                }
+            }
+            
+            // 최종 이미지 배열 업데이트 (인덱스 재정렬 필수! 😉)
+            $data['images'] = array_values($currentImages);
+            
+            $inquiry->update($data);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '문의가 성공적으로 수정되었습니다! 😊'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => '수정 중 오류가 발생했습니다.'], 500);
+        }
+    }
+
+    /**
+     * 문의 삭제 처리 ✨
+     */
+    public function destroyInquiry(Inquiry $inquiry): JsonResponse
+    {
+        // 본인 글인지 확인! 🕵️‍♀️
+        if ($inquiry->member_id !== Auth::id()) {
+            return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
+        }
+
+        try {
+            // 서버에 저장된 사진들도 지워주면 좋겠지? 😉✨
+            if ($inquiry->images) {
+                foreach ($inquiry->images as $imageUrl) {
+                    $path = str_replace('/storage/', '', $imageUrl);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+                }
+            }
+
+            $inquiry->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '문의가 삭제되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => '삭제 중 오류가 발생했습니다.'], 500);
         }
     }
 

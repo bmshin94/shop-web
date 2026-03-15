@@ -4,13 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 상품 목록 페이지가 정상적으로 표시되는지 테스트합니다.
@@ -142,5 +142,71 @@ class ProductTest extends TestCase
         $response->assertSee('보통이');
         $response->assertDontSee('저렴이');
         $response->assertDontSee('비싼이');
+    }
+
+    /**
+     * 통합 검색 기능 테스트 ✨🔍
+     */
+    public function test_products_can_be_searched(): void
+    {
+        Product::factory()->create(['name' => '카리나 레깅스', 'status' => '판매중']);
+        Product::factory()->create(['name' => '에스파 크롭탑', 'status' => '판매중']);
+        Product::factory()->create(['name' => '평범한 바지', 'status' => '판매중']);
+
+        // 1. 검색 실행! 😊
+        $response = $this->get(route('products.search', ['q' => '카리나']));
+
+        $response->assertStatus(200);
+        $response->assertSee('카리나 레깅스');
+        $response->assertDontSee('에스파 크롭탑');
+        $response->assertDontSee('평범한 바지');
+
+        // 2. 검색 기록 확인! 📝
+        $this->assertDatabaseHas('search_logs', [
+            'keyword' => '카리나'
+        ]);
+    }
+
+    /**
+     * 실시간 검색 제안(Autocomplete) 테스트 ✨🚀
+     */
+    public function test_autocomplete_returns_suggestions(): void
+    {
+        Product::factory()->create(['name' => 'Active Women Top', 'status' => '판매중']);
+        Product::factory()->create(['name' => 'Active Women Pants', 'status' => '판매중']);
+
+        $response = $this->getJson(route('products.autocomplete', ['q' => 'Active']));
+
+        $response->assertStatus(200)
+            ->assertJsonCount(2)
+            ->assertJsonFragment(['name' => 'Active Women Top'])
+            ->assertJsonFragment(['name' => 'Active Women Pants']);
+    }
+
+    /**
+     * 검색 결과 내 필터링 기능 테스트 ✨🔍🎨
+     */
+    public function test_search_results_can_be_filtered_by_color(): void
+    {
+        // 1. 데이터 준비 ✨
+        $black = \App\Models\Color::create(['name' => '블랙', 'hex_code' => '#000000']);
+        $white = \App\Models\Color::create(['name' => '화이트', 'hex_code' => '#FFFFFF']);
+
+        $blackProduct = Product::factory()->create(['name' => '매력적인 블랙 레깅스', 'status' => '판매중']);
+        $blackProduct->colors()->attach($black->id);
+
+        $whiteProduct = Product::factory()->create(['name' => '매끈한 화이트 탑', 'status' => '판매중']);
+        $whiteProduct->colors()->attach($white->id);
+
+        // 2. 검색어 '매'로 검색하되, 색상은 '블랙'만 필터링! 😊
+        $response = $this->get(route('products.search', [
+            'q' => '매',
+            'colors' => ['블랙']
+        ]));
+
+        // 3. 검증! 🎬🚀 ✅
+        $response->assertStatus(200);
+        $response->assertSee('매력적인 블랙 레깅스');
+        $response->assertDontSee('매끈한 화이트 탑'); // 화이트는 검색어엔 맞지만 색상이 틀려야 함! 🕵️‍♀️🚫
     }
 }

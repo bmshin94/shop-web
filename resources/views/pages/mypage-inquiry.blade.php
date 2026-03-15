@@ -60,6 +60,15 @@
                                     <span class="text-xs font-bold text-text-main">나의 문의 내용</span>
                                 </div>
                                 <p class="text-sm text-text-main leading-relaxed whitespace-pre-wrap pl-8">{{ $inquiry->content }}</p>
+                                
+                                @if($inquiry->images && count($inquiry->images) > 0)
+                                <div class="flex gap-2 mt-4 pl-8 overflow-x-auto pb-2 scrollbar-hide">
+                                    @foreach($inquiry->images as $img)
+                                    <img src="{{ $img }}" alt="Inquiry Image" class="size-20 rounded-lg object-cover border border-gray-100 cursor-zoom-in" 
+                                         onclick="const zm = document.getElementById('imageZoomModal'); const zi = document.getElementById('zoomImage'); zi.src = this.src; zm.style.display = 'flex'; zm.classList.remove('hidden');" />
+                                    @endforeach
+                                </div>
+                                @endif
                             </div>
 
                             {{-- 답변 --}}
@@ -120,8 +129,32 @@
             <div>
                 <label for="inquiry_content" class="block text-xs font-black text-text-muted uppercase mb-2 tracking-tighter">문의 내용</label>
                 <textarea id="inquiry_content" name="content" rows="6" placeholder="문의하실 내용을 상세히 남겨주시면 정성껏 답변해 드릴게요! ✨" 
-                          class="w-full px-4 py-4 rounded-xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all resize-none" required></textarea>
+                          class="w-full px-4 py-4 rounded-xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all resize-none"></textarea>
             </div>
+            
+            {{-- 사진 첨부 영역 ✨ --}}
+            <div>
+                <label class="block text-xs font-black text-text-muted uppercase mb-3 tracking-tighter">사진 첨부 (선택)</label>
+                <div class="flex flex-wrap gap-3" id="modal-photo-container">
+                    <label class="flex flex-col items-center justify-center w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-primary hover:bg-primary-light/30 transition-all text-gray-400 hover:text-primary group">
+                        <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">add_a_photo</span>
+                        <span class="text-[9px] font-bold mt-1">사진 추가</span>
+                        <input type="file" name="images[]" id="modalImageInput" class="hidden" accept="image/*" multiple>
+                    </label>
+                </div>
+            </div>
+
+            {{-- 비밀글 설정 ✨🔒 --}}
+            <div class="flex items-center gap-2 pt-2">
+                <label class="relative flex items-center cursor-pointer">
+                    <input type="checkbox" name="is_private" value="1" class="peer sr-only">
+                    <div class="w-5 h-5 border-2 border-gray-200 rounded-md bg-white peer-checked:bg-primary peer-checked:border-primary transition-all flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-[12px] scale-0 peer-checked:scale-100 transition-transform">lock</span>
+                    </div>
+                    <span class="ml-2 text-xs font-bold text-text-muted peer-checked:text-primary transition-colors">비밀글로 문의하기</span>
+                </label>
+            </div>
+
             <div class="pt-4 flex gap-3">
                 <button type="button" onclick="closeModal(document.getElementById('inquiryWriteModal'))" class="flex-1 h-14 bg-gray-100 text-text-muted text-sm font-black rounded-2xl hover:bg-gray-200 transition-all">취소</button>
                 <button type="submit" class="flex-1 h-14 bg-primary text-white text-sm font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/30">문의 등록하기</button>
@@ -164,6 +197,45 @@
             if (e.target === this) closeModal(this);
         });
 
+        const $modalImageInput = $('#modalImageInput');
+        const $modalPhotoContainer = $('#modal-photo-container');
+        const MAX_IMAGES = 4;
+        let modalSelectedFiles = [];
+
+        // 1. 이미지 미리보기 처리 📸✨
+        $modalImageInput.on('change', function(e) {
+            const files = Array.from(e.target.files);
+            if (modalSelectedFiles.length + files.length > MAX_IMAGES) {
+                showToast(`사진은 최대 ${MAX_IMAGES}장까지만 가능해요! 😊`, 'info', 'bg-red-500');
+                return;
+            }
+            files.forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                modalSelectedFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const html = `
+                        <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 group animate-in fade-in zoom-in">
+                            <img src="${e.target.result}" class="w-full h-full object-cover">
+                            <button type="button" class="btn-remove-modal-img absolute top-1 right-1 size-5 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                                <span class="material-symbols-outlined text-[12px]">close</span>
+                            </button>
+                        </div>
+                    `;
+                    $modalPhotoContainer.append(html);
+                };
+                reader.readAsDataURL(file);
+            });
+            $modalImageInput.val('');
+        });
+
+        // 2. 이미지 삭제 ❌
+        $(document).on('click', '.btn-remove-modal-img', function() {
+            const index = $(this).parent().index() - 1;
+            modalSelectedFiles.splice(index, 1);
+            $(this).parent().remove();
+        });
+
         /**
          * 문의 등록 AJAX 처리 ✨
          */
@@ -172,13 +244,20 @@
             
             const $form = $(this);
             const $submitBtn = $form.find('button[type="submit"]');
+            if ($submitBtn.prop('disabled')) return;
+
+            const formData = new FormData(this);
+            formData.delete('images[]');
+            modalSelectedFiles.forEach(file => { formData.append('images[]', file); });
             
             $submitBtn.prop('disabled', true).text('등록 중...');
 
             $.ajax({
                 url: "{{ route('mypage.inquiry.store') }}",
                 method: 'POST',
-                data: $form.serialize(),
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     if (response.status === 'success') {
                         showToast(response.message, 'check_circle', 'bg-primary');
@@ -187,9 +266,9 @@
                     }
                 },
                 error: function(xhr) {
+                    $submitBtn.prop('disabled', false).text('문의 등록하기');
                     const msg = xhr.responseJSON ? xhr.responseJSON.message : '등록에 실패했습니다.';
                     showToast(msg, 'error', 'bg-red-500');
-                    $submitBtn.prop('disabled', false).text('문의 등록하기');
                 }
             });
         });

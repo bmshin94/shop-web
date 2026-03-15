@@ -273,7 +273,7 @@
                     </button>
                     <button type="button" data-tab="qna" 
                         class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
-                        Q & A
+                        Q & A <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full bg-gray-100 font-normal">{{ number_format($product->inquiries->count()) }}</span>
                     </button>
                     <button type="button" data-tab="shipping" 
                         class="tab-btn border-b-2 border-transparent py-4 text-text-muted hover:border-gray-300 hover:text-text-main whitespace-nowrap transition-colors focus:outline-none">
@@ -302,7 +302,23 @@
                         <span class="text-sm font-bold text-text-main ml-1">{{ number_format($product->average_rating, 1) }} / 5.0</span>
                     </div>
                 </div>
+                
+                @php
+                    $canReview = false;
+                    if(auth()->check()) {
+                        $canReview = \App\Models\OrderItem::where('product_id', $product->id)
+                            ->whereHas('order', function ($query) {
+                                $query->where('member_id', auth()->id())
+                                    ->where('order_status', '구매확정');
+                            })->exists();
+                    }
+                @endphp
+
+                @if($canReview)
                 <a href="{{ route('review.write', ['product_id' => $product->id]) }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">리뷰 작성하기</a>
+                @else
+                <button type="button" onclick="showToast('구매확정 완료된 상품만 리뷰를 작성할 수 있어요! 😊', 'info', 'bg-gray-600')" class="px-6 py-3 bg-gray-100 text-text-muted text-sm font-bold rounded-xl hover:bg-gray-200 transition-colors shadow-sm">리뷰 작성안내</button>
+                @endif
             </div>
 
             <div id="review-list">
@@ -364,14 +380,79 @@
         <div class="tab-content hidden mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[200px]" id="qna">
             <div class="flex justify-between items-end mb-8 border-b border-gray-200 pb-4">
                 <h2 class="text-2xl font-bold text-text-main">Q & A</h2>
-                <a href="{{ route('qna.write') }}" class="px-4 py-2 bg-text-main text-white text-sm font-bold rounded hover:bg-primary transition-colors">문의 작성하기</a>
+                <a href="{{ route('qna.write', ['product_id' => $product->id]) }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">문의 작성하기</a>
             </div>
-            <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-3xl border border-gray-100">
-                <div class="flex items-center justify-center w-24 h-24 rounded-full bg-white mb-6 shadow-sm text-gray-300">
-                    <span class="material-symbols-outlined text-5xl">forum</span>
+            
+            <div class="space-y-4">
+                @forelse($product->inquiries->sortByDesc('created_at') as $inquiry)
+                <div class="border border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold {{ $inquiry->status === '답변완료' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                {{ $inquiry->status }}
+                            </span>
+                            <div class="flex items-center gap-1">
+                                @if($inquiry->is_private)
+                                <span class="material-symbols-outlined text-[14px] text-text-muted">lock</span>
+                                @endif
+                                <h4 class="text-base font-bold text-text-main">{{ $inquiry->title }}</h4>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-text-main">{{ Str::mask($inquiry->member->name, '*', 1) }}</p>
+                            <p class="text-[10px] text-text-muted mt-0.5">{{ $inquiry->created_at->format('Y.m.d') }}</p>
+                            
+                            @if(auth()->check() && $inquiry->member_id === auth()->id() && !$inquiry->answer)
+                            <div class="flex gap-2 mt-2 justify-end">
+                                <a href="{{ route('qna.edit', $inquiry->id) }}" class="text-[10px] font-bold text-text-muted hover:text-primary transition-colors">수정</a>
+                                <button type="button" onclick="deleteInquiry({{ $inquiry->id }})" class="text-[10px] font-bold text-text-muted hover:text-red-500 transition-colors">삭제</button>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    @php
+                        $isOwner = auth()->check() && $inquiry->member_id === auth()->id();
+                        $canView = !$inquiry->is_private || $isOwner;
+                    @endphp
+
+                    @if($canView)
+                    <div class="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">{{ $inquiry->content }}</div>
+                    
+                    @if($inquiry->images && count($inquiry->images) > 0)
+                    <div class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+                        @foreach($inquiry->images as $img)
+                        <img src="{{ $img }}" alt="Inquiry Image" class="size-20 rounded-lg object-cover border border-gray-100 cursor-zoom-in" 
+                             onclick="const zm = document.getElementById('imageZoomModal'); const zi = document.getElementById('zoomImage'); zi.src = this.src; zm.style.display = 'flex'; zm.classList.remove('hidden');" />
+                        @endforeach
+                    </div>
+                    @endif
+                    @else
+                    <div class="flex items-center gap-2 text-sm text-text-muted italic bg-gray-50 p-4 rounded-xl border border-dashed border-gray-200">
+                        <span class="material-symbols-outlined text-base">lock</span>
+                        비밀글입니다. 작성자만 확인하실 수 있어요! 😊✨
+                    </div>
+                    @endif
+                    
+                    @if($inquiry->answer && $canView)
+                    <div class="mt-4 p-4 bg-gray-50 rounded-xl border-l-4 border-primary/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="material-symbols-outlined text-primary text-sm">subdirectory_arrow_right</span>
+                            <span class="text-xs font-bold text-primary uppercase">Seller Answer</span>
+                        </div>
+                        <p class="text-sm text-text-main leading-relaxed whitespace-pre-wrap">{{ $inquiry->answer }}</p>
+                    </div>
+                    @endif
                 </div>
-                <h3 class="text-xl font-bold text-text-main mb-2">등록된 문의가 없습니다</h3>
-                <p class="text-sm text-text-muted">궁금한 점이 있으시면 문의를 남겨주세요.</p>
+                @empty
+                <div class="flex flex-col items-center justify-center py-20 text-center bg-gray-50 rounded-3xl border border-gray-100">
+                    <div class="flex items-center justify-center w-24 h-24 rounded-full bg-white mb-6 shadow-sm text-gray-300">
+                        <span class="material-symbols-outlined text-5xl">forum</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-text-main mb-2">등록된 문의가 없습니다</h3>
+                    <p class="text-sm text-text-muted">이 상품에 대해 궁금한 점이 있으시면 문의를 남겨주세요.</p>
+                </div>
+                @endforelse
             </div>
         </div>
 
@@ -963,5 +1044,26 @@
             btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
         }
     });
+
+    /**
+     * 문의 삭제 처리 ✨💖
+     */
+    async function deleteInquiry(id) {
+        if (!await showConfirm('정말 이 문의를 삭제하시겠어요? 🥺')) return;
+
+        $.ajax({
+            url: `/qna/${id}`,
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            success: function(response) {
+                showToast(response.message, 'delete', 'bg-red-500');
+                setTimeout(() => location.reload(), 1500);
+            },
+            error: function(xhr) {
+                const msg = xhr.responseJSON?.message || '삭제 중 오류가 발생했습니다.';
+                showToast(msg, 'error', 'bg-red-500');
+            }
+        });
+    }
 </script>
 @endpush

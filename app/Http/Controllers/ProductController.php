@@ -56,6 +56,26 @@ class ProductController extends Controller
     }
 
     /**
+     * 상품 통합 검색 ✨🔍
+     */
+    public function search(Request $request)
+    {
+        $data = $this->productService->searchProducts($request);
+        return view('pages.product-list', $data);
+    }
+
+    /**
+     * 실시간 검색 제안 (AJAX Autocomplete) ✨🚀
+     */
+    public function autocomplete(Request $request)
+    {
+        $keyword = $request->query('q', '');
+        $suggestions = $this->productService->getSearchSuggestions($keyword);
+        
+        return response()->json($suggestions);
+    }
+
+    /**
      * 퀵 뷰를 위한 단수 상품 옵션 정보 조회
      */
     public function getQuickViewData($id)

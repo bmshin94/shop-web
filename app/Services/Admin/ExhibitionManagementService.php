@@ -18,8 +18,7 @@ class ExhibitionManagementService
     public function paginateExhibitions(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Exhibition::query()
-            ->latest('start_at')
-            ->latest('id');
+            ->latest(); // 생성일(created_at) 기준으로 최신순 정렬! ✨ 새로 등록한 게 맨 위로 와요! 😊
 
         $this->applyExhibitionFilters($query, $filters);
 
@@ -68,7 +67,21 @@ class ExhibitionManagementService
      */
     public function createExhibition(array $payload): Exhibition
     {
-        return Exhibition::query()->create($payload);
+        // 배너 이미지 업로드 처리! ✨
+        if (isset($payload['banner_image']) && $payload['banner_image'] instanceof \Illuminate\Http\UploadedFile) {
+            $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
+        }
+
+        // 날짜 기반 상태 자동 결정! 🕵️‍♀️
+        $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
+
+        $exhibition = Exhibition::query()->create($payload);
+
+        if (isset($payload['product_ids'])) {
+            $exhibition->products()->sync($payload['product_ids']);
+        }
+
+        return $exhibition;
     }
 
     /**
@@ -80,9 +93,53 @@ class ExhibitionManagementService
      */
     public function updateExhibition(Exhibition $exhibition, array $payload): Exhibition
     {
+        // 배너 이미지 업로드 처리! ✨
+        if (isset($payload['banner_image']) && $payload['banner_image'] instanceof \Illuminate\Http\UploadedFile) {
+            $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
+        }
+
+        // 날짜 기반 상태 자동 결정! 🕵️‍♀️
+        $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
+
         $exhibition->update($payload);
 
+        if (isset($payload['product_ids'])) {
+            $exhibition->products()->sync($payload['product_ids']);
+        }
+
         return $exhibition->refresh();
+    }
+
+    /**
+     * 날짜를 기준으로 상태를 결정한다. 😊
+     */
+    private function determineStatusByDates(?string $startAt, ?string $endAt): string
+    {
+        $now = now();
+        $start = $startAt ? \Illuminate\Support\Carbon::parse($startAt) : null;
+        $end = $endAt ? \Illuminate\Support\Carbon::parse($endAt) : null;
+
+        // 1. 종료일이 지났다면 무조건 '종료' 🛑
+        if ($end && $end->isPast()) {
+            return '종료';
+        }
+
+        // 2. 시작일이 아직 안 왔다면 '진행예정' ⏳
+        if ($start && $start->isFuture()) {
+            return '진행예정';
+        }
+
+        // 3. 그 외(시작일 지났고 종료일 안 지났거나 날짜가 없는 경우) '진행중' ✨
+        return '진행중';
+    }
+
+    /**
+     * 배너 이미지를 저장소에 업로드한다.
+     */
+    private function uploadBannerImage(\Illuminate\Http\UploadedFile $file): string
+    {
+        $path = $file->store('exhibitions', 'public');
+        return \Illuminate\Support\Facades\Storage::url($path);
     }
 
     /**

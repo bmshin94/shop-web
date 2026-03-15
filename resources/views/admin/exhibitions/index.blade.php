@@ -110,9 +110,27 @@
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
-                <input type="text" name="start_from" value="{{ request('start_from') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                <input type="text" name="start_to" value="{{ request('start_to') }}" class="datepicker px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+            <div class="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-gray-100">
+                <div class="w-full sm:w-auto relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px] group-focus-within:text-primary transition-colors pointer-events-none">calendar_today</span>
+                    <input 
+                        type="text" 
+                        name="start_from" 
+                        value="{{ request('start_from') }}" 
+                        placeholder="시작일 검색"
+                        class="datepicker w-full sm:w-[180px] pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
+                </div>
+                <span class="hidden sm:block text-text-muted opacity-30">~</span>
+                <div class="w-full sm:w-auto relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px] group-focus-within:text-primary transition-colors pointer-events-none">calendar_month</span>
+                    <input 
+                        type="text" 
+                        name="start_to" 
+                        value="{{ request('start_to') }}" 
+                        placeholder="종료일 검색"
+                        class="datepicker w-full sm:w-[180px] pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
+                </div>
+                <p class="text-[11px] font-bold text-text-muted ml-auto hidden xl:block italic">기획전 시작일 기준으로 검색됩니다. 😊</p>
             </div>
         </form>
     </div>
@@ -121,7 +139,7 @@
         <div class="px-6 py-4 border-b border-gray-100 bg-white/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <p class="text-sm font-extrabold text-text-main">검색 결과 {{ number_format($exhibitions->total()) }}건</p>
             <div class="flex flex-wrap items-center gap-2 text-[12px] font-bold text-text-muted">
-                <a href="{{ route('admin.exhibitions.create') }}" class="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-primary hover:bg-primary hover:text-white transition-colors">
+                <a href="{{ route('admin.exhibitions.create', request()->query()) }}" class="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-primary hover:bg-primary hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-[14px]">add</span>
                     기획전 등록
                 </a>
@@ -148,7 +166,7 @@
             @forelse($exhibitions as $exhibition)
                 <div class="exhibition-row px-4 lg:px-6 py-4 hover:bg-gray-50/60 transition-colors">
                     <div class="min-w-0">
-                        <a href="{{ route('admin.exhibitions.edit', $exhibition) }}" class="text-sm font-extrabold text-text-main hover:text-primary transition-colors block truncate">
+                        <a href="{{ route('admin.exhibitions.show', array_merge(['exhibition' => $exhibition->id], request()->query())) }}" class="text-sm font-extrabold text-text-main hover:text-primary transition-colors block truncate">
                             {{ $exhibition->title }}
                         </a>
                         <p class="mt-1 text-[12px] font-bold text-text-muted truncate">/{{ $exhibition->slug }}</p>
@@ -173,7 +191,7 @@
                     </div>
 
                     <div class="flex lg:justify-center gap-2">
-                        <a href="{{ route('admin.exhibitions.edit', $exhibition) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-[12px] font-bold text-text-main hover:border-primary hover:text-primary transition-colors">
+                        <a href="{{ route('admin.exhibitions.edit', array_merge(['exhibition' => $exhibition->id], request()->query())) }}" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-[12px] font-bold text-text-main hover:border-primary hover:text-primary transition-colors">
                             수정
                         </a>
                         <form
@@ -208,7 +226,7 @@
     </div>
 
     <div class="mt-10">
-        {{ $exhibitions->links() }}
+        {{ $exhibitions->withQueryString()->links() }}
     </div>
 </div>
 @endsection

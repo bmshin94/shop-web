@@ -29,13 +29,15 @@ class StoreExhibitionRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:120'],
             'slug' => ['required', 'string', 'max:160', Rule::unique('exhibitions', 'slug')],
-            'status' => ['required', Rule::in(Exhibition::STATUSES)],
-            'banner_image_url' => ['nullable', 'url', 'max:2048'],
+            'banner_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'summary' => ['nullable', 'string', 'max:255'],
+
             'description' => ['nullable', 'string'],
             'start_at' => ['nullable', 'date'],
             'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['exists:products,id'],
         ];
     }
 

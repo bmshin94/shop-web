@@ -94,6 +94,16 @@ class Product extends Model
     }
 
     /**
+     * 상품이 포함된 기획전 목록
+     */
+    public function exhibitions()
+    {
+        return $this->belongsToMany(Exhibition::class, 'exhibition_product')
+            ->withPivot('sort_order')
+            ->withTimestamps();
+    }
+
+    /**
      * 현재 로그인한 사용자가 이 상품을 찜했는지 여부
      */
     public function getIsWishlistedAttribute()

@@ -6,7 +6,7 @@
 <div class="space-y-6 lg:space-y-8">
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.exhibitions.index') }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+            <a href="{{ route('admin.exhibitions.index', request()->query()) }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>

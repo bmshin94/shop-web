@@ -36,4 +36,15 @@ class Exhibition extends Model
         'sort_order' => 'integer',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * 기획전에 포함된 상품 목록
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'exhibition_product')
+            ->withPivot('sort_order')
+            ->withTimestamps()
+            ->orderByPivot('sort_order', 'asc');
+    }
 }

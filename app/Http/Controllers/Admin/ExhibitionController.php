@@ -55,6 +55,7 @@ class ExhibitionController extends Controller
     {
         return view('admin.exhibitions.create', [
             'statusOptions' => Exhibition::STATUSES,
+            'products' => \App\Models\Product::all(),
         ]);
     }
 
@@ -74,6 +75,22 @@ class ExhibitionController extends Controller
     }
 
     /**
+     * 관리자 기획전 상세 정보를 조회한다. ✨
+     *
+     * @param  Exhibition  $exhibition
+     * @return View
+     */
+    public function show(Exhibition $exhibition): View
+    {
+        // 연결된 상품들과 함께 상세 정보를 가져와요! 😊
+        $exhibition->load(['products.images', 'products.category']);
+
+        return view('admin.exhibitions.show', [
+            'exhibition' => $exhibition,
+        ]);
+    }
+
+    /**
      * 관리자 기획전 수정 폼을 조회한다.
      *
      * @param  Exhibition  $exhibition
@@ -84,6 +101,7 @@ class ExhibitionController extends Controller
         return view('admin.exhibitions.edit', [
             'exhibition' => $exhibition,
             'statusOptions' => Exhibition::STATUSES,
+            'products' => \App\Models\Product::all(),
         ]);
     }
 

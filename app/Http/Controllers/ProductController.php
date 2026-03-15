@@ -54,4 +54,59 @@ class ProductController extends Controller
         $data = $this->productService->getProductDetail($slug);
         return view('pages.product-detail', $data);
     }
+
+    /**
+     * 퀵 뷰를 위한 단수 상품 옵션 정보 조회
+     */
+    public function getQuickViewData($id)
+    {
+        try {
+            $product = \App\Models\Product::with(['colors', 'sizes', 'images'])->findOrFail($id);
+            
+            return response()->json([
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'sale_price' => $product->sale_price,
+                'image_url' => $product->images->first()?->image_url,
+                'colors' => $product->colors,
+                'sizes' => $product->sizes,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => '상품 정보를 불러올 수 없습니다.'], 404);
+        }
+    }
+
+    /**
+     * 멀티 퀵 뷰를 위한 여러 상품의 옵션 정보 조회
+     */
+    public function getBulkQuickViewData(Request $request)
+    {
+        try {
+            $ids = explode(',', $request->query('ids', ''));
+            if (empty($ids)) {
+                return response()->json(['error' => '선택된 상품이 없습니다.'], 400);
+            }
+
+            // 전달받은 모든 상품 ID에 대해 상세 정보와 옵션을 한꺼번에 로드
+            $products = \App\Models\Product::with(['colors', 'sizes', 'images'])
+                ->whereIn('id', $ids)
+                ->get()
+                ->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'sale_price' => $product->sale_price,
+                        'image_url' => $product->images->first()?->image_url,
+                        'colors' => $product->colors,
+                        'sizes' => $product->sizes,
+                    ];
+                });
+            
+            return response()->json($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => '상품 정보를 불러올 수 없습니다.'], 500);
+        }
+    }
 }

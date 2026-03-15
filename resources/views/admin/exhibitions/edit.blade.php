@@ -1,12 +1,13 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
 @section('page_title', '기획전 수정')
 
 @section('content')
 <div class="space-y-6 lg:space-y-8">
+    {{-- 상단 헤더 영역 ✨ --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.exhibitions.index') }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+            <a href="{{ route('admin.exhibitions.index', request()->query()) }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>
@@ -23,69 +24,17 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6">
-        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+    {{-- 메인 수정 폼 (단일 컬럼으로 시원하게! 🚀) --}}
+    <div class="max-w-5xl">
+        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:p-10">
             @include('admin.exhibitions._form', [
                 'exhibition' => $exhibition,
                 'statusOptions' => $statusOptions,
                 'formAction' => route('admin.exhibitions.update', $exhibition),
                 'formMethod' => 'PUT',
-                'submitLabel' => '기획전 저장',
+                'submitLabel' => '기획전 정보 업데이트',
             ])
-        </div>
-
-        <div class="space-y-6">
-            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-                <h4 class="text-base font-extrabold text-text-main mb-5">기획전 요약</h4>
-                <dl class="space-y-4 text-sm">
-                    <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase">상태</dt>
-                        <dd class="mt-1"><x-admin.status-badge type="exhibition" :value="$exhibition->status" /></dd>
-                    </div>
-                    <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase">기간</dt>
-                        <dd class="mt-1 font-bold text-text-main">
-                            {{ optional($exhibition->start_at)->format('Y.m.d H:i') ?: '-' }}
-                            <span class="text-text-muted">~</span>
-                            {{ optional($exhibition->end_at)->format('Y.m.d H:i') ?: '-' }}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase">정렬 순서</dt>
-                        <dd class="mt-1 font-bold text-text-main">{{ number_format($exhibition->sort_order) }}</dd>
-                    </div>
-                    <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase">생성일</dt>
-                        <dd class="mt-1 font-bold text-text-main">{{ optional($exhibition->created_at)->format('Y.m.d H:i') ?: '-' }}</dd>
-                    </div>
-                    <div>
-                        <dt class="text-[11px] font-bold text-text-muted uppercase">수정일</dt>
-                        <dd class="mt-1 font-bold text-text-main">{{ optional($exhibition->updated_at)->format('Y.m.d H:i') ?: '-' }}</dd>
-                    </div>
-                </dl>
-            </div>
-
-            <div class="bg-white rounded-3xl border border-red-100 shadow-sm p-6">
-                <h4 class="text-base font-extrabold text-text-main mb-4">기획전 삭제</h4>
-                <p class="text-[12px] font-bold text-text-muted leading-relaxed">
-                    기획전을 삭제하면 목록에서 숨겨지며(soft delete), 휴지통에서 복구 또는 영구삭제할 수 있습니다.
-                </p>
-                <form
-                    action="{{ route('admin.exhibitions.destroy', $exhibition) }}"
-                    method="POST"
-                    class="mt-5 js-confirm-submit"
-                    data-confirm-title="기획전 삭제"
-                    data-confirm-message="이 기획전을 soft delete 처리하시겠습니까? 목록에서 숨김 처리됩니다."
-                    data-confirm-text="삭제 처리">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full px-5 py-4 bg-red-50 text-red-600 border border-red-200 rounded-2xl text-sm font-extrabold hover:bg-red-100 transition-colors">
-                        기획전 삭제
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
 </div>
 @endsection
-

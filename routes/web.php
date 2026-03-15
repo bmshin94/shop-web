@@ -69,6 +69,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/exhibitions/trash', [ExhibitionController::class, 'trash'])->name('exhibitions.trash');
     Route::get('/exhibitions/create', [ExhibitionController::class, 'create'])->name('exhibitions.create');
     Route::post('/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
+    Route::get('/exhibitions/{exhibition}', [ExhibitionController::class, 'show'])->name('exhibitions.show');
     Route::get('/exhibitions/{exhibition}/edit', [ExhibitionController::class, 'edit'])->name('exhibitions.edit');
     Route::put('/exhibitions/{exhibition}', [ExhibitionController::class, 'update'])->name('exhibitions.update');
     Route::patch('/exhibitions/{exhibition}/restore', [ExhibitionController::class, 'restore'])->withTrashed()->name('exhibitions.restore');
@@ -169,8 +170,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/wishlist/clear', [WishlistController::class, 'clearAll'])->name('wishlist.clear');
 
     // 장바구니
+    // 장바구니 관리
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::put('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/bulk', [CartController::class, 'bulkDestroy'])->name('cart.bulk-destroy');
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
 
     // 결제 / 바로구매
     Route::post('/buy-now', [CheckoutController::class, 'buyNow'])->name('buy-now');
@@ -210,6 +215,8 @@ Route::get('/product-list', [ProductController::class, 'index'])->name('product-
 Route::get('/products/new', [ProductController::class, 'newArrivals'])->name('products.new');
 Route::get('/products/best', [ProductController::class, 'bestProducts'])->name('products.best');
 Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product-detail');
+Route::get('/products/bulk-quick-view', [ProductController::class, 'getBulkQuickViewData'])->name('product-bulk-quick-view');
+Route::get('/products/{id}/quick-view', [ProductController::class, 'getQuickViewData'])->name('product-quick-view');
 
 // 인증 및 검증 관련 (로그인하지 않은 사용자만 접근 가능)
 Route::middleware('guest')->group(function () {
@@ -255,6 +262,9 @@ Route::post('/event/{event}/participate', [EventController::class, 'participate'
 Route::delete('/event/{event}/participate', [EventController::class, 'cancelParticipation'])->name('event.participate.cancel')->middleware('auth');
 Route::get('/event/participate', function () { return view('pages.event-participate'); })->name('event.participate');
 
-Route::get('/exhibition', function () { return view('pages.exhibition'); })->name('exhibition');
+// 기획전 라우트 추가! ✨
+Route::get('/exhibition', [\App\Http\Controllers\ExhibitionController::class, 'index'])->name('exhibition.index');
+Route::get('/exhibition/{slug}', [\App\Http\Controllers\ExhibitionController::class, 'show'])->name('exhibition.show');
+
 Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
 // Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry'); // 삭제! ✨

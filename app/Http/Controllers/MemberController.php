@@ -135,7 +135,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 최근 본 상품 목록 조회 ✨ (비로그인 지원!)
+     * 최근 본 상품 목록 조회  (비로그인 지원!)
      */
     public function recentViewList(): View
     {
@@ -146,7 +146,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 최근 본 상품 전체 삭제 ✨ (비로그인 지원!)
+     * 최근 본 상품 전체 삭제  (비로그인 지원!)
      */
     public function clearRecentViews(): JsonResponse
     {
@@ -167,7 +167,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 최근 본 상품 선택 삭제 ✨
+     * 최근 본 상품 선택 삭제 
      */
     public function deleteSelectedRecentViews(Request $request): JsonResponse
     {
@@ -197,11 +197,11 @@ class MemberController extends Controller
     }
 
     /**
-     * 비밀번호 재확인 폼 ✨
+     * 비밀번호 재확인 폼 
      */
     public function confirmPasswordForm(): View|RedirectResponse
     {
-        // 이미 확인했다면 바로 수정 페이지로! 😊
+        // 이미 확인했다면 바로 수정 페이지로! 
         if (session()->get('auth.password_confirmed_at')) {
             return redirect()->route('mypage.profile-edit');
         }
@@ -210,7 +210,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 비밀번호 재확인 처리 ✨
+     * 비밀번호 재확인 처리 
      */
     public function confirmPassword(Request $request): JsonResponse
     {
@@ -235,11 +235,11 @@ class MemberController extends Controller
     }
 
     /**
-     * 회원정보 수정 폼 ✨
+     * 회원정보 수정 폼 
      */
     public function profileEditForm(): View|RedirectResponse
     {
-        // 비밀번호 확인 안 됐으면 쫓아내기! 🕵️‍♀️
+        // 비밀번호 확인 안 됐으면 쫓아내기! ️‍️
         if (!session()->has('auth.password_confirmed_at')) {
             return redirect()->route('mypage.profile');
         }
@@ -249,7 +249,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 회원정보 수정 처리 ✨
+     * 회원정보 수정 처리 
      */
     public function updateProfile(Request $request): JsonResponse
     {
@@ -290,7 +290,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 1:1 문의 내역 조회 ✨
+     * 1:1 문의 내역 조회 
      */
     public function inquiryList(): View
     {
@@ -301,7 +301,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 1:1 문의 등록 처리 ✨
+     * 1:1 문의 등록 처리 
      */
     public function storeInquiry(Request $request): JsonResponse
     {
@@ -309,16 +309,16 @@ class MemberController extends Controller
             'product_id' => 'nullable|exists:products,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'is_private' => 'nullable|boolean', // 비밀글 여부 ✨
+            'is_private' => 'nullable|boolean', // 비밀글 여부 
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $member = Auth::user();
             $data = $request->only('product_id', 'title', 'content');
-            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! ✨🔒
+            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! 
 
-            // 사진 업로드 처리 📸✨
+            // 사진 업로드 처리 
             if ($request->hasFile('images')) {
                 $imagePaths = [];
                 foreach ($request->file('images') as $image) {
@@ -332,7 +332,7 @@ class MemberController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => '문의가 등록되었습니다! 😊✨'
+                'message' => '문의가 등록되었습니다! '
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -343,24 +343,24 @@ class MemberController extends Controller
     }
 
     /**
-     * 문의 수정 페이지 ✨
+     * 문의 수정 페이지 
      */
     public function editInquiry(Inquiry $inquiry): View
     {
-        // 본인 글인지 확인! 🕵️‍♀️
+        // 본인 글인지 확인! ️‍️
         if ($inquiry->member_id !== Auth::id()) {
-            abort(403, '본인의 문의만 수정할 수 있어요! 😊');
+            abort(403, '본인의 문의만 수정할 수 있어요! ');
         }
 
         return view('pages.qna-edit', compact('inquiry'));
     }
 
     /**
-     * 문의 수정 처리 ✨
+     * 문의 수정 처리 
      */
     public function updateInquiry(Request $request, Inquiry $inquiry): JsonResponse
     {
-        // 본인 글인지 확인! 🕵️‍♀️
+        // 본인 글인지 확인! ️‍️
         if ($inquiry->member_id !== Auth::id()) {
             return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
         }
@@ -368,28 +368,28 @@ class MemberController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'is_private' => 'nullable|boolean', // 비밀글 여부 ✨
+            'is_private' => 'nullable|boolean', // 비밀글 여부 
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $data = $request->only('title', 'content');
-            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! ✨🔒
+            $data['is_private'] = $request->boolean('is_private'); // 불리언으로 변환! 
 
-            // 1. 기존 이미지 삭제 처리 🧹✨
+            // 1. 기존 이미지 삭제 처리 
             $currentImages = $inquiry->images ?? [];
             if ($request->has('delete_images')) {
                 foreach ($request->delete_images as $deletePath) {
-                    // 서버 스토리지에서 파일 삭제! ✂️
+                    // 서버 스토리지에서 파일 삭제! ️
                     $storagePath = str_replace('/storage/', '', $deletePath);
                     \Illuminate\Support\Facades\Storage::disk('public')->delete($storagePath);
                     
-                    // 현재 이미지 배열에서 제외! 😊
+                    // 현재 이미지 배열에서 제외! 
                     $currentImages = array_filter($currentImages, fn($img) => $img !== $deletePath);
                 }
             }
 
-            // 2. 새 사진 업로드 📸✨
+            // 2. 새 사진 업로드 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('inquiries', 'public');
@@ -397,14 +397,14 @@ class MemberController extends Controller
                 }
             }
             
-            // 최종 이미지 배열 업데이트 (인덱스 재정렬 필수! 😉)
+            // 최종 이미지 배열 업데이트 (인덱스 재정렬 필수! )
             $data['images'] = array_values($currentImages);
             
             $inquiry->update($data);
 
             return response()->json([
                 'status' => 'success',
-                'message' => '문의가 성공적으로 수정되었습니다! 😊'
+                'message' => '문의가 성공적으로 수정되었습니다! '
             ]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => '수정 중 오류가 발생했습니다.'], 500);
@@ -412,17 +412,17 @@ class MemberController extends Controller
     }
 
     /**
-     * 문의 삭제 처리 ✨
+     * 문의 삭제 처리 
      */
     public function destroyInquiry(Inquiry $inquiry): JsonResponse
     {
-        // 본인 글인지 확인! 🕵️‍♀️
+        // 본인 글인지 확인! ️‍️
         if ($inquiry->member_id !== Auth::id()) {
             return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
         }
 
         try {
-            // 서버에 저장된 사진들도 지워주면 좋겠지? 😉✨
+            // 서버에 저장된 사진들도 지워주면 좋겠지? 
             if ($inquiry->images) {
                 foreach ($inquiry->images as $imageUrl) {
                     $path = str_replace('/storage/', '', $imageUrl);
@@ -442,7 +442,7 @@ class MemberController extends Controller
     }
 
     /**
-     * 상품 리뷰 관리 페이지 ✨
+     * 상품 리뷰 관리 페이지 
      */
     public function reviewList(): View
     {

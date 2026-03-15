@@ -167,7 +167,7 @@
   </div>
 </section>
 
-{{-- Mobile Filter Drawer ✨ --}}
+{{-- Mobile Filter Drawer  --}}
 <div id="mobile-filter-drawer" class="fixed inset-0 z-[100] hidden">
     <div id="filter-drawer-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
     <div id="filter-drawer-content" class="absolute right-0 top-0 h-full w-[85%] max-w-sm translate-x-full bg-white transition-transform duration-300 ease-in-out shadow-2xl flex flex-col">
@@ -281,7 +281,7 @@ $(document).ready(function() {
         if (cat) {
             const $catEl = $(`.filter-category[data-filter-value="${cat}"]`);
             if ($catEl.length) {
-                // 텍스트 노드만 추출하여 'chevron_right' 같은 아이콘 텍스트 제외! ✨
+                // 텍스트 노드만 추출하여 'chevron_right' 같은 아이콘 텍스트 제외! 
                 const pureText = $catEl.first().find('span:first').text().trim();
                 addFilterTag('category', pureText, cat);
             }
@@ -354,13 +354,13 @@ $(document).ready(function() {
         updateFilter('category', $(this).data('filterValue'));
     });
 
-    // 색상 필터 클릭 이벤트 ✨
+    // 색상 필터 클릭 이벤트 
     $('.filter-color').on('click', function() {
         const isSelected = $(this).attr('data-selected') === 'true';
         updateFilter('colors[]', $(this).data('filterValue'), !isSelected);
     });
 
-    // 가격 필터 변경 이벤트 ✨
+    // 가격 필터 변경 이벤트 
     $('.filter-price').on('change', function() {
         updateFilter('price_range[]', $(this).data('filterValue'), this.checked);
     });
@@ -372,7 +372,7 @@ $(document).ready(function() {
         window.location.href = window.location.pathname + '?' + urlParams.toString();
     });
 
-    // 검색어 하이라이트 처리 ✨🌈
+    // 검색어 하이라이트 처리 
     const keyword = "{{ $keyword ?? '' }}";
     if (keyword) {
         $('.product-card-name').each(function() {

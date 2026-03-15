@@ -50,7 +50,7 @@ class CheckoutController extends Controller
         $buyNow = session('buy_now');
         
         // 쿼리 파라미터들
-        $cartIds = $request->query('cart_ids'); // 장바구니 기반 결제 ✨
+        $cartIds = $request->query('cart_ids'); // 장바구니 기반 결제 
         $pIds = $request->query('p', []); 
         $qtys = $request->query('q', []); 
         $cIds = $request->query('c', []); 
@@ -62,7 +62,7 @@ class CheckoutController extends Controller
         $checkoutItems = [];
         $totalProductPrice = 0;
 
-        // 1. 장바구니 기반 결제 처리 (cart.blade.php 대응 ✨)
+        // 1. 장바구니 기반 결제 처리 (cart.blade.php 대응 )
         if ($cartIds) {
             $ids = explode(',', $cartIds);
             $cartItems = \App\Models\Cart::whereIn('id', $ids)

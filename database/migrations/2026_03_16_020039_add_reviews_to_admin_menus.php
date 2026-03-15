@@ -12,12 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. '상품 관리' 그룹의 마지막 정렬 순서 근처로 잡기 ✨
+        // 1. '상품 관리' 그룹의 마지막 정렬 순서 근처로 잡기 
         $lastSortOrder = DB::table('admin_menus')
             ->where('group_name', '상품 관리')
             ->max('sort_order') ?? 10;
 
-        // 2. 고객 리뷰 관리 메뉴 추가 ⭐🛍️
+        // 2. 고객 리뷰 관리 메뉴 추가 ️
         DB::table('admin_menus')->insert([
             'group_name' => '상품 관리',
             'name' => '고객 리뷰 관리',

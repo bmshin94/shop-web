@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class HomeService
 {
     /**
-     * 메인 페이지에 필요한 모든 데이터를 한꺼번에 가져옵니다. ✨💖
+     * 메인 페이지에 필요한 모든 데이터를 한꺼번에 가져옵니다. 
      * 
      * @return array
      */
@@ -31,10 +31,10 @@ class HomeService
             // 4. 실시간 인기 급상승 (조회수 기준 10개)
             'trendingProducts' => $this->getTrendingProducts(),
             
-            // 5. 최신 매거진 (3개) ✨
+            // 5. 최신 매거진 (3개) 
             'recentMagazines' => Magazine::latest()->take(3)->get(),
             
-            // 6. 최신 OOTD (8개 - 프리뷰용) 📸
+            // 6. 최신 OOTD (8개 - 프리뷰용) 
             'recentOotds' => Ootd::with('member')->latest()->take(8)->get(),
         ];
     }
@@ -80,7 +80,7 @@ class HomeService
     private function getTrendingProducts(): Collection
     {
         // 실제로는 view_count 같은 컬럼이 있으면 좋겠지만, 
-        // 우선은 최신 상품 중 랜덤하게 10개 보여주는 걸로 시작할게! ✨
+        // 우선은 최신 상품 중 랜덤하게 10개 보여주는 걸로 시작할게! 
         return Product::with(['images', 'category'])
             ->selling()
             ->inRandomOrder()

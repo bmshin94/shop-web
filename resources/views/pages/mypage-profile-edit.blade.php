@@ -58,7 +58,7 @@
                             <div class="sm:col-span-2">
                                 <input type="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-16자" 
                                        class="w-full h-12 px-4 bg-white border border-gray-200 rounded-xl text-text-main text-sm font-bold focus:border-primary focus:ring-primary/20 transition-all">
-                                <p class="text-[11px] text-text-muted mt-2 ml-1">변경할 경우에만 입력해 주세요. ✨</p>
+                                <p class="text-[11px] text-text-muted mt-2 ml-1">변경할 경우에만 입력해 주세요. </p>
                             </div>
                         </div>
                         
@@ -108,7 +108,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 items-start">
                             <div class="sm:mt-1">
                                 <label class="text-sm font-black text-text-main">마케팅 수신동의</label>
-                                <p class="text-[11px] text-text-muted mt-1 leading-tight">다양한 이벤트 및 혜택 안내 정보를 받아보실 수 있습니다. ✨</p>
+                                <p class="text-[11px] text-text-muted mt-1 leading-tight">다양한 이벤트 및 혜택 안내 정보를 받아보실 수 있습니다. </p>
                             </div>
                             <div class="sm:col-span-2 flex items-center gap-8 mt-2">
                                 <label class="flex items-center gap-2.5 cursor-pointer group">
@@ -136,7 +136,7 @@
     </div>
 </main>
 
-{{-- 휴대폰 인증 변경 모달 ✨ --}}
+{{-- 휴대폰 인증 변경 모달  --}}
 <div id="phoneVerifyModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-in fade-in zoom-in duration-200">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -173,7 +173,7 @@
 @push('scripts')
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-// Modal Functions ✨ (전역 스코프 보장)
+// Modal Functions  (전역 스코프 보장)
 window.openVerifyModal = function(modal) {
     if (!modal) return;
     $(modal).removeClass('hidden').addClass('flex');
@@ -214,12 +214,12 @@ $(document).ready(function() {
         }, 1000);
     }
 
-    // 모달 열기 버튼 이벤트 ✨
+    // 모달 열기 버튼 이벤트 
     $('#btn-open-verify-modal').on('click', function() {
         window.openVerifyModal(document.getElementById('phoneVerifyModal'));
     });
 
-    // 모달 닫기 버튼 이벤트 ✨
+    // 모달 닫기 버튼 이벤트 
     $('.btn-close-modal').on('click', function() {
         window.closeVerifyModal(document.getElementById('phoneVerifyModal'));
     });
@@ -229,7 +229,7 @@ $(document).ready(function() {
         if (e.target === this) window.closeVerifyModal(this);
     });
 
-    // 인증번호 발송 ✨
+    // 인증번호 발송 
     $('#btn-send-code').on('click', function() {
         const phone = $('#new_phone').val();
         if (!/^010-?\d{3,4}-?\d{4}$/.test(phone)) {
@@ -265,7 +265,7 @@ $(document).ready(function() {
         });
     });
 
-    // 인증번호 확인 ✨
+    // 인증번호 확인 
     $('#btn-verify-code').on('click', function() {
         const phone = $('#new_phone').val();
         const code = $('#verify_code').val();
@@ -282,7 +282,7 @@ $(document).ready(function() {
             data: { phone: phone, code: code },
             success: function(response) {
                 if (response.success) {
-                    showToast('인증이 완료되었습니다! ✨', 'check_circle', 'bg-primary');
+                    showToast('인증이 완료되었습니다! ', 'check_circle', 'bg-primary');
                     $('#user_phone').val(phone); 
                     window.closeVerifyModal(document.getElementById('phoneVerifyModal'));
                 }

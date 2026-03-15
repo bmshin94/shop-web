@@ -64,7 +64,7 @@
                     </li>
                     @empty
                     <li class="py-20 text-center text-text-muted">
-                        등록된 공지사항이 없습니다. ✨
+                        등록된 공지사항이 없습니다. 
                     </li>
                     @endforelse
                 </ul>
@@ -110,7 +110,7 @@
         m.classList.remove('flex');
     }
 
-    // 모달 외부 클릭 시 닫기 ✨
+    // 모달 외부 클릭 시 닫기 
     window.onclick = (e) => {
         if(e.target.id === 'noticeModal') closeModal();
     }

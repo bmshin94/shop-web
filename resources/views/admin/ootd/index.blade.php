@@ -6,12 +6,12 @@
 <div class="px-8 py-8">
     <div class="flex items-center justify-between mb-10">
         <div>
-            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">OOTD 관리 📸✨</h1>
+            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">OOTD 관리 </h1>
             <p class="mt-2 text-sm text-text-muted">고객님들의 멋진 스타일링(OOTD) 콘텐츠를 관리합니다.</p>
         </div>
         <a href="{{ route('admin.ootds.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-105 transition-all">
             <span class="material-symbols-outlined text-[20px]">add</span>
-            새 OOTD 등록 📸
+            새 OOTD 등록 
         </a>
     </div>
 
@@ -65,7 +65,7 @@
                             <a href="{{ route('admin.ootds.edit', $ootd) }}" class="p-2 text-text-muted hover:text-primary transition-colors">
                                 <span class="material-symbols-outlined">edit</span>
                             </a>
-                            <form action="{{ route('admin.ootds.destroy', $ootd) }}" method="POST" onsubmit="return confirm('OOTD를 삭제할까요? 😢');">
+                            <form action="{{ route('admin.ootds.destroy', $ootd) }}" method="POST" onsubmit="return confirm('OOTD를 삭제할까요? ');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 text-text-muted hover:text-red-500 transition-colors">
@@ -78,7 +78,7 @@
                 @empty
                 <tr>
                     <td colspan="6" class="px-8 py-20 text-center text-text-muted">
-                        등록된 OOTD가 없어요! ✨ 
+                        등록된 OOTD가 없어요!  
                     </td>
                 </tr>
                 @endforelse

@@ -28,7 +28,7 @@ class Inquiry extends Model
     ];
 
     /**
-     * 회원 관계 정의 ✨
+     * 회원 관계 정의 
      */
     public function member()
     {
@@ -36,7 +36,7 @@ class Inquiry extends Model
     }
 
     /**
-     * 상품 관계 정의 (상품 문의인 경우) ✨💖
+     * 상품 관계 정의 (상품 문의인 경우) 
      */
     public function product()
     {

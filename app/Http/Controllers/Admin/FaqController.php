@@ -43,7 +43,7 @@ class FaqController extends Controller
 
         Faq::create($validated);
 
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 성공적으로 등록되었습니다. ✨');
+        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 성공적으로 등록되었습니다. ');
     }
 
     /**
@@ -69,7 +69,7 @@ class FaqController extends Controller
 
         $faq->update($validated);
 
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 성공적으로 수정되었습니다. ✨');
+        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 성공적으로 수정되었습니다. ');
     }
 
     /**
@@ -79,6 +79,6 @@ class FaqController extends Controller
     {
         $faq->delete();
 
-        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 삭제되었습니다. 😢');
+        return redirect()->route('admin.faqs.index')->with('success', 'FAQ가 삭제되었습니다. ');
     }
 }

@@ -9,7 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Coupon;
 use App\Models\PointHistory;
-use App\Models\Inquiry; // Inquiry 모델 추가! ✨
+use App\Models\Inquiry; // Inquiry 모델 추가! 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -237,7 +237,7 @@ class MemberService
      */
     public function getReviewListData(Member $member): array
     {
-        // 1. 작성 가능한 리뷰 ✨ (page_avail 파라미터 사용)
+        // 1. 작성 가능한 리뷰  (page_avail 파라미터 사용)
         $purchasedProductIds = OrderItem::whereHas('order', function($q) use ($member) {
                 $q->where('member_id', $member->id)->where('order_status', '배송완료');
             })
@@ -250,7 +250,7 @@ class MemberService
         $availableReviews = Product::whereIn('id', $availableProductIds)
             ->paginate(10, ['*'], 'page_avail');
 
-        // 2. 내가 작성한 리뷰 목록 ✨ (page_written 파라미터 사용)
+        // 2. 내가 작성한 리뷰 목록  (page_written 파라미터 사용)
         $writtenReviews = Review::with('product')
             ->where('member_id', $member->id)
             ->latest()
@@ -376,14 +376,14 @@ class MemberService
     }
 
     /**
-     * 최근 본 상품 데이터 조회 및 날짜별 그룹화 ✨ (비로그인 지원!)
+     * 최근 본 상품 데이터 조회 및 날짜별 그룹화  (비로그인 지원!)
      */
     public function getRecentViewData(?Member $member = null): array
     {
         if ($member) {
-            // 1. 로그인 회원: DB 조회 후 그룹화 😊
+            // 1. 로그인 회원: DB 조회 후 그룹화 
             $recentViews = $member->recentViews()
-                ->with(['product.images', 'product.colors']) // 색상 정보 추가! ✨
+                ->with(['product.images', 'product.colors']) // 색상 정보 추가! 
                 ->orderByDesc('viewed_at')
                 ->take(50)
                 ->get()
@@ -394,18 +394,18 @@ class MemberService
                     return $date->format('Y.m.d');
                 });
         } else {
-            // 2. 비로그인 게스트: 쿠키 조회 후 가공 🍪
+            // 2. 비로그인 게스트: 쿠키 조회 후 가공 
             $viewedIds = json_decode(request()->cookie('recent_views', '[]'), true) ?: [];
             
-            // 쿠키에 담긴 ID 순서대로 상품 가져오기! ✨
-            $products = Product::with(['images', 'colors']) // 여기도 색상 정보 추가! ✨
+            // 쿠키에 담긴 ID 순서대로 상품 가져오기! 
+            $products = Product::with(['images', 'colors']) // 여기도 색상 정보 추가! 
                 ->whereIn('id', $viewedIds)
                 ->get()
                 ->sortBy(function($p) use ($viewedIds) {
                     return array_search($p->id, $viewedIds);
                 });
 
-            // 게스트는 "오늘" 본 상품으로 묶어서 보여줄게! 🥰
+            // 게스트는 "오늘" 본 상품으로 묶어서 보여줄게! 
             $recentViews = $products->isNotEmpty() ? collect(['오늘' => $products->map(fn($p) => (object)['product' => $p])]) : collect();
         }
 
@@ -416,7 +416,7 @@ class MemberService
     }
 
     /**
-     * 최근 본 상품 전체 삭제 ✨ (비로그인 지원!)
+     * 최근 본 상품 전체 삭제  (비로그인 지원!)
      */
     public function clearRecentViews(?Member $member = null): void
     {
@@ -428,7 +428,7 @@ class MemberService
     }
 
     /**
-     * 최근 본 상품 선택 삭제 ✨
+     * 최근 본 상품 선택 삭제 
      */
     public function deleteSelectedRecentViews(Member $member, array $ids): void
     {
@@ -436,7 +436,7 @@ class MemberService
     }
 
     /**
-     * 회원의 찜 목록 전체 삭제 ✨
+     * 회원의 찜 목록 전체 삭제 
      */
     public function clearWishlist(Member $member): void
     {
@@ -444,7 +444,7 @@ class MemberService
     }
 
     /**
-     * 1:1 문의 내역 조회 ✨
+     * 1:1 문의 내역 조회 
      */
     public function getInquiryData(Member $member): array
     {
@@ -459,7 +459,7 @@ class MemberService
     }
 
     /**
-     * 1:1 문의 등록 ✨
+     * 1:1 문의 등록 
      */
     public function createInquiry(Member $member, array $data): Inquiry
     {
@@ -467,7 +467,7 @@ class MemberService
             'product_id' => $data['product_id'] ?? null,
             'title' => $data['title'],
             'content' => $data['content'],
-            'is_private' => $data['is_private'] ?? false, // 비밀글 설정! 🔒✨
+            'is_private' => $data['is_private'] ?? false, // 비밀글 설정! 
             'images' => $data['images'] ?? null,
             'status' => '답변대기'
         ]);

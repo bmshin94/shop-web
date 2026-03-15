@@ -28,7 +28,7 @@
                         <span class="material-symbols-outlined text-4xl text-primary">lock</span>
                     </div>
                     <h3 class="text-2xl font-extrabold text-text-main mb-2">비밀번호 재확인</h3>
-                    <p class="text-text-muted text-sm leading-relaxed">고객님의 소중한 개인정보를 보호하기 위해<br>비밀번호를 다시 한번 확인합니다. ✨</p>
+                    <p class="text-text-muted text-sm leading-relaxed">고객님의 소중한 개인정보를 보호하기 위해<br>비밀번호를 다시 한번 확인합니다. </p>
                 </div>
                 
                 <form id="confirmForm" class="space-y-6 text-left border-t border-gray-50 pt-10">
@@ -69,7 +69,7 @@ $(document).ready(function() {
             data: $(this).serialize(),
             success: function(response) {
                 if (response.success) {
-                    showToast('비밀번호가 확인되었습니다! ✨', 'lock_open', 'bg-primary');
+                    showToast('비밀번호가 확인되었습니다! ', 'lock_open', 'bg-primary');
                     setTimeout(() => {
                         location.href = response.redirect;
                     }, 800);

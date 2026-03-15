@@ -25,34 +25,34 @@ class InquiryTest extends TestCase
     /** @test */
     public function other_members_cannot_see_private_inquiry_content()
     {
-        // 🌟 타인이 비밀글 내용을 볼 수 없는지 테스트! 🕵️‍♀️🔒
+        //  타인이 비밀글 내용을 볼 수 없는지 테스트! ️‍️
         $owner = Member::factory()->create();
         $inquiry = Inquiry::factory()->create([
             'member_id' => $owner->id,
             'product_id' => $this->product->id,
             'is_private' => true,
             'title' => '나만의 비밀 상담',
-            'content' => '이건 아무도 모르게 해줘요! 🤫'
+            'content' => '이건 아무도 모르게 해줘요! '
         ]);
 
-        $this->actingAs($this->member); // 다른 사용자로 로그인! 😊
+        $this->actingAs($this->member); // 다른 사용자로 로그인! 
 
         $response = $this->get(route('product-detail', $this->product->slug));
 
         $response->assertStatus(200);
         $response->assertSee('비밀글입니다');
-        $response->assertDontSee('이건 아무도 모르게 해줘요!'); // 내용이 숨겨졌는지 확인! ✅
+        $response->assertDontSee('이건 아무도 모르게 해줘요!'); // 내용이 숨겨졌는지 확인! 
     }
 
     /** @test */
     public function owner_can_see_their_own_private_inquiry_content()
     {
-        // 🌟 본인은 본인의 비밀글 내용을 볼 수 있는지 테스트! 😍✨
+        //  본인은 본인의 비밀글 내용을 볼 수 있는지 테스트! 
         $inquiry = Inquiry::factory()->create([
             'member_id' => $this->member->id,
             'product_id' => $this->product->id,
             'is_private' => true,
-            'content' => '나만 볼 수 있는 비밀 내용! 💖'
+            'content' => '나만 볼 수 있는 비밀 내용! '
         ]);
 
         $this->actingAs($this->member);
@@ -60,7 +60,7 @@ class InquiryTest extends TestCase
         $response = $this->get(route('product-detail', $this->product->slug));
 
         $response->assertStatus(200);
-        $response->assertSee('나만 볼 수 있는 비밀 내용!'); // 본인은 내용 확인 가능! ✅
+        $response->assertSee('나만 볼 수 있는 비밀 내용!'); // 본인은 내용 확인 가능! 
     }
 
     /** @test */
@@ -86,7 +86,7 @@ class InquiryTest extends TestCase
 
         $data = [
             'title' => '배송 문의드립니다.',
-            'content' => '언제쯤 배송이 시작될까요? 궁금해요! ✨'
+            'content' => '언제쯤 배송이 시작될까요? 궁금해요! '
         ];
 
         $response = $this->postJson(route('mypage.inquiry.store'), $data);
@@ -104,13 +104,13 @@ class InquiryTest extends TestCase
     /** @test */
     public function member_can_register_product_inquiry()
     {
-        // 🌟 상품 문의 등록 테스트! ✨💖
+        //  상품 문의 등록 테스트! 
         $this->actingAs($this->member);
 
         $data = [
-            'product_id' => $this->product->id, // 상품 ID 포함! 😊
+            'product_id' => $this->product->id, // 상품 ID 포함! 
             'title' => '사이즈 문의합니다.',
-            'content' => '170cm에 60kg인데 어떤 사이즈가 좋을까요? 🤔'
+            'content' => '170cm에 60kg인데 어떤 사이즈가 좋을까요? '
         ];
 
         $response = $this->postJson(route('mypage.inquiry.store'), $data);
@@ -118,7 +118,7 @@ class InquiryTest extends TestCase
         $response->assertStatus(200)
             ->assertJson(['status' => 'success']);
 
-        // DB에 product_id와 함께 잘 들어갔는지 확인! 🎬🚀 ✅
+        // DB에 product_id와 함께 잘 들어갔는지 확인!  
         $this->assertDatabaseHas('inquiries', [
             'member_id' => $this->member->id,
             'product_id' => $this->product->id,
@@ -129,7 +129,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function product_detail_page_shows_product_inquiries()
     {
-        // 🌟 상품 상세 페이지 Q&A 탭 데이터 확인 테스트! ✨🎬
+        //  상품 상세 페이지 Q&A 탭 데이터 확인 테스트! 
         $this->actingAs($this->member);
 
         // 1. 이 상품에 달린 문의 2개 생성
@@ -139,7 +139,7 @@ class InquiryTest extends TestCase
             'title' => '이 상품 질문이요!'
         ]);
 
-        // 2. 다른 상품에 달린 문의 1개 생성 (안 보여야 해! 😉)
+        // 2. 다른 상품에 달린 문의 1개 생성 (안 보여야 해! )
         $otherProduct = Product::factory()->create();
         Inquiry::factory()->create([
             'member_id' => $this->member->id,
@@ -151,11 +151,11 @@ class InquiryTest extends TestCase
 
         $response->assertStatus(200);
         
-        // 해당 상품의 문의만 노출되는지 확인! ✨🎬🚀 ✅
+        // 해당 상품의 문의만 노출되는지 확인!  
         $response->assertSee('이 상품 질문이요!');
         $response->assertDontSee('다른 상품 질문!');
 
-        // 🌟 탭 메뉴에 갯수가 잘 나오는지 확인! (2개여야 함! 😉)
+        //  탭 메뉴에 갯수가 잘 나오는지 확인! (2개여야 함! )
         $this->assertEquals(2, $response->viewData('product')->inquiries->count());
     }
 
@@ -179,7 +179,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function member_can_update_their_own_inquiry()
     {
-        // 🌟 본인 문의 수정 테스트! ✨🎬
+        //  본인 문의 수정 테스트! 
         $this->actingAs($this->member);
 
         $inquiry = Inquiry::factory()->create([
@@ -189,7 +189,7 @@ class InquiryTest extends TestCase
 
         $data = [
             'title' => '수정 후 제목',
-            'content' => '내용도 예쁘게 고쳐봤어! ✨'
+            'content' => '내용도 예쁘게 고쳐봤어! '
         ];
 
         $response = $this->postJson(route('qna.update', $inquiry->id), $data);
@@ -206,7 +206,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function member_cannot_update_others_inquiry()
     {
-        // 🌟 타인 문의 수정 시도 차단 테스트! 🕵️‍♀️🔒
+        //  타인 문의 수정 시도 차단 테스트! ️‍️
         $this->actingAs($this->member);
 
         $otherMember = Member::factory()->create();
@@ -225,7 +225,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function member_can_delete_their_own_inquiry()
     {
-        // 🌟 본인 문의 삭제 테스트! 🧹✨
+        //  본인 문의 삭제 테스트! 
         $this->actingAs($this->member);
 
         $inquiry = Inquiry::factory()->create([
@@ -248,10 +248,10 @@ class InquiryTest extends TestCase
     /** @test */
     public function guest_cannot_access_qna_write_page()
     {
-        // 🌟 로그인을 안 한 게스트가 Q&A 작성 페이지에 접근할 때! ✨🔒
+        //  로그인을 안 한 게스트가 Q&A 작성 페이지에 접근할 때! 
         $response = $this->get(route('qna.write'));
         
-        // 로그인 페이지로 리다이렉트되어야 함! 🚫
+        // 로그인 페이지로 리다이렉트되어야 함! 
         $response->assertRedirect(route('login'));
     }
 }

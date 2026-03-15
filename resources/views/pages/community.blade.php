@@ -214,7 +214,7 @@
     </div>
 </div>
 
-<!-- OOTD Create Modal ✨💖 -->
+<!-- OOTD Create Modal  -->
 <div id="ootdCreateModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
     <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden my-auto animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
         <div class="p-6 border-b flex items-center justify-between bg-white shrink-0">
@@ -223,7 +223,7 @@
         </div>
         <div class="overflow-y-auto flex-1 custom-scrollbar">
             <form id="ootdCreateForm" onsubmit="submitOotd(event)" class="p-8 space-y-6">
-                <!-- Image Drop Zone - Size Reduced ✨ -->
+                <!-- Image Drop Zone - Size Reduced  -->
                 <div id="drop-zone" class="relative group">
                     <input type="file" id="image_file" accept="image/*" class="hidden" onchange="previewOotdImage(this)">
                     <label for="image_file" class="flex flex-col items-center justify-center w-full aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all overflow-hidden relative">
@@ -350,7 +350,7 @@
             icon.style.fontVariationSettings = "'FILL' 1";
             status.innerText = '좋아요 취소';
             
-            // 귀여운 하트 리플 효과 💖 (하트 찍을 때만)
+            // 귀여운 하트 리플 효과  (하트 찍을 때만)
             if (ripple) {
                 ripple.classList.remove('scale-0', 'opacity-0');
                 ripple.classList.add('scale-150', 'opacity-0');
@@ -436,7 +436,7 @@
     async function loadMoreOOTD() {
         const btn = document.getElementById('btn-load-more');
         const originalText = btn.innerText;
-        btn.innerText = '로딩 중... ✨';
+        btn.innerText = '로딩 중... ';
         btn.disabled = true;
 
         try {
@@ -447,7 +447,7 @@
             if (data.data.length > 0) {
                 const fullList = document.getElementById('ootd-full');
                 data.data.forEach(o => {
-                    ots.push(o); // 데이터 배열에 추가해서 모달 연동 ✨
+                    ots.push(o); // 데이터 배열에 추가해서 모달 연동 
                     const h = `<div onclick="openOotd(${o.id})" class="aspect-4-5 rounded-xl overflow-hidden cursor-pointer shadow-sm animate-in fade-in zoom-in duration-500"><img src="${o.img}" class="w-full h-full object-cover hover:scale-105 transition-all"></div>`;
                     fullList.innerHTML += h;
                 });
@@ -462,7 +462,7 @@
                 btn.classList.add('hidden');
             }
         } catch (e) {
-            console.error('더보기 실패 😢', e);
+            console.error('더보기 실패 ', e);
             btn.innerText = originalText;
             btn.disabled = false;
         }
@@ -472,7 +472,7 @@
     async function loadMoreMagazines() {
         const btn = document.getElementById('btn-load-more-mag');
         const originalText = btn.innerText;
-        btn.innerText = '로딩 중... ✨';
+        btn.innerText = '로딩 중... ';
         btn.disabled = true;
 
         try {
@@ -483,7 +483,7 @@
             if (data.data.length > 0) {
                 const fullList = document.getElementById('magazine-full');
                 data.data.forEach(m => {
-                    mags.push(m); // 데이터 배열에 추가해서 모달 연동 ✨
+                    mags.push(m); // 데이터 배열에 추가해서 모달 연동 
                     const h = `<article onclick="openMag(${m.id})" class="group cursor-pointer animate-in fade-in zoom-in duration-500"><div class="aspect-video overflow-hidden rounded-2xl mb-4 bg-gray-100"><img src="${m.img}" class="w-full h-full object-cover group-hover:scale-105 transition-all"></div><h4 class="font-bold group-hover:text-primary transition-colors">${m.title}</h4></article>`;
                     fullList.innerHTML += h;
                 });
@@ -498,7 +498,7 @@
                 btn.classList.add('hidden');
             }
         } catch (e) {
-            console.error('더보기 실패 😢', e);
+            console.error('더보기 실패 ', e);
             btn.innerText = originalText;
             btn.disabled = false;
         }
@@ -508,7 +508,7 @@
     async function loadMoreNotices() {
         const btn = document.getElementById('btn-load-more-notice');
         const originalText = btn.innerText;
-        btn.innerText = '로딩 중... ✨';
+        btn.innerText = '로딩 중... ';
         btn.disabled = true;
 
         try {
@@ -519,7 +519,7 @@
             if (data.data.length > 0) {
                 const fullList = document.getElementById('notice-full');
                 data.data.forEach(n => {
-                    nots.push(n); // 데이터 배열에 추가해서 모달 연동 ✨
+                    nots.push(n); // 데이터 배열에 추가해서 모달 연동 
                     const h = `<li onclick="openNotice(${n.id})" class="py-5 px-6 flex justify-between hover:bg-gray-50 cursor-pointer rounded-xl transition-colors animate-in fade-in slide-in-from-bottom-2 duration-500"><span>${n.title}</span><span class="text-gray-400 text-sm">${n.date}</span></li>`;
                     fullList.innerHTML += h;
                 });
@@ -534,7 +534,7 @@
                 btn.classList.add('hidden');
             }
         } catch (e) {
-            console.error('더보기 실패 😢', e);
+            console.error('더보기 실패 ', e);
             btn.innerText = originalText;
             btn.disabled = false;
         }
@@ -568,14 +568,14 @@
         if(e.target.id === 'ootdCreateModal') closeModal('ootdCreateModal');
     }
 
-    // OOTD Create Modal Functions ✨💖
+    // OOTD Create Modal Functions 
     function openOotdCreateModal() {
         @guest
             alert('로그인한 회원만 이용 가능합니다.');
             return;
         @endguest
         document.getElementById('ootdCreateModal').classList.replace('hidden', 'flex');
-        initDropZone(); // 드롭존 초기화 ✨
+        initDropZone(); // 드롭존 초기화 
     }
 
     function previewOotdImage(input) {
@@ -626,7 +626,7 @@
         if (!fileInput.files[0]) { return alert('스타일 사진을 선택해 주세요.'); }
         if (!content) { return alert('스타일 설명을 입력해 주세요.'); }
 
-        btn.innerText = '등록 중... ✨';
+        btn.innerText = '등록 중... ';
         btn.disabled = true;
 
         const formData = new FormData();
@@ -644,7 +644,7 @@
 
             if (res.ok) {
                 alert('등록되었습니다.');
-                location.reload(); // 성공 시 새로고침하여 목록 갱신 ✨
+                location.reload(); // 성공 시 새로고침하여 목록 갱신 
             } else {
                 alert(data.message || '등록에 실패했습니다.');
                 btn.innerText = originalText;

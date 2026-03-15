@@ -74,7 +74,7 @@ class ProductService
             }
         }
 
-        // 3. 색상 필터 ✨ (ID 대신 이름으로 검색!)
+        // 3. 색상 필터  (ID 대신 이름으로 검색!)
         if (!empty($selectedColors)) {
             $query->whereHas('colors', function (Builder $q) use ($selectedColors) {
                 $q->whereIn('colors.name', $selectedColors);
@@ -146,7 +146,7 @@ class ProductService
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // 최근 본 상품 기록! ✨
+        // 최근 본 상품 기록! 
         if (auth()->check()) {
             // 1. 로그인 회원: DB 저장/갱신
             \App\Models\RecentView::updateOrCreate(
@@ -154,18 +154,18 @@ class ProductService
                 ['viewed_at' => now()]
             );
         } else {
-            // 2. 비로그인 게스트: 쿠키 저장 🍪
+            // 2. 비로그인 게스트: 쿠키 저장 
             $recentCookie = request()->cookie('recent_views', '[]');
             $viewedIds = json_decode($recentCookie, true) ?: [];
             
-            // 현재 상품 ID를 배열 맨 앞으로 보내고 중복 제거! 😊
+            // 현재 상품 ID를 배열 맨 앞으로 보내고 중복 제거! 
             array_unshift($viewedIds, $product->id);
             $viewedIds = array_unique($viewedIds);
             
-            // 최대 20개까지만 유지! ✨
+            // 최대 20개까지만 유지! 
             $viewedIds = array_slice($viewedIds, 0, 20);
             
-            // 쿠키에 30일 동안 저장 예약! ✌️
+            // 쿠키에 30일 동안 저장 예약! ️
             \Illuminate\Support\Facades\Cookie::queue('recent_views', json_encode($viewedIds), 60 * 24 * 30);
         }
 
@@ -186,7 +186,7 @@ class ProductService
     }
 
     /**
-     * 통합 검색 처리 ✨🔍💖
+     * 통합 검색 처리 
      */
     public function searchProducts(Request $request): array
     {
@@ -198,7 +198,7 @@ class ProductService
 
         $query = Product::with(['category', 'images', 'colors'])->selling();
 
-        // 1. 검색어 기본 필터링 🔍
+        // 1. 검색어 기본 필터링 
         if ($keyword) {
             $this->logSearchKeyword($keyword);
             $query->where(function ($q) use ($keyword) {
@@ -210,7 +210,7 @@ class ProductService
             });
         }
 
-        // 2. 카테고리 필터 ✨
+        // 2. 카테고리 필터 
         if ($categorySlug) {
             $category = Category::where('slug', $categorySlug)->first();
             if ($category) {
@@ -223,14 +223,14 @@ class ProductService
             }
         }
 
-        // 3. 색상 필터 ✨
+        // 3. 색상 필터 
         if (!empty($selectedColors)) {
             $query->whereHas('colors', function ($q) use ($selectedColors) {
                 $q->whereIn('colors.name', $selectedColors);
             });
         }
 
-        // 4. 가격 필터 ✨
+        // 4. 가격 필터 
         if (!empty($selectedPrices)) {
             $query->where(function ($q) use ($selectedPrices) {
                 foreach ($selectedPrices as $range) {
@@ -273,7 +273,7 @@ class ProductService
     }
 
     /**
-     * 실시간 검색 제안 (Autocomplete) ✨🚀
+     * 실시간 검색 제안 (Autocomplete) 
      */
     public function getSearchSuggestions(string $keyword)
     {
@@ -287,7 +287,7 @@ class ProductService
     }
 
     /**
-     * 검색어 로그 저장 ✨📝
+     * 검색어 로그 저장 
      */
     private function logSearchKeyword(string $keyword)
     {
@@ -301,7 +301,7 @@ class ProductService
     }
 
     /**
-     * 인기 검색어 조회 🔥📈
+     * 인기 검색어 조회 
      */
     public function getPopularKeywords(int $limit = 5)
     {

@@ -51,7 +51,7 @@
                             </div>
                         </button>
                         
-                        {{-- 문의 내용 및 답변 영역 ✨ --}}
+                        {{-- 문의 내용 및 답변 영역  --}}
                         <div class="hidden bg-gray-50/50 px-8 py-8 border-t border-gray-50 animate-in slide-in-from-top-2 duration-300">
                             {{-- 질문 --}}
                             <div class="mb-8">
@@ -83,7 +83,7 @@
                             </div>
                             @else
                             <div class="bg-gray-100/50 p-6 rounded-2xl border border-dashed border-gray-200 text-center">
-                                <p class="text-xs text-gray-400 font-medium">문의하신 내용을 확인 중입니다. 잠시만 기다려 주세요! ✨</p>
+                                <p class="text-xs text-gray-400 font-medium">문의하신 내용을 확인 중입니다. 잠시만 기다려 주세요! </p>
                             </div>
                             @endif
                         </div>
@@ -110,7 +110,7 @@
     </div>
 </main>
 
-{{-- 1:1 문의 작성 모달 ✨ --}}
+{{-- 1:1 문의 작성 모달  --}}
 <div id="inquiryWriteModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in duration-200">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -128,11 +128,11 @@
             </div>
             <div>
                 <label for="inquiry_content" class="block text-xs font-black text-text-muted uppercase mb-2 tracking-tighter">문의 내용</label>
-                <textarea id="inquiry_content" name="content" rows="6" placeholder="문의하실 내용을 상세히 남겨주시면 정성껏 답변해 드릴게요! ✨" 
+                <textarea id="inquiry_content" name="content" rows="6" placeholder="문의하실 내용을 상세히 남겨주시면 정성껏 답변해 드릴게요! " 
                           class="w-full px-4 py-4 rounded-xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all resize-none"></textarea>
             </div>
             
-            {{-- 사진 첨부 영역 ✨ --}}
+            {{-- 사진 첨부 영역  --}}
             <div>
                 <label class="block text-xs font-black text-text-muted uppercase mb-3 tracking-tighter">사진 첨부 (선택)</label>
                 <div class="flex flex-wrap gap-3" id="modal-photo-container">
@@ -144,7 +144,7 @@
                 </div>
             </div>
 
-            {{-- 비밀글 설정 ✨🔒 --}}
+            {{-- 비밀글 설정  --}}
             <div class="flex items-center gap-2 pt-2">
                 <label class="relative flex items-center cursor-pointer">
                     <input type="checkbox" name="is_private" value="1" class="peer sr-only">
@@ -166,7 +166,7 @@
 
 @push('scripts')
 <script>
-    // Modal Functions ✨
+    // Modal Functions 
     function openModal(modal) {
         if (!modal) return;
         modal.style.display = "flex";
@@ -202,11 +202,11 @@
         const MAX_IMAGES = 4;
         let modalSelectedFiles = [];
 
-        // 1. 이미지 미리보기 처리 📸✨
+        // 1. 이미지 미리보기 처리 
         $modalImageInput.on('change', function(e) {
             const files = Array.from(e.target.files);
             if (modalSelectedFiles.length + files.length > MAX_IMAGES) {
-                showToast(`사진은 최대 ${MAX_IMAGES}장까지만 가능해요! 😊`, 'info', 'bg-red-500');
+                showToast(`사진은 최대 ${MAX_IMAGES}장까지만 가능해요! `, 'info', 'bg-red-500');
                 return;
             }
             files.forEach(file => {
@@ -229,7 +229,7 @@
             $modalImageInput.val('');
         });
 
-        // 2. 이미지 삭제 ❌
+        // 2. 이미지 삭제 
         $(document).on('click', '.btn-remove-modal-img', function() {
             const index = $(this).parent().index() - 1;
             modalSelectedFiles.splice(index, 1);
@@ -237,7 +237,7 @@
         });
 
         /**
-         * 문의 등록 AJAX 처리 ✨
+         * 문의 등록 AJAX 처리 
          */
         $('#inquiryForm').on('submit', function(e) {
             e.preventDefault();

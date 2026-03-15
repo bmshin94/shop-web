@@ -12,10 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. 마지막 정렬 순서 가져오기 ✨
+        // 1. 마지막 정렬 순서 가져오기 
         $lastSortOrder = DB::table('admin_menus')->max('sort_order') ?? 0;
 
-        // 2. 검색 로그 관리 메뉴 추가 📊🔍
+        // 2. 검색 로그 관리 메뉴 추가 
         DB::table('admin_menus')->insert([
             'group_name' => '통계 및 분석',
             'name' => '검색 로그 관리',

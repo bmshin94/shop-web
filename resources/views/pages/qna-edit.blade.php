@@ -30,7 +30,7 @@
         <!-- Page Title -->
         <div class="mb-8">
             <h2 class="text-2xl font-extrabold text-text-main tracking-tight">문의 내용 수정 </h2>
-            <p class="mt-2 text-sm text-text-muted italic">실수했어도 괜찮아! 카리나가 고칠 기회를 줄게~ 😊✨</p>
+            <p class="mt-2 text-sm text-text-muted italic">실수했어도 괜찮아! 내용을 수정할 수 있습니다~ </p>
         </div>
 
         @if($inquiry->product)
@@ -67,7 +67,7 @@
                         class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary transition-all resize-none shadow-inner bg-gray-50/30 leading-relaxed">{{ $inquiry->content }}</textarea>
                 </div>
                 
-                <!-- Secret Post Option ✨🔒 -->
+                <!-- Secret Post Option  -->
                 <div class="mt-6 flex items-center gap-2 px-1">
                     <label class="relative flex items-center cursor-pointer">
                         <input type="checkbox" name="is_private" value="1" {{ $inquiry->is_private ? 'checked' : '' }} class="peer sr-only">
@@ -79,10 +79,10 @@
                 </div>
             </div>
 
-            <!-- Photos ✨ -->
+            <!-- Photos  -->
             <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
                 <h3 class="text-lg font-bold text-text-main mb-2">사진 첨부 (최대 4장)</h3>
-                <p class="text-sm text-text-muted mb-6">기존 사진을 지우거나 새로 등록할 수 있어! 📸✨</p>
+                <p class="text-sm text-text-muted mb-6">기존 사진을 지우거나 새로 등록할 수 있어! </p>
                 <div class="flex flex-wrap gap-4" id="photo-container">
                     <label class="flex flex-col items-center justify-center w-24 h-24 rounded-2xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-primary hover:bg-primary-light/30 transition-all text-gray-400 hover:text-primary group">
                         <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">add_a_photo</span>
@@ -105,7 +105,7 @@
                             @endforeach
                         @endif
                     </div>
-                    <!-- New preview images will be inserted here! ✨ -->
+                    <!-- New preview images will be inserted here!  -->
                 </div>
                 {{-- 삭제할 기존 이미지 경로를 담을 hidden 영역 --}}
                 <div id="delete-images-container"></div>
@@ -129,11 +129,11 @@
         const MAX_IMAGES = 4;
         let selectedFiles = [];
 
-        // 이미지 미리보기 📸
+        // 이미지 미리보기 
         $imageInput.on('change', function(e) {
             const files = Array.from(e.target.files);
             if (selectedFiles.length + files.length > MAX_IMAGES) {
-                showToast(`사진은 최대 ${MAX_IMAGES}장까지만 등록 가능해요! 😊`, 'info', 'bg-red-500');
+                showToast(`사진은 최대 ${MAX_IMAGES}장까지만 등록 가능해요! `, 'info', 'bg-red-500');
                 return;
             }
             files.forEach(file => {
@@ -156,14 +156,14 @@
             $imageInput.val('');
         });
 
-        // 기존 이미지 삭제 처리 ❌📸
+        // 기존 이미지 삭제 처리 
         $(document).on('click', '.btn-remove-existing', function() {
             const path = $(this).data('path');
             $('#delete-images-container').append(`<input type="hidden" name="delete_images[]" value="${path}">`);
             $(this).parent().remove();
             
             // 전체 사진 개수 체크를 위해 selectedFiles와 합산 로직이 필요할 수 있지만, 
-            // 여기서는 단순 삭제로만 처리할게! ✨
+            // 여기서는 단순 삭제로만 처리할게! 
         });
 
         $(document).on('click', '.btn-remove-img', function() {
@@ -172,7 +172,7 @@
             $(this).parent().remove();
         });
 
-        // 폼 전송 (AJAX) 🚀✨
+        // 폼 전송 (AJAX) 
         $('#qnaForm').on('submit', function(e) {
             e.preventDefault();
             const $btn = $('#submitBtn');

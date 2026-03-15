@@ -6,12 +6,12 @@
 <div class="px-8 py-8">
     <div class="flex items-center justify-between mb-10">
         <div>
-            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">공지사항 관리 📢✨</h1>
+            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">공지사항 관리 </h1>
             <p class="mt-2 text-sm text-text-muted">우리 고객님들께 전할 소중한 소식들을 관리합니다.</p>
         </div>
         <a href="{{ route('admin.notices.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-105 transition-all">
             <span class="material-symbols-outlined text-[20px]">add</span>
-            새 공지사항 등록 📢
+            새 공지사항 등록 
         </a>
     </div>
 
@@ -63,7 +63,7 @@
                             <a href="{{ route('admin.notices.edit', $notice) }}" class="p-2 text-text-muted hover:text-primary transition-colors">
                                 <span class="material-symbols-outlined">edit</span>
                             </a>
-                            <form action="{{ route('admin.notices.destroy', $notice) }}" method="POST" onsubmit="return confirm('공지사항을 삭제할까요? 😢');">
+                            <form action="{{ route('admin.notices.destroy', $notice) }}" method="POST" onsubmit="return confirm('공지사항을 삭제할까요? ');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 text-text-muted hover:text-red-500 transition-colors">
@@ -76,7 +76,7 @@
                 @empty
                 <tr>
                     <td colspan="6" class="px-8 py-20 text-center text-text-muted">
-                        등록된 공지사항이 없어요! ✨ 
+                        등록된 공지사항이 없어요!  
                     </td>
                 </tr>
                 @endforelse

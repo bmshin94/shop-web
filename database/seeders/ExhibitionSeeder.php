@@ -15,7 +15,7 @@ class ExhibitionSeeder extends Seeder
     {
         Exhibition::query()->delete();
 
-        // 20개의 기획전 생성 ✨
+        // 20개의 기획전 생성 
         $exhibitions = Exhibition::factory()
             ->count(20)
             ->create();
@@ -24,7 +24,7 @@ class ExhibitionSeeder extends Seeder
 
         if ($products->count() > 0) {
             foreach ($exhibitions as $exhibition) {
-                // 각 기획전에 랜덤 상품 4~8개 연결 🔗
+                // 각 기획전에 랜덤 상품 4~8개 연결 
                 $randomProducts = $products->random(min($products->count(), rand(4, 8)));
                 
                 foreach ($randomProducts as $index => $product) {

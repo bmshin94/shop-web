@@ -47,7 +47,7 @@ class CartController extends Controller
     }
 
     /**
-     * 장바구니 정보 업데이트 (수량 및 옵션 변경 ✨)
+     * 장바구니 정보 업데이트 (수량 및 옵션 변경 )
      */
     public function update(Request $request, Cart $cart)
     {

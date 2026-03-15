@@ -10,7 +10,7 @@
         </a>
         <div>
             <h2 class="text-2xl font-black text-text-main tracking-tight">문의 상세 및 답변</h2>
-            <p class="text-sm text-text-muted mt-1">고객님의 문의 내용을 확인하고 답변을 작성해주세요. 📝</p>
+            <p class="text-sm text-text-muted mt-1">고객님의 문의 내용을 확인하고 답변을 작성해주세요. </p>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
         <form id="answerForm" class="space-y-6">
             @csrf
             @method('PATCH')
-            <textarea name="answer" rows="8" placeholder="고객님께 전달할 정성스러운 답변을 입력해주세요. ✨" 
+            <textarea name="answer" rows="8" placeholder="고객님께 전달할 정성스러운 답변을 입력해주세요. " 
                       class="w-full px-6 py-5 rounded-2xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all resize-none" required>{{ $inquiry->answer }}</textarea>
             
             <div class="flex justify-end gap-3">

@@ -78,7 +78,7 @@ class Product extends Model
     }
 
     /**
-     * 상품의 문의 목록 ✨💖
+     * 상품의 문의 목록 
      */
     public function inquiries()
     {

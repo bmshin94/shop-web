@@ -67,7 +67,7 @@
                     </div>
                     @endforelse
 
-                    {{-- 작성 가능한 리뷰 페이징 추가! ✨ --}}
+                    {{-- 작성 가능한 리뷰 페이징 추가!  --}}
                     @if($availableReviews->hasPages())
                     <div class="mt-12">
                         {{ $availableReviews->links() }}
@@ -113,7 +113,7 @@
                     </div>
                     @endforelse
 
-                    {{-- 내가 작성한 리뷰 페이징 ✨ --}}
+                    {{-- 내가 작성한 리뷰 페이징  --}}
                     @if($writtenReviews->hasPages())
                     <div class="mt-12">
                         {{ $writtenReviews->links() }}
@@ -125,7 +125,7 @@
     </div>
 </main>
 
-{{-- 리뷰 작성 모달 ✨ --}}
+{{-- 리뷰 작성 모달  --}}
 <div id="reviewModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 opacity-0 transition-opacity duration-300">
     <div id="reviewModalContent" class="relative bg-white rounded-3xl shadow-2xl max-w-xl w-full max-h-[90vh] flex flex-col overflow-hidden scale-95 transition-transform duration-300">
         <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/50 shrink-0">
@@ -170,7 +170,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-text-main mb-3 ml-1">상세 후기</label>
-                    <textarea name="content" rows="6" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 카리나가 너무 기쁠 거야! ✨" 
+                    <textarea name="content" rows="6" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 관리자가 너무 기쁠 거야! " 
                               class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary/20 transition-all resize-none bg-gray-50/30 leading-relaxed"></textarea>
                 </div>
             </div>
@@ -232,14 +232,14 @@
             btnWritten.classList.remove('border-transparent', 'text-text-muted');
         }
         
-        // URL 파라미터 업데이트 (새로고침 시 탭 유지 목적) ✨
+        // URL 파라미터 업데이트 (새로고침 시 탭 유지 목적) 
         const url = new URL(window.location);
         url.searchParams.set('tab', tab);
         window.history.replaceState({}, '', url);
     }
 
     $(document).ready(function() {
-        // 초기 로드 시 탭 유지 로직 ✨
+        // 초기 로드 시 탭 유지 로직 
         const urlParams = new URLSearchParams(window.location.search);
         const activeTab = urlParams.get('tab') || 'available';
         const isWrittenPage = urlParams.has('page_written');
@@ -348,7 +348,7 @@
             return;
         }
         if (content.length < 10) {
-            showToast('상세 후기를 10자 이상 작성해주세요! ✨', 'info', 'bg-[#181211]');
+            showToast('상세 후기를 10자 이상 작성해주세요! ', 'info', 'bg-[#181211]');
             return;
         }
 
@@ -365,7 +365,7 @@
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                showToast(data.message || '리뷰가 성공적으로 등록되었습니다! ✨');
+                showToast(data.message || '리뷰가 성공적으로 등록되었습니다! ');
                 closeReviewModal();
                 setTimeout(() => location.reload(), 1500);
             } else {

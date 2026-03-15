@@ -71,7 +71,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-text-main mb-3 ml-1">상세 후기</label>
-                    <textarea name="content" rows="8" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 카리나가 너무 기쁠 거야! " required
+                    <textarea name="content" rows="8" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 관리자가 너무 기쁠 거야! " required
                         class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary transition-all resize-none bg-gray-50/30 leading-relaxed"></textarea>
                 </div>
             </div>

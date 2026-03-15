@@ -123,7 +123,7 @@
                 @method('PUT')
                 @include('admin.events._form', [
                     'event' => $event,
-                    'formAction' => null, // form 태그를 밖에서 감싸므로 null 처리 ✨
+                    'formAction' => null, // form 태그를 밖에서 감싸므로 null 처리 
                     'submitLabel' => '수정하기'
                 ])
             </form>

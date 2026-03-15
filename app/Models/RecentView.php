@@ -20,7 +20,7 @@ class RecentView extends Model
     ];
 
     /**
-     * 회원 관계 정의 ✨
+     * 회원 관계 정의 
      */
     public function member()
     {
@@ -28,7 +28,7 @@ class RecentView extends Model
     }
 
     /**
-     * 상품 관계 정의 ✨
+     * 상품 관계 정의 
      */
     public function product()
     {

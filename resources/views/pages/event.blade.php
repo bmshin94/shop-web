@@ -404,7 +404,7 @@
 
         // 기간 및 상세 내용 적용
         if (showWinner) {
-            // 당첨자 발표 탭에서 직접 클릭한 경우에만 당첨자 정보 노출! ✨
+            // 당첨자 발표 탭에서 직접 클릭한 경우에만 당첨자 정보 노출! 
             document.getElementById('edPeriod').innerText = '당첨자 발표';
             document.getElementById('edDescription').innerHTML = ev.winner_announcement || '<p class="text-lg font-medium">당첨자 명단을 확인해 주세요!</p>';
             
@@ -412,7 +412,7 @@
                 renderWinners(ev.winners);
             }
         } else {
-            // 일반 상세 보기인 경우에는 당첨자가 있어도 보여주지 않음! 😊
+            // 일반 상세 보기인 경우에는 당첨자가 있어도 보여주지 않음! 
             const formatDate = (dateStr) => {
                 const d = new Date(dateStr);
                 return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;

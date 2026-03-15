@@ -11,9 +11,9 @@
                 <span class="size-12 rounded-2xl bg-yellow-400/10 text-yellow-500 flex items-center justify-center">
                     <span class="material-symbols-outlined text-3xl">star</span>
                 </span>
-                Customer Reviews ✨⭐
+                Customer Reviews 
             </h1>
-            <p class="mt-2 text-sm font-medium text-text-muted italic ml-15">우리 소중한 고객님들의 찐후기를 카리나가 관리해줄게! 😍💖</p>
+            <p class="mt-2 text-sm font-medium text-text-muted italic ml-15">우리 소중한 고객님들의 찐후기를 관리자가 관리해줄게! </p>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                     <select name="rating" class="w-full h-12 px-4 rounded-2xl border-gray-200 bg-white text-sm font-bold text-text-main focus:border-primary focus:ring-0 cursor-pointer">
                         <option value="">평점 전체 (All Stars)</option>
                         @foreach([5, 4, 3, 2, 1] as $r)
-                        <option value="{{ $r }}" {{ request('rating') == $r ? 'selected' : '' }}>{{ $r }}점 {{ str_repeat('⭐', $r) }}</option>
+                        <option value="{{ $r }}" {{ request('rating') == $r ? 'selected' : '' }}>{{ $r }}점 {{ str_repeat('', $r) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -111,7 +111,7 @@
                                 <button onclick="showReviewDetail({{ $review->id }})" class="size-9 rounded-xl bg-gray-50 text-gray-400 hover:bg-primary-light hover:text-primary transition-all flex items-center justify-center" title="상세보기">
                                     <span class="material-symbols-outlined text-lg">visibility</span>
                                 </button>
-                                <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" class="js-confirm-submit" data-confirm-message="정말 이 리뷰를 삭제하시겠습니까? 🧹">
+                                <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" class="js-confirm-submit" data-confirm-message="정말 이 리뷰를 삭제하시겠습니까? ">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="size-9 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center" title="삭제하기">
@@ -127,7 +127,7 @@
                             <div class="size-20 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-6 text-gray-200">
                                 <span class="material-symbols-outlined text-5xl">rate_review</span>
                             </div>
-                            <p class="text-text-muted font-black">아직 등록된 리뷰가 없습니다. ✨</p>
+                            <p class="text-text-muted font-black">아직 등록된 리뷰가 없습니다. </p>
                         </td>
                     </tr>
                     @endforelse
@@ -141,7 +141,7 @@
     </div>
 </div>
 
-{{-- Detail Modal ✨📸 --}}
+{{-- Detail Modal  --}}
 <div id="reviewDetailModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
     <div class="relative bg-white rounded-[2.5rem] shadow-2xl max-w-2xl w-full overflow-hidden animate-in zoom-in duration-300">
         <div class="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
@@ -154,14 +154,14 @@
             </button>
         </div>
         <div id="reviewDetailContent" class="p-10 max-h-[70vh] overflow-y-auto scrollbar-hide">
-            <!-- AJAX Content 😊 -->
+            <!-- AJAX Content  -->
         </div>
     </div>
 </div>
 
 <style>
     .filled { font-variation-settings: 'FILL' 1; }
-    /* Pagination Style Override ✨ */
+    /* Pagination Style Override  */
     .pagination { @apply flex gap-1 justify-center; }
     .page-item .page-link { @apply border-0 rounded-xl size-10 flex items-center justify-center font-bold text-sm text-text-muted hover:bg-white hover:shadow-md transition-all; }
     .page-item.active .page-link { @apply bg-primary text-white shadow-lg shadow-primary/20; }

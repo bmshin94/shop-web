@@ -94,7 +94,7 @@
             </div>
 
             <div class="p-8 bg-gray-50 rounded-3xl border border-gray-100 text-center">
-                <p class="text-sm text-text-muted italic">"자기가 어떤 등급이든, 카리나한테는 언제나 VIP인 거 알지? "</p>
+                <p class="text-sm text-text-muted italic">"자기가 어떤 등급이든, 관리자한테는 언제나 VIP인 거 알지? "</p>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\EventController; // 사용자용 EventController 추가! ✨
+use App\Http\Controllers\EventController; // 사용자용 EventController 추가! 
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\OotdController;
 use App\Http\Controllers\SupportController;
@@ -30,7 +30,7 @@ use App\Http\Controllers\Admin\NoticeController as AdminNoticeController;
 use App\Http\Controllers\Admin\OotdController as AdminOotdController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\InquiryController; // InquiryController 추가! ✨
+use App\Http\Controllers\Admin\InquiryController; // InquiryController 추가! 
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\PointController as AdminPointController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
@@ -59,8 +59,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         
         Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-    // 검색 로그 관리 ✨📊
-    // 리뷰 관리 ✨🛍️
+    // 검색 로그 관리 
+    // 리뷰 관리 ️
     Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
     Route::get('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'show'])->name('reviews.show');
     Route::delete('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
@@ -144,7 +144,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/categories/reorder', [AdminController::class, 'categoryReorder'])->name('categories.reorder');
     Route::get('/products/search', [AdminController::class, 'productSearch'])->name('products.search');
 
-    // 문의 관리 ✨
+    // 문의 관리 
     Route::get('/inquiries', [InquiryController::class, 'index'])->name('inquiries.index');
     Route::get('/inquiries/{inquiry}', [InquiryController::class, 'show'])->name('inquiries.show');
     Route::patch('/inquiries/{inquiry}/answer', [InquiryController::class, 'updateAnswer'])->name('inquiries.answer');
@@ -161,7 +161,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/sizes/groups/{group}', [SizeController::class, 'updateGroup'])->name('sizes.groups.update');
     Route::delete('/sizes/groups/{group}', [SizeController::class, 'destroyGroup'])->name('sizes.groups.destroy');
 
-    // 매거진 관리 라우트 ✨💖
+    // 매거진 관리 라우트 
     Route::resource('/magazines', AdminMagazineController::class)->names('magazines');
     Route::resource('/notices', AdminNoticeController::class)->names('notices');
     Route::resource('/ootds', AdminOotdController::class)->names('ootds');
@@ -209,7 +209,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/review/write', [ReviewController::class, 'create'])->name('review.write');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
 
-    // 회원정보 수정 ✨
+    // 회원정보 수정 
     Route::get('/mypage/profile', [MemberController::class, 'confirmPasswordForm'])->name('mypage.profile');
     Route::post('/mypage/profile/confirm', [MemberController::class, 'confirmPassword'])->name('mypage.profile.confirm');
     Route::get('/mypage/profile-edit', [MemberController::class, 'profileEditForm'])->name('mypage.profile-edit');
@@ -234,7 +234,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/mypage/coupon/register', [MemberController::class, 'registerCoupon'])->name('mypage.coupon.register');
     Route::get('/mypage/point', [MemberController::class, 'pointList'])->name('mypage.point');
 
-    // OOTD 등록, 좋아요, 수정, 삭제 ✨💖
+    // OOTD 등록, 좋아요, 수정, 삭제 
     Route::get('/community/ootd/create', [OotdController::class, 'create'])->name('ootd.create');
     Route::post('/community/ootd', [OotdController::class, 'store'])->name('ootd.store');
     Route::post('/community/ootd/{ootd}/like', [OotdController::class, 'toggleLike'])->name('ootd.like');
@@ -291,7 +291,7 @@ Route::get('/support/exchange', function () { return view('pages.support-exchang
 Route::get('/community', [CommunityController::class, 'index'])->name('community');
 Route::get('/community/magazine/more', [CommunityController::class, 'moreMagazines'])->name('magazine.more-data');
 Route::get('/community/ootd/more', [CommunityController::class, 'moreOotds'])->name('ootd.more-data');
-Route::get('/community/notice/more', [CommunityController::class, 'moreNotices'])->name('notice.more-data'); // 공지사항 더보기 추가! ✨
+Route::get('/community/notice/more', [CommunityController::class, 'moreNotices'])->name('notice.more-data'); // 공지사항 더보기 추가! 
 Route::get('/community/notice', function () { return view('pages.community-notice'); })->name('community.notice');
 
 Route::get('/community/membership', function () { return view('pages.community-membership'); })->name('community.membership');
@@ -303,8 +303,8 @@ Route::post('/event/{event}/participate', [EventController::class, 'participate'
 Route::delete('/event/{event}/participate', [EventController::class, 'cancelParticipation'])->name('event.participate.cancel')->middleware('auth');
 Route::get('/event/participate', function () { return view('pages.event-participate'); })->name('event.participate');
 
-// 기획전 라우트 추가! ✨
+// 기획전 라우트 추가! 
 Route::get('/exhibition', [\App\Http\Controllers\ExhibitionController::class, 'index'])->name('exhibition.index');
 Route::get('/exhibition/{slug}', [\App\Http\Controllers\ExhibitionController::class, 'show'])->name('exhibition.show');
 
-// Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry'); // 삭제! ✨
+// Route::get('/mypage/inquiry', function () { return view('pages.mypage-inquiry'); })->name('mypage.inquiry'); // 삭제! 

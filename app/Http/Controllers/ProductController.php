@@ -56,7 +56,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 상품 통합 검색 ✨🔍
+     * 상품 통합 검색 
      */
     public function search(Request $request)
     {
@@ -65,7 +65,7 @@ class ProductController extends Controller
     }
 
     /**
-     * 실시간 검색 제안 (AJAX Autocomplete) ✨🚀
+     * 실시간 검색 제안 (AJAX Autocomplete) 
      */
     public function autocomplete(Request $request)
     {

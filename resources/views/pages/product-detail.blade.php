@@ -317,7 +317,7 @@
                 @if($canReview)
                 <a href="{{ route('review.write', ['product_id' => $product->id]) }}" class="px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors shadow-sm">리뷰 작성하기</a>
                 @else
-                <button type="button" onclick="showToast('구매확정 완료된 상품만 리뷰를 작성할 수 있어요! 😊', 'info', 'bg-gray-600')" class="px-6 py-3 bg-gray-100 text-text-muted text-sm font-bold rounded-xl hover:bg-gray-200 transition-colors shadow-sm">리뷰 작성안내</button>
+                <button type="button" onclick="showToast('구매확정 완료된 상품만 리뷰를 작성할 수 있어요! ', 'info', 'bg-gray-600')" class="px-6 py-3 bg-gray-100 text-text-muted text-sm font-bold rounded-xl hover:bg-gray-200 transition-colors shadow-sm">리뷰 작성안내</button>
                 @endif
             </div>
 
@@ -430,7 +430,7 @@
                     @else
                     <div class="flex items-center gap-2 text-sm text-text-muted italic bg-gray-50 p-4 rounded-xl border border-dashed border-gray-200">
                         <span class="material-symbols-outlined text-base">lock</span>
-                        비밀글입니다. 작성자만 확인하실 수 있어요! 😊✨
+                        비밀글입니다. 작성자만 확인하실 수 있어요! 
                     </div>
                     @endif
                     
@@ -1046,10 +1046,10 @@
     });
 
     /**
-     * 문의 삭제 처리 ✨💖
+     * 문의 삭제 처리 
      */
     async function deleteInquiry(id) {
-        if (!await showConfirm('정말 이 문의를 삭제하시겠어요? 🥺')) return;
+        if (!await showConfirm('정말 이 문의를 삭제하시겠어요? ')) return;
 
         $.ajax({
             url: `/qna/${id}`,

@@ -18,7 +18,7 @@ return new class extends Migration
             $create->timestamp('viewed_at')->useCurrent();
             $create->timestamps();
 
-            // 같은 회원이 같은 상품을 여러 번 봐도 마지막 시간만 갱신하기 위해 유니크 키 제안! 😊
+            // 같은 회원이 같은 상품을 여러 번 봐도 마지막 시간만 갱신하기 위해 유니크 키 제안! 
             $create->unique(['member_id', 'product_id']);
         });
     }

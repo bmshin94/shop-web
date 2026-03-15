@@ -99,7 +99,7 @@
                                     @endif
                                 </span>
                             </div>
-                            {{-- 상태 텍스트 영역 (오빠가 원한 바로 그 부분!) --}}
+                            {{-- 상태 텍스트 영역 (사용자가 원한 바로 그 부분!) --}}
                             <span class="text-[11px] font-black {{ $coupon->is_active ? 'text-primary' : 'text-text-muted' }}">
                                 {{ $coupon->status_text }}
                             </span>

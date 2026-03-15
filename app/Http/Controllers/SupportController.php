@@ -15,12 +15,12 @@ class SupportController extends Controller
     {
         $query = Faq::where('is_visible', true);
 
-        // 카테고리 필터링 ✨
+        // 카테고리 필터링 
         if ($request->filled('category') && $request->category !== 'all') {
             $query->where('category', $request->category);
         }
 
-        // 검색 필터링 ✨🔍
+        // 검색 필터링 
         if ($request->filled('q')) {
             $search = $request->q;
             $query->where(function($q) use ($search) {
@@ -38,7 +38,7 @@ class SupportController extends Controller
     }
 
     /**
-     * 고객센터 공지사항 페이지 ✨📢
+     * 고객센터 공지사항 페이지 
      */
     public function notices()
     {

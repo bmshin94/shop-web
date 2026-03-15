@@ -156,7 +156,7 @@
     </div>
 </main>
 
-{{-- 장바구니 성공 안내 모달 ✨ --}}
+{{-- 장바구니 성공 안내 모달  --}}
 <div id="cartSuccessModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-in fade-in zoom-in duration-200">
         <button type="button" onclick="closeModal(document.getElementById('cartSuccessModal'))" class="absolute top-4 right-4 size-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 transition-colors">
@@ -181,7 +181,7 @@
 
 @push('scripts')
 <script>
-    // Modal Functions ✨
+    // Modal Functions 
     function openModal(modal) {
         if (!modal) return;
         modal.style.display = "flex";
@@ -196,7 +196,7 @@
     }
 
     $(document).ready(function() {
-        // 모달 외부 클릭 시 닫기 ✨
+        // 모달 외부 클릭 시 닫기 
         $('#cartSuccessModal').on('click', function(e) {
             if (e.target === this) closeModal(this);
         });
@@ -296,7 +296,7 @@
         });
 
         /**
-         * 개별 장바구니 담기 ✨
+         * 개별 장바구니 담기 
          */
         $(document).on('click', '.btn-add-cart', function() {
             const $btn = $(this);
@@ -318,7 +318,7 @@
                 data: { product_id: productId, quantity: 1 },
                 success: function(response) {
                     if (response.status === 'success' || response.status === 'duplicate') {
-                        // 토스트 대신 성공 모달 띄우기! 💖
+                        // 토스트 대신 성공 모달 띄우기! 
                         openModal(document.getElementById('cartSuccessModal'));
                         
                         // 헤더 카운트 업데이트
@@ -329,7 +329,7 @@
         });
 
         /**
-         * 개별 바로구매 ✨
+         * 개별 바로구매 
          */
         $(document).on('click', '.btn-buy-now', function() {
             const $btn = $(this);
@@ -345,7 +345,7 @@
                 return;
             }
 
-            // 이동 안내 토스트 추가! ✨
+            // 이동 안내 토스트 추가! 
             showToast('결제 페이지로 이동합니다.', 'bolt', 'bg-[#181211]');
 
             $.ajax({

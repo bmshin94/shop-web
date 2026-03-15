@@ -74,11 +74,11 @@ class PointHistorySeeder extends Seeder
                 'reason' => '이벤트 참여 보너스 (기간 한정)',
                 'amount' => $expiringAmount,
                 'balance_after' => $currentBalance,
-                'expired_at' => now()->addDays(15), // 30일 내 소멸 예정에 걸리도록 설정! ✨
+                'expired_at' => now()->addDays(15), // 30일 내 소멸 예정에 걸리도록 설정! 
                 'created_at' => now()->subDays(350), // 거의 1년 다 되어감
             ]);
 
-            // 최종 잔액을 회원 테이블에 업데이트! 🛡️
+            // 최종 잔액을 회원 테이블에 업데이트! ️
             $member->update(['points' => $currentBalance]);
         }
     }

@@ -7,7 +7,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-black text-text-main tracking-tight">1:1 문의 관리</h2>
-            <p class="text-sm text-text-muted mt-1">고객님들의 소중한 문의에 정성껏 답변해 주세요. ✨</p>
+            <p class="text-sm text-text-muted mt-1">고객님들의 소중한 문의에 정성껏 답변해 주세요. </p>
         </div>
     </div>
 

@@ -19,7 +19,7 @@ class MyPageTest extends TestCase
     public function test_authenticated_member_can_access_mypage(): void
     {
         $member = Member::factory()->create([
-            'name' => '카리나',
+            'name' => '관리자',
             'points' => 5000,
             'level' => 'VIP'
         ]);
@@ -27,7 +27,7 @@ class MyPageTest extends TestCase
         $response = $this->actingAs($member)->get(route('mypage'));
 
         $response->assertStatus(200);
-        $response->assertSee('카리나');
+        $response->assertSee('관리자');
         $response->assertSee('VIP 등급');
         $response->assertSee('5,000'); // 포인트 확인
     }
@@ -74,7 +74,7 @@ class MyPageTest extends TestCase
     public function test_mypage_shows_recent_orders(): void
     {
         $member = Member::factory()->create();
-        $product = Product::factory()->create(['name' => '에스파 응원봉']);
+        $product = Product::factory()->create(['name' => 'Active Women 응원봉']);
         
         $order = Order::factory()->create([
             'member_id' => $member->id,
@@ -95,7 +95,7 @@ class MyPageTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('ORD-20260309-TEST');
-        $response->assertSee('에스파 응원봉');
+        $response->assertSee('Active Women 응원봉');
         $response->assertSee('55,000');
     }
 

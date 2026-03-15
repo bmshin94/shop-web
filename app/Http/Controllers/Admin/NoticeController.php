@@ -45,7 +45,7 @@ class NoticeController extends Controller
 
         Notice::create($validated);
 
-        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 등록되었어! 📢💖');
+        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 등록되었어! ');
     }
 
     /**
@@ -72,7 +72,7 @@ class NoticeController extends Controller
 
         $notice->update($validated);
 
-        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 수정되었어! 📢💖');
+        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 수정되었어! ');
     }
 
     /**
@@ -82,6 +82,6 @@ class NoticeController extends Controller
     {
         $notice->delete();
 
-        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 삭제되었어! 📢💖');
+        return redirect()->route('admin.notices.index')->with('success', '공지사항이 성공적으로 삭제되었어! ');
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class OotdController extends Controller
 {
     /**
-     * OOTD 등록 폼 (모달로 변경되어 이제 사용하지 않지만 하위 호환을 위해 유지할 수 있어! ✨)
+     * OOTD 등록 폼 (모달로 변경되어 이제 사용하지 않지만 하위 호환을 위해 유지할 수 있어! )
      */
     public function create()
     {
@@ -18,7 +18,7 @@ class OotdController extends Controller
     }
 
     /**
-     * OOTD 저장 처리 ✨💖 (AJAX 대응)
+     * OOTD 저장 처리  (AJAX 대응)
      */
     public function store(Request $request)
     {
@@ -43,7 +43,7 @@ class OotdController extends Controller
             'is_visible' => true,
         ]);
 
-        // AJAX 요청인 경우 JSON 응답 ✨
+        // AJAX 요청인 경우 JSON 응답 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,

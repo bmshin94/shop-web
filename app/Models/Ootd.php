@@ -33,7 +33,7 @@ class Ootd extends Model
     }
 
     /**
-     * 좋아요를 누른 회원들 관계 (다대다) ✨💖❤️
+     * 좋아요를 누른 회원들 관계 (다대다) ️
      */
     public function likers()
     {
@@ -42,7 +42,7 @@ class Ootd extends Model
     }
 
     /**
-     * 특정 회원이 이 OOTD에 좋아요를 눌렀는지 확인 ✨🤔❤️
+     * 특정 회원이 이 OOTD에 좋아요를 눌렀는지 확인 ️
      */
     public function isLikedBy(?Member $member)
     {

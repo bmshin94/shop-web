@@ -53,7 +53,7 @@ class ExhibitionDetailFeatureTest extends TestCase
      */
     public function test_exhibition_detail_shows_selection_ui_for_active_exhibition(): void
     {
-        $this->withoutExceptionHandling(); // 뷰 렌더링 에러를 찾아라! ✨
+        $this->withoutExceptionHandling(); // 뷰 렌더링 에러를 찾아라! 
 
         // 1. 진행 중인 기획전 생성
         $exhibition = Exhibition::factory()->create(['status' => '진행중']);

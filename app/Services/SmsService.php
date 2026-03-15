@@ -28,7 +28,7 @@ class SmsService
      */
     public function sendSms($receiver, $message)
     {
-        // 로컬 환경이나 테스트 환경에서는 실제로 보내지 않고 로그만 남김 ✨
+        // 로컬 환경이나 테스트 환경에서는 실제로 보내지 않고 로그만 남김 
         if ((app()->environment('local', 'testing') || empty($this->apiKey))) {
             Log::info("SMS Mock Send [To: {$receiver}] [Msg: {$message}]");
             return ['result_code' => 1, 'message' => 'success (mock)'];

@@ -95,7 +95,7 @@
                 @empty
                 <div class="py-20 text-center text-text-muted">
                     <span class="material-symbols-outlined text-5xl mb-4 block">search_off</span>
-                    찾으시는 결과가 없습니다. ✨
+                    찾으시는 결과가 없습니다. 
                 </div>
                 @endforelse
             </div>

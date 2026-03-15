@@ -145,30 +145,30 @@ class ProductTest extends TestCase
     }
 
     /**
-     * 통합 검색 기능 테스트 ✨🔍
+     * 통합 검색 기능 테스트 
      */
     public function test_products_can_be_searched(): void
     {
-        Product::factory()->create(['name' => '카리나 레깅스', 'status' => '판매중']);
-        Product::factory()->create(['name' => '에스파 크롭탑', 'status' => '판매중']);
+        Product::factory()->create(['name' => '관리자 레깅스', 'status' => '판매중']);
+        Product::factory()->create(['name' => 'Active Women 크롭탑', 'status' => '판매중']);
         Product::factory()->create(['name' => '평범한 바지', 'status' => '판매중']);
 
-        // 1. 검색 실행! 😊
-        $response = $this->get(route('products.search', ['q' => '카리나']));
+        // 1. 검색 실행! 
+        $response = $this->get(route('products.search', ['q' => '관리자']));
 
         $response->assertStatus(200);
-        $response->assertSee('카리나 레깅스');
-        $response->assertDontSee('에스파 크롭탑');
+        $response->assertSee('관리자 레깅스');
+        $response->assertDontSee('Active Women 크롭탑');
         $response->assertDontSee('평범한 바지');
 
-        // 2. 검색 기록 확인! 📝
+        // 2. 검색 기록 확인! 
         $this->assertDatabaseHas('search_logs', [
-            'keyword' => '카리나'
+            'keyword' => '관리자'
         ]);
     }
 
     /**
-     * 실시간 검색 제안(Autocomplete) 테스트 ✨🚀
+     * 실시간 검색 제안(Autocomplete) 테스트 
      */
     public function test_autocomplete_returns_suggestions(): void
     {
@@ -184,11 +184,11 @@ class ProductTest extends TestCase
     }
 
     /**
-     * 검색 결과 내 필터링 기능 테스트 ✨🔍🎨
+     * 검색 결과 내 필터링 기능 테스트 
      */
     public function test_search_results_can_be_filtered_by_color(): void
     {
-        // 1. 데이터 준비 ✨
+        // 1. 데이터 준비 
         $black = \App\Models\Color::create(['name' => '블랙', 'hex_code' => '#000000']);
         $white = \App\Models\Color::create(['name' => '화이트', 'hex_code' => '#FFFFFF']);
 
@@ -198,15 +198,15 @@ class ProductTest extends TestCase
         $whiteProduct = Product::factory()->create(['name' => '매끈한 화이트 탑', 'status' => '판매중']);
         $whiteProduct->colors()->attach($white->id);
 
-        // 2. 검색어 '매'로 검색하되, 색상은 '블랙'만 필터링! 😊
+        // 2. 검색어 '매'로 검색하되, 색상은 '블랙'만 필터링! 
         $response = $this->get(route('products.search', [
             'q' => '매',
             'colors' => ['블랙']
         ]));
 
-        // 3. 검증! 🎬🚀 ✅
+        // 3. 검증!  
         $response->assertStatus(200);
         $response->assertSee('매력적인 블랙 레깅스');
-        $response->assertDontSee('매끈한 화이트 탑'); // 화이트는 검색어엔 맞지만 색상이 틀려야 함! 🕵️‍♀️🚫
+        $response->assertDontSee('매끈한 화이트 탑'); // 화이트는 검색어엔 맞지만 색상이 틀려야 함! ️‍️
     }
 }

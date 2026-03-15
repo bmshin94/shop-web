@@ -16,10 +16,10 @@ class SearchLogAdminTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // 테스트용 관리자 생성 ✨
+        // 테스트용 관리자 생성 
         $this->admin = Operator::factory()->create();
 
-        // 🌟 레이아웃 렌더링에 필요한 메뉴 데이터 생성! 🧩
+        //  레이아웃 렌더링에 필요한 메뉴 데이터 생성! 
         \App\Models\AdminMenu::create([
             'name' => 'Dashboard',
             'route' => 'admin.dashboard',
@@ -32,13 +32,13 @@ class SearchLogAdminTest extends TestCase
     /** @test */
     public function admin_can_view_search_logs_index()
     {
-        $this->withoutExceptionHandling(); // 에러 내용 다 보여줘! ✨🕵️‍♀️
+        $this->withoutExceptionHandling(); // 에러 내용 다 보여줘! ️‍️
         
-        // 1. 검색 로그 데이터 생성 😊
+        // 1. 검색 로그 데이터 생성 
         SearchLog::create(['keyword' => '레깅스', 'ip_address' => '127.0.0.1']);
         SearchLog::create(['keyword' => '브라탑', 'ip_address' => '127.0.0.1']);
 
-        // 2. 관리자로 로그인하여 접근! 🔐
+        // 2. 관리자로 로그인하여 접근! 
         $response = $this->actingAs($this->admin, 'admin')
             ->get(route('admin.search-logs.index'));
 
@@ -70,6 +70,6 @@ class SearchLogAdminTest extends TestCase
             ->post(route('admin.search-logs.clear'));
 
         $response->assertStatus(302);
-        $this->assertEquals(0, SearchLog::count()); // 싹 비워졌는지 확인! 🧹✨
+        $this->assertEquals(0, SearchLog::count()); // 싹 비워졌는지 확인! 
     }
 }

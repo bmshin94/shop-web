@@ -23,7 +23,7 @@ class ReviewController extends Controller
         $product = Product::findOrFail($productId);
         $memberId = auth()->id();
 
-        // 1. 해당 상품을 구매했는지, 그리고 상태가 '구매확정'인지 확인합니다. ✨💖
+        // 1. 해당 상품을 구매했는지, 그리고 상태가 '구매확정'인지 확인합니다. 
         $hasPurchased = \App\Models\OrderItem::where('product_id', $productId)
             ->whereHas('order', function ($query) use ($memberId) {
                 $query->where('member_id', $memberId)
@@ -32,7 +32,7 @@ class ReviewController extends Controller
 
         if (!$hasPurchased) {
             return redirect()->route('product-detail', $product->slug)
-                ->with('error', '구매확정 완료된 상품만 리뷰를 작성할 수 있습니다. 상품을 받으신 후 구매확정을 해주세요! 😊✨');
+                ->with('error', '구매확정 완료된 상품만 리뷰를 작성할 수 있습니다. 상품을 받으신 후 구매확정을 해주세요! ');
         }
 
         return view('pages.review-write', compact('product'));
@@ -54,7 +54,7 @@ class ReviewController extends Controller
         $memberId = auth()->id();
         $productId = $request->product_id;
 
-        // 2. 저장 시에도 한 번 더 꼼꼼하게 구매 여부와 상태를 체크합니다! ✨🔒
+        // 2. 저장 시에도 한 번 더 꼼꼼하게 구매 여부와 상태를 체크합니다! 
         $hasPurchased = \App\Models\OrderItem::where('product_id', $productId)
             ->whereHas('order', function ($query) use ($memberId) {
                 $query->where('member_id', $memberId)
@@ -64,7 +64,7 @@ class ReviewController extends Controller
         if (!$hasPurchased) {
             return response()->json([
                 'success' => false,
-                'message' => '구매확정 완료된 상품만 리뷰를 남길 수 있어요! 나중에 꼭 다시 와주세요~ 😊💖'
+                'message' => '구매확정 완료된 상품만 리뷰를 남길 수 있어요! 나중에 꼭 다시 와주세요~ '
             ], 403);
         }
 

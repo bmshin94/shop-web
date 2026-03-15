@@ -51,12 +51,12 @@ class CommunityController extends Controller
             ];
         });
 
-        // 공지사항 데이터 (10개씩 페이징! ✨)
+        // 공지사항 데이터 (10개씩 페이징! )
         $notices = Notice::where('is_visible', true)
             ->orderBy('is_important', 'desc')
             ->orderBy('published_at', 'desc')
             ->orderBy('created_at', 'desc')
-            ->paginate(10); // 공지사항 페이징 적용! 📈
+            ->paginate(10); // 공지사항 페이징 적용! 
 
         $noticeList = $notices->getCollection()->map(function ($n) {
             return [
@@ -74,7 +74,7 @@ class CommunityController extends Controller
             'ootds' => $ootdList,
             'hasMoreOotd' => $ootds->hasMorePages(),
             'notices' => $noticeList,
-            'hasMoreNotice' => $notices->hasMorePages() // 공지사항 더보기 여부 ✨
+            'hasMoreNotice' => $notices->hasMorePages() // 공지사항 더보기 여부 
         ]);
     }
 
@@ -136,7 +136,7 @@ class CommunityController extends Controller
     }
 
     /**
-     * 공지사항 더보기 (AJAX) ✨💖🚀
+     * 공지사항 더보기 (AJAX) 
      */
     public function moreNotices(Request $request)
     {

@@ -16,7 +16,7 @@ class SupportTest extends TestCase
      */
     public function test_faq_index_page_display(): void
     {
-        // 1. 샘플 FAQ 생성 ✨
+        // 1. 샘플 FAQ 생성 
         Faq::create([
             'category' => 'member',
             'question' => '회원 탈퇴는 어떻게 하나요?',
@@ -24,7 +24,7 @@ class SupportTest extends TestCase
             'is_visible' => true,
         ]);
 
-        // 2. 접근 및 확인 🚀
+        // 2. 접근 및 확인 
         $response = $this->get(route('support'));
 
         $response->assertStatus(200);
@@ -32,14 +32,14 @@ class SupportTest extends TestCase
     }
 
     /**
-     * FAQ 카테고리 필터링 테스트 ✨📂
+     * FAQ 카테고리 필터링 테스트 
      */
     public function test_faq_category_filtering(): void
     {
         Faq::create(['category' => 'member', 'question' => '가입 질문', 'answer' => '답변', 'is_visible' => true]);
         Faq::create(['category' => 'order', 'question' => '주문 질문', 'answer' => '답변', 'is_visible' => true]);
 
-        // 가입 카테고리만 요청! 😊
+        // 가입 카테고리만 요청! 
         $response = $this->get(route('support', ['category' => 'member']));
 
         $response->assertStatus(200);
@@ -48,14 +48,14 @@ class SupportTest extends TestCase
     }
 
     /**
-     * FAQ 검색 기능 테스트 ✨🔍
+     * FAQ 검색 기능 테스트 
      */
     public function test_faq_search_functionality(): void
     {
         Faq::create(['category' => 'member', 'question' => '비밀번호 찾기', 'answer' => '답변', 'is_visible' => true]);
         Faq::create(['category' => 'delivery', 'question' => '배송 추적', 'answer' => '답변', 'is_visible' => true]);
 
-        // '비밀번호'로 검색! 🔍
+        // '비밀번호'로 검색! 
         $response = $this->get(route('support', ['q' => '비밀번호']));
 
         $response->assertStatus(200);
@@ -64,7 +64,7 @@ class SupportTest extends TestCase
     }
 
     /**
-     * 고객센터 공지사항 목록 테스트 ✨📢
+     * 고객센터 공지사항 목록 테스트 
      */
     public function test_support_notices_display(): void
     {

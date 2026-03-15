@@ -9,7 +9,7 @@ class SearchLog extends Model
 {
     use HasFactory;
 
-    public $timestamps = false; // created_at만 써요! ✨
+    public $timestamps = false; // created_at만 써요! 
 
     protected $fillable = [
         'keyword',
@@ -22,7 +22,7 @@ class SearchLog extends Model
     ];
 
     /**
-     * 검색한 회원 관계 ✨
+     * 검색한 회원 관계 
      */
     public function member()
     {

@@ -6,12 +6,12 @@
 <div class="px-8 py-8">
     <div class="flex items-center justify-between mb-10">
         <div>
-            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">FAQ 관리 ✨</h1>
+            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">FAQ 관리 </h1>
             <p class="mt-2 text-sm text-text-muted">자주 묻는 질문(FAQ)을 관리합니다.</p>
         </div>
         <a href="{{ route('admin.faqs.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-105 transition-all">
             <span class="material-symbols-outlined text-[20px]">add</span>
-            새 FAQ 등록 📄
+            새 FAQ 등록 
         </a>
     </div>
 
@@ -63,7 +63,7 @@
                             <a href="{{ route('admin.faqs.edit', $faq) }}" class="p-2 text-text-muted hover:text-primary transition-colors">
                                 <span class="material-symbols-outlined">edit</span>
                             </a>
-                            <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" onsubmit="return confirm('FAQ를 삭제할까요? 😢');">
+                            <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" onsubmit="return confirm('FAQ를 삭제할까요? ');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 text-text-muted hover:text-red-500 transition-colors">
@@ -76,7 +76,7 @@
                 @empty
                 <tr>
                     <td colspan="6" class="px-8 py-20 text-center text-text-muted">
-                        등록된 FAQ가 없습니다. ✨
+                        등록된 FAQ가 없습니다. 
                     </td>
                 </tr>
                 @endforelse

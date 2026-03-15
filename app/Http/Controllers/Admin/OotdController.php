@@ -45,7 +45,7 @@ class OotdController extends Controller
 
         Ootd::create($validated);
 
-        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 등록되었어! 📸💖');
+        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 등록되었어! ');
     }
 
     /**
@@ -72,7 +72,7 @@ class OotdController extends Controller
 
         $ootd->update($validated);
 
-        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 수정되었어! 📸💖');
+        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 수정되었어! ');
     }
 
     /**
@@ -82,6 +82,6 @@ class OotdController extends Controller
     {
         $ootd->delete();
 
-        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 삭제되었어! 📸💖');
+        return redirect()->route('admin.ootds.index')->with('success', 'OOTD가 성공적으로 삭제되었어! ');
     }
 }

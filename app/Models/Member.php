@@ -115,7 +115,7 @@ class Member extends Authenticatable
     }
 
     /**
-     * 회원의 최근 본 상품 목록 ✨
+     * 회원의 최근 본 상품 목록 
      */
     public function recentViews()
     {
@@ -123,7 +123,7 @@ class Member extends Authenticatable
     }
 
     /**
-     * 회원의 1:1 문의 목록 ✨
+     * 회원의 1:1 문의 목록 
      */
     public function inquiries()
     {
@@ -139,7 +139,7 @@ class Member extends Authenticatable
     }
 
     /**
-     * 회원이 좋아요를 누른 OOTD 목록 (다대다) ✨💖❤️
+     * 회원이 좋아요를 누른 OOTD 목록 (다대다) ️
      */
     public function likedOotds()
     {

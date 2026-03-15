@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="space-y-6 lg:space-y-8">
-    {{-- 상단 네비게이션 및 액션 버튼 ✨ --}}
+    {{-- 상단 네비게이션 및 액션 버튼  --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.exhibitions.index', request()->query()) }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
@@ -24,7 +24,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 lg:gap-8">
-        {{-- 왼쪽: 상세 정보 🔍 --}}
+        {{-- 왼쪽: 상세 정보  --}}
         <div class="space-y-6">
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            {{-- 연결 상품 목록 🛍️ --}}
+            {{-- 연결 상품 목록 ️ --}}
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
                     <h4 class="text-sm font-black text-text-main flex items-center gap-2">
@@ -97,14 +97,14 @@
                         </div>
                     @empty
                         <div class="py-12 text-center">
-                            <p class="text-sm font-bold text-text-muted">연결된 상품이 없습니다. 😊</p>
+                            <p class="text-sm font-bold text-text-muted">연결된 상품이 없습니다. </p>
                         </div>
                     @endforelse
                 </div>
             </div>
         </div>
 
-        {{-- 오른쪽: 운영 정보 ⚙️ --}}
+        {{-- 오른쪽: 운영 정보 ️ --}}
         <div class="space-y-6">
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
                 <h4 class="text-sm font-black text-text-main mb-5 uppercase tracking-wider">운영 히스토리</h4>
@@ -137,7 +137,7 @@
                 </dl>
             </div>
 
-            {{-- 미리보기 링크 ✨ --}}
+            {{-- 미리보기 링크  --}}
             <div class="bg-text-main rounded-3xl p-6 text-white shadow-xl shadow-text-main/20">
                 <h4 class="text-sm font-black mb-2 flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary">visibility</span>

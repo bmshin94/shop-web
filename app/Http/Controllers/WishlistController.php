@@ -70,7 +70,7 @@ class WishlistController extends Controller
     }
 
     /**
-     * 찜 목록 전체 삭제 ✨
+     * 찜 목록 전체 삭제 
      */
     public function clearAll()
     {

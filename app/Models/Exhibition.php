@@ -38,7 +38,7 @@ class Exhibition extends Model
     ];
 
     /**
-     * 진행 중인 기획전만 조회하는 스코프 ✨💖
+     * 진행 중인 기획전만 조회하는 스코프 
      */
     public function scopeActive($query)
     {

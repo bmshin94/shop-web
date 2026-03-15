@@ -130,7 +130,7 @@
                         placeholder="종료일 검색"
                         class="datepicker w-full sm:w-[180px] pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all">
                 </div>
-                <p class="text-[11px] font-bold text-text-muted ml-auto hidden xl:block italic">기획전 시작일 기준으로 검색됩니다. 😊</p>
+                <p class="text-[11px] font-bold text-text-muted ml-auto hidden xl:block italic">기획전 시작일 기준으로 검색됩니다. </p>
             </div>
         </form>
     </div>

@@ -70,7 +70,7 @@ class AuthTest extends TestCase
         ]);
 
         $userData = [
-            'name' => '카리나',
+            'name' => '관리자',
             'email' => 'karina@aespa.com',
             'password' => 'password123!',
             'password_confirm' => 'password123!',
@@ -88,7 +88,7 @@ class AuthTest extends TestCase
 
         // DB에 저장되었는지 확인
         $this->assertDatabaseHas('members', [
-            'name' => '카리나',
+            'name' => '관리자',
             'email' => 'karina@aespa.com',
             'phone' => '010-1234-5678',
             'status' => '활성',

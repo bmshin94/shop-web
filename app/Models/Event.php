@@ -26,7 +26,7 @@ class Event extends Model
         'banner_image_url',
         'summary',
         'description',
-        'winner_announcement', // 당첨자 발표 내용 추가! ✨
+        'winner_announcement', // 당첨자 발표 내용 추가! 
         'start_at',
         'end_at',
         'sort_order',
@@ -42,7 +42,7 @@ class Event extends Model
     ];
 
     /**
-     * 현재 날짜 기반 동적 상태 속성 ✨
+     * 현재 날짜 기반 동적 상태 속성 
      */
     public function getStatusAttribute(): string
     {
@@ -60,7 +60,7 @@ class Event extends Model
     }
 
     /**
-     * 이벤트 당첨자들 ✨
+     * 이벤트 당첨자들 
      */
     public function winners(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

@@ -18,7 +18,7 @@ class ExhibitionManagementService
     public function paginateExhibitions(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Exhibition::query()
-            ->latest(); // 생성일(created_at) 기준으로 최신순 정렬! ✨ 새로 등록한 게 맨 위로 와요! 😊
+            ->latest(); // 생성일(created_at) 기준으로 최신순 정렬!  새로 등록한 게 맨 위로 와요! 
 
         $this->applyExhibitionFilters($query, $filters);
 
@@ -67,12 +67,12 @@ class ExhibitionManagementService
      */
     public function createExhibition(array $payload): Exhibition
     {
-        // 배너 이미지 업로드 처리! ✨
+        // 배너 이미지 업로드 처리! 
         if (isset($payload['banner_image']) && $payload['banner_image'] instanceof \Illuminate\Http\UploadedFile) {
             $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
         }
 
-        // 날짜 기반 상태 자동 결정! 🕵️‍♀️
+        // 날짜 기반 상태 자동 결정! ️‍️
         $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
 
         $exhibition = Exhibition::query()->create($payload);
@@ -93,12 +93,12 @@ class ExhibitionManagementService
      */
     public function updateExhibition(Exhibition $exhibition, array $payload): Exhibition
     {
-        // 배너 이미지 업로드 처리! ✨
+        // 배너 이미지 업로드 처리! 
         if (isset($payload['banner_image']) && $payload['banner_image'] instanceof \Illuminate\Http\UploadedFile) {
             $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
         }
 
-        // 날짜 기반 상태 자동 결정! 🕵️‍♀️
+        // 날짜 기반 상태 자동 결정! ️‍️
         $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
 
         $exhibition->update($payload);
@@ -111,7 +111,7 @@ class ExhibitionManagementService
     }
 
     /**
-     * 날짜를 기준으로 상태를 결정한다. 😊
+     * 날짜를 기준으로 상태를 결정한다. 
      */
     private function determineStatusByDates(?string $startAt, ?string $endAt): string
     {
@@ -119,7 +119,7 @@ class ExhibitionManagementService
         $start = $startAt ? \Illuminate\Support\Carbon::parse($startAt) : null;
         $end = $endAt ? \Illuminate\Support\Carbon::parse($endAt) : null;
 
-        // 1. 종료일이 지났다면 무조건 '종료' 🛑
+        // 1. 종료일이 지났다면 무조건 '종료' 
         if ($end && $end->isPast()) {
             return '종료';
         }
@@ -129,7 +129,7 @@ class ExhibitionManagementService
             return '진행예정';
         }
 
-        // 3. 그 외(시작일 지났고 종료일 안 지났거나 날짜가 없는 경우) '진행중' ✨
+        // 3. 그 외(시작일 지났고 종료일 안 지났거나 날짜가 없는 경우) '진행중' 
         return '진행중';
     }
 

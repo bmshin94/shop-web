@@ -25,7 +25,7 @@ class ExhibitionTest extends TestCase
     }
 
     /**
-     * 페이징 처리가 정상적으로 작동하는지 테스트한다. ✨
+     * 페이징 처리가 정상적으로 작동하는지 테스트한다. 
      */
     public function test_exhibition_pagination_works(): void
     {
@@ -34,11 +34,11 @@ class ExhibitionTest extends TestCase
         $response = $this->get(route('exhibition.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('page=2'); // 5개씩 페이징이므로 2페이지 링크가 있어야 함! 😊
+        $response->assertSee('page=2'); // 5개씩 페이징이므로 2페이지 링크가 있어야 함! 
     }
 
     /**
-     * 기획전 상세 페이지가 정상적으로 노출되는지 테스트한다. 🖼️
+     * 기획전 상세 페이지가 정상적으로 노출되는지 테스트한다. ️
      */
     public function test_exhibition_detail_page_is_accessible(): void
     {
@@ -55,7 +55,7 @@ class ExhibitionTest extends TestCase
     }
 
     /**
-     * 비노출 상태의 기획전은 접근이 불가능해야 한다. 🕵️‍♀️
+     * 비노출 상태의 기획전은 접근이 불가능해야 한다. ️‍️
      */
     public function test_hidden_exhibitions_are_not_displayed(): void
     {

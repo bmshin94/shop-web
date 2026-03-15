@@ -6,12 +6,12 @@
 <div class="px-8 py-8">
     <div class="flex items-center justify-between mb-10">
         <div>
-            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">매거진 관리 ✨</h1>
+            <h1 class="text-3xl font-extrabold text-text-main tracking-tight">매거진 관리 </h1>
             <p class="mt-2 text-sm text-text-muted">커뮤니티 페이지에 노출될 매거진 콘텐츠를 관리합니다.</p>
         </div>
         <a href="{{ route('admin.magazines.create') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-105 transition-all">
             <span class="material-symbols-outlined text-[20px]">add</span>
-            새 매거진 등록 📖
+            새 매거진 등록 
         </a>
     </div>
 
@@ -59,7 +59,7 @@
                             <a href="{{ route('admin.magazines.edit', $magazine) }}" class="p-2 text-text-muted hover:text-primary transition-colors">
                                 <span class="material-symbols-outlined">edit</span>
                             </a>
-                            <form action="{{ route('admin.magazines.destroy', $magazine) }}" method="POST" onsubmit="return confirm('진짜 삭제할 거야? 😢');">
+                            <form action="{{ route('admin.magazines.destroy', $magazine) }}" method="POST" onsubmit="return confirm('진짜 삭제할 거야? ');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 text-text-muted hover:text-red-500 transition-colors">
@@ -72,7 +72,7 @@
                 @empty
                 <tr>
                     <td colspan="7" class="px-8 py-20 text-center text-text-muted">
-                        등록된 매거진이 없어요! 🌸 자기가 첫 매거진을 써주세요! ✨
+                        등록된 매거진이 없어요!  자기가 첫 매거진을 써주세요! 
                     </td>
                 </tr>
                 @endforelse

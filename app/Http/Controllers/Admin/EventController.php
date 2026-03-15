@@ -61,7 +61,7 @@ class EventController extends Controller
         ]);
 
         $events = $this->eventManagementService->paginateEvents($filters, self::DEFAULT_PER_PAGE);
-        $events->appends($request->all()); // 검색 조건 유지! ✨
+        $events->appends($request->all()); // 검색 조건 유지! 
         $stats = $this->eventManagementService->getSummaryStats();
 
         return view('admin.events.index', [
@@ -148,7 +148,7 @@ class EventController extends Controller
             ->latest()
             ->paginate(20);
 
-        $participants->appends(request()->all()); // 검색 조건 유지! ✨
+        $participants->appends(request()->all()); // 검색 조건 유지! 
 
         // 현재 당첨자 ID 목록 조회
         $winnerIds = $event->winners()->pluck('members.id')->toArray();
@@ -214,7 +214,7 @@ class EventController extends Controller
         ]);
 
         $events = $this->eventManagementService->paginateTrashedEvents($filters, self::DEFAULT_PER_PAGE);
-        $events->appends($request->all()); // 검색 조건 유지! ✨
+        $events->appends($request->all()); // 검색 조건 유지! 
 
         return view('admin.events.trash', [
             'events' => $events,

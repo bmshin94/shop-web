@@ -75,14 +75,14 @@ class ExhibitionController extends Controller
     }
 
     /**
-     * 관리자 기획전 상세 정보를 조회한다. ✨
+     * 관리자 기획전 상세 정보를 조회한다. 
      *
      * @param  Exhibition  $exhibition
      * @return View
      */
     public function show(Exhibition $exhibition): View
     {
-        // 연결된 상품들과 함께 상세 정보를 가져와요! 😊
+        // 연결된 상품들과 함께 상세 정보를 가져와요! 
         $exhibition->load(['products.images', 'products.category']);
 
         return view('admin.exhibitions.show', [

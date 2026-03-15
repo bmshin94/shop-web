@@ -58,14 +58,14 @@
         </div>
         
         <div class="space-y-2 flex flex-col justify-end pb-3">
-            <p class="text-[11px] font-bold text-text-muted italic">※ 상태값은 시작/종료 일시에 따라 자동으로 계산됩니다. 😊</p>
+            <p class="text-[11px] font-bold text-text-muted italic">※ 상태값은 시작/종료 일시에 따라 자동으로 계산됩니다. </p>
         </div>
     </div>
 
     <div class="space-y-2">
         <label class="text-sm font-bold text-text-main">배너 이미지</label>
         <div class="space-y-4">
-            {{-- 드래그 앤 드롭 지원 이미지 업로드 영역 ✨ --}}
+            {{-- 드래그 앤 드롭 지원 이미지 업로드 영역  --}}
             <div id="banner-drop-zone" class="relative group">
                 <input 
                     type="file" 
@@ -75,7 +75,7 @@
                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                 
                 <div id="preview-wrapper" class="w-full min-h-[200px] aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl overflow-hidden flex flex-col items-center justify-center transition-all relative group-hover:border-primary/30 group-hover:bg-primary/5">
-                    {{-- 기존 이미지 또는 미리보기 이미지 🖼️ --}}
+                    {{-- 기존 이미지 또는 미리보기 이미지 ️ --}}
                     <img 
                         id="banner-preview" 
                         src="{{ $exhibition?->banner_image_url ?? '' }}" 
@@ -90,7 +90,7 @@
                         <p class="mt-1 text-[11px] font-bold text-text-muted">권장 사이즈: 1200 x 500 px (최대 2MB)</p>
                     </div>
 
-                    {{-- 드래그 시 덮어씌워지는 레이어 😊 --}}
+                    {{-- 드래그 시 덮어씌워지는 레이어  --}}
                     <div id="drag-overlay" class="absolute inset-0 bg-primary/10 backdrop-blur-[2px] items-center justify-center hidden z-10">
                         <div class="bg-white px-6 py-3 rounded-full shadow-xl flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary">download</span>
@@ -162,7 +162,7 @@
         </div>
     </div>
 
-    {{-- 연결 상품 관리 영역 ✨ --}}
+    {{-- 연결 상품 관리 영역  --}}
     <div class="space-y-3 pt-4">
         <label class="text-sm font-bold text-text-main flex items-center gap-2">
             연결 상품 관리 
@@ -266,16 +266,16 @@
     @endif
 
     <div class="space-y-4">
-        {{-- 삭제 안내 문구 (수정 시에만 표시) ✨ --}}
+        {{-- 삭제 안내 문구 (수정 시에만 표시)  --}}
         @if($exhibition && $exhibition->exists)
             <div class="flex items-center gap-2 px-1">
                 <span class="material-symbols-outlined text-[16px] text-rose-500">warning</span>
-                <p class="text-[11px] font-bold text-rose-600/70 italic">기획전 삭제 시 즉시 목록에서 제외되며, 휴지통에서 복구하거나 영구 삭제할 수 있습니다. 😊</p>
+                <p class="text-[11px] font-bold text-rose-600/70 italic">기획전 삭제 시 즉시 목록에서 제외되며, 휴지통에서 복구하거나 영구 삭제할 수 있습니다. </p>
             </div>
         @endif
 
         <div class="flex flex-col sm:flex-row gap-3">
-            {{-- 메인 저장 버튼 ✨ --}}
+            {{-- 메인 저장 버튼  --}}
             <button type="submit" class="flex-1 px-5 py-4 bg-primary text-white rounded-2xl text-sm font-extrabold hover:bg-red-600 transition-colors shadow-lg shadow-primary/20">
                 {{ $submitLabel }}
             </button>
@@ -293,7 +293,7 @@
     </div>
 </form>
 
-{{-- 삭제 처리를 위한 숨겨진 폼 🕵️‍♀️ --}}
+{{-- 삭제 처리를 위한 숨겨진 폼 ️‍️ --}}
 @if($exhibition && $exhibition->exists)
     <form id="delete-exhibition-form" action="{{ route('admin.exhibitions.destroy', $exhibition) }}" method="POST" class="hidden">
         @csrf
@@ -311,7 +311,7 @@
         });
         updateCount();
 
-        // 1. 배너 이미지 관리 (클릭 & 드래그 앤 드롭) 📸 ✨
+        // 1. 배너 이미지 관리 (클릭 & 드래그 앤 드롭)  
         const $bannerInput = $('#banner-input');
         const $bannerPreview = $('#banner-preview');
         const $placeholder = $('#upload-placeholder');
@@ -334,7 +334,7 @@
             handleFiles(this.files);
         });
 
-        // 드래그 앤 드롭 이벤트 🚀
+        // 드래그 앤 드롭 이벤트 
         const zone = document.getElementById('banner-drop-zone');
 
         ['dragenter', 'dragover'].forEach(eventName => {
@@ -357,13 +357,13 @@
             const dt = e.dataTransfer;
             const files = dt.files;
             
-            // 인풋에 파일 할당 (DataTransfer 활용 ✨)
+            // 인풋에 파일 할당 (DataTransfer 활용 )
             document.getElementById('banner-input').files = files;
             handleFiles(files);
         }, false);
 
 
-        // 2. 상품 실시간 검색 🔍
+        // 2. 상품 실시간 검색 
         $('#product-search').on('input', function() {
             const query = $(this).val().toLowerCase();
             let visibleCount = 0;
@@ -381,7 +381,7 @@
             $('#no-result').toggle(visibleCount === 0);
         });
 
-        // 3. 상품 추가 버튼 ✨
+        // 3. 상품 추가 버튼 
         $(document).on('click', '.btn-add', function() {
             const $item = $(this).closest('.product-item');
             const id = $item.data('id');
@@ -408,7 +408,7 @@
             $('#product-search').trigger('input');
         });
 
-        // 4. 상품 제거 버튼 🛑
+        // 4. 상품 제거 버튼 
         $(document).on('click', '.btn-remove', function() {
             const $selectedItem = $(this).closest('.selected-item');
             const id = $selectedItem.data('id');

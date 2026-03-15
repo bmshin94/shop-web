@@ -143,7 +143,7 @@
                         <span class="material-symbols-outlined text-5xl text-primary/20 scale-110">visibility_off</span>
                     </div>
                     <p class="text-text-muted font-bold text-lg">최근 본 상품이 없습니다.</p>
-                    <p class="text-xs text-text-muted mt-2 mb-8">오빠가 본 상품들이 여기에 기록될 거예요!</p>
+                    <p class="text-xs text-text-muted mt-2 mb-8">사용자가 본 상품들이 여기에 기록될 거예요!</p>
                     <a href="{{ route('product-list') }}" class="px-10 py-3.5 bg-text-main text-white text-sm font-black rounded-2xl hover:bg-primary transition-all shadow-lg shadow-gray-200 active:scale-95 block w-fit mx-auto">상품 보러가기</a>
                 </div>
                 @endif
@@ -152,7 +152,7 @@
     </div>
 </main>
 
-{{-- 장바구니 성공 안내 모달 ✨ --}}
+{{-- 장바구니 성공 안내 모달  --}}
 <div id="cartSuccessModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden animate-in fade-in zoom-in duration-200">
         <button type="button" onclick="closeModal(document.getElementById('cartSuccessModal'))" class="absolute top-4 right-4 size-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 transition-colors">
@@ -177,7 +177,7 @@
 
 @push('scripts')
 <script>
-    // Modal Functions ✨
+    // Modal Functions 
     function openModal(modal) {
         if (!modal) return;
         modal.style.display = "flex";
@@ -192,7 +192,7 @@
     }
 
     $(document).ready(function() {
-        // 모달 외부 클릭 시 닫기 ✨
+        // 모달 외부 클릭 시 닫기 
         $('#cartSuccessModal').on('click', function(e) {
             if (e.target === this) closeModal(this);
         });
@@ -284,7 +284,7 @@
         });
 
         /**
-         * 개별 장바구니 담기 ✨
+         * 개별 장바구니 담기 
          */
         $(document).on('click', '.btn-add-cart', function() {
             const $btn = $(this);
@@ -306,7 +306,7 @@
                 data: { product_id: productId, quantity: 1 },
                 success: function(response) {
                     if (response.status === 'success' || response.status === 'duplicate') {
-                        // 성공 모달 띄우기! 💖
+                        // 성공 모달 띄우기! 
                         openModal(document.getElementById('cartSuccessModal'));
                         $('.header-cart-count').removeClass('hidden').text(response.cart_count);
                     }
@@ -315,7 +315,7 @@
         });
 
         /**
-         * 개별 바로구매 ✨
+         * 개별 바로구매 
          */
         $(document).on('click', '.btn-buy-now', function() {
             const $btn = $(this);
@@ -331,7 +331,7 @@
                 return;
             }
 
-            // 이동 안내 토스트 ✨
+            // 이동 안내 토스트 
             showToast('결제 페이지로 이동합니다.', 'bolt', 'bg-[#181211]');
 
             $.ajax({

@@ -16,16 +16,16 @@ class FaqAdminTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // 1. 관리자(Operator) 생성 ✨
+        // 1. 관리자(Operator) 생성 
         $this->admin = Operator::factory()->create();
     }
 
     /**
-     * 관리자 FAQ 등록 테스트 ✨📄
+     * 관리자 FAQ 등록 테스트 
      */
     public function test_admin_can_create_faq(): void
     {
-        // 'admin' 가드를 명시해서 로그인! ✨🛡️
+        // 'admin' 가드를 명시해서 로그인! ️
         $response = $this->actingAs($this->admin, 'admin')->post(route('admin.faqs.store'), [
             'category' => 'product',
             'question' => '새로운 질문?',
@@ -42,7 +42,7 @@ class FaqAdminTest extends TestCase
     }
 
     /**
-     * 관리자 FAQ 수정 테스트 ✨🛠️
+     * 관리자 FAQ 수정 테스트 ️
      */
     public function test_admin_can_update_faq(): void
     {
@@ -66,7 +66,7 @@ class FaqAdminTest extends TestCase
     }
 
     /**
-     * 관리자 FAQ 삭제 테스트 ✨🗑️
+     * 관리자 FAQ 삭제 테스트 ️
      */
     public function test_admin_can_delete_faq(): void
     {
@@ -80,6 +80,6 @@ class FaqAdminTest extends TestCase
         $response = $this->actingAs($this->admin, 'admin')->delete(route('admin.faqs.destroy', $faq));
 
         $response->assertRedirect(route('admin.faqs.index'));
-        $this->assertSoftDeleted($faq); // Soft Delete 확인! ✨
+        $this->assertSoftDeleted($faq); // Soft Delete 확인! 
     }
 }

@@ -47,7 +47,7 @@ class AuthController extends Controller
             $member = Auth::user();
             $member->update(['last_login_at' => now()]);
 
-            // 최근 본 상품 쿠키 -> DB 동기화 ✨
+            // 최근 본 상품 쿠키 -> DB 동기화 
             $this->syncRecentViews($member);
 
             return response()->json([
@@ -129,14 +129,14 @@ class AuthController extends Controller
         Auth::login($member);
         $member->update(['last_login_at' => now()]);
 
-        // 최근 본 상품 쿠키 -> DB 동기화 ✨
+        // 최근 본 상품 쿠키 -> DB 동기화 
         $this->syncRecentViews($member);
 
         return redirect()->intended(route('home'));
     }
 
     /**
-     * 최근 본 상품 쿠키 데이터를 DB로 동기화 ✨
+     * 최근 본 상품 쿠키 데이터를 DB로 동기화 
      */
     private function syncRecentViews($member)
     {
@@ -150,7 +150,7 @@ class AuthController extends Controller
                     ['viewed_at' => now()]
                 );
             }
-            // 동기화 후 쿠키 비우기 🍪
+            // 동기화 후 쿠키 비우기 
             \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forget('recent_views'));
         }
     }
@@ -306,7 +306,7 @@ class AuthController extends Controller
         // 가입 즉시 로그인 처리
         Auth::login($member);
 
-        // 최근 본 상품 쿠키 -> DB 동기화 ✨
+        // 최근 본 상품 쿠키 -> DB 동기화 
         $this->syncRecentViews($member);
 
         return response()->json([

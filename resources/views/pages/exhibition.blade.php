@@ -7,7 +7,7 @@
     .aspect-banner { aspect-ratio: 21 / 9; }
     @media (max-width: 640px) { .aspect-banner { aspect-ratio: 16 / 9; } }
 
-    /* 1. 모바일 터치 스크롤 유지를 위한 overflow-x-auto 및 스크롤바 숨기기 ✨ */
+    /* 1. 모바일 터치 스크롤 유지를 위한 overflow-x-auto 및 스크롤바 숨기기  */
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
@@ -19,7 +19,7 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    /* 2. 드래그 인터랙션을 위한 커서 및 스타일 설정 😊 */
+    /* 2. 드래그 인터랙션을 위한 커서 및 스타일 설정  */
     #exhibit-nav {
         cursor: grab;
         user-select: none;
@@ -27,7 +27,7 @@
     }
     #exhibit-nav.active {
         cursor: grabbing;
-        scroll-behavior: auto; /* 드래그 중엔 즉각 반응하도록 auto로 변경! 🎯 */
+        scroll-behavior: auto; /* 드래그 중엔 즉각 반응하도록 auto로 변경!  */
     }
 </style>
 @endpush
@@ -42,10 +42,10 @@
         </div>
     </div>
 
-    <!-- Sticky Nav (핵심: 하이브리드 드래그 스크롤 🚀) -->
+    <!-- Sticky Nav (핵심: 하이브리드 드래그 스크롤 ) -->
     <div class="sticky top-[110px] z-40 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm overflow-hidden">
         <div class="mx-auto max-w-7xl">
-            {{-- overflow-x-auto를 통해 모바일 터치 스크롤은 그대로 작동! 📱 --}}
+            {{-- overflow-x-auto를 통해 모바일 터치 스크롤은 그대로 작동!  --}}
             <nav id="exhibit-nav" class="flex gap-3 overflow-x-auto scrollbar-hide touch-scroll py-4 px-4 sm:px-6 lg:px-8 text-sm font-bold flex-nowrap items-center w-full relative">
                 @if(isset($exhibitions) && $exhibitions->count() > 0)
                     @foreach($exhibitions as $index => $exhibition)
@@ -63,7 +63,7 @@
         @foreach($exhibitions as $index => $exhibition)
         <!-- Exhibition {{ $index + 1 }} -->
         <section id="exhibit-{{ $exhibition->id }}" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 scroll-mt-[180px] border-b border-gray-50 last:border-0">
-            {{-- 진행예정 상태일 때의 스타일 처리 ✨ --}}
+            {{-- 진행예정 상태일 때의 스타일 처리  --}}
             @php
                 $isUpcoming = $exhibition->status === '진행예정';
             @endphp
@@ -88,7 +88,7 @@
                     <div>
                         @if($isUpcoming)
                             <div class="inline-block bg-white/20 backdrop-blur-md text-white font-bold px-8 py-3 rounded-full cursor-default border border-white/30">
-                                {{ optional($exhibition->start_at)->format('m월 d일') }} 오픈 예정 ✨
+                                {{ optional($exhibition->start_at)->format('m월 d일') }} 오픈 예정 
                             </div>
                         @else
                             <a href="{{ route('exhibition.show', $exhibition->slug) }}" class="inline-block bg-white text-text-main font-bold px-8 py-3 rounded-full hover:bg-primary hover:text-white transition-all">전체보기</a>
@@ -118,7 +118,7 @@
         </div>
     @else
         <section class="py-20 text-center">
-            <p class="text-text-muted">현재 진행 중인 기획전이 없습니다. 😊</p>
+            <p class="text-text-muted">현재 진행 중인 기획전이 없습니다. </p>
         </section>
     @endif
 </main>
@@ -175,7 +175,7 @@
     nav.addEventListener('mouseup', endDragging);
     nav.addEventListener('mouseleave', endDragging);
 
-    // 4. 드래그 후 탭 클릭 오작동 방지 처리 🎤
+    // 4. 드래그 후 탭 클릭 오작동 방지 처리 
     nav.addEventListener('click', (e) => {
         if (isDragging) {
             e.preventDefault();
@@ -183,10 +183,10 @@
         }
     }, true);
 
-    // 5. 탭 클릭 시 부드러운 이동 (드래그가 아닐 때만 작동하도록 기본 UI 유지) ✨
+    // 5. 탭 클릭 시 부드러운 이동 (드래그가 아닐 때만 작동하도록 기본 UI 유지) 
     document.querySelectorAll('.nav-item').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            if (isDragging) return; // 드래그 중이면 이동 방지! 😊
+            if (isDragging) return; // 드래그 중이면 이동 방지! 
 
             e.preventDefault();
             const targetId = this.getAttribute('href');

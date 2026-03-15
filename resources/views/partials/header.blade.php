@@ -58,17 +58,17 @@
             placeholder="어떤 스타일을 찾으시나요?" type="text" />
         </form>
 
-        <!-- 실시간 검색 제안 드롭다운 ✨🚀 -->
+        <!-- 실시간 검색 제안 드롭다운  -->
         <div id="desktopSearchSuggestions" class="invisible absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[110] opacity-0 transition-all duration-300 -translate-y-2">
           <div class="p-4 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
-            <span class="text-[10px] font-black text-primary uppercase tracking-widest">Suggestions ✨</span>
+            <span class="text-[10px] font-black text-primary uppercase tracking-widest">Suggestions </span>
             <span class="text-[9px] text-text-muted">연관 상품 검색 결과</span>
           </div>
           <div id="desktopSuggestionList" class="max-h-[400px] overflow-y-auto">
-            <!-- AJAX 결과가 들어갈 자리 😊 -->
+            <!-- AJAX 결과가 들어갈 자리  -->
           </div>
           <div class="p-3 bg-gray-50 text-center">
-            <a href="#" id="viewAllSearch" class="text-[11px] font-bold text-text-muted hover:text-primary transition-colors">전체 결과 보기 🔍</a>
+            <a href="#" id="viewAllSearch" class="text-[11px] font-bold text-text-muted hover:text-primary transition-colors">전체 결과 보기 </a>
           </div>
         </div>
       </div>
@@ -238,7 +238,7 @@
             mobileMenuOverlay.addEventListener('click', closeMenu);
         }
 
-        // --- Real-time Search Suggestions ✨🔍 ---
+        // --- Real-time Search Suggestions  ---
         const $searchInput = $('#desktopSearchInput');
         const $suggestions = $('#desktopSearchSuggestions');
         const $suggestionList = $('#desktopSuggestionList');
@@ -278,7 +278,7 @@
             let html = '';
             products.forEach(p => {
                 const price = new Intl.NumberFormat().format(p.sale_price || p.price);
-                // 검색어 하이라이트! ✨🌈
+                // 검색어 하이라이트! 
                 const highlightedName = p.name.replace(new RegExp(query, 'gi'), match => `<mark class="bg-primary/10 text-primary p-0">${match}</mark>`);
                 
                 html += `

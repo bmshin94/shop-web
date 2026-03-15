@@ -45,7 +45,7 @@ class MagazineController extends Controller
 
         Magazine::create($validated);
 
-        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 등록되었어! ✨💖');
+        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 등록되었어! ');
     }
 
     /**
@@ -73,7 +73,7 @@ class MagazineController extends Controller
 
         $magazine->update($validated);
 
-        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 수정되었어! ✨💖');
+        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 수정되었어! ');
     }
 
     /**
@@ -83,6 +83,6 @@ class MagazineController extends Controller
     {
         $magazine->delete();
 
-        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 삭제되었어! ✨💖');
+        return redirect()->route('admin.magazines.index')->with('success', '매거진이 성공적으로 삭제되었어! ');
     }
 }

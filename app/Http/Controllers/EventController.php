@@ -14,7 +14,7 @@ class EventController extends Controller
     {
         $now = now();
 
-        // 히어로 영역용 이벤트 (is_hero가 true인 것들) ✨
+        // 히어로 영역용 이벤트 (is_hero가 true인 것들) 
         $heroEvents = Event::with('winners')
             ->where('is_hero', true)
             ->where(function ($query) use ($now) {
@@ -66,7 +66,7 @@ class EventController extends Controller
             'ended' => $endedEvents->hasMorePages(),
         ];
 
-        // 프론트엔드 모달용 전체 데이터 병합 ✨
+        // 프론트엔드 모달용 전체 데이터 병합 
         $eventsData = $upcomingEvents->getCollection()
             ->concat($ongoingEvents->getCollection())
             ->concat($endedEvents->getCollection())
@@ -170,7 +170,7 @@ class EventController extends Controller
     {
         $tab = $request->query('tab', 'ongoing');
         $now = now();
-        $query = Event::with('winners'); // 모든 쿼리에 기본으로 추가! ✨
+        $query = Event::with('winners'); // 모든 쿼리에 기본으로 추가! 
 
         if ($tab === 'upcoming') {
             $query->where('start_at', '>', $now)

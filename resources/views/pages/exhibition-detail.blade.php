@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <!-- Product Grid Area (product-card와 완벽하게 UI 통일 ✨) -->
+    <!-- Product Grid Area (product-card와 완벽하게 UI 통일 ) -->
     <div id="product-list" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         
         {{-- Top Toolbar --}}
@@ -79,11 +79,11 @@
             @endif
         </div>
 
-        {{-- Grid (product-list.blade.php와 동일한 그리드 설정 ✨) --}}
+        {{-- Grid (product-list.blade.php와 동일한 그리드 설정 ) --}}
         <div class="grid gap-x-6 gap-y-12 grid-cols-2 md:grid-cols-3 xl:grid-cols-4 {{ $isUpcoming ? 'opacity-50 grayscale pointer-events-none' : '' }}">
             @forelse($exhibition->products as $product)
             <div class="group relative flex flex-col h-full">
-                {{-- 상품 이미지 및 배지 영역 (product-card.blade.php 구조 100% 복제 ✨) --}}
+                {{-- 상품 이미지 및 배지 영역 (product-card.blade.php 구조 100% 복제 ) --}}
                 <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200 shadow-sm">
                     <a href="{{ route('product-detail', ['slug' => $product->slug]) }}">
                         <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105 {{ $product->status === '품절' ? 'grayscale-[0.5] opacity-60' : '' }}"
@@ -136,7 +136,7 @@
                     </div>
                 </div>
 
-                {{-- 상품 정보 영역 (product-card.blade.php 스타일 완벽 동기화 ✨) --}}
+                {{-- 상품 정보 영역 (product-card.blade.php 스타일 완벽 동기화 ) --}}
                 <div class="mt-4 flex flex-1 flex-col px-1">
                     <h4 class="text-base font-bold text-text-main hover:text-primary transition-colors line-clamp-1">
                         <a href="{{ route('product-detail', ['slug' => $product->slug]) }}">{{ $product->name }}</a>

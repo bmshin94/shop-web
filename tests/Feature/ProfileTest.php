@@ -16,7 +16,7 @@ class ProfileTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // 테스트용 회원 생성 (비밀번호: password) ✨
+        // 테스트용 회원 생성 (비밀번호: password) 
         $this->member = Member::factory()->create([
             'password' => Hash::make('password')
         ]);
@@ -27,10 +27,10 @@ class ProfileTest extends TestCase
     {
         $this->actingAs($this->member);
 
-        // 확인 없이 바로 수정 페이지 접속 시도 🕵️‍♀️
+        // 확인 없이 바로 수정 페이지 접속 시도 ️‍️
         $response = $this->get(route('mypage.profile-edit'));
 
-        // 비밀번호 확인 페이지로 튕겨야 해! 😊
+        // 비밀번호 확인 페이지로 튕겨야 해! 
         $response->assertRedirect(route('mypage.profile'));
     }
 
@@ -54,7 +54,7 @@ class ProfileTest extends TestCase
     {
         $this->actingAs($this->member);
         
-        // 먼저 비밀번호 확인 통과! 🔐
+        // 먼저 비밀번호 확인 통과! 
         session()->put('auth.password_confirmed_at', time());
 
         $newData = [
@@ -93,7 +93,7 @@ class ProfileTest extends TestCase
 
         $response->assertStatus(200);
 
-        // 새 비밀번호로 로그인이 되는지 확인! 🔑✨
+        // 새 비밀번호로 로그인이 되는지 확인! 
         $this->assertTrue(Hash::check('new_password_123', $this->member->fresh()->password));
     }
 

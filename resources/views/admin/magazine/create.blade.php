@@ -5,7 +5,7 @@
 @section('content')
 <div class="px-8 py-8 max-w-4xl">
     <div class="mb-10">
-        <h1 class="text-3xl font-extrabold text-text-main tracking-tight">새 매거진 등록 📖✨</h1>
+        <h1 class="text-3xl font-extrabold text-text-main tracking-tight">새 매거진 등록 </h1>
         <p class="mt-2 text-sm text-text-muted">우리 고객님들을 위한 멋진 매거진을 작성해 주세요!</p>
     </div>
 
@@ -34,7 +34,7 @@
 
         <div class="space-y-2">
             <label class="text-sm font-bold text-text-main">상세 내용</label>
-            <textarea name="content" rows="10" placeholder="우리 자기가 하고 싶은 이야기를 마음껏 들려주세요! ✨" class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all"></textarea>
+            <textarea name="content" rows="10" placeholder="우리 자기가 하고 싶은 이야기를 마음껏 들려주세요! " class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 transition-all"></textarea>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
@@ -46,7 +46,7 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="hidden" name="is_visible" value="0">
                     <input type="checkbox" name="is_visible" value="1" checked class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary/20">
-                    <span class="text-sm font-bold text-text-main">즉시 노출하기 ✨</span>
+                    <span class="text-sm font-bold text-text-main">즉시 노출하기 </span>
                 </label>
             </div>
         </div>
@@ -54,7 +54,7 @@
         <div class="flex items-center justify-end gap-4 pt-10 border-t border-gray-50">
             <a href="{{ route('admin.magazines.index') }}" class="px-8 py-4 bg-gray-100 text-text-muted font-bold rounded-2xl hover:bg-gray-200 transition-all">취소</a>
             <button type="submit" class="px-10 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-                등록 완료! 💖
+                등록 완료! 
             </button>
         </div>
     </form>

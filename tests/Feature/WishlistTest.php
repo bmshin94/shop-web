@@ -33,7 +33,7 @@ class WishlistTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'added',
-                'wishlistCount' => 1 // wishlistCount 키 값 검증! ✨
+                'wishlistCount' => 1 // wishlistCount 키 값 검증! 
             ]);
         
         $this->assertDatabaseHas('wishlists', [
@@ -72,7 +72,7 @@ class WishlistTest extends TestCase
             $wishlistIds[] = $item->id;
         }
 
-        // 2개만 선택해서 삭제! ✌️
+        // 2개만 선택해서 삭제! ️
         $deleteIds = [$wishlistIds[0], $wishlistIds[1]];
 
         $response = $this->postJson(route('wishlist.delete-selected'), [
@@ -82,7 +82,7 @@ class WishlistTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'wishlistCount' => 1 // 3개 중 2개 지웠으니까 1개 남아야 해! 😊
+                'wishlistCount' => 1 // 3개 중 2개 지웠으니까 1개 남아야 해! 
             ]);
 
         $this->assertDatabaseMissing('wishlists', ['id' => $wishlistIds[0]]);
@@ -95,7 +95,7 @@ class WishlistTest extends TestCase
     {
         $this->actingAs($this->member);
 
-        // 찜한 상품 15개 생성 (페이징 사이즈 12보다 많게!) ✨
+        // 찜한 상품 15개 생성 (페이징 사이즈 12보다 많게!) 
         Product::factory()->count(15)->create()->each(function ($p) {
             Wishlist::create([
                 'member_id' => $this->member->id,
@@ -107,7 +107,7 @@ class WishlistTest extends TestCase
 
         $response->assertStatus(200);
         
-        // 페이징 처리 확인 (12개까지만 노출되는지!) 😊
+        // 페이징 처리 확인 (12개까지만 노출되는지!) 
         // wishlist-item 클래스가 12개 있는지 확인하는 로직은 복잡하니까,
         // 컨트롤러에서 넘어온 데이터의 페이징 정보를 체크할게!
         $this->assertEquals(12, $response->viewData('wishlist')->count());

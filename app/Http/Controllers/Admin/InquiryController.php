@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 class InquiryController extends Controller
 {
     /**
-     * 문의 목록 조회 ✨
+     * 문의 목록 조회 
      */
     public function index(Request $request): View
     {
@@ -39,7 +39,7 @@ class InquiryController extends Controller
     }
 
     /**
-     * 문의 상세 및 답변 페이지 ✨
+     * 문의 상세 및 답변 페이지 
      */
     public function show(Inquiry $inquiry): View
     {
@@ -47,7 +47,7 @@ class InquiryController extends Controller
     }
 
     /**
-     * 답변 등록 및 수정 ✨
+     * 답변 등록 및 수정 
      */
     public function updateAnswer(Request $request, Inquiry $inquiry): JsonResponse
     {
@@ -75,7 +75,7 @@ class InquiryController extends Controller
     }
 
     /**
-     * 문의 삭제 ✨
+     * 문의 삭제 
      */
     public function destroy(Inquiry $inquiry): JsonResponse
     {

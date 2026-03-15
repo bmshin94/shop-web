@@ -203,7 +203,7 @@
         </div>
     </div>
 
-    {{-- 2. 삭제 확인 모달 (투박한 confirm 대신 ✨) --}}
+    {{-- 2. 삭제 확인 모달 (투박한 confirm 대신 ) --}}
     <div id="delete-confirm-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm modal-close opacity-0 transition-opacity duration-300" id="delete-modal-bg"></div>
         <div class="relative bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden transform transition-all duration-300 translate-y-4 opacity-0 scale-95" id="delete-modal-content">
@@ -299,14 +299,14 @@ $(document).ready(function() {
         });
     });
 
-    // 2. 옵션 변경 모달 열기 (기존 선택 사항 표시 ✨)
+    // 2. 옵션 변경 모달 열기 (기존 선택 사항 표시 )
     $('.btn-change-option').on('click', function() {
         currentCartId = $(this).data('id');
         const productId = $(this).data('product-id');
         const currentColor = $(this).data('currentColor');
         const currentSize = $(this).data('currentSize');
         
-        selectedColorName = currentColor; // 초기값 설정 ✨
+        selectedColorName = currentColor; // 초기값 설정 
         selectedSizeName = currentSize;
 
         $.get(`/products/${productId}/quick-view`, function(data) {
@@ -319,7 +319,7 @@ $(document).ready(function() {
             if (data.colors?.length > 0) {
                 html += `<div class="space-y-3"><label class="text-[10px] font-black text-text-muted uppercase tracking-tighter">색상</label><div class="flex flex-wrap gap-2.5">`;
                 data.colors.forEach(c => {
-                    const isActive = c.name === currentColor; // 현재 값 비교 ✨
+                    const isActive = c.name === currentColor; // 현재 값 비교 
                     html += `<button type="button" class="btn-color-swatch size-8 rounded-full border-2 border-transparent ring-1 ring-gray-200 ring-offset-2 transition-all hover:scale-110 ${isActive ? 'ring-primary ring-2 scale-110' : ''}" style="background-color: ${c.hex_code}" data-name="${c.name}"></button>`;
                 });
                 html += `</div></div>`;
@@ -328,7 +328,7 @@ $(document).ready(function() {
             if (data.sizes?.length > 0) {
                 html += `<div class="space-y-3"><label class="text-[10px] font-black text-text-muted uppercase tracking-tighter">사이즈</label><div class="flex flex-wrap gap-2">`;
                 data.sizes.forEach(s => {
-                    const isActive = s.name === currentSize; // 현재 값 비교 ✨
+                    const isActive = s.name === currentSize; // 현재 값 비교 
                     html += `<button type="button" class="btn-size-choice min-w-[40px] h-9 px-3 bg-white border border-gray-100 rounded-lg text-[11px] font-black text-text-muted hover:border-primary transition-all ${isActive ? 'border-primary text-primary bg-primary/5' : ''}" data-name="${s.name}">${s.name}</button>`;
                 });
                 html += `</div></div>`;
@@ -359,7 +359,7 @@ $(document).ready(function() {
         });
     });
 
-    // 3. 삭제 처리 (커스텀 모달 기반 ✨)
+    // 3. 삭제 처리 (커스텀 모달 기반 )
     // 개별 삭제 버튼
     $('.btn-open-delete').on('click', function() {
         deleteMode = 'single';
@@ -375,7 +375,7 @@ $(document).ready(function() {
         openModal('#delete-confirm-modal');
     });
 
-    // 최종 삭제 실행 (동적 UI 업데이트 ✨)
+    // 최종 삭제 실행 (동적 UI 업데이트 )
     $('#btn-confirm-delete').on('click', function() {
         if (deleteMode === 'single') {
             $.ajax({
@@ -417,7 +417,7 @@ $(document).ready(function() {
     });
 
     /**
-     * 장바구니 전체 수량 관련 UI 일괄 갱신 ✨
+     * 장바구니 전체 수량 관련 UI 일괄 갱신 
      */
     function updateAllCounts() {
         const totalItems = $('.cart-item').length;

@@ -608,7 +608,7 @@
                 document.querySelector('.truncate').innerText;
 
             // 아임포트 결제 요청 파라미터 구성
-            // 오빠의 포트원 스크린샷을 분석한 결과 'KG이니시스' (html5_inicis) 테스트 채널 1개만 등록되어 있어요!
+            // 고객님의 포트원 스크린샷을 분석한 결과 'KG이니시스' (html5_inicis) 테스트 채널 1개만 등록되어 있어요!
             // 따라서 어떤 결제수단을 누르든 일단 테스트 채널(이니시스)로 고정 호출해야 에러가 나지 않습니다.
             let pgProvider = 'html5_inicis'; 
             

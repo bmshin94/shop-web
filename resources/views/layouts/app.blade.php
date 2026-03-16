@@ -123,7 +123,7 @@
   </div>
 
   <!-- Alert Modal -->
-  <div id="alert-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+  <div id="alert-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
       <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
           <div class="p-8 text-center">
               <div class="size-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-6">
@@ -133,13 +133,13 @@
               <p id="alert-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
           </div>
           <div class="p-4 bg-gray-50 flex gap-3">
-              <button onclick="closeAlert()" class="flex-1 py-3 bg-text-main text-white text-sm font-black rounded-xl hover:bg-black transition-all">확인</button>
+              <button onclick="closeAlert()" class="flex-1 py-[18px] bg-text-main text-white text-sm font-black rounded-2xl hover:bg-black transition-all shadow-lg active:scale-95">확인</button>
           </div>
       </div>
   </div>
 
   <!-- Confirm Modal -->
-  <div id="confirm-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+  <div id="confirm-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
       <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in duration-200">
           <div class="p-8 text-center">
               <div class="size-16 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-6">
@@ -149,18 +149,20 @@
               <p id="confirm-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
           </div>
           <div class="p-4 bg-gray-50 flex gap-3">
-              <button id="confirm-cancel" class="flex-1 py-3 bg-white border border-gray-200 text-text-muted text-sm font-black rounded-xl hover:bg-gray-100 transition-all">취소</button>
-              <button id="confirm-accept" class="flex-1 py-3 bg-primary text-white text-sm font-black rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20">확인</button>
+              <button id="confirm-cancel" class="flex-1 py-[18px] bg-white border border-gray-200 text-text-muted text-sm font-black rounded-2xl hover:bg-gray-100 transition-all active:scale-95">취소</button>
+              <button id="confirm-accept" class="flex-1 py-[18px] bg-primary text-white text-sm font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20 active:scale-95">확인</button>
           </div>
       </div>
   </div>
 
   <!-- Toast Container -->
-  <div id="toastContainer" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[110] flex flex-col gap-3 pointer-events-none"></div>
+  <div id="toastContainer" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[10001] flex flex-col gap-3 pointer-events-none"></div>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
     let confirmResolver = null;

@@ -39,6 +39,10 @@ module.exports = {
         xl: "0.75rem",
         full: "9999px",
       },
+      spacing: {
+        '4.5': '1.125rem', // 18px
+        '5.5': '1.375rem', // 22px
+      },
       letterSpacing: {
         widest: "0",
       },

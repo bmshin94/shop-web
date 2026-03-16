@@ -3,44 +3,101 @@
 @section('title', '홈 - Active Women\'s Premium Store')
 
 @section('content')
-<!-- 메인 히어로 배너 섹션 -->
-<section class="relative mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
-  <div class="relative overflow-hidden rounded-2xl bg-black">
-    @forelse($heroExhibitions as $exhibition)
-    <div class="relative z-0 {{ $loop->first ? '' : 'hidden' }}"> <!-- 우선 첫 번째 기획전만 보여줄게! -->
-      <div class="absolute inset-0 z-0">
-        <div class="h-full w-full bg-cover bg-center opacity-70 transition-transform duration-700 hover:scale-105"
-          style="background-image: url('{{ $exhibition->banner_image_url ?? 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070' }}');">
+<!-- 메인 히어로 배너 섹션 (Swiper) -->
+<section class="relative mt-6 w-full overflow-hidden">
+  <div class="swiper hero-swiper px-4 py-4">
+    <div class="swiper-wrapper">
+      @forelse($heroProducts as $product)
+      <div class="swiper-slide w-full transition-transform duration-500">
+        <div class="group relative overflow-hidden rounded-3xl bg-gray-100 aspect-[3/4] w-full h-full shadow-md transition-all duration-500">
+          <a href="{{ route('product-detail', $product->slug) }}" class="block w-full h-full">
+            @php
+              $imgSrc = $product->images->first()?->image_url;
+              if (empty($imgSrc)) $imgSrc = $product->image_url;
+              $hasImage = !empty($imgSrc);
+              // 각 슬라이드마다 다른 그라데이션 색상을 적용
+              $gradients = [
+                'from-rose-300 to-pink-500',
+                'from-violet-300 to-purple-500',
+                'from-sky-300 to-blue-500',
+                'from-emerald-300 to-green-500',
+                'from-amber-300 to-orange-500',
+                'from-teal-300 to-cyan-500',
+                'from-fuchsia-300 to-pink-600',
+                'from-indigo-300 to-blue-600',
+                'from-lime-300 to-emerald-500',
+                'from-red-300 to-rose-500',
+              ];
+              $gradient = $gradients[$loop->index % count($gradients)];
+            @endphp
+            @if($hasImage)
+              <img src="{{ $imgSrc }}"
+                alt="{{ $product->name }}"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <!-- 이미지 로딩 실패 시 표시될 그라데이션 fallback -->
+              <div class="h-full w-full bg-gradient-to-br {{ $gradient }} items-center justify-center p-6 transition-transform duration-700 group-hover:scale-110" style="display:none;">
+                <span class="text-white text-lg sm:text-xl font-extrabold text-center drop-shadow-md break-keep leading-relaxed">{{ $product->name }}</span>
+              </div>
+            @else
+              <!-- 이미지 미등록 시 그라데이션 배경 + 상품명 표시 -->
+              <div class="h-full w-full bg-gradient-to-br {{ $gradient }} flex items-center justify-center p-6 transition-transform duration-700 group-hover:scale-110">
+                <span class="text-white text-lg sm:text-xl font-extrabold text-center drop-shadow-md break-keep leading-relaxed">{{ $product->name }}</span>
+              </div>
+            @endif
+          </a>
+          
+          <!-- 그라데이션 오버레이 (텍스트 가독성 확보, 호버 시 노출) -->
+          <div class="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+          <!-- 상품 정보 (호버 시 아래에서 위로 등장) -->
+          <div class="absolute bottom-0 left-0 right-0 z-10 p-6 sm:p-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white mb-2 drop-shadow-md truncate">
+              {{ $product->name }}
+            </h3>
+            <div class="flex items-end gap-3">
+              <span class="text-lg sm:text-xl font-black text-primary drop-shadow-md">
+                ₩{{ number_format($product->sale_price ?? $product->price) }}
+              </span>
+              @if($product->discount_rate > 0)
+              <span class="text-sm font-bold text-gray-300 line-through">
+                ₩{{ number_format($product->price) }}
+              </span>
+              @endif
+            </div>
+          </div>
+          
         </div>
       </div>
-      <div class="relative z-10 flex min-h-[500px] sm:min-h-[560px] flex-col items-center justify-center px-4 py-16 sm:py-20 text-center sm:px-6 lg:px-8">
-        <span class="mb-4 inline-flex items-center rounded-full bg-primary/90 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm shadow-lg">
-          {{ $exhibition->summary ?? 'New Season 2026' }}
-        </span>
-        <h2 class="mb-6 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl drop-shadow-md break-keep">
-          {!! nl2br(e($exhibition->title)) !!}
-        </h2>
-        <p class="mb-8 sm:mb-10 max-w-xl text-base font-medium text-gray-100 sm:text-xl break-keep drop-shadow">
-          {{ $exhibition->description ?? '하이엔드 감성과 퍼포먼스의 완벽한 조화. 새로운 컬렉션으로 최고의 순간을 준비하세요.' }}
-        </p>
-        <div class="flex flex-col gap-4 sm:flex-row">
-          <a href="{{ route('exhibition.show', $exhibition->slug) }}"
-            class="inline-flex h-12 min-w-[160px] items-center justify-center rounded-full bg-primary px-8 text-base font-bold text-white transition-all hover:bg-red-600 hover:shadow-lg hover:shadow-primary/30">
-            컬렉션 보기
-          </a>
-          <a href="/exhibition"
-            class="inline-flex h-12 min-w-[160px] items-center justify-center rounded-full bg-white px-8 text-base font-bold text-text-main transition-all hover:bg-gray-100">
-            스타일북
-          </a>
+      @empty
+      <!-- 데이터가 없을 때 기본 슬라이드 -->
+      <div class="swiper-slide w-full transition-transform duration-500">
+        <div class="relative overflow-hidden rounded-3xl bg-black aspect-[3/4] w-full h-full shadow-lg">
+          <div class="relative z-10 flex h-full flex-col items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">상품을 <br/> <span class="text-primary">준비 중입니다</span></h2>
+          </div>
         </div>
       </div>
+      @endforelse
     </div>
-    @empty
-    <!-- 데이터가 없을 때의 기본 배너! -->
-    <div class="relative z-10 flex min-h-[560px] flex-col items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8">
-      <h2 class="text-4xl font-extrabold text-white sm:text-6xl">당신만의 스타일로 <br class="hidden sm:block" /> <span class="text-primary">플레이하세요</span></h2>
+    
+    <!-- Custom Pagination Controls -->
+    <div class="flex items-center justify-center gap-6 mt-4 sm:mt-6">
+      <button class="hero-prev flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      
+      <div class="flex items-center gap-4">
+        <div class="text-sm font-black text-text-main tracking-widest"><span class="hero-current-slide">1</span> <span class="text-gray-400 font-medium mx-1">/</span> <span class="hero-total-slides whitespace-nowrap">1</span></div>
+        <div class="w-24 sm:w-48 h-1.5 bg-gray-200 rounded-full overflow-hidden relative">
+          <div class="hero-progress-bar h-full bg-primary absolute left-0 top-0 transition-all duration-300 ease-out" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <button class="hero-next flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
     </div>
-    @endforelse
   </div>
 </section>
 
@@ -162,6 +219,56 @@
 @push('scripts')
 <script>
   $(document).ready(function() {
+    // 0. 메인 히어로 Swiper 초기화 (상품 10개, 5열 직노출)
+    const heroSwiper = new Swiper('.hero-swiper', {
+      slidesPerView: 2, // 모바일 기본
+      centeredSlides: true,
+      spaceBetween: 10,
+      loop: true,
+      speed: 800,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true, // 마우스 오버 시 일시정지, 아웃 시 자동 재개
+      },
+      navigation: {
+        nextEl: '.hero-next',
+        prevEl: '.hero-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 3,
+          spaceBetween: 14,
+        },
+        1024: {
+          slidesPerView: 5, // PC 화면에서는 5줄!
+          spaceBetween: 18,
+        }
+      },
+      on: {
+        init: function () {
+          updateHeroProgress(this);
+        },
+        slideChange: function () {
+          updateHeroProgress(this);
+        }
+      }
+    });
+
+    function updateHeroProgress(swiper) {
+      if(!swiper.slides) return;
+      const total = document.querySelectorAll('.hero-swiper .swiper-slide:not(.swiper-slide-duplicate)').length;
+      if (total === 0) return;
+      
+      let current = swiper.realIndex + 1;
+      
+      $('.hero-current-slide').text(current);
+      $('.hero-total-slides').text(total);
+      
+      const progress = (current / total) * 100;
+      $('.hero-progress-bar').css('width', progress + '%');
+    }
+
     // 1. 장바구니 담기 (AJAX 연동 준비)
     $(document).on('click', '.btn-add-cart', function(e) {
       e.preventDefault();
@@ -272,6 +379,24 @@
   });
 </script>
 <style>
+  /* Hero Swiper Custom Styles */
+  .hero-swiper {
+    overflow: visible; /* scale 확대 시 잘림 방지 */
+  }
+  .hero-swiper .swiper-slide {
+    transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: scale(0.88);
+    opacity: 0.5;
+  }
+  .hero-swiper .swiper-slide-active {
+    transform: scale(1); /* 활성화 슬라이드만 원래 크기 (짤림 없음!) */
+    opacity: 1;
+    z-index: 10;
+  }
+  .hero-swiper .swiper-slide-active > div {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* 활성화된 슬라이드 그림자 강화 */
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

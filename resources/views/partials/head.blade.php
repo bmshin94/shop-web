@@ -43,6 +43,9 @@
 
 <!-- Flatpickr Global Style -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <style>
     /* Flatpickr Global Custom Theme */
     .flatpickr-calendar {

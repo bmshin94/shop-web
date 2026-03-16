@@ -33,6 +33,7 @@ class AdminMenuSeeder extends Seeder
             ['name' => '상품 관리', 'description' => '상품 등록/수정/삭제', 'icon' => 'inventory_2', 'route' => 'admin.products.index', 'permission_key' => 'products', 'sort_order' => 13],
             ['name' => '리뷰 관리', 'description' => '고객 상품평 조회 및 관리', 'icon' => 'reviews', 'route' => 'admin.reviews.index', 'permission_key' => 'reviews', 'sort_order' => 14],
             ['name' => '주문/배송 관리', 'description' => '주문 상태 및 배송 상태 관리', 'icon' => 'shopping_cart', 'route' => 'admin.orders.index', 'permission_key' => 'orders', 'sort_order' => 15],
+            ['name' => '교환/반품 관리', 'description' => '교환 및 반품 신청 내역 관리', 'icon' => 'assignment_return', 'route' => 'admin.order-claims.index', 'permission_key' => 'order_claims', 'sort_order' => 15.5],
             ['name' => '회원 관리', 'description' => '회원 조회 및 상태 변경', 'icon' => 'group', 'route' => 'admin.members.index', 'permission_key' => 'members', 'sort_order' => 16],
             ['name' => '쿠폰 관리', 'description' => '쿠폰 생성 및 발급 내역 관리', 'icon' => 'confirmation_number', 'route' => 'admin.coupons.index', 'permission_key' => 'coupons', 'sort_order' => 17],
             ['name' => '적립금 관리', 'description' => '회원 적립금 변동 내역 및 지급/차감', 'icon' => 'monetization_on', 'route' => 'admin.points.index', 'permission_key' => 'points', 'sort_order' => 18],

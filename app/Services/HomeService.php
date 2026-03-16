@@ -19,8 +19,8 @@ class HomeService
     public function getHomeData(): array
     {
         return [
-            // 1. 메인 히어로 배너용 기획전 (최신순 3개)
-            'heroExhibitions' => $this->getHeroExhibitions(),
+            // 1. 메인 히어로 배너용 상품 (최신 판매중 상품 10개)
+            'heroProducts' => $this->getHeroProducts(),
             
             // 2. 퀵 메뉴용 최상위 카테고리 (4개)
             'topCategories' => $this->getTopCategories(),
@@ -40,13 +40,14 @@ class HomeService
     }
 
     /**
-     * 상단 히어로 배너용 기획전 조회
+     * 상단 히어로 배너용 상품 조회
      */
-    private function getHeroExhibitions(): Collection
+    private function getHeroProducts(): Collection
     {
-        return Exhibition::active()
+        return Product::with(['images', 'category'])
+            ->selling()
             ->latest()
-            ->take(3)
+            ->take(10)
             ->get();
     }
 

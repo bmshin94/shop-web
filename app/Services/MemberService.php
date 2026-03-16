@@ -202,10 +202,14 @@ class MemberService
      */
     public function getOrderListData(Member $member, Request $request): array
     {
-        // 1. 기본 주문 쿼리 생성 (관계 모델 로드 및 정렬)
-        $query = $member->orders()->with('items.product')->latest();
+        // 1. 기본 주문 쿼리 생성 (취소/환불 건 영구 제외)
+        $query = $member->orders()
+            ->with('items.product')
+            ->whereNotIn('order_status', ['취소완료'])
+            ->whereNotIn('payment_status', ['환불완료', '취소완료'])
+            ->latest();
 
-        // 2. 키워드 검색 적용 (주문번호 또는 상품명)
+        // 2. 키워드 검색 적용 (검색 조건은 그룹화하여 취소 제외 조건과 분리)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -293,56 +297,68 @@ class MemberService
      */
     public function getCancelListData(Member $member, Request $request): array
     {
-        // 1. 취소/환불 관련 주문 베이스 쿼리
-        $query = $member->orders()
-            ->with(['items.product'])
-            ->where(function($q) {
-                $q->whereIn('order_status', ['취소완료'])
-                  ->orWhereIn('payment_status', ['환불완료', '취소완료']);
-            })
+        // 1. 모든 클레임(취소/반품/교환) 통합 쿼리
+        $query = $member->orderClaims()
+            ->with(['order', 'items.orderItem.product'])
             ->latest();
 
-        // 2. 검색어 필터링
+        // 2. 검색어 필터링 적용 (신청번호, 주문번호, 상품명)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('order_number', 'like', "%{$search}%")
-                  ->orWhereHas('items', function($sq) use ($search) {
+                $q->where('claim_number', 'like', "%{$search}%")
+                  ->orWhereHas('order', function($sq) use ($search) {
+                      $sq->where('order_number', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('items.orderItem', function($sq) use ($search) {
                       $sq->where('product_name', 'like', "%{$search}%");
                   });
             });
         }
 
-        // 3. 상태 필터링
+        // 3. 신청유형 필터링 (cancel, exchange, return)
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // 4. 진행상태 필터링 (접수, 처리중, 완료, 거부)
         if ($request->filled('status')) {
-            $query->where('order_status', $request->status);
+            $query->where('status', $request->status);
         }
 
-        // 4. 기간 필터링 처리
-        $months = $request->get('months');
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $startDate = $request->start_date;
-            $endDate = $request->end_date;
-            $query->whereBetween('ordered_at', [
-                $startDate . ' 00:00:00',
-                $endDate . ' 23:59:59'
-            ]);
-        } else {
-            $months = $months ?: 1;
-            $startDate = now()->subMonths($months)->format('Y-m-d');
-            $endDate = now()->format('Y-m-d');
-            $query->where('ordered_at', '>=', $startDate . ' 00:00:00');
-        }
+        // 5. 기간 필터링 처리
+        $months = $request->get('months', 1);
+        $startDate = $request->filled('start_date') ? $request->start_date : now()->subMonths($months)->format('Y-m-d');
+        $endDate = $request->filled('end_date') ? $request->end_date : now()->format('Y-m-d');
 
-        // 5. 페이징 처리 및 결과 반환
-        $cancels = $query->paginate(10)->withQueryString();
+        $query->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+
+        // 5. 페이징 처리 및 데이터 가공 (뷰 호환성 유지)
+        $claims = $query->paginate(10)->withQueryString();
+
+        $claims->getCollection()->transform(function($claim) {
+            $typeLabel = '취소';
+            if ($claim->type === 'exchange') $typeLabel = '교환';
+            if ($claim->type === 'return') $typeLabel = '반품';
+
+            return (object)[
+                'id' => $claim->id,
+                'number' => $claim->claim_number,
+                'type' => $typeLabel,
+                'items' => $claim->items->map(fn($ci) => $ci->orderItem),
+                'status' => $claim->status,
+                'created_at' => $claim->created_at,
+                'is_claim' => true
+            ];
+        });
 
         return [
             'member' => $member,
-            'cancels' => $cancels,
+            'cancels' => $claims,
             'months' => $months,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'status' => $request->get('status'),
             'search' => $request->get('search'),
         ];
     }

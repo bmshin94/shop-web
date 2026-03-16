@@ -121,14 +121,14 @@
                                 <button type="button" 
                                         class="btn-add-cart flex-1 h-10 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-text-main hover:bg-gray-50 transition-all active:scale-95 group/cart"
                                         data-id="{{ $product->id }}" 
-                                        data-has-options="{{ $product->colors->count() > 0 || $product->sizes->count() > 0 ? 'true' : 'false' }}">
+                                        data-has-options="{{ ($product->colors->count() > 0 || $product->sizes->count() > 0) ? 1 : 0 }}">
                                     <span class="material-symbols-outlined text-[20px] group-hover/cart:text-primary transition-colors">shopping_cart</span>
                                 </button>
                                 <button type="button" 
                                         class="btn-buy-now flex-1 h-10 flex items-center justify-center rounded-xl bg-text-main text-white hover:bg-black transition-all active:scale-95 group/buy"
                                         data-id="{{ $product->id }}"
                                         data-slug="{{ $product->slug }}"
-                                        data-has-options="{{ $product->colors->count() > 0 || $product->sizes->count() > 0 ? 'true' : 'false' }}">
+                                        data-has-options="{{ ($product->colors->count() > 0 || $product->sizes->count() > 0) ? 1 : 0 }}">
                                     <span class="material-symbols-outlined text-[20px] group-hover/buy:scale-110 transition-transform">shopping_bag</span>
                                 </button>
                             </div>
@@ -171,13 +171,58 @@
                 선택하신 상품이 장바구니에 담겼습니다.<br>지금 확인하시겠습니까?
             </p>
             <div class="grid grid-cols-2 gap-3">
-                <button type="button" onclick="closeModal(document.getElementById('cartSuccessModal'))" class="px-6 py-4 bg-gray-100 text-text-muted text-sm font-bold rounded-2xl hover:bg-gray-200 transition-colors">쇼핑 계속하기</button>
-                <a href="{{ route('cart.index') }}" class="px-6 py-4 bg-text-main text-white text-sm font-bold rounded-2xl hover:bg-black transition-all shadow-lg text-center flex items-center justify-center">장바구니 확인</a>
+                <button type="button" onclick="closeModal(document.getElementById('cartSuccessModal'))" class="px-6 py-[20px] bg-gray-100 text-text-muted text-sm font-bold rounded-2xl hover:bg-gray-200 transition-colors active:scale-95">쇼핑 계속하기</button>
+                <a href="{{ route('cart.index') }}" class="px-6 py-[20px] bg-text-main text-white text-sm font-bold rounded-2xl hover:bg-black transition-all shadow-lg text-center flex items-center justify-center active:scale-95">장바구니 확인</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- 퀵 옵션 선택 모달 --}}
+<div id="quick-view-modal" class="fixed inset-0 z-[100] hidden flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm modal-close opacity-0 transition-opacity duration-300" id="modal-bg"></div>
+    <div class="relative bg-white w-full max-w-3xl rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-all duration-300 translate-y-full md:translate-y-4 opacity-0 md:scale-95" id="modal-content">
+        <div class="flex flex-col h-[85vh] md:h-auto max-h-[800px]">
+            <div class="px-8 py-6 border-b border-gray-50 flex items-center justify-between shrink-0">
+                <div>
+                    <h3 class="text-2xl font-black text-text-main tracking-tighter">상품 옵션 선택</h3>
+                    <p class="text-[11px] font-bold text-text-muted uppercase tracking-wider mt-1">Select options for your wishlist item</p>
+                </div>
+                <button type="button" class="size-10 flex items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:text-text-main transition-colors modal-close">
+                    <span class="material-symbols-outlined text-[24px]">close</span>
+                </button>
+            </div>
+            <div id="qv-product-list" class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar"></div>
+            <div class="px-8 py-6 bg-gray-50 border-t border-gray-100 shrink-0">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-text-muted">총 수량</span>
+                        <span id="qv-total-count" class="text-lg font-black text-text-main">0개</span>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[11px] font-bold text-text-muted uppercase mb-1">Total Amount</p>
+                        <p id="qv-total-price" class="text-2xl font-black text-primary">₩0</p>
+                    </div>
+                </div>
+                <button type="button" id="qv-final-submit" class="w-full py-[22px] bg-text-main text-white text-base font-black rounded-2xl hover:bg-black transition-all shadow-xl flex items-center justify-center gap-2 active:scale-95">
+                    <span id="qv-submit-label">담기</span>
+                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                </button>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .row-qty::-webkit-outer-spin-button, .row-qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .row-qty { -moz-appearance: textfield; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -296,6 +341,107 @@
         });
 
         /**
+         * 퀵 뷰 모달 관련 로직
+         */
+        let currentAction = 'cart'; 
+        let selectedProductsData = [];
+
+        function loadProductOptions(id, action) {
+            currentAction = action;
+            const idStr = Array.isArray(id) ? id.join(',') : id;
+            $.get('/products/bulk-quick-view', { ids: idStr }, function(products) {
+                selectedProductsData = products; 
+                const $list = $('#qv-product-list').empty();
+                products.forEach((p, i) => {
+                    let opts = '';
+                    if (p.colors?.length > 0) {
+                        opts += `<div class="space-y-2"><label class="text-[10px] font-black text-text-muted uppercase">Color</label><div class="flex flex-wrap gap-2" data-idx="${i}" data-type="color">${p.colors.map(c => `<button type="button" class="btn-opt size-7 rounded-full border-2 border-transparent ring-1 ring-gray-200 ring-offset-2 transition-all hover:scale-110" style="background-color: ${c.hex_code}" data-name="${c.name}" data-id="${c.id}"></button>`).join('')}</div></div>`;
+                    }
+                    if (p.sizes?.length > 0) {
+                        opts += `<div class="space-y-2"><label class="text-[10px] font-black text-text-muted uppercase">Size</label><div class="flex flex-wrap gap-1.5" data-idx="${i}" data-type="size">${p.sizes.map(s => `<button type="button" class="btn-opt min-w-[36px] h-8 px-2.5 bg-white border border-gray-100 rounded-lg text-[10px] font-black text-text-muted hover:border-primary transition-all" data-name="${s.name}" data-id="${s.id}">${s.name}</button>`).join('')}</div></div>`;
+                    }
+                    $list.append(`<div class="flex gap-5 pb-6 border-b border-gray-50 last:border-0 last:pb-0 qv-item-row" data-index="${i}"><div class="size-24 md:size-32 rounded-xl bg-gray-50 border border-gray-100 overflow-hidden shrink-0"><img src="${p.image_url}" class="w-full h-full object-cover"></div><div class="flex-1 space-y-4"><div><h4 class="font-bold text-text-main text-sm line-clamp-1">${p.name}</h4><p class="text-xs font-bold text-primary mt-1">₩${(p.sale_price || p.price).toLocaleString()}</p></div><div class="flex flex-col gap-4">${opts}<div class="space-y-2"><label class="text-[10px] font-black text-text-muted uppercase">Quantity</label><div class="flex items-center w-24 h-8 bg-white rounded-lg border border-gray-200 p-0.5 shadow-sm overflow-hidden"><button type="button" class="w-7 h-full flex items-center justify-center text-gray-400 hover:text-primary hover:bg-primary/5 rounded-md" onclick="updateRowQty(${i}, -1)"><span class="material-symbols-outlined text-[14px]">remove</span></button><input type="number" class="row-qty w-0 flex-1 h-full bg-transparent text-center text-xs font-black text-text-main border-0 focus:ring-0 outline-none p-0" value="1" readonly><button type="button" class="w-7 h-full flex items-center justify-center text-gray-400 hover:text-primary hover:bg-primary/5 rounded-md" onclick="updateRowQty(${i}, 1)"><span class="material-symbols-outlined text-[14px]">add</span></button></div></div></div></div></div>`);
+                    p.selectedColor = null; p.selectedSize = null; p.selectedColorId = null; p.selectedSizeId = null; p.quantity = 1;
+                });
+                $('#qv-submit-label').text(`${currentAction === 'cart' ? '장바구니 담기' : '바로구매'}`);
+                updateModalTotal();
+                openQuickViewModal();
+            });
+        }
+
+        $(document).on('click', '.btn-opt', function() {
+            const $cont = $(this).parent(); const idx = $cont.data('idx'); const type = $cont.data('type'); const name = $(this).data('name'); const id = $(this).data('id');
+            if (type === 'color') {
+                $cont.find('.btn-opt').removeClass('ring-primary ring-2 scale-110').addClass('ring-gray-200 ring-1');
+                $(this).removeClass('ring-gray-200 ring-1').addClass('ring-primary ring-2 scale-110');
+                selectedProductsData[idx].selectedColor = name;
+                selectedProductsData[idx].selectedColorId = id;
+            } else {
+                $cont.find('.btn-opt').removeClass('border-primary text-primary bg-primary/5').addClass('border-gray-100 text-text-muted bg-white');
+                $(this).removeClass('border-gray-100 text-text-muted bg-white').addClass('border-primary text-primary bg-primary/5');
+                selectedProductsData[idx].selectedSize = name;
+                selectedProductsData[idx].selectedSizeId = id;
+            }
+        });
+
+        window.updateRowQty = function(index, delta) {
+            const $row = $(`.qv-item-row[data-index="${index}"]`); const $input = $row.find('.row-qty');
+            const newVal = Math.max(1, parseInt($input.val()) + delta); $input.val(newVal);
+            selectedProductsData[index].quantity = newVal; updateModalTotal();
+        };
+
+        function updateModalTotal() {
+            let total = 0; let count = 0;
+            selectedProductsData.forEach(p => { total += (p.sale_price || p.price) * p.quantity; count += p.quantity; });
+            $('#qv-total-count').text(`${count}개`);
+            $('#qv-total-price').text('₩' + total.toLocaleString());
+        }
+
+        $('#qv-final-submit').on('click', function() {
+            for (let p of selectedProductsData) {
+                if (p.colors?.length > 0 && !p.selectedColorId) { showToast(`'${p.name}'의 색상을 선택해 주세요.`, 'warning', 'bg-red-500'); return; }
+                if (p.sizes?.length > 0 && !p.selectedSizeId) { showToast(`'${p.name}'의 사이즈를 선택해 주세요.`, 'warning', 'bg-red-500'); return; }
+            }
+            if (currentAction === 'cart') {
+                const addProductsToCart = (products, force = false) => {
+                    const reqs = products.map(p => $.post('/cart', { product_id: p.id, color: p.selectedColor, size: p.selectedSize, quantity: p.quantity, force: force ? 1 : 0, _token: '{{ csrf_token() }}' }));
+                    
+                    Promise.all(reqs).then((responses) => { 
+                        // 중복된 상품이 하나라도 있는지 확인! 🕵️‍♀️
+                        const duplicateResponse = responses.find(r => r.status === 'duplicate');
+                        
+                        if (duplicateResponse && !force) {
+                            showConfirm(duplicateResponse.message, { 
+                                title: '상품 중복', 
+                                confirmText: '모두 수량 추가' 
+                            }).then((res) => {
+                                if (res) addProductsToCart(products, true); // force 모드로 재시도! 
+                            });
+                            return;
+                        }
+
+                        closeQuickViewModal(); 
+                        openModal(document.getElementById('cartSuccessModal'));
+                        
+                        const lastResponse = responses[responses.length - 1];
+                        if (lastResponse && lastResponse.cart_count !== undefined) {
+                            $('.header-cart-count').text(lastResponse.cart_count).removeClass('hidden').addClass('flex');
+                        }
+                    }).catch(() => showToast('장바구니 담기에 실패했습니다.', 'error', 'bg-red-500'));
+                };
+
+                addProductsToCart(selectedProductsData);
+            } else {
+                let url = '/checkout?' + selectedProductsData.map(p => `p[]=${p.id}&q[]=${p.quantity}${p.selectedColorId ? '&c[]='+p.selectedColorId : ''}${p.selectedSizeId ? '&s[]='+p.selectedSizeId : ''}`).join('&');
+                window.location.href = url;
+            }
+        });
+
+        function openQuickViewModal() { $('#quick-view-modal').removeClass('hidden'); setTimeout(() => { $('#modal-bg').addClass('opacity-100'); $('#modal-content').removeClass('translate-y-full md:translate-y-4 opacity-0 md:scale-95').addClass('translate-y-0 opacity-100 md:scale-100'); $('body').addClass('overflow-hidden'); }, 10); }
+        function closeQuickViewModal() { $('#modal-bg').removeClass('opacity-100').addClass('opacity-0'); $('#modal-content').removeClass('translate-y-0 opacity-100 md:scale-100').addClass('translate-y-full md:translate-y-4 opacity-0 md:scale-95'); setTimeout(() => { $('#quick-view-modal').addClass('hidden'); $('body').removeClass('overflow-hidden'); }, 300); }
+        $('.modal-close').on('click', closeQuickViewModal);
+
+        /**
          * 개별 장바구니 담기 
          */
         $(document).on('click', '.btn-add-cart', function() {
@@ -304,28 +450,35 @@
             const hasOptions = $btn.data('hasOptions');
 
             if (hasOptions) {
-                showToast('옵션 선택이 필요한 상품입니다. 상세 페이지로 이동합니다.', 'info', 'bg-[#181211]');
-                setTimeout(() => {
-                    location.href = `/product-detail/${$btn.closest('.wishlist-item').find('a').first().attr('href').split('/').pop()}`;
-                }, 1000);
+                loadProductOptions([productId], 'cart');
                 return;
             }
 
-            $.ajax({
-                url: "{{ route('cart.store') }}",
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                data: { product_id: productId, quantity: 1 },
-                success: function(response) {
-                    if (response.status === 'success' || response.status === 'duplicate') {
-                        // 토스트 대신 성공 모달 띄우기! 
-                        openModal(document.getElementById('cartSuccessModal'));
-                        
-                        // 헤더 카운트 업데이트
-                        $('.header-cart-count').removeClass('hidden').text(response.cart_count);
+            const addToCart = (force = false) => {
+                $.ajax({
+                    url: "{{ route('cart.store') }}",
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    data: { product_id: productId, quantity: 1, force: force ? 1 : 0 },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            openModal(document.getElementById('cartSuccessModal'));
+                            if (response.cart_count !== undefined) {
+                                $('.header-cart-count').text(response.cart_count).removeClass('hidden').addClass('flex');
+                            }
+                        } else if (response.status === 'duplicate') {
+                            showConfirm(response.message, { 
+                                title: '상품 중복', 
+                                confirmText: '수량 추가' 
+                            }).then((res) => {
+                                if (res) addToCart(true); // force 전송하여 수량 추가 진행! 
+                            });
+                        }
                     }
-                }
-            });
+                });
+            };
+
+            addToCart();
         });
 
         /**
@@ -338,10 +491,7 @@
             const hasOptions = $btn.data('hasOptions');
 
             if (hasOptions) {
-                showToast('옵션 선택이 필요한 상품입니다. 상세 페이지로 이동합니다.', 'info', 'bg-[#181211]');
-                setTimeout(() => {
-                    location.href = `/product-detail/${slug}`;
-                }, 1000);
+                loadProductOptions([productId], 'buy');
                 return;
             }
 

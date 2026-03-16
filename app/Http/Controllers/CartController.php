@@ -125,7 +125,10 @@ class CartController extends Controller
             ->where('size', $size)
             ->first();
 
-        if ($cart && !$request->force) {
+        // force 파라미터가 'true', 1, true 등 다양한 형태로 올 수 있으므로 확실하게 체크
+        $isForce = filter_var($request->force, FILTER_VALIDATE_BOOLEAN);
+
+        if ($cart && !$isForce) {
             return response()->json([
                 'status' => 'duplicate',
                 'message' => '이미 장바구니에 동일한 상품이 있습니다. 수량을 추가하시겠습니까?'

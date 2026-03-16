@@ -68,6 +68,14 @@ class Member extends Authenticatable
     }
 
     /**
+     * 회원의 교환/반품 신청 내역
+     */
+    public function orderClaims()
+    {
+        return $this->hasMany(OrderClaim::class);
+    }
+
+    /**
      * 회원의 보유 쿠폰 목록 (다대다)
      */
     public function coupons(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

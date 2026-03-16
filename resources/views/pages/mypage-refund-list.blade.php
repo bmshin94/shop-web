@@ -90,7 +90,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center bg-gray-50 rounded-xl px-3 py-1.5 border border-gray-100 focus-within:border-primary/30 transition-all w-full lg:w-auto">
+                            <div class="flex items-center bg-gray-50 rounded-xl px-3 py-1.5 border border-gray-100 focus-within:border-primary/30 transition-all w-full lg:auto">
                                 <input type="text" name="start_date" value="{{ $startDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-medium focus:ring-0 outline-none w-full sm:w-24 text-center">
                                 <span class="text-gray-300 mx-2">~</span>
                                 <input type="text" name="end_date" value="{{ $endDate }}" placeholder="연도-월-일" class="datepicker bg-transparent border-none p-0 text-[11px] font-medium focus:ring-0 outline-none w-full sm:w-24 text-center">
@@ -111,7 +111,8 @@
 
             <!-- List Section -->
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="overflow-x-auto">
+                <!-- PC Version: Table (Hidden on mobile) -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr class="bg-gray-50/50 border-b border-gray-100">
@@ -170,6 +171,54 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Version: Card List (Shown on mobile only) -->
+                <div class="md:hidden divide-y divide-gray-50">
+                    @forelse($refunds as $order)
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-text-muted">{{ $order->updated_at->format('Y.m.d') }}</span>
+                                <span class="text-[10px] text-gray-300">|</span>
+                                <span class="text-xs font-black text-text-main">{{ $order->order_number }}</span>
+                            </div>
+                            <span class="inline-flex py-1 px-3 bg-gray-100 text-gray-600 font-bold text-[10px] rounded-full border border-current/10 shadow-sm">
+                                {{ $order->payment_status }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-start gap-4 bg-gray-50 p-4 rounded-2xl">
+                            <div class="size-12 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-sm border border-gray-100">
+                                <span class="material-symbols-outlined text-primary">keyboard_return</span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[13px] font-bold text-text-main line-clamp-1">
+                                    @if($order->items->first())
+                                        {{ $order->items->first()->product_name }} 
+                                        @if($order->items->count() > 1)
+                                            외 {{ $order->items->count() - 1 }}건
+                                        @endif
+                                    @endif
+                                </p>
+                                <p class="text-[11px] text-text-muted mt-1 font-medium leading-relaxed">주문 취소에 따른 결제 금액 환불</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-gray-50 flex items-center justify-between">
+                            <div class="flex items-center gap-1.5">
+                                <span class="size-1.5 rounded-full bg-primary"></span>
+                                <span class="text-xs font-bold text-text-muted">환불 금액</span>
+                            </div>
+                            <span class="text-lg font-black text-primary tracking-tight">₩{{ number_format($order->total_amount) }}</span>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-20 text-center">
+                        <span class="material-symbols-outlined text-4xl text-gray-200 mb-4">payments</span>
+                        <p class="text-text-muted text-sm font-bold">환불 내역이 없습니다.</p>
+                    </div>
+                    @endforelse
                 </div>
 
                 <!-- Pagination -->

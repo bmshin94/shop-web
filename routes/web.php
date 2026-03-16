@@ -117,7 +117,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
     Route::patch('/orders/{order}/restore', [OrderController::class, 'restore'])->withTrashed()->name('orders.restore');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
-    Route::delete('/orders/{order}/force', [OrderController::class, 'forceDestroy'])->withTrashed()->name('orders.force-destroy');
+    Route::get('/orders/{order}/force', [OrderController::class, 'forceDestroy'])->withTrashed()->name('orders.force-destroy');
+
+    // 교환/반품 관리
+    Route::get('/order-claims', [\App\Http\Controllers\Admin\OrderClaimController::class, 'index'])->name('order-claims.index');
+    Route::get('/order-claims/trash', [\App\Http\Controllers\Admin\OrderClaimController::class, 'trash'])->name('order-claims.trash');
+    Route::get('/order-claims/{order_claim}', [\App\Http\Controllers\Admin\OrderClaimController::class, 'show'])->name('order-claims.show');
+    Route::patch('/order-claims/{order_claim}', [\App\Http\Controllers\Admin\OrderClaimController::class, 'update'])->name('order-claims.update');
+    Route::patch('/order-claims/{order_claim}/restore', [\App\Http\Controllers\Admin\OrderClaimController::class, 'restore'])->withTrashed()->name('order-claims.restore');
+    Route::delete('/order-claims/{order_claim}', [\App\Http\Controllers\Admin\OrderClaimController::class, 'destroy'])->name('order-claims.destroy');
+    Route::delete('/order-claims/{order_claim}/force', [\App\Http\Controllers\Admin\OrderClaimController::class, 'forceDestroy'])->withTrashed()->name('order-claims.force-destroy');
 
     // 적립금 관리
     Route::get('/points', [AdminPointController::class, 'index'])->name('points.index');

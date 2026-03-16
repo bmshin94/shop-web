@@ -47,6 +47,22 @@
             '종료' => 'bg-gray-100 text-gray-500',
             '비노출' => 'bg-rose-50 text-rose-600',
         ],
+        'claim' => [
+            '접수' => 'bg-blue-50 text-blue-600',
+            '처리중' => 'bg-amber-50 text-amber-600',
+            '완료' => 'bg-green-50 text-green-600',
+            '거절' => 'bg-red-50 text-red-600',
+        ],
+        'item' => [
+            '주문완료' => 'bg-gray-50 text-gray-600',
+            '배송준비' => 'bg-amber-50 text-amber-600',
+            '배송중' => 'bg-indigo-50 text-indigo-600',
+            '배송완료' => 'bg-green-50 text-green-600',
+            '반품접수' => 'bg-red-50 text-red-600',
+            '반품완료' => 'bg-red-100 text-red-700',
+            '교환접수' => 'bg-blue-50 text-blue-600',
+            '교환완료' => 'bg-blue-100 text-blue-700',
+        ],
     ];
 
     $badgeClass = $styles[$type][$value] ?? 'bg-gray-100 text-gray-500';

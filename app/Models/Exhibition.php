@@ -22,6 +22,7 @@ class Exhibition extends Model
         'title',
         'slug',
         'status',
+        'is_visible',
         'banner_image_url',
         'summary',
         'description',
@@ -31,6 +32,7 @@ class Exhibition extends Model
     ];
 
     protected $casts = [
+        'is_visible' => 'boolean',
         'start_at' => 'datetime',
         'end_at' => 'datetime',
         'sort_order' => 'integer',

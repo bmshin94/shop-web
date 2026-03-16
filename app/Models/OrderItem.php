@@ -18,6 +18,7 @@ class OrderItem extends Model
         'unit_price',
         'quantity',
         'line_total',
+        'status',
     ];
 
     protected $casts = [

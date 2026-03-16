@@ -38,7 +38,9 @@
                             <select name="status" class="w-full pl-4 pr-10 py-3 bg-gray-50 border border-transparent rounded-2xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary/30 transition-all outline-none font-medium appearance-none cursor-pointer !bg-none">
                                 <option value="">모든 주문상태</option>
                                 @foreach(\App\Models\Order::ORDER_STATUSES as $status)
-                                <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @if(!in_array($status, ['취소완료', '환불완료']))
+                                        <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 pointer-events-none">expand_more</span>
@@ -82,7 +84,8 @@
 
             <!-- List Section -->
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="overflow-x-auto">
+                <!-- PC Version: Table (Hidden on mobile) -->
+                <div class="hidden md:block overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[800px]">
                         <thead>
                             <tr class="bg-gray-50/50 border-b border-gray-100">
@@ -99,7 +102,7 @@
                                 @if($itemIndex === 0)
                                 <td class="py-6 px-8 text-center border-r border-gray-50/50 align-top" rowspan="{{ $order->items->count() }}">
                                     <p class="font-semibold text-text-main text-sm">{{ $order->ordered_at->format('Y.m.d') }}</p>
-                                    <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number]) }}" class="inline-block mt-2 px-2.5 py-1 bg-gray-100 rounded-lg text-xs font-semibold text-text-muted hover:bg-primary-light hover:text-primary transition-colors tracking-tighter">
+                                    <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number]) }}" class="inline-block mt-2 px-2.5 py-1 bg-gray-50 rounded-lg text-xs font-semibold text-text-muted hover:bg-primary-light hover:text-primary transition-colors tracking-tighter">
                                         {{ $order->order_number }}
                                     </a>
                                 </td>
@@ -162,6 +165,65 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Version: Card List (Shown on mobile only) -->
+                <div class="md:hidden divide-y divide-gray-50">
+                    @forelse($orders as $order)
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-text-muted">{{ $order->ordered_at->format('Y.m.d') }}</span>
+                                <span class="text-[10px] text-gray-300">|</span>
+                                <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number]) }}" class="text-xs font-black text-text-main underline decoration-gray-200 underline-offset-4">{{ $order->order_number }}</a>
+                            </div>
+                            @php
+                                $statusClasses = [
+                                    '주문접수' => 'bg-gray-100 text-gray-600',
+                                    '상품준비중' => 'bg-blue-50 text-blue-600',
+                                    '배송중' => 'bg-primary-light text-primary',
+                                    '배송완료' => 'bg-green-50 text-green-600',
+                                    '구매확정' => 'bg-background-dark text-white',
+                                ];
+                                $statusClass = $statusClasses[$order->order_status] ?? 'bg-gray-100 text-gray-600';
+                            @endphp
+                            <span class="inline-flex py-1 px-3 {{ $statusClass }} font-bold text-[10px] rounded-full border border-current/10 shadow-sm">
+                                {{ $order->order_status }}
+                            </span>
+                        </div>
+
+                        <div class="space-y-3">
+                            @foreach($order->items as $item)
+                            <div class="flex gap-4">
+                                <div class="size-16 bg-gray-50 rounded-xl overflow-hidden shrink-0 border border-gray-100">
+                                    <img src="{{ $item->product->image_url }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-[13px] font-bold text-text-main line-clamp-1">{{ $item->product_name }}</p>
+                                    @if($item->option_summary)
+                                    <p class="text-[10px] text-text-muted mt-1 font-medium">{{ $item->option_summary }}</p>
+                                    @endif
+                                    <p class="text-[11px] text-text-muted mt-1 font-bold">{{ number_format($item->quantity) }}개</p>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="pt-3 border-t border-gray-50 flex items-center justify-between">
+                            <span class="text-xs font-bold text-text-muted">결제금액 ({{ $order->payment_method }})</span>
+                            <span class="text-sm font-black text-text-main">₩{{ number_format($order->total_amount) }}</span>
+                        </div>
+
+                        @if($order->tracking_number)
+                        <button class="w-full py-2.5 bg-gray-50 text-text-main text-xs font-bold rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">배송추적</button>
+                        @endif
+                    </div>
+                    @empty
+                    <div class="py-20 text-center">
+                        <span class="material-symbols-outlined text-4xl text-gray-200 mb-4">inventory_2</span>
+                        <p class="text-text-muted text-sm font-bold">주문 내역이 없습니다.</p>
+                    </div>
+                    @endforelse
                 </div>
 
                 <!-- Pagination -->

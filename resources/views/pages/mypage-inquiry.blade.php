@@ -124,7 +124,7 @@
             <div>
                 <label for="inquiry_title" class="block text-xs font-black text-text-muted uppercase mb-2 tracking-tighter">문의 제목</label>
                 <input type="text" id="inquiry_title" name="title" placeholder="제목을 입력해 주세요" 
-                       class="w-full h-12 px-4 rounded-xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all" required>
+                       class="w-full h-12 px-4 rounded-xl border-gray-200 focus:border-primary focus:ring-primary/20 text-sm font-medium transition-all">
             </div>
             <div>
                 <label for="inquiry_content" class="block text-xs font-black text-text-muted uppercase mb-2 tracking-tighter">문의 내용</label>

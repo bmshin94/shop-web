@@ -257,6 +257,26 @@ class CheckoutService
                 'admin_memo' => $order->admin_memo . "\n[" . now()->format('Y-m-d H:i:s') . "] 주문 취소 처리됨 (사유: " . $reason . ")"
             ]);
 
+            // 3-1. 통합 클레임(OrderClaim) 레코드 생성 ✨
+            $claim = OrderClaim::create([
+                'member_id' => $order->member_id,
+                'order_id' => $order->id,
+                'claim_number' => 'CAN-' . $order->order_number,
+                'type' => OrderClaim::TYPE_CANCEL,
+                'status' => OrderClaim::STATUS_COMPLETED,
+                'reason_type' => '기타',
+                'reason_detail' => $reason,
+                'processed_at' => now(),
+            ]);
+
+            foreach ($order->items as $item) {
+                OrderClaimItem::create([
+                    'order_claim_id' => $claim->id,
+                    'order_item_id' => $item->id,
+                    'quantity' => $item->quantity,
+                ]);
+            }
+
             // 4. 사용된 적립금 복구
             if ($order->discount_amount > 0) {
                 $order->member->increment('points', $order->discount_amount);

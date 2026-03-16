@@ -22,11 +22,62 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
+        $today = now()->startOfDay();
+        $yesterday = now()->subDay()->startOfDay();
+
+        // 1. 오늘의 통계 데이터 
+        // 1-1. 오늘의 매출액 (결제 완료된 주문만)
+        $todaySales = \App\Models\Order::where('created_at', '>=', $today)
+            ->where('payment_status', '결제완료')
+            ->sum('total_amount');
+
+        // 어제 매출액 (전일 대비 계산용)
+        $yesterdaySales = \App\Models\Order::whereBetween('created_at', [$yesterday, $today])
+            ->where('payment_status', '결제완료')
+            ->sum('total_amount');
+
+        $salesTrend = 0;
+        if ($yesterdaySales > 0) {
+            $salesTrend = round((($todaySales - $yesterdaySales) / $yesterdaySales) * 100, 1);
+        }
+
+        // 1-2. 오늘의 주문 건수 (전체 주문 시도 건수)
+        $todayOrdersCount = \App\Models\Order::where('created_at', '>=', $today)->count();
+
+        // 1-3. 신규 가입자 수
+        $todayNewMembersCount = \App\Models\Member::where('created_at', '>=', $today)->count();
+
+        // 1-4. 답변 대기 문의 수
+        $pendingInquiriesCount = \App\Models\Inquiry::whereNull('answered_at')->count();
+
+        // 2. 주간 매출 추이 데이터 (최근 7일)
+        $weeklySales = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $amount = \App\Models\Order::whereDate('created_at', $date)
+                ->where('payment_status', '결제완료')
+                ->sum('total_amount');
+            
+            $weeklySales[] = [
+                'date' => now()->subDays($i)->format('m/d'),
+                'amount' => $amount
+            ];
+        }
+
+        // 3. 최근 주문 리스트 (5개)
+        $recentOrders = \App\Models\Order::with(['member', 'items.product'])
+            ->latest()
+            ->take(5)
+            ->get();
+
         $stats = [
-            'today_sales' => 1250000,
-            'today_orders' => 42,
-            'new_members' => 12,
-            'pending_qna' => 5,
+            'today_sales' => $todaySales,
+            'sales_trend' => $salesTrend,
+            'today_orders' => $todayOrdersCount,
+            'new_members' => $todayNewMembersCount,
+            'pending_qna' => $pendingInquiriesCount,
+            'weekly_sales' => $weeklySales,
+            'recent_orders' => $recentOrders,
         ];
 
         return view('admin.dashboard', compact('stats'));

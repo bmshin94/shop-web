@@ -29,7 +29,6 @@ class OrderController extends Controller
             'search',
             'order_status',
             'payment_status',
-            'shipping_status',
             'date_from',
             'date_to',
         ]);
@@ -43,7 +42,6 @@ class OrderController extends Controller
             'trashedOrdersCount' => Order::onlyTrashed()->count(),
             'orderStatusOptions' => Order::ORDER_STATUSES,
             'paymentStatusOptions' => Order::PAYMENT_STATUSES,
-            'shippingStatusOptions' => Order::SHIPPING_STATUSES,
         ]);
     }
 
@@ -59,7 +57,6 @@ class OrderController extends Controller
             'search',
             'order_status',
             'payment_status',
-            'shipping_status',
             'date_from',
             'date_to',
         ]);
@@ -70,7 +67,6 @@ class OrderController extends Controller
             'orders' => $orders,
             'orderStatusOptions' => Order::ORDER_STATUSES,
             'paymentStatusOptions' => Order::PAYMENT_STATUSES,
-            'shippingStatusOptions' => Order::SHIPPING_STATUSES,
         ]);
     }
 
@@ -88,7 +84,6 @@ class OrderController extends Controller
             'order' => $order,
             'orderStatusOptions' => Order::ORDER_STATUSES,
             'paymentStatusOptions' => Order::PAYMENT_STATUSES,
-            'shippingStatusOptions' => Order::SHIPPING_STATUSES,
         ]);
     }
 

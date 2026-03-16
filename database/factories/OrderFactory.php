@@ -42,7 +42,6 @@ class OrderFactory extends Factory
             'payment_method' => fake()->randomElement(Order::PAYMENT_METHODS),
             'payment_status' => '결제완료',
             'order_status' => '주문접수',
-            'shipping_status' => '배송대기',
             'courier' => null,
             'tracking_number' => null,
             'admin_memo' => null,
@@ -66,7 +65,6 @@ class OrderFactory extends Factory
 
             return [
                 'order_status' => '배송중',
-                'shipping_status' => '배송중',
                 'courier' => 'CJ대한통운',
                 'tracking_number' => fake()->numerify('###########'),
                 'shipped_at' => $shippedAt,
@@ -85,7 +83,6 @@ class OrderFactory extends Factory
 
             return [
                 'order_status' => '배송완료',
-                'shipping_status' => '배송완료',
                 'courier' => 'CJ대한통운',
                 'tracking_number' => fake()->numerify('###########'),
                 'shipped_at' => $deliveredAt->copy()->subDays(2),
@@ -102,7 +99,6 @@ class OrderFactory extends Factory
         return $this->state(fn (): array => [
             'payment_status' => '환불완료',
             'order_status' => '취소완료',
-            'shipping_status' => '배송대기',
             'courier' => null,
             'tracking_number' => null,
             'shipped_at' => null,

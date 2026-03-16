@@ -40,7 +40,6 @@ class OrderSeeder extends Seeder
                 'customer_phone' => $member?->phone ?? '010-' . fake()->numerify('####-####'),
                 'order_status' => $status,
                 'payment_status' => ($status === '취소완료') ? '환불완료' : '결제완료',
-                'shipping_status' => in_array($status, ['배송중', '배송완료', '구매확정']) ? $status : '배송대기',
             ]);
 
             // 주문당 1~3개의 상품 추가

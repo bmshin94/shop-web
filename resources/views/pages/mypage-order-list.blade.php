@@ -37,7 +37,7 @@
                         <div class="w-full lg:w-[220px] relative">
                             <select name="status" class="w-full pl-4 pr-10 py-3 bg-gray-50 border border-transparent rounded-2xl text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white focus:border-primary/30 transition-all outline-none font-medium appearance-none cursor-pointer !bg-none">
                                 <option value="">모든 주문상태</option>
-                                @foreach(['주문접수', '상품준비중', '배송중', '배송완료', '구매확정'] as $status)
+                                @foreach(\App\Models\Order::ORDER_STATUSES as $status)
                                 <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
                                 @endforeach
                             </select>

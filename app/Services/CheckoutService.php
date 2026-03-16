@@ -218,7 +218,6 @@ class CheckoutService
                 'merchant_uid' => $merchant_uid,
                 'payment_status' => '결제완료',
                 'order_status' => '주문접수',
-                'shipping_status' => '배송대기',
                 'subtotal_amount' => $totalProductPrice,
                 'shipping_amount' => $shippingFee,
                 'discount_amount' => $appliedPoints,
@@ -320,7 +319,6 @@ class CheckoutService
                 'payment_method' => $paymentMethod,
                 'payment_status' => '결제완료', // 테스트를 위해 즉시 결제 완료 처리
                 'order_status' => '주문접수',
-                'shipping_status' => '배송대기',
                 'subtotal_amount' => $totalProductPrice,
                 'shipping_amount' => $shippingFee,
                 'discount_amount' => $discountAmount,

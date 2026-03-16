@@ -14,7 +14,7 @@
     <h2 class="text-3xl font-extrabold text-text-main tracking-tight mb-8">마이페이지</h2>
 
     <div class="flex flex-col lg:flex-row gap-8 items-start">
-        @include('partials.sidebar-mypage')
+        @include('partials.mypage-sidebar')
 
         <div class="flex-1 w-full space-y-8">
             <!-- User Summary (Restored) -->

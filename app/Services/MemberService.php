@@ -376,6 +376,67 @@ class MemberService
     }
 
     /**
+     * 영수증/계산서 발급 데이터 조회 및 필터링
+     */
+    public function getReceiptListData(Member $member, Request $request): array
+    {
+        $query = $member->orders()
+            ->with(['items.product'])
+            ->where('payment_status', '결제완료') // 결제 완료된 건만 영수증 발급 가능! ✨
+            ->latest();
+
+        // 0. 키워드 검색 (상품명 또는 주문번호)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('order_number', 'like', "%{$search}%")
+                  ->orWhereHas('items', function($sq) use ($search) {
+                      $sq->where('product_name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // 1. 증빙종류 필터 (결제 수단 기반)
+        if ($request->filled('status')) {
+            $query->where('payment_method', $request->status);
+        }
+
+        // 2. 기간 필터 및 직접 날짜 검색
+        $months = $request->get('months');
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            $query->whereBetween('ordered_at', [
+                $startDate . ' 00:00:00',
+                $endDate . ' 23:59:59'
+            ]);
+        } else {
+            $months = $months ?: 1;
+            $startDate = now()->subMonths($months)->format('Y-m-d');
+            $endDate = now()->format('Y-m-d');
+            $query->where('ordered_at', '>=', $startDate . ' 00:00:00');
+        }
+
+        $receipts = $query->paginate(10)->withQueryString();
+
+        // 아임포트(포트원) 영수증 URL 등 추가 정보 가공 (예시)
+        $receipts->getCollection()->transform(function($order) {
+            // 실제 서비스에서는 PG사 API나 DB에 저장된 영수증 URL을 연결해줘야 해! 🔗
+            $order->receipt_url = "https://iniweb.inicis.com/DefaultWebApp/mall/cr/cm/m_s_receipt.jsp?noTid={$order->imp_uid}&noMethod=1"; 
+            return $order;
+        });
+
+        return [
+            'member' => $member,
+            'receipts' => $receipts,
+            'months' => $months,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'search' => $request->get('search'),
+        ];
+    }
+
+    /**
      * 최근 본 상품 데이터 조회 및 날짜별 그룹화  (비로그인 지원!)
      */
     public function getRecentViewData(?Member $member = null): array

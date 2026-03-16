@@ -33,19 +33,21 @@ class Order extends Model
         '배송완료',
         '구매확정',
         '취소완료',
+        '환불완료',
     ];
 
-    public const SHIPPING_STATUSES = [
-        '배송대기',
-        '출고완료',
-        '배송중',
-        '배송완료',
+    /**
+     * 사용자가 직접 취소 가능한 주문 상태 목록
+     */
+    public const CANCELLABLE_STATUSES = [
+        '주문접수',
+        '상품준비중',
     ];
 
     public const SHIPPING_STARTED_STATUSES = [
-        '출고완료',
         '배송중',
         '배송완료',
+        '구매확정',
     ];
 
     public const PAYMENT_CANCELLED_STATUSES = [
@@ -70,7 +72,6 @@ class Order extends Model
         'merchant_uid',
         'payment_status',
         'order_status',
-        'shipping_status',
         'courier',
         'tracking_number',
         'admin_memo',

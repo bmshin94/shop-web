@@ -182,6 +182,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage', [MemberController::class, 'index'])->name('mypage');
     Route::get('/mypage/order-list', [MemberController::class, 'orderList'])->name('mypage.order-list');
     Route::get('/mypage/orders/{order_number}', [MemberController::class, 'orderDetail'])->name('mypage.order-detail');
+    Route::get('/mypage/orders/{order_number}/exchange-return', [MemberController::class, 'exchangeReturnForm'])->name('mypage.exchange-return');
     Route::post('/mypage/orders/{order_number}/cancel', [MemberController::class, 'cancelOrder'])->name('mypage.order-cancel');
     Route::get('/mypage/orders/{order_number}/receipt', [MemberController::class, 'printReceipt'])->name('mypage.order-receipt');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

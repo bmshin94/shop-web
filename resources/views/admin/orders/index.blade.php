@@ -7,13 +7,13 @@
     .order-row {
         display: grid;
         align-items: center;
-        grid-template-columns: 1.3fr 1fr 0.8fr 0.8fr 0.8fr;
+        grid-template-columns: 1.3fr 1fr 0.8fr 0.8fr;
         gap: 12px;
     }
 
     @media (min-width: 1024px) {
         .order-row {
-            grid-template-columns: 1.4fr 1.1fr 0.9fr 0.9fr 0.9fr 1fr 120px;
+            grid-template-columns: 1.4fr 1.1fr 1fr 1fr 1.2fr 120px;
             gap: 16px;
         }
     }
@@ -26,7 +26,6 @@
         request('search'),
         request('order_status'),
         request('payment_status'),
-        request('shipping_status'),
         request('date_from'),
         request('date_to'),
     ])->filter(fn ($value) => filled($value))->count();
@@ -76,7 +75,7 @@
     <!-- 주문 필터 -->
     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
         <form action="{{ route('admin.orders.index') }}" method="GET" class="space-y-4">
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div class="lg:col-span-2 relative">
                     <span class="material-symbols-outlined absolute left-3 top-3 text-text-muted text-[18px]">search</span>
                     <input
@@ -100,15 +99,6 @@
                         <option value="">모든 결제상태</option>
                         @foreach($paymentStatusOptions as $status)
                             <option value="{{ $status }}" {{ request('payment_status') === $status ? 'selected' : '' }}>{{ $status }}</option>
-                        @endforeach
-                    </select>
-                    <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>
-                </div>
-                <div class="relative">
-                    <select name="shipping_status" class="w-full px-4 py-2.5 pr-10 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 appearance-none outline-none">
-                        <option value="">모든 배송상태</option>
-                        @foreach($shippingStatusOptions as $status)
-                            <option value="{{ $status }}" {{ request('shipping_status') === $status ? 'selected' : '' }}>{{ $status }}</option>
                         @endforeach
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-3 text-text-muted text-[18px] pointer-events-none">expand_more</span>
@@ -164,7 +154,6 @@
             <div class="text-[11px] font-bold text-text-muted uppercase">수령인 / 상품수</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">주문상태</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">결제상태</div>
-            <div class="text-center text-[11px] font-bold text-text-muted uppercase">배송상태</div>
             <div class="text-right text-[11px] font-bold text-text-muted uppercase">결제금액 / 주문일</div>
             <div class="text-center text-[11px] font-bold text-text-muted uppercase">관리</div>
         </div>
@@ -188,17 +177,13 @@
 
                     <div class="text-left lg:text-center">
                         <x-admin.status-badge type="order" :value="$order->order_status" />
+                        @if($order->tracking_number)
+                            <p class="mt-1.5 text-[10px] font-bold text-text-muted truncate bg-gray-100 px-2 py-0.5 rounded-md inline-block">송장: {{ $order->tracking_number }}</p>
+                        @endif
                     </div>
 
                     <div class="text-left lg:text-center">
                         <x-admin.status-badge type="payment" :value="$order->payment_status" />
-                    </div>
-
-                    <div class="text-left lg:text-center">
-                        <x-admin.status-badge type="shipping" :value="$order->shipping_status" />
-                        @if($order->tracking_number)
-                            <p class="mt-1 text-[11px] font-bold text-text-muted truncate">{{ $order->tracking_number }}</p>
-                        @endif
                     </div>
 
                     <div class="text-left lg:text-right">

@@ -2,35 +2,45 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Operator;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class OrderManagementTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // 관리자 권한으로 로그인 상태 유지! 🔒✨
+        $admin = Operator::factory()->create([
+            'status' => '활성'
+        ]);
+        $this->actingAs($admin, 'admin');
+    }
 
     /** @test */
-    public function 관리자_주문목록은_검색어와_배송상태로_필터링된다(): void
+    public function 관리자_주문목록은_검색어와_주문상태로_필터링된다(): void
     {
         $matchingOrder = $this->createOrderWithItems([
             'order_number' => 'HF-SEARCH-1001',
             'customer_name' => '김하늘',
-            'shipping_status' => '배송중',
             'order_status' => '배송중',
         ]);
 
         $hiddenOrder = $this->createOrderWithItems([
             'order_number' => 'HF-SEARCH-2002',
             'customer_name' => '박서연',
-            'shipping_status' => '배송대기',
             'order_status' => '주문접수',
         ]);
 
         $response = $this->get(route('admin.orders.index', [
             'search' => '김하늘',
-            'shipping_status' => '배송중',
+            'order_status' => '배송중',
         ]));
 
         $response->assertOk();
@@ -47,7 +57,6 @@ class OrderManagementTest extends TestCase
             ->patch(route('admin.orders.update', $order), [
                 'order_status' => '배송중',
                 'payment_status' => '결제완료',
-                'shipping_status' => '배송중',
                 'courier' => '',
                 'tracking_number' => '',
                 'admin_memo' => '배송 준비 중',
@@ -58,19 +67,17 @@ class OrderManagementTest extends TestCase
     }
 
     /** @test */
-    public function 배송완료로_변경하면_주문상태와_처리시각이_자동_동기화된다(): void
+    public function 배송완료로_변경하면_처리시각이_자동_기록된다(): void
     {
         $order = $this->createOrderWithItems([
             'order_status' => '주문접수',
-            'shipping_status' => '배송대기',
             'shipped_at' => null,
             'delivered_at' => null,
         ]);
 
         $response = $this->patch(route('admin.orders.update', $order), [
-            'order_status' => '배송중',
+            'order_status' => '배송완료',
             'payment_status' => '결제완료',
-            'shipping_status' => '배송완료',
             'courier' => 'CJ대한통운',
             'tracking_number' => '123456789012',
             'admin_memo' => '배송 완료 확인',
@@ -80,7 +87,6 @@ class OrderManagementTest extends TestCase
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
             'order_status' => '배송완료',
-            'shipping_status' => '배송완료',
             'courier' => 'CJ대한통운',
             'tracking_number' => '123456789012',
         ]);
@@ -97,7 +103,6 @@ class OrderManagementTest extends TestCase
         $order = $this->createOrderWithItems([
             'payment_status' => '결제완료',
             'order_status' => '배송중',
-            'shipping_status' => '배송중',
             'courier' => 'CJ대한통운',
             'tracking_number' => '123456789012',
             'shipped_at' => now()->subDay(),
@@ -106,7 +111,6 @@ class OrderManagementTest extends TestCase
         $response = $this->patch(route('admin.orders.update', $order), [
             'order_status' => '취소완료',
             'payment_status' => '결제완료',
-            'shipping_status' => '배송대기',
             'courier' => 'CJ대한통운',
             'tracking_number' => '123456789012',
             'admin_memo' => '고객 요청 취소',
@@ -117,7 +121,6 @@ class OrderManagementTest extends TestCase
             'id' => $order->id,
             'order_status' => '취소완료',
             'payment_status' => '환불완료',
-            'shipping_status' => '배송대기',
             'courier' => null,
             'tracking_number' => null,
         ]);

@@ -18,7 +18,6 @@ class EventSeeder extends Seeder
             [
                 'title' => '3월 봄맞이 전 상품 10% 쿠폰',
                 'slug' => 'march-spring-coupon',
-                'status' => '진행중',
                 'banner_image_url' => 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=1200&h=628&fit=crop',
                 'summary' => '봄 시즌 한정 쿠폰 이벤트',
                 'description' => '회원 등급 상관없이 전 상품 10% 쿠폰을 지급하는 이벤트입니다.',
@@ -29,7 +28,6 @@ class EventSeeder extends Seeder
             [
                 'title' => '신규 회원 가입 웰컴 포인트 지급',
                 'slug' => 'new-member-welcome-point',
-                'status' => '진행예정',
                 'banner_image_url' => 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=1200&h=628&fit=crop',
                 'summary' => '신규 가입 즉시 5,000P 지급',
                 'description' => '기간 내 신규 회원에게 웰컴 포인트를 제공합니다.',
@@ -40,7 +38,6 @@ class EventSeeder extends Seeder
             [
                 'title' => '가을 기획 특가전 종료 이벤트',
                 'slug' => 'fall-special-closing',
-                'status' => '종료',
                 'banner_image_url' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=1200&h=628&fit=crop',
                 'summary' => '종료된 프로모션 샘플',
                 'description' => '이벤트 관리 화면에서 종료 상태 확인용 데이터입니다.',
@@ -51,7 +48,6 @@ class EventSeeder extends Seeder
             [
                 'title' => '앱 전용 비공개 사전 예약 이벤트',
                 'slug' => 'app-private-preorder-event',
-                'status' => '비노출',
                 'banner_image_url' => 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&h=628&fit=crop',
                 'summary' => '관리자 전용 비노출 샘플',
                 'description' => '비노출 상태 관리 확인을 위한 샘플 데이터입니다.',

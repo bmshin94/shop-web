@@ -466,6 +466,26 @@ class MemberController extends Controller
     }
 
     /**
+     * 교환/반품 신청 폼
+     */
+    public function exchangeReturnForm($orderNumber): View|RedirectResponse
+    {
+        $member = Auth::user();
+        $order = $member->orders()
+            ->with(['items.product'])
+            ->where('order_number', $orderNumber)
+            ->firstOrFail();
+
+        // 배송완료 상태일 때만 신청 가능하도록 방어 로직
+        if ($order->order_status !== '배송완료') {
+            return redirect()->route('mypage.order-detail', $order->order_number)
+                ->with('error', '교환/반품 신청은 배송완료 상태에서만 가능합니다.');
+        }
+
+        return view('pages.mypage-exchange-return', compact('member', 'order'));
+    }
+
+    /**
      * 주문 취소 처리
      */
     public function cancelOrder(Request $request, $orderNumber): JsonResponse
@@ -473,7 +493,7 @@ class MemberController extends Controller
         $member = Auth::user();
         $order = $member->orders()->where('order_number', $orderNumber)->firstOrFail();
 
-        if (!in_array($order->order_status, ['주문접수', '상품준비중'])) {
+        if (!in_array($order->order_status, Order::CANCELLABLE_STATUSES)) {
             return response()->json(['message' => '이미 배송이 시작되어 취소할 수 없습니다.'], 422);
         }
 

@@ -165,7 +165,7 @@
             
             <div class="flex items-center gap-3">
                 @php
-                    $isCancellable = in_array($order->order_status, ['주문접수', '상품준비중']);
+                    $isCancellable = in_array($order->order_status, \App\Models\Order::CANCELLABLE_STATUSES);
                 @endphp
                 <button id="btnCancelOrder" 
                         data-order-number="{{ $order->order_number }}"
@@ -178,7 +178,7 @@
             
             @if($order->order_status === '배송완료')
             <div class="flex items-center gap-3">
-                <button id="btnExchangeReturn" class="px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">교환/반품 신청</button>
+                <a href="{{ route('mypage.exchange-return', $order->order_number) }}" class="px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">교환/반품 신청</a>
             </div>
             @endif
         </div>

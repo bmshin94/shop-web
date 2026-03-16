@@ -34,7 +34,6 @@
         <div class="flex flex-wrap items-center gap-2">
             <x-admin.status-badge type="order" label="주문" :value="$order->order_status" class="px-3 py-1.5 text-[12px]" />
             <x-admin.status-badge type="payment" label="결제" :value="$order->payment_status" class="px-3 py-1.5 text-[12px]" />
-            <x-admin.status-badge type="shipping" label="배송" :value="$order->shipping_status" class="px-3 py-1.5 text-[12px]" />
         </div>
     </div>
 
@@ -162,7 +161,7 @@
                     @method('PATCH')
 
                     <div class="rounded-2xl bg-amber-50 border border-amber-100 px-4 py-3 text-[12px] font-bold text-amber-700 leading-relaxed">
-                        배송상태를 <span class="text-amber-900">출고완료</span> 이상으로 변경하면 택배사와 송장번호를 반드시 입력해야 합니다.
+                        주문상태를 <span class="text-amber-900">배송중</span> 이상으로 변경하면 택배사와 송장번호를 반드시 입력해야 합니다.
                     </div>
 
                     <div class="space-y-2">
@@ -185,18 +184,6 @@
                             @endforeach
                         </select>
                         @error('payment_status')
-                            <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-text-main">배송상태</label>
-                        <select name="shipping_status" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 appearance-none outline-none">
-                            @foreach($shippingStatusOptions as $status)
-                                <option value="{{ $status }}" {{ old('shipping_status', $order->shipping_status) === $status ? 'selected' : '' }}>{{ $status }}</option>
-                            @endforeach
-                        </select>
-                        @error('shipping_status')
                             <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
                         @enderror
                     </div>

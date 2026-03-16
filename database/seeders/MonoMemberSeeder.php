@@ -36,7 +36,7 @@ class MonoMemberSeeder extends Seeder
             ]);
         }
 
-        // 1-1. 기존 데이터 싹 밀기! 🧹
+        // 1-1. 기존 데이터 초기화!
         $member->pointHistories()->delete();
         $member->coupons()->detach();
         $member->orders()->each(function($order) {
@@ -71,7 +71,7 @@ class MonoMemberSeeder extends Seeder
         foreach ($products as $index => $product) {
             $orderNumber = 'MONO-' . date('Ymd') . '-' . str_pad($index + 1, '0', 3, STR_PAD_LEFT);
             
-            // 동일한 주문번호가 있다면 소유자 불문 무조건 삭제! 🧹
+            // 동일한 주문번호가 있다면 소유자 불문 무조건 삭제!
             Order::where('order_number', $orderNumber)->each(function($oldOrder) {
                 $oldOrder->items()->delete();
                 $oldOrder->forceDelete();
@@ -105,7 +105,7 @@ class MonoMemberSeeder extends Seeder
             ]);
         }
 
-        // 4-1. [추가] 주문 하나에 여러 상품이 포함된 데이터 생성! (패키지 주문) 🎁
+        // 4-1. [추가] 주문 하나에 여러 상품이 포함된 데이터 생성! (패키지 주문)
         $multiOrderNumber = 'MONO-' . date('Ymd') . '-MULTI';
         
         // 중복 방지 삭제

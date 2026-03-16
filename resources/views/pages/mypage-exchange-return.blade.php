@@ -131,18 +131,55 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const checkedItems = document.querySelectorAll('input[name="items[]"]:checked');
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const checkedItems = Array.from(document.querySelectorAll('input[name="items[]"]:checked')).map(el => el.value);
             
             if (checkedItems.length === 0) {
                 showToast('신청할 상품을 하나 이상 선택해 주세요.', true);
                 return;
             }
 
-            // 실제 구현 시 API 호출 로직이 들어갈 자리! 🚀
-            showToast('교환/반품 신청이 정상적으로 접수되었습니다. (데모)');
-            setTimeout(() => {
-                location.href = "{{ route('mypage.order-detail', $order->order_number) }}";
-            }, 2000);
+            const formData = new FormData(form);
+            const data = {
+                items: checkedItems,
+                type: formData.get('type'),
+                reason: formData.get('reason'),
+                content: formData.get('content'),
+                _token: document.querySelector('meta[name="csrf-token"]').content
+            };
+
+            // 버튼 비활성화 및 로딩 표시
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="animate-spin material-symbols-outlined text-sm">sync</span> 처리 중...';
+
+            fetch("{{ route('mypage.exchange-return.store', $order->order_number) }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': data._token
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success' || result.message.includes('정상적으로')) {
+                    showToast(result.message || '신청이 정상적으로 접수되었습니다.');
+                    setTimeout(() => {
+                        location.href = "{{ route('mypage.order-detail', $order->order_number) }}";
+                    }, 2000);
+                } else {
+                    showToast(result.message || '요청 처리 중 오류가 발생했습니다.', true);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '신청하기';
+                }
+            })
+            .catch(error => {
+                showToast('서버 통신 중 오류가 발생했습니다.', true);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '신청하기';
+            });
         });
     });
 </script>

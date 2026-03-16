@@ -3,11 +3,11 @@
 @section('title', '홈 - Active Women\'s Premium Store')
 
 @section('content')
-<!-- 메인 히어로 배너 섹션  -->
+<!-- 메인 히어로 배너 섹션 -->
 <section class="relative mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
   <div class="relative overflow-hidden rounded-2xl bg-black">
     @forelse($heroExhibitions as $exhibition)
-    <div class="relative z-0 {{ $loop->first ? '' : 'hidden' }}"> <!-- 우선 첫 번째 기획전만 보여줄게!  -->
+    <div class="relative z-0 {{ $loop->first ? '' : 'hidden' }}"> <!-- 우선 첫 번째 기획전만 보여줄게! -->
       <div class="absolute inset-0 z-0">
         <div class="h-full w-full bg-cover bg-center opacity-70 transition-transform duration-700 hover:scale-105"
           style="background-image: url('{{ $exhibition->banner_image_url ?? 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070' }}');">
@@ -36,7 +36,7 @@
       </div>
     </div>
     @empty
-    <!-- 데이터가 없을 때의 기본 배너!  -->
+    <!-- 데이터가 없을 때의 기본 배너! -->
     <div class="relative z-10 flex min-h-[560px] flex-col items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8">
       <h2 class="text-4xl font-extrabold text-white sm:text-6xl">당신만의 스타일로 <br class="hidden sm:block" /> <span class="text-primary">플레이하세요</span></h2>
     </div>
@@ -44,7 +44,7 @@
   </div>
 </section>
 
-<!-- 카테고리 퀵 메뉴 섹션  -->
+<!-- 카테고리 퀵 메뉴 섹션 -->
 <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
   <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-8">
     @foreach($topCategories as $cat)
@@ -65,7 +65,7 @@
   </div>
 </section>
 
-<!-- Editor's Pick 섹션 (베스트 상품)  -->
+<!-- Editor's Pick 섹션 (베스트 상품) -->
 <section class="bg-background-alt py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-10 flex items-center justify-between border-b border-gray-200 pb-4">
@@ -86,7 +86,7 @@
               style="background-image: url('{{ $product->image_url ?? ($product->images->first()?->image_url ?? 'https://via.placeholder.com/400x533') }}');">
             </div>
           </a>
-          <!-- 찜하기 버튼  -->
+          <!-- 찜하기 버튼 -->
           <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 btn-toggle-wishlist" data-id="{{ $product->id }}">
             <span class="material-symbols-outlined block text-lg {{ $product->is_wishlisted ? 'filled text-red-500' : '' }}" style="{{ $product->is_wishlisted ? "font-variation-settings: 'FILL' 1" : "" }}">favorite</span>
           </div>
@@ -123,7 +123,7 @@
   </div>
 </section>
 
-<!-- 실시간 인기 급상승 섹션  -->
+<!-- 실시간 인기 급상승 섹션 -->
 <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
   <div class="mb-8 flex items-end justify-between">
     <div>
@@ -162,13 +162,12 @@
 @push('scripts')
 <script>
   $(document).ready(function() {
-    // 1. 장바구니 담기  (AJAX 연동 준비)
+    // 1. 장바구니 담기 (AJAX 연동 준비)
     $(document).on('click', '.btn-add-cart', function(e) {
       e.preventDefault();
       const productId = $(this).data('id');
       
-      // 나중에 실제 장바구니 API가 생기면 여기에 연결할 거야! 
-      // 지금은 일단 알림만 띄워줄게~ 
+      // 지금은 일단 알림만 띄워줄게!
       showToast('상품을 장바구니에 담았어요! ', 'shopping_cart');
       
       const $cartBadge = $('.header-cart-count'); // 레이아웃에 정의된 배지 클래스 확인 필요!
@@ -179,7 +178,7 @@
       }
     });
 
-    // 2. 실시간 인기 급상승 섹션 가로 스크롤 제어  (아이템 1개씩 이동)
+    // 2. 실시간 인기 급상승 섹션 가로 스크롤 제어 (아이템 1개씩 이동)
     const containerEl = document.querySelector('.trending-container');
     
     // 이동할 너비 계산 (아이템 너비 56rem(224px) + gap 6rem(24px) = 248px 추정, 좀 더 넉넉하게 250px)
@@ -201,13 +200,13 @@
         containerEl.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
     });
 
-    // 3. 마우스 드래그 스크롤 기능 ️ (가장 최신의 드래그 로직 )
+    // 3. 마우스 드래그 스크롤 기능 (가장 최신의 드래그 로직)
     const container = document.querySelector('.trending-container');
     let isDown = false;
     let startX;
     let scrollLeft;
     let isDragging = false;
-    const DRAG_THRESHOLD = 5; // 드래그 판정 기준 픽셀 
+    const DRAG_THRESHOLD = 5; // 드래그 판정 기준 픽셀
     let initialX;
 
     // 기본 이미지/링크 드래그 팡지
@@ -263,7 +262,7 @@
         }
     });
 
-    // 드래그 중일 때는 링크 클릭 방지 로직 (확실하게!) ️
+    // 드래그 중일 때는 링크 클릭 방지 로직 (확실하게!)
     $(container).on('click', 'a', function(e) {
         if (isDragging) {
             e.preventDefault();
@@ -289,7 +288,7 @@
   }
   .trending-container.active {
     cursor: grabbing;
-    scroll-behavior: auto; /* 드래그 중에는 부드러운 스크롤 잠시 끄기!  */
+    scroll-behavior: auto; /* 드래그 중에는 부드러운 스크롤 잠시 끄기! */
   }
 </style>
 @endpush

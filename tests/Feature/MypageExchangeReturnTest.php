@@ -75,7 +75,7 @@ class MypageExchangeReturnTest extends TestCase
         $response = $this->actingAs($member)
             ->get(route('mypage.exchange-return', $order->order_number));
 
-        // 주문 상세로 리다이렉트 및 에러 메시지 확인 🔒
+        // 주문 상세로 리다이렉트 및 에러 메시지 확인
         $response->assertRedirect(route('mypage.order-detail', $order->order_number));
         $response->assertSessionHas('error', '교환/반품 신청은 배송완료 상태에서만 가능합니다.');
     }
@@ -98,7 +98,7 @@ class MypageExchangeReturnTest extends TestCase
         $response = $this->actingAs($member1)
             ->get(route('mypage.exchange-return', $orderOfMember2->order_number));
 
-        // 자신의 주문이 아니므로 찾을 수 없음 처리! 🔒
+        // 자신의 주문이 아니므로 찾을 수 없음 처리!
         $response->assertStatus(404);
     }
 

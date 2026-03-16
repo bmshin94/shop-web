@@ -32,7 +32,7 @@
 @endphp
 
 <div class="space-y-6">
-    <!-- 주문 통계 -->
+    <!-- 주문 요약 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
         <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">

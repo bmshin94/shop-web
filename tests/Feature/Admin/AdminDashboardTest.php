@@ -24,7 +24,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         // 2. 테스트용 데이터 생성 (매출 집계용)
-        // 기존 데이터를 싹 비우고 시작! (RefreshDatabase가 있으니 괜찮아 ✨)
+        // 기존 데이터를 싹 비우고 시작! (RefreshDatabase가 있으니 괜찮아)
         Order::query()->delete();
         Member::query()->delete();
         Inquiry::query()->delete();
@@ -47,7 +47,7 @@ class AdminDashboardTest extends TestCase
         ]);
 
         // 3. 대시보드 페이지 접속 
-        // 팩토리가 Inquiry 등을 만들면서 추가로 생성한 회원까지 포함해서 카운트! 🔍
+        // 팩토리가 Inquiry 등을 만들면서 추가로 생성한 회원까지 포함해서 카운트!
         $expectedMemberCount = Member::where('created_at', '>=', now()->startOfDay())->count();
 
         $response = $this->actingAs($admin, 'admin')
@@ -76,7 +76,7 @@ class AdminDashboardTest extends TestCase
     {
         $response = $this->get(route('admin.dashboard'));
 
-        // 비로그인 시 로그인 페이지로 리다이렉트 되는지 확인! 🔒
+        // 비로그인 시 로그인 페이지로 리다이렉트 되는지 확인!
         $response->assertRedirect(route('admin.login'));
     }
 }

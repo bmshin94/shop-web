@@ -3,11 +3,16 @@
 namespace App\Services\Admin;
 
 use App\Models\Order;
+use App\Services\CheckoutService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class OrderManagementService
 {
+    public function __construct(
+        private readonly CheckoutService $checkoutService
+    ) {
+    }
     /**
      * 관리자 주문 목록을 필터링하여 페이징한다.
      *
@@ -61,15 +66,17 @@ class OrderManagementService
         ];
     }
 
-    /**
-     * 주문/배송 상태를 규칙에 맞게 보정 후 저장한다.
-     *
-     * @param  Order  $order
-     * @param  array<string, mixed>  $payload
-     * @return Order
-     */
     public function updateOrder(Order $order, array $payload): Order
     {
+        // 취소 처리 여부 확인 🚩
+        $isTransitionToCancelled = ($payload['order_status'] === '취소완료' || $payload['payment_status'] === '환불완료' || $payload['payment_status'] === '취소완료') 
+                                    && ($order->order_status !== '취소완료');
+
+        if ($isTransitionToCancelled) {
+            // CheckoutService의 통합 취소 로직 호출! (환불, 적립금, 재고 등 한방에!)
+            return $this->checkoutService->cancelOrder($order, $payload['admin_memo'] ?? '관리자에 의한 취소 처리');
+        }
+
         $normalizedPayload = $this->normalizeStatusPayload($order, $payload);
 
         $order->update($normalizedPayload);

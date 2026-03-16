@@ -16,7 +16,7 @@ class OrderManagementTest extends TestCase
     {
         parent::setUp();
         
-        // 관리자 권한으로 로그인 상태 유지! 🔒✨
+        // 관리자 권한으로 로그인 상태 유지!
         $admin = Operator::factory()->create([
             'status' => '활성'
         ]);

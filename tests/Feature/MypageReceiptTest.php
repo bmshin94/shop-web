@@ -59,7 +59,7 @@ class MypageReceiptTest extends TestCase
         $response->assertSee('59,000');
         $response->assertSee('레깅스');
 
-        // 결제대기 중인 주문은 보이면 안 됨! 🙅‍♀️
+        // 결제대기 중인 주문은 보이면 안 됨!
         $response->assertDontSee('ORD-20260316-002');
     }
 
@@ -84,7 +84,7 @@ class MypageReceiptTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('블랙 요가복');
-        $response->assertDontSee('핑크 스트랩'); // 스트랩은 나오면 안 됨! ✨
+        $response->assertDontSee('핑크 스트랩'); // 스트랩은 나오면 안 됨!
     }
 
     /**

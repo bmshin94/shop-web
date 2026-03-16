@@ -5,13 +5,167 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\OrderClaim;
+use App\Models\OrderClaimItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CheckoutService
 {
     /**
+     * 결제 페이지에 필요한 데이터 준비 (수집 및 계산)
+     * 
+     * @param \App\Models\Member $member 회원 정보
+     * @param \Illuminate\Http\Request $request 요청 데이터
+     * @return array 결제 정보 데이터 배열
+     */
+    public function prepareCheckoutData($member, $request)
+    {
+        $buyNow = session('buy_now');
+        $cartIds = $request->query('cart_ids');
+        $pIds = $request->query('p', []);
+        $qtys = $request->query('q', []);
+        $cIds = $request->query('c', []);
+        $sIds = $request->query('s', []);
+        $directProductIds = $request->query('direct_product_ids');
+        $directProductId = $request->query('direct_product_id');
+
+        $checkoutItems = [];
+        $totalProductPrice = 0;
+
+        try {
+            // 1. 장바구니 기반 결제 처리
+            if ($cartIds) {
+                $ids = explode(',', $cartIds);
+                $cartItems = \App\Models\Cart::whereIn('id', $ids)
+                    ->where('member_id', $member->id)
+                    ->with('product')
+                    ->get();
+
+                foreach ($cartItems as $item) {
+                    $product = $item->product;
+                    $price = $product->sale_price ?? $product->price;
+                    $checkoutItems[] = [
+                        'product' => $product,
+                        'color' => $item->color,
+                        'size' => $item->size,
+                        'quantity' => $item->quantity,
+                        'price' => $price,
+                        'total' => $price * $item->quantity
+                    ];
+                    $totalProductPrice += ($price * $item->quantity);
+                }
+            }
+            // 2. 복합 배열 파라미터 처리 (멀티 옵션)
+            elseif (!empty($pIds)) {
+                foreach ($pIds as $index => $id) {
+                    $product = Product::with(['colors', 'sizes'])->find($id);
+                    if (!$product) continue;
+
+                    $qty = isset($qtys[$index]) ? (int)$qtys[$index] : 1;
+                    $colorId = $cIds[$index] ?? null;
+                    $sizeId = $sIds[$index] ?? null;
+
+                    if (($product->colors->count() > 0 && !$colorId) || ($product->sizes->count() > 0 && !$sizeId)) {
+                        return ['success' => false, 'message' => "'{$product->name}'의 옵션이 선택되지 않았습니다."];
+                    }
+
+                    $price = $product->sale_price ?? $product->price;
+                    $checkoutItems[] = [
+                        'product' => $product,
+                        'color' => $colorId ? \App\Models\Color::find($colorId)?->name : null,
+                        'size' => $sizeId ? \App\Models\Size::find($sizeId)?->name : null,
+                        'quantity' => $qty,
+                        'price' => $price,
+                        'total' => $price * $qty
+                    ];
+                    $totalProductPrice += ($price * $qty);
+                }
+            }
+            // 3. 세션 기반 바로구매 처리
+            elseif ($buyNow) {
+                $product = Product::find($buyNow['product_id']);
+                if ($product) {
+                    $price = $product->sale_price ?? $product->price;
+                    $checkoutItems[] = [
+                        'product' => $product,
+                        'color' => $buyNow['color'] ?? null,
+                        'size' => $buyNow['size'] ?? null,
+                        'quantity' => $buyNow['quantity'],
+                        'price' => $price,
+                        'total' => $price * $buyNow['quantity']
+                    ];
+                    $totalProductPrice += $price * $buyNow['quantity'];
+                }
+            }
+            // 4. 직접 상품 ID 목록 처리
+            elseif ($directProductIds) {
+                $ids = explode(',', $directProductIds);
+                $products = Product::whereIn('id', $ids)->with(['colors', 'sizes'])->get();
+                
+                foreach ($products as $product) {
+                    if ($product->colors->count() > 0 || $product->sizes->count() > 0) {
+                        return ['success' => false, 'message' => "'{$product->name}' 상품은 옵션 선택이 필수입니다."];
+                    }
+
+                    $price = $product->sale_price ?? $product->price;
+                    $checkoutItems[] = [
+                        'product' => $product,
+                        'color' => null,
+                        'size' => null,
+                        'quantity' => 1,
+                        'price' => $price,
+                        'total' => $price
+                    ];
+                    $totalProductPrice += $price;
+                }
+            }
+            // 5. 단일 상품 처리
+            elseif ($directProductId) {
+                $product = Product::find($directProductId);
+                if ($product) {
+                    $qty = $request->query('quantity', 1);
+                    $price = $product->sale_price ?? $product->price;
+                    $checkoutItems[] = [
+                        'product' => $product,
+                        'color' => $request->query('color_id'),
+                        'size' => $request->query('size_id'),
+                        'quantity' => $qty,
+                        'price' => $price,
+                        'total' => $price * $qty
+                    ];
+                    $totalProductPrice += $price * $qty;
+                }
+            }
+
+            if (empty($checkoutItems)) {
+                return ['success' => false, 'message' => '결제할 상품 정보가 없습니다.'];
+            }
+
+            // 6. 배송비 및 최종 금액 계산
+            $shippingFee = $this->calculateShippingFee($checkoutItems[0]['product'], $totalProductPrice);
+            $finalTotal = $totalProductPrice + $shippingFee;
+
+            return [
+                'success' => true,
+                'items' => $checkoutItems,
+                'totalProductPrice' => $totalProductPrice,
+                'shippingFee' => $shippingFee,
+                'finalTotal' => $finalTotal,
+            ];
+
+        } catch (\Exception $e) {
+            Log::error('체크아웃 데이터 준비 실패: ' . $e->getMessage());
+            return ['success' => false, 'message' => '데이터 처리 중 오류가 발생했습니다.'];
+        }
+    }
+    /**
      * 포트원(Iamport) 금액 검증 및 결제 처리
+     * 
+     * @param \App\Models\Member $member 회원 정보
+     * @param array $data 결제 승인 데이터
+     * @return \App\Models\Order 생성된 주문 모델
+     * @throws \Exception 검증 실패 시
      */
     public function verifyAndProcessCheckout($member, array $data)
     {
@@ -67,6 +221,10 @@ class CheckoutService
 
     /**
      * 주문 취소 및 환불 처리 (Portone 연동)
+     * 
+     * @param Order $order 취소할 주문 모델
+     * @param string $reason 취소 사유
+     * @return Order 업데이트된 주문 모델
      */
     public function cancelOrder(Order $order, string $reason = '사용자 요청 취소')
     {
@@ -110,7 +268,63 @@ class CheckoutService
                 $order->member->decrement('points', $rewardPoints);
             }
 
+            // 6. 상품 재고 복구 📦
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('stock_quantity', $item->quantity);
+                }
+            }
+
             return $order;
+        });
+    }
+
+    /**
+     * 교환/반품 신청 처리
+     * 
+     * @param \App\Models\Member $member 회원 정보
+     * @param Order $order 대상 주문
+     * @param array $data 신청 데이터 (items, type, reason, content)
+     * @return OrderClaim 생성된 신청 모델
+     * @throws \Exception
+     */
+    public function processOrderClaim($member, Order $order, array $data)
+    {
+        return DB::transaction(function () use ($member, $order, $data) {
+            // 1. 신청번호 생성 (C + 날짜 + 랜덤)
+            $claimNumber = 'C' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+
+            // 2. 신청 정보 저장
+            $claim = OrderClaim::create([
+                'member_id' => $member->id,
+                'order_id' => $order->id,
+                'claim_number' => $claimNumber,
+                'type' => $data['type'], // exchange or return
+                'reason_type' => $data['reason'],
+                'reason_detail' => $data['content'] ?? null,
+                'status' => '접수',
+            ]);
+
+            // 3. 신청 상품 상세 저장
+            $itemIds = $data['items'] ?? [];
+            foreach ($itemIds as $itemId) {
+                $orderItem = $order->items()->find($itemId);
+                if ($orderItem) {
+                    OrderClaimItem::create([
+                        'order_claim_id' => $claim->id,
+                        'order_item_id' => $orderItem->id,
+                        'quantity' => $orderItem->quantity,
+                    ]);
+                }
+            }
+
+            // 4. 주문 로그 업데이트 (관리자용)
+            $logMsg = $data['type'] === 'exchange' ? '교환' : '반품';
+            $order->update([
+                'admin_memo' => $order->admin_memo . "\n[" . now()->format('Y-m-d H:i:s') . "] {$logMsg} 신청 접수됨 (번호: {$claimNumber})"
+            ]);
+
+            return $claim;
         });
     }
 
@@ -257,7 +471,11 @@ class CheckoutService
     }
 
     /**
-     * (기존 컨트롤러용, 하위호환 유지 또는 삭제 가능) 결제 처리 비즈니스 로직
+     * 결제 처리 비즈니스 로직 (기존 레거시 지원용)
+     * 
+     * @param \App\Models\Member $member 회원 정보
+     * @param array $validatedData 검증된 결제 요청 데이터
+     * @return Order 생성된 주문 모델
      */
     public function processCheckout($member, array $validatedData)
     {

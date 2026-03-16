@@ -12,6 +12,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Inquiry;
+use App\Models\Order;
 
 class MemberController extends Controller
 {
@@ -502,6 +503,43 @@ class MemberController extends Controller
             return response()->json(['message' => '주문이 정상적으로 취소되었습니다.']);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * 교환/반품 신청 저장
+     */
+    public function storeExchangeReturn(Request $request, $orderNumber): JsonResponse
+    {
+        $member = Auth::user();
+        $order = $member->orders()->where('order_number', $orderNumber)->firstOrFail();
+
+        // 1. 상태 검증
+        if ($order->order_status !== '배송완료') {
+            return response()->json(['message' => '교환/반품 신청은 배송완료 상태에서만 가능합니다.'], 422);
+        }
+
+        // 2. 유효성 검사
+        $validated = $request->validate([
+            'items' => 'required|array|min:1',
+            'type' => 'required|in:exchange,return',
+            'reason' => 'required|string',
+            'content' => 'nullable|string',
+        ]);
+
+        try {
+            // 3. 서비스 호출하여 신청 처리
+            $this->checkoutService->processOrderClaim($member, $order, $validated);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => '교환/반품 신청이 정상적으로 접수되었습니다.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }

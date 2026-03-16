@@ -9,7 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Coupon;
 use App\Models\PointHistory;
-use App\Models\Inquiry; // Inquiry 모델 추가! 
+use App\Models\Inquiry; // Inquiry 모델 추가!
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -37,6 +37,9 @@ class MemberService
 
     /**
      * 적립금 내역 데이터 조회
+     * 
+     * @param Member $member
+     * @return array 데이터 배열 ('member', 'currentPoints', 'expiringPoints', 'histories')
      */
     public function getPointListData(Member $member): array
     {
@@ -61,10 +64,13 @@ class MemberService
 
     /**
      * 마이페이지 대시보드 데이터 조회
+     * 
+     * @param Member $member
+     * @return array 대시보드 요약 정보 데이터
      */
     public function getDashboardData(Member $member): array
     {
-        // ... (기존 로직 유지)
+        // 1. 주문 현황 통계 (상태별 카운트)
         $orderStats = [
             'received' => $member->orders()->where('order_status', '주문접수')->count(),
             'preparing' => $member->orders()->where('order_status', '상품준비중')->count(),
@@ -73,10 +79,13 @@ class MemberService
             'confirmed' => $member->orders()->where('order_status', '구매확정')->count(),
         ];
 
+        // 2. 최근 주문 내역 5건
         $recentOrders = $member->orders()->with('items.product')->latest()->take(5)->get();
+        
+        // 3. 총 주문 횟수
         $totalOrderCount = $member->orders()->count();
 
-        // 사용 가능한 쿠폰 개수 조회 추가!
+        // 4. 사용 가능한 쿠폰 개수
         $couponCount = $member->coupons()->whereNull('used_at')->count();
 
         return [
@@ -90,13 +99,17 @@ class MemberService
 
     /**
      * 보유 쿠폰 목록 조회 및 필터링
+     * 
+     * @param Member $member
+     * @param Request $request 검색/필터링 조건
+     * @return array 쿠폰 목록 및 통계 데이터
      */
     public function getCouponListData(Member $member, Request $request): array
     {
-        // 모든 쿠폰 내역 조회 (사용 여부 상관없이!)
+        // 1. 회원의 모든 쿠폰 베이스 쿼리 생성
         $query = $member->coupons();
 
-        // 1. 키워드 검색
+        // 2. 키워드 검색 적용 (이름, 설명)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -105,17 +118,18 @@ class MemberService
             });
         }
 
-        // 2. 유형 필터
+        // 3. 쿠폰 유형 필터링
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
 
+        // 4. 데이터 가공 및 상태 결정
         $coupons = $query->latest('assigned_at')->get()->map(function($coupon) {
             $isUsed = $coupon->pivot->used_at !== null;
             $isExpired = $coupon->ends_at && $coupon->ends_at->isPast();
 
             return (object)[
-                'id' => $coupon->pivot->id, // 쿠폰 고유 ID가 아닌 '발급 고유 번호'로 교체!
+                'id' => $coupon->pivot->id, // 쿠폰 발급 고유 ID
                 'name' => $coupon->name,
                 'description' => $coupon->description,
                 'type' => $coupon->type === 'shipping' ? '배송비 쿠폰' : '할인 쿠폰',
@@ -138,16 +152,22 @@ class MemberService
 
     /**
      * 쿠폰 코드를 통한 쿠폰 등록
+     * 
+     * @param Member $member
+     * @param string $code 등록할 쿠폰 코드
+     * @return Coupon 등록된 쿠폰 모델
+     * @throws \Exception 쿠폰 코드 유효성 검사 실패 시
      */
     public function registerCoupon(Member $member, string $code): Coupon
     {
-        // 대소문자 구분 없이 검색!
+        // 1. 코드 대문자화 후 존재 여부 확인
         $coupon = Coupon::where('code', strtoupper($code))->first();
 
         if (!$coupon) {
             throw new \Exception('존재하지 않거나 발급 가능한 코드가 아닙니다.');
         }
 
+        // 2. 쿠폰 상태 검증 (활성, 기간, 중복 등록 여부)
         if (!$coupon->is_active) {
             throw new \Exception('현재 사용 중단된 쿠폰입니다.');
         }
@@ -164,7 +184,7 @@ class MemberService
             throw new \Exception('이미 등록된 쿠폰입니다.');
         }
 
-        // 회원에게 쿠폰 할당!
+        // 3. 회원에게 쿠폰 할당 및 이력 생성
         $member->coupons()->attach($coupon->id, [
             'assigned_at' => now(),
             'used_at' => null
@@ -177,14 +197,15 @@ class MemberService
      * 주문 목록 조회 및 필터링
      * 
      * @param Member $member
-     * @param Request $request
-     * @return array
+     * @param Request $request 검색/필터링 조건 (search, status, months, start_date, end_date)
+     * @return array 주문 목록 및 필터링 메타데이터
      */
     public function getOrderListData(Member $member, Request $request): array
     {
+        // 1. 기본 주문 쿼리 생성 (관계 모델 로드 및 정렬)
         $query = $member->orders()->with('items.product')->latest();
 
-        // 0. 키워드 검색 (상품명 또는 주문번호)
+        // 2. 키워드 검색 적용 (주문번호 또는 상품명)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -195,12 +216,12 @@ class MemberService
             });
         }
 
-        // 1. 상태 필터
+        // 3. 주문 상태 필터링
         if ($request->filled('status')) {
             $query->where('order_status', $request->status);
         }
 
-        // 2. 기간 필터 및 직접 날짜 검색
+        // 4. 기간 필터링 처리 (날짜 범위 또는 사전 정의된 개월 수)
         $months = $request->get('months');
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
@@ -209,14 +230,14 @@ class MemberService
                 $startDate . ' 00:00:00',
                 $endDate . ' 23:59:59'
             ]);
-            // months가 없으면 1이 아닌 빈 값을 유지 (수동 입력 감지용)
         } else {
-            $months = $months ?: 1; // 버튼 클릭이 없거나 첫 진입이면 1개월 기본
+            $months = $months ?: 1; // 기본 1개월
             $startDate = now()->subMonths($months)->format('Y-m-d');
             $endDate = now()->format('Y-m-d');
             $query->where('ordered_at', '>=', $startDate . ' 00:00:00');
         }
 
+        // 5. 페이징 처리 및 결과 반환
         $orders = $query->paginate(10)->withQueryString();
 
         return [
@@ -233,11 +254,11 @@ class MemberService
      * 리뷰 관리 페이지 데이터 조회
      * 
      * @param Member $member
-     * @return array
+     * @return array 작성 가능한 리뷰 및 작성한 리뷰 데이터
      */
     public function getReviewListData(Member $member): array
     {
-        // 1. 작성 가능한 리뷰  (page_avail 파라미터 사용)
+        // 1. 작성 가능한 리뷰 대상 추출 (배송완료 상품 중 미작성건)
         $purchasedProductIds = OrderItem::whereHas('order', function($q) use ($member) {
                 $q->where('member_id', $member->id)->where('order_status', '배송완료');
             })
@@ -250,7 +271,7 @@ class MemberService
         $availableReviews = Product::whereIn('id', $availableProductIds)
             ->paginate(10, ['*'], 'page_avail');
 
-        // 2. 내가 작성한 리뷰 목록  (page_written 파라미터 사용)
+        // 2. 이미 작성된 나의 리뷰 목록 추출
         $writtenReviews = Review::with('product')
             ->where('member_id', $member->id)
             ->latest()
@@ -265,9 +286,14 @@ class MemberService
 
     /**
      * 취소/반품/교환 내역 조회 및 필터링
+     * 
+     * @param Member $member
+     * @param Request $request 필터 조건
+     * @return array 취소 내역 데이터 및 필터 메타데이터
      */
     public function getCancelListData(Member $member, Request $request): array
     {
+        // 1. 취소/환불 관련 주문 베이스 쿼리
         $query = $member->orders()
             ->with(['items.product'])
             ->where(function($q) {
@@ -276,7 +302,7 @@ class MemberService
             })
             ->latest();
 
-        // 0. 키워드 검색
+        // 2. 검색어 필터링
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -287,12 +313,12 @@ class MemberService
             });
         }
 
-        // 1. 상태 필터
+        // 3. 상태 필터링
         if ($request->filled('status')) {
             $query->where('order_status', $request->status);
         }
 
-        // 2. 기간 필터 및 직접 날짜 검색
+        // 4. 기간 필터링 처리
         $months = $request->get('months');
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
@@ -301,14 +327,14 @@ class MemberService
                 $startDate . ' 00:00:00',
                 $endDate . ' 23:59:59'
             ]);
-            // months가 없으면 1이 아닌 빈 값을 유지 (수동 입력 감지용)
         } else {
-            $months = $months ?: 1; // 버튼 클릭이 없거나 첫 진입이면 1개월 기본
+            $months = $months ?: 1;
             $startDate = now()->subMonths($months)->format('Y-m-d');
             $endDate = now()->format('Y-m-d');
             $query->where('ordered_at', '>=', $startDate . ' 00:00:00');
         }
 
+        // 5. 페이징 처리 및 결과 반환
         $cancels = $query->paginate(10)->withQueryString();
 
         return [
@@ -377,15 +403,20 @@ class MemberService
 
     /**
      * 영수증/계산서 발급 데이터 조회 및 필터링
+     * 
+     * @param Member $member
+     * @param Request $request 필터 조건
+     * @return array 영수증 목록 및 메타데이터
      */
     public function getReceiptListData(Member $member, Request $request): array
     {
+        // 1. 결제 완료된 주문 베이스 쿼리
         $query = $member->orders()
             ->with(['items.product'])
-            ->where('payment_status', '결제완료') // 결제 완료된 건만 영수증 발급 가능! ✨
+            ->where('payment_status', '결제완료')
             ->latest();
 
-        // 0. 키워드 검색 (상품명 또는 주문번호)
+        // 2. 검색어 필터링
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -396,12 +427,12 @@ class MemberService
             });
         }
 
-        // 1. 증빙종류 필터 (결제 수단 기반)
+        // 3. 필터링 (결제 수단 기준 등)
         if ($request->filled('status')) {
             $query->where('payment_method', $request->status);
         }
 
-        // 2. 기간 필터 및 직접 날짜 검색
+        // 4. 기간 필터링 처리
         $months = $request->get('months');
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
@@ -417,11 +448,11 @@ class MemberService
             $query->where('ordered_at', '>=', $startDate . ' 00:00:00');
         }
 
+        // 5. 페이징 및 영수증 URL 생성 (PortOne 연동)
         $receipts = $query->paginate(10)->withQueryString();
 
-        // 아임포트(포트원) 영수증 URL 등 추가 정보 가공 (예시)
         $receipts->getCollection()->transform(function($order) {
-            // 실제 서비스에서는 PG사 API나 DB에 저장된 영수증 URL을 연결해줘야 해! 🔗
+            // NOTE: 실제 운영에서는 PG 응답 결과에 따라 URL을 생성하거나 저장된 값을 사용함
             $order->receipt_url = "https://iniweb.inicis.com/DefaultWebApp/mall/cr/cm/m_s_receipt.jsp?noTid={$order->imp_uid}&noMethod=1"; 
             return $order;
         });
@@ -437,14 +468,17 @@ class MemberService
     }
 
     /**
-     * 최근 본 상품 데이터 조회 및 날짜별 그룹화  (비로그인 지원!)
+     * 최근 본 상품 데이터 조회 및 날짜별 그룹화 (로그인/비로그인 공통)
+     * 
+     * @param Member|null $member 로그인 회원 정보 (null일 경우 게스트)
+     * @return array 그룹화된 최근 본 상품 데이터
      */
     public function getRecentViewData(?Member $member = null): array
     {
         if ($member) {
-            // 1. 로그인 회원: DB 조회 후 그룹화 
+            // 1. 로그인 회원: DB에서 최근 50건 조회 및 날짜별 그룹화 
             $recentViews = $member->recentViews()
-                ->with(['product.images', 'product.colors']) // 색상 정보 추가! 
+                ->with(['product.images', 'product.colors'])
                 ->orderByDesc('viewed_at')
                 ->take(50)
                 ->get()
@@ -455,19 +489,19 @@ class MemberService
                     return $date->format('Y.m.d');
                 });
         } else {
-            // 2. 비로그인 게스트: 쿠키 조회 후 가공 
+            // 2. 비로그인 게스트: 쿠키에 저장된 ID를 기반으로 상품 정보 조회
             $viewedIds = json_decode(request()->cookie('recent_views', '[]'), true) ?: [];
             
-            // 쿠키에 담긴 ID 순서대로 상품 가져오기! 
-            $products = Product::with(['images', 'colors']) // 여기도 색상 정보 추가! 
+            $products = Product::with(['images', 'colors'])
                 ->whereIn('id', $viewedIds)
                 ->get()
                 ->sortBy(function($p) use ($viewedIds) {
                     return array_search($p->id, $viewedIds);
                 });
 
-            // 게스트는 "오늘" 본 상품으로 묶어서 보여줄게! 
-            $recentViews = $products->isNotEmpty() ? collect(['오늘' => $products->map(fn($p) => (object)['product' => $p])]) : collect();
+            $recentViews = $products->isNotEmpty() 
+                ? collect(['오늘' => $products->map(fn($p) => (object)['product' => $p])]) 
+                : collect();
         }
 
         return [
@@ -520,15 +554,20 @@ class MemberService
     }
 
     /**
-     * 1:1 문의 등록 
+     * 1:1 문의 등록
+     * 
+     * @param Member $member
+     * @param array $data 문의 내용 (title, content, product_id, is_private, images)
+     * @return Inquiry 생성된 문의 모델
      */
     public function createInquiry(Member $member, array $data): Inquiry
     {
+        // 1. 회원의 문의 내역으로 새로운 데이터 생성
         return $member->inquiries()->create([
             'product_id' => $data['product_id'] ?? null,
             'title' => $data['title'],
             'content' => $data['content'],
-            'is_private' => $data['is_private'] ?? false, // 비밀글 설정! 
+            'is_private' => $data['is_private'] ?? false,
             'images' => $data['images'] ?? null,
             'status' => '답변대기'
         ]);

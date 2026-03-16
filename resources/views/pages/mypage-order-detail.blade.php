@@ -176,9 +176,15 @@
                 </button>
             </div>
             
-            @if($order->order_status === '배송완료')
+            @if($order->order_status === '배송완료' && !$order->has_active_claim)
             <div class="flex items-center gap-3">
                 <a href="{{ route('mypage.exchange-return', $order->order_number) }}" class="px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">교환/반품 신청</a>
+            </div>
+            @endif
+            
+            @if($order->has_active_claim)
+            <div class="flex items-center gap-3">
+                <span class="px-6 py-3 bg-gray-100 border border-gray-200 text-gray-400 text-sm font-bold rounded-xl cursor-default">교환/반품 신청 완료</span>
             </div>
             @endif
         </div>

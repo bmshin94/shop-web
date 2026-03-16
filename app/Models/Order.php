@@ -108,4 +108,23 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /**
+     * 주문과 관련된 교환/반품 신청 이력
+     */
+    public function claims(): HasMany
+    {
+        return $this->hasMany(OrderClaim::class);
+    }
+
+    /**
+     * 현재 진행 중이거나 완료된 교환/반품 신청이 있는지 여부 확인
+     */
+    public function getHasActiveClaimAttribute(): bool
+    {
+        // 취소된 클레임을 제외하고 현재 유효한 클레임이 있는지 확인! 
+        return $this->claims()
+            ->whereNotIn('status', ['취소완료', '반려'])
+            ->exists();
+    }
 }

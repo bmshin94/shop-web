@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             AdminMenuSeeder::class,
             CategorySeeder::class,
             ColorSeeder::class,
+            SizeSeeder::class, // ProductSeeder 이전에 위치!
             ProductSeeder::class,
-            SizeSeeder::class,
             MemberSeeder::class,
             OperatorSeeder::class,
             OrderSeeder::class,

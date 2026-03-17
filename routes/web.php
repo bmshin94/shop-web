@@ -147,7 +147,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/categories', [AdminController::class, 'categoryList'])->name('categories.index');
     Route::get('/categories/create', [AdminController::class, 'categoryCreate'])->name('categories.create');
     Route::post('/categories', [AdminController::class, 'categoryStore'])->name('categories.store');
-    Route::get('/categories/{category}/edit', [AdminController::class, 'categoryEdit'])->name('categories.edit');
+    Route::get('/categories/{category}/edit', [AdminController::class, 'categoryEdit'])->name('category.edit');
+
+    // 알림 발송 관리
+    Route::get('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{log}', [\App\Http\Controllers\Admin\NotificationController::class, 'show'])->name('notifications.show');
+
+    // 알림 템플릿 관리
+    Route::get('/notification-templates', [\App\Http\Controllers\Admin\NotificationTemplateController::class, 'index'])->name('notification-templates.index');
+    Route::get('/notification-templates/{template}/edit', [\App\Http\Controllers\Admin\NotificationTemplateController::class, 'edit'])->name('notification-templates.edit');
+    Route::put('/notification-templates/{template}', [\App\Http\Controllers\Admin\NotificationTemplateController::class, 'update'])->name('notification-templates.update');
     Route::put('/categories/{category}', [AdminController::class, 'categoryUpdate'])->name('categories.update');
     Route::delete('/categories/{category}', [AdminController::class, 'categoryDestroy'])->name('categories.destroy');
     Route::post('/categories/reorder', [AdminController::class, 'categoryReorder'])->name('categories.reorder');

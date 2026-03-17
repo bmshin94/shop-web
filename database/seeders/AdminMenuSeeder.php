@@ -38,6 +38,8 @@ class AdminMenuSeeder extends Seeder
             ['name' => '쿠폰 관리', 'description' => '쿠폰 생성 및 발급 내역 관리', 'icon' => 'confirmation_number', 'route' => 'admin.coupons.index', 'permission_key' => 'coupons', 'sort_order' => 17],
             ['name' => '적립금 관리', 'description' => '회원 적립금 변동 내역 및 지급/차감', 'icon' => 'monetization_on', 'route' => 'admin.points.index', 'permission_key' => 'points', 'sort_order' => 18],
             ['name' => '검색 로그 관리', 'description' => '사용자 인기 검색어 및 로그 분석', 'icon' => 'search_insights', 'route' => 'admin.search-logs.index', 'permission_key' => 'search_logs', 'sort_order' => 19],
+            ['name' => '알림 발송 관리', 'description' => '카카오톡 및 문자 발송 이력 관리', 'icon' => 'notifications_active', 'route' => 'admin.notifications.index', 'permission_key' => 'notifications', 'sort_order' => 19.5],
+            ['name' => '알림 템플릿 설정', 'description' => '알림 문구 및 템플릿 관리', 'icon' => 'settings_suggest', 'route' => 'admin.notification-templates.index', 'permission_key' => 'notification_templates', 'sort_order' => 19.6],
         ];
 
         foreach ($mallMenus as $menu) {

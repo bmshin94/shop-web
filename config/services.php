@@ -43,4 +43,11 @@ return [
         'redirect' => env('NAVER_REDIRECT_URI'),
     ],
 
+    'solapi' => [
+        'api_key' => env('SOLAPI_API_KEY'),
+        'api_secret' => env('SOLAPI_API_SECRET'),
+        'sender_number' => env('SOLAPI_SENDER_NUMBER'), // 등록된 발신번호
+        'pfid' => env('SOLAPI_PFID'), // 카카오 비즈니스 채널 PFID
+    ],
+
 ];

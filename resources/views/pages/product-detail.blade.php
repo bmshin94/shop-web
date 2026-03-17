@@ -22,10 +22,12 @@
 @section('content')
 <main class="flex-1 bg-background-light">
     <!-- Breadcrumb -->
+    <!-- Breadcrumb & Navigation Area -->
     <div class="bg-background-light py-4 border-b border-gray-100">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-            <nav class="flex text-xs text-text-muted" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <!-- Breadcrumb (모바일/PC 모두 노출) -->
+            <nav class="flex text-xs text-text-muted overflow-x-auto scrollbar-hide pb-1 sm:pb-0" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3 whitespace-nowrap">
                     <li class="inline-flex items-center">
                         <a href="/" class="hover:text-primary transition-colors">Home</a>
                     </li>
@@ -53,10 +55,30 @@
                     </li>
                 </ol>
             </nav>
-            <a href="{{ route('product-list', ['category' => $product->category->slug ?? '']) }}" class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-text-muted hover:text-primary transition-colors group">
-                <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
-                목록으로 돌아가기
-            </a>
+
+            <!-- 목록 돌아가기 버튼 -->
+            @php
+                $previousUrl = url()->previous();
+                // 돌아가야 할 "목록" 페이지들의 키워드 리스트
+                $listKeywords = [
+                    'product-list', 'category=', 'products/new', 'products/best', 
+                    'products/search', '/search', 'mypage/wishlist', 'mypage/recent', 'cart'
+                ];
+                $isFromList = false;
+                foreach($listKeywords as $keyword) {
+                    if (str_contains($previousUrl, $keyword)) {
+                        $isFromList = true;
+                        break;
+                    }
+                }
+                $backUrl = $isFromList ? $previousUrl : route('product-list', ['category' => $product->category->slug ?? '']);
+            @endphp
+            <div class="flex">
+                <a href="{{ $backUrl }}" class="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all duration-300 shadow-sm hover:shadow-md active:scale-95">
+                    <span class="material-symbols-outlined text-[20px] sm:text-[22px] group-hover:-translate-x-1 transition-transform">west</span>
+                    <span class="text-[13px] font-bold tracking-tight">목록으로 돌아가기</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -122,8 +144,8 @@
                             {{ $product->name }}
                         </h1>
                         @if($product->brief_description)
-                        <p class="text-base text-text-muted break-keep leading-relaxed whitespace-pre-wrap">
-                            {{ $product->brief_description }}
+                        <p class="text-base text-text-muted break-keep leading-relaxed">
+                            {{ trim($product->brief_description) }}
                         </p>
                         @endif
                     </div>
@@ -239,12 +261,6 @@
                             바로 구매하기
                         </button>
                     </div>
-                    <!-- Naver Pay Button -->
-                    <button type="button"
-                        class="mt-3 hidden lg:flex h-14 w-full items-center justify-center rounded-xl bg-[#03C75A] text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] shadow-sm">
-                        <span class="mr-2 font-extrabold italic font-sans text-xl tracking-tighter text-white">N</span>
-                        <span class="text-white">Pay 구매하기</span>
-                    </button>
                     @else
                     <div class="px-4 lg:px-0">
                         <button type="button" disabled

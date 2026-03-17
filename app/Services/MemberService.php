@@ -14,8 +14,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+use App\Notifications\WelcomeNotification;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+
 class MemberService
 {
+    /**
+     * 회원 가입 처리 및 알림 발송
+     * 
+     * @param array $data 가입 데이터 (name, email, phone, password)
+     * @return Member 생성된 회원 모델
+     */
+    public function register(array $data): Member
+    {
+        // 1. 회원 정보 생성
+        $member = Member::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'password' => Hash::make($data['password']),
+            'status' => '활성',
+        ]);
+
+        // 2. 가입 축하 알림 발송 (푸쉬/데이터베이스)
+        $member->notify(new WelcomeNotification());
+
+        return $member;
+    }
+
     /**
      * 찜 목록 데이터 조회
      * 

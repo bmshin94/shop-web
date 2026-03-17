@@ -284,7 +284,7 @@ class AuthController extends Controller
     /**
      * 회원가입 처리
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request, \App\Services\MemberService $memberService)
     {
         // 휴대폰 인증 최종 확인
         $phone = str_replace('-', '', $request->phone);
@@ -300,16 +300,11 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $member = Member::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'status' => '활성',
-        ]);
+        // MemberService를 통해 회원 가입 및 환영 알림 처리
+        $member = $memberService->register($request->all());
 
-        // 가입 즉시 로그인 처리
-        Auth::login($member);
+        // 자동 로그인
+        auth()->login($member);
 
         // 최근 본 상품 쿠키 -> DB 동기화 
         $this->syncRecentViews($member);

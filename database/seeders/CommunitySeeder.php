@@ -18,13 +18,13 @@ class CommunitySeeder extends Seeder
      */
     public function run(): void
     {
-        // 외래 키 검사 잠시 끄기 ️
+        // 외래 키 검사 잠시 끄기 
         Schema::disableForeignKeyConstraints();
 
         Magazine::truncate();
         Ootd::truncate();
         Notice::truncate();
-        DB::table('ootd_likes')->truncate(); // 좋아요 기록도 싹- 비우기! ️
+        DB::table('ootd_likes')->truncate(); // 좋아요 기록도 싹- 비우기! 
 
         // 1. 매거진 샘플 데이터 (풍성하게! )
         $magData = [
@@ -70,7 +70,7 @@ class CommunitySeeder extends Seeder
             ['https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=600', '오늘도 오운완!  #액티브우먼OOTD', rand(50, 500)],
             ['https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=600', '신상 레깅스 핏 너무 좋아요! ', rand(50, 500)],
             ['https://images.unsplash.com/photo-1434596922112-19c563067271?w=600', '필라테스 수업 듣고 왔어요! ', rand(50, 500)],
-            ['https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600', '아침 조깅 완료! ️ 상쾌해요!', rand(50, 500)],
+            ['https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600', '아침 조깅 완료!  상쾌해요!', rand(50, 500)],
             ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600', '운동복도 패션이죠! 힙하게~ ', rand(50, 500)],
             ['https://images.unsplash.com/photo-1483721310020-03333e577078?w=600', '오늘의 헬스장 룩! ', rand(50, 500)],
             ['https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600', '복근아 생겨라! 열운 중! ', rand(50, 500)],
@@ -113,7 +113,7 @@ class CommunitySeeder extends Seeder
             ]);
         }
 
-        // 외래 키 검사 다시 켜기 ️
+        // 외래 키 검사 다시 켜기 
         Schema::enableForeignKeyConstraints();
     }
 }

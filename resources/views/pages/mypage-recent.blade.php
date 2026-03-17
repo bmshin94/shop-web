@@ -394,7 +394,7 @@
                     const reqs = products.map(p => $.post('/cart', { product_id: p.id, color: p.selectedColor, size: p.selectedSize, quantity: p.quantity, force: force ? 1 : 0, _token: '{{ csrf_token() }}' }));
                     
                     Promise.all(reqs).then((responses) => { 
-                        // 중복 상품 응답이 하나라도 있는지 확인! 🕵️‍♀️
+                        // 중복 상품 응답이 하나라도 있는지 확인! 🕵
                         const duplicateResponse = responses.find(r => r.status === 'duplicate');
                         
                         if (duplicateResponse && !force) {

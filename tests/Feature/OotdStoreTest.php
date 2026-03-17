@@ -22,7 +22,7 @@ class OotdStoreTest extends TestCase
         Storage::fake('public');
         $member = Member::factory()->create();
         
-        // GD 라이브러리 없이도 가능한 일반 파일 생성 방식으로 변경! ️
+        // GD 라이브러리 없이도 가능한 일반 파일 생성 방식으로 변경! 
         $file = UploadedFile::fake()->create('style.jpg', 100, 'image/jpeg');
         $content = '테스트용 스타일 설명입니다. #ActiveWomen';
         $instaUrl = 'https://www.instagram.com/p/DV576ndD844/';

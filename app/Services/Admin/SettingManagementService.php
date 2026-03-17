@@ -19,6 +19,7 @@ class SettingManagementService
         'free_shipping_threshold' => 50000,
         'point_earn_rate' => 1.0,
         'maintenance_mode' => false,
+        'alimtalk_test_mode' => true,
         'order_auto_cancel_hours' => 24,
         'couriers' => [
             ['name' => 'CJ대한통운', 'url' => 'https://www.doortodoor.co.kr/parcel/doortodoor_search.jsp?f_invc_no={tracking_number}'],
@@ -46,6 +47,7 @@ class SettingManagementService
         'free_shipping_threshold' => 'int',
         'point_earn_rate' => 'float',
         'maintenance_mode' => 'bool',
+        'alimtalk_test_mode' => 'bool',
         'order_auto_cancel_hours' => 'int',
         'couriers' => 'json',
     ];
@@ -137,10 +139,13 @@ class SettingManagementService
     {
         $type = self::VALUE_TYPES[$key] ?? 'string';
 
+        if ($type === 'bool') {
+            return $value ? '1' : '0';
+        }
+
         return match ($type) {
             'int' => (string) ((int) $value),
             'float' => (string) ((float) $value),
-            'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN) ? '1' : '0',
             'json' => is_string($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE),
             default => trim((string) $value),
         };

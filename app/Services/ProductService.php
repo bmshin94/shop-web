@@ -165,7 +165,7 @@ class ProductService
             // 최대 20개까지만 유지! 
             $viewedIds = array_slice($viewedIds, 0, 20);
             
-            // 쿠키에 30일 동안 저장 예약! ️
+            // 쿠키에 30일 동안 저장 예약! 
             \Illuminate\Support\Facades\Cookie::queue('recent_views', json_encode($viewedIds), 60 * 24 * 30);
         }
 

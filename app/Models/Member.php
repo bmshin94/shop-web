@@ -147,7 +147,7 @@ class Member extends Authenticatable
     }
 
     /**
-     * 회원이 좋아요를 누른 OOTD 목록 (다대다) ️
+     * 회원이 좋아요를 누른 OOTD 목록 (다대다) 
      */
     public function likedOotds()
     {

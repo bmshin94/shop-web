@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ReviewController extends Controller
 {
     /**
-     * 고객 리뷰 목록 페이지 ️
+     * 고객 리뷰 목록 페이지 
      */
     public function index(Request $request)
     {

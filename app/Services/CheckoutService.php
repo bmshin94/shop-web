@@ -257,7 +257,7 @@ class CheckoutService
                 'admin_memo' => $order->admin_memo . "\n[" . now()->format('Y-m-d H:i:s') . "] 주문 취소 처리됨 (사유: " . $reason . ")"
             ]);
 
-            // 3-1. 통합 클레임(OrderClaim) 레코드 생성 ✨
+            // 3-1. 통합 클레임(OrderClaim) 레코드 생성 
             $claim = OrderClaim::create([
                 'member_id' => $order->member_id,
                 'order_id' => $order->id,

@@ -132,6 +132,24 @@
             </section>
 
             <section class="space-y-3">
+                <h4 class="text-base font-extrabold text-text-main">알림 발송 설정</h4>
+                <label class="inline-flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="alimtalk_test_mode" value="0">
+                    <input
+                        type="checkbox"
+                        name="alimtalk_test_mode"
+                        value="1"
+                        {{ old('alimtalk_test_mode', $settings['alimtalk_test_mode'] ?? true) ? 'checked' : '' }}
+                        class="size-4 rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-sm font-bold text-text-main">알림 발송 테스트 모드 활성화</span>
+                </label>
+                <p class="text-[12px] font-bold text-text-muted">활성화 시 실제 알림톡/문자가 발송되지 않고 로그만 기록됩니다. 서비스 오픈 시 반드시 해제해 주세요.</p>
+                @error('alimtalk_test_mode')
+                    <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
+                @enderror
+            </section>
+
+            <section class="space-y-3">
                 <h4 class="text-base font-extrabold text-text-main">운영 모드</h4>
                 <label class="inline-flex items-center gap-3 cursor-pointer">
                     <input type="hidden" name="maintenance_mode" value="0">
@@ -187,7 +205,7 @@
                 </div>
             `;
             courierContainer.insertAdjacentHTML('afterbegin', html);
-            reindexCouriers(); // 맨 위에 추가했으니 인덱스 싹~ 다시 정리! ✨
+            reindexCouriers(); // 맨 위에 추가했으니 인덱스 싹~ 다시 정리! 
         });
 
         courierContainer.addEventListener('click', (e) => {

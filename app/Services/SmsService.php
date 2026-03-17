@@ -2,60 +2,102 @@
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
-    protected $client;
-    protected $apiKey;
-    protected $userId;
-    protected $sender;
-
-    public function __construct()
-    {
-        $this->client = new Client([
-            'base_uri' => 'https://apis.aligo.in/',
-            'timeout'  => 5.0,
-        ]);
-        $this->apiKey = env('ALIGO_API_KEY');
-        $this->userId = env('ALIGO_USER_ID');
-        $this->sender = env('ALIGO_SENDER'); // 등록된 발신번호
-    }
-
     /**
-     * 알리고 API를 통한 문자 발송
+     * 문자 발송 (멀티 드라이버 지원: Solapi, Aligo)
      */
     public function sendSms($receiver, $message)
     {
-        // 로컬 환경이나 테스트 환경에서는 실제로 보내지 않고 로그만 남김 
-        if ((app()->environment('local', 'testing') || empty($this->apiKey))) {
-            Log::info("SMS Mock Send [To: {$receiver}] [Msg: {$message}]");
-            return ['result_code' => 1, 'message' => 'success (mock)'];
+        $driver = config('alimtalk.default', 'solapi');
+        
+        // DB 설정 우선 조회 (없으면 config/env 값 사용) 🚀
+        $testModeSetting = \App\Models\SiteSetting::where('setting_key', 'alimtalk_test_mode')->first();
+        $isTestMode = $testModeSetting ? filter_var($testModeSetting->setting_value, FILTER_VALIDATE_BOOLEAN) : config('alimtalk.test_mode', true);
+
+        // 테스트 모드가 활성화되어 있으면 실제로 발송하지 않고 로그만 남김 🚀
+        if ($isTestMode) {
+            Log::info("[SmsService TestMode] To: {$receiver}, Msg: {$message}");
+            return ['result_code' => 1, 'message' => 'success (test mode)'];
+        }
+
+        if ($driver === 'aligo') {
+            return $this->sendByAligo($receiver, $message);
+        } else {
+            return $this->sendBySolapi($receiver, $message);
+        }
+    }
+
+    /**
+     * 솔라피(Solapi)를 통한 문자 발송
+     */
+    protected function sendBySolapi($receiver, $message)
+    {
+        $config = config('services.solapi');
+        if (empty($config['api_key']) || empty($config['api_secret'])) {
+            return ['result_code' => -1, 'message' => 'Solapi API 설정 누락'];
         }
 
         try {
-            Log::info("SMS Attempting to send via Aligo API to {$receiver}");
-            $response = $this->client->post('send/', [
-                'form_params' => [
-                    'key' => $this->apiKey,
-                    'user_id' => $this->userId,
-                    'sender' => $this->sender,
-                    'receiver' => $receiver,
-                    'msg' => $message,
-                    'test_mode_yn' => app()->environment('production') ? 'N' : 'Y',
-                ]
+            $date = date('Y-m-d\TH:i:s.v\Z');
+            $salt = uniqid();
+            $signature = hash_hmac('sha256', $date . $salt, $config['api_secret']);
+            $authHeader = "HMAC-SHA256 apiKey={$config['api_key']}, date={$date}, salt={$salt}, signature={$signature}";
+
+            $response = Http::withHeaders(['Authorization' => $authHeader])
+                ->post('https://api.solapi.com/messages/v4/send-many', [
+                    'messages' => [
+                        [
+                            'to' => str_replace('-', '', $receiver),
+                            'from' => $config['sender_number'],
+                            'text' => $message,
+                            'type' => 'SMS'
+                        ]
+                    ]
+                ]);
+
+            if ($response->successful()) {
+                return ['result_code' => 1, 'message' => 'success'];
+            }
+            
+            return ['result_code' => -1, 'message' => $response->json()['errorMessage'] ?? 'Solapi Error'];
+        } catch (\Exception $e) {
+            Log::error("Solapi SMS Exception: " . $e->getMessage());
+            return ['result_code' => -1, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * 알리고(Aligo)를 통한 문자 발송
+     */
+    protected function sendByAligo($receiver, $message)
+    {
+        $config = config('services.aligo');
+        if (empty($config['api_key']) || empty($config['user_id'])) {
+            return ['result_code' => -1, 'message' => 'Aligo API 설정 누락'];
+        }
+
+        try {
+            $response = Http::asForm()->post('https://apis.aligo.in/send/', [
+                'key' => $config['api_key'],
+                'user_id' => $config['user_id'],
+                'sender' => $config['sender_number'],
+                'receiver' => str_replace('-', '', $receiver),
+                'msg' => $message,
+                'test_mode_yn' => app()->environment('production') ? 'N' : 'Y',
             ]);
 
-            $result = json_decode($response->getBody()->getContents(), true);
-            
-            if ($result['result_code'] < 0) {
-                Log::error("Aligo SMS Error: Code[" . $result['result_code'] . "] Msg[" . ($result['message'] ?? 'Unknown') . "]");
+            $result = $response->json();
+            if ($response->successful() && isset($result['result_code']) && $result['result_code'] == '1') {
+                return ['result_code' => 1, 'message' => 'success'];
             }
 
-            return $result;
+            return ['result_code' => -1, 'message' => $result['message'] ?? 'Aligo Error'];
         } catch (\Exception $e) {
-            Log::error("SmsService Exception: " . $e->getMessage());
+            Log::error("Aligo SMS Exception: " . $e->getMessage());
             return ['result_code' => -1, 'message' => $e->getMessage()];
         }
     }

@@ -38,7 +38,7 @@ class ExhibitionTest extends TestCase
     }
 
     /**
-     * 기획전 상세 페이지가 정상적으로 노출되는지 테스트한다. ️
+     * 기획전 상세 페이지가 정상적으로 노출되는지 테스트한다. 
      */
     public function test_exhibition_detail_page_is_accessible(): void
     {
@@ -55,7 +55,7 @@ class ExhibitionTest extends TestCase
     }
 
     /**
-     * 비노출 상태의 기획전은 접근이 불가능해야 한다. ️‍️
+     * 비노출 상태의 기획전은 접근이 불가능해야 한다. 
      */
     public function test_hidden_exhibitions_are_not_displayed(): void
     {

@@ -17,13 +17,30 @@
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
             <div class="grid grid-cols-2 gap-6">
                 <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">발송 방식</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="send_type" value="alimtalk" {{ old('send_type', $template->send_type) === 'alimtalk' ? 'checked' : '' }} class="w-4 h-4 text-primary focus:ring-primary border-gray-300">
+                            <span class="text-sm font-bold text-gray-700">카카오 알림톡 (실패 시 문자)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="send_type" value="sms" {{ old('send_type', $template->send_type) === 'sms' ? 'checked' : '' }} class="w-4 h-4 text-primary focus:ring-primary border-gray-300">
+                            <span class="text-sm font-bold text-gray-700">문자(SMS/LMS) 전용</span>
+                        </label>
+                    </div>
+                    @error('send_type')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
+                </div>
+                <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">템플릿 이름</label>
                     <input type="text" name="name" value="{{ old('name', $template->name) }}" 
                         class="w-full h-11 px-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-0 text-sm font-bold">
                     @error('name')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                 </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">카카오 템플릿 ID (선택)</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">카카오 템플릿 ID (알림톡 전용)</label>
                     <input type="text" name="template_id" value="{{ old('template_id', $template->template_id) }}" 
                         class="w-full h-11 px-4 rounded-xl border border-gray-200 focus:border-primary focus:ring-0 text-sm font-mono">
                     <p class="mt-1 text-xs text-gray-400">솔라피(Solapi)에 등록된 템플릿 ID를 입력하세요.</p>

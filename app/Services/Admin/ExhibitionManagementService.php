@@ -72,7 +72,7 @@ class ExhibitionManagementService
             $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
         }
 
-        // 날짜 기반 상태 자동 결정! ️‍️
+        // 날짜 기반 상태 자동 결정! 
         $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
 
         $exhibition = Exhibition::query()->create($payload);
@@ -98,7 +98,7 @@ class ExhibitionManagementService
             $payload['banner_image_url'] = $this->uploadBannerImage($payload['banner_image']);
         }
 
-        // 날짜 기반 상태 자동 결정! ️‍️
+        // 날짜 기반 상태 자동 결정! 
         $payload['status'] = $this->determineStatusByDates($payload['start_at'] ?? null, $payload['end_at'] ?? null);
 
         $exhibition->update($payload);

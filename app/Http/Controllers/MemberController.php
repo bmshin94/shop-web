@@ -240,7 +240,7 @@ class MemberController extends Controller
      */
     public function profileEditForm(): View|RedirectResponse
     {
-        // 비밀번호 확인 안 됐으면 쫓아내기! ️‍️
+        // 비밀번호 확인 안 됐으면 쫓아내기! 
         if (!session()->has('auth.password_confirmed_at')) {
             return redirect()->route('mypage.profile');
         }
@@ -348,7 +348,7 @@ class MemberController extends Controller
      */
     public function editInquiry(Inquiry $inquiry): View
     {
-        // 본인 글인지 확인! ️‍️
+        // 본인 글인지 확인! 
         if ($inquiry->member_id !== Auth::id()) {
             abort(403, '본인의 문의만 수정할 수 있어요! ');
         }
@@ -361,7 +361,7 @@ class MemberController extends Controller
      */
     public function updateInquiry(Request $request, Inquiry $inquiry): JsonResponse
     {
-        // 본인 글인지 확인! ️‍️
+        // 본인 글인지 확인! 
         if ($inquiry->member_id !== Auth::id()) {
             return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
         }
@@ -381,7 +381,7 @@ class MemberController extends Controller
             $currentImages = $inquiry->images ?? [];
             if ($request->has('delete_images')) {
                 foreach ($request->delete_images as $deletePath) {
-                    // 서버 스토리지에서 파일 삭제! ️
+                    // 서버 스토리지에서 파일 삭제! 
                     $storagePath = str_replace('/storage/', '', $deletePath);
                     \Illuminate\Support\Facades\Storage::disk('public')->delete($storagePath);
                     
@@ -417,7 +417,7 @@ class MemberController extends Controller
      */
     public function destroyInquiry(Inquiry $inquiry): JsonResponse
     {
-        // 본인 글인지 확인! ️‍️
+        // 본인 글인지 확인! 
         if ($inquiry->member_id !== Auth::id()) {
             return response()->json(['status' => 'error', 'message' => '권한이 없습니다.'], 403);
         }

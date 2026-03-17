@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NotificationTemplate;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 
 class NotificationTemplateController extends Controller
@@ -32,6 +33,7 @@ class NotificationTemplateController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'send_type' => 'required|in:alimtalk,sms',
             'template_id' => 'nullable|string|max:100',
             'content' => 'required|string',
             'buttons' => 'nullable|array',
@@ -39,6 +41,7 @@ class NotificationTemplateController extends Controller
 
         $template->update([
             'name' => $request->name,
+            'send_type' => $request->send_type,
             'template_id' => $request->template_id,
             'content' => $request->content,
             'buttons' => $request->buttons,

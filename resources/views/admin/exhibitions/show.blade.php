@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            {{-- 연결 상품 목록 ️ --}}
+            {{-- 연결 상품 목록  --}}
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
                     <h4 class="text-sm font-black text-text-main flex items-center gap-2">
@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        {{-- 오른쪽: 운영 정보 ️ --}}
+        {{-- 오른쪽: 운영 정보  --}}
         <div class="space-y-6">
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
                 <h4 class="text-sm font-black text-text-main mb-5 uppercase tracking-wider">운영 히스토리</h4>

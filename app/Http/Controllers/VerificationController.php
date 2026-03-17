@@ -42,7 +42,12 @@ class VerificationController extends Controller
             'expires_at' => $expiresAt,
         ]);
 
-        $message = "[Active Women] 인증번호 [{$code}]를 입력해주세요.";
+        // DB 템플릿 기반 메시지 생성 (없으면 기본 메시지 사용) 🚀
+        $template = \App\Models\NotificationTemplate::where('code', 'VERIFICATION_CODE')->where('is_active', true)->first();
+        $message = $template 
+            ? $template->parseContent(['code' => $code])
+            : "[Active Women] 인증번호 [{$code}]를 입력해주세요.";
+
         $result = $this->smsService->sendSms($phone, $message);
 
         if ($result['result_code'] > 0) {

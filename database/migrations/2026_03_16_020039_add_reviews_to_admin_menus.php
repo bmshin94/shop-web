@@ -17,7 +17,7 @@ return new class extends Migration
             ->where('group_name', '상품 관리')
             ->max('sort_order') ?? 10;
 
-        // 2. 고객 리뷰 관리 메뉴 추가 ️
+        // 2. 고객 리뷰 관리 메뉴 추가 
         DB::table('admin_menus')->insert([
             'group_name' => '상품 관리',
             'name' => '고객 리뷰 관리',

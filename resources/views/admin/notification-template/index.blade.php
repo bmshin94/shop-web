@@ -19,6 +19,7 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-50 border-b border-gray-100">
+                    <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">발송 방식</th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">알림 코드</th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">템플릿 이름</th>
                     <th class="px-6 py-4 text-xs font-bold text-gray-500 uppercase">카카오 템플릿 ID</th>
@@ -30,6 +31,17 @@
             <tbody class="divide-y divide-gray-50">
                 @foreach($templates as $template)
                 <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4">
+                        @if($template->send_type === 'alimtalk')
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-yellow-100 text-yellow-800 rounded-md text-[11px] font-black">
+                            <span class="material-symbols-outlined text-[14px]">chat</span> 알림톡
+                        </span>
+                        @else
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 text-blue-800 rounded-md text-[11px] font-black">
+                            <span class="material-symbols-outlined text-[14px]">sms</span> SMS
+                        </span>
+                        @endif
+                    </td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-mono font-bold">{{ $template->code }}</span>
                     </td>

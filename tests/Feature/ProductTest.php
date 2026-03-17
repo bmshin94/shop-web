@@ -207,6 +207,6 @@ class ProductTest extends TestCase
         // 3. 검증!  
         $response->assertStatus(200);
         $response->assertSee('매력적인 블랙 레깅스');
-        $response->assertDontSee('매끈한 화이트 탑'); // 화이트는 검색어엔 맞지만 색상이 틀려야 함! ️‍️
+        $response->assertDontSee('매끈한 화이트 탑'); // 화이트는 검색어엔 맞지만 색상이 틀려야 함! 
     }
 }

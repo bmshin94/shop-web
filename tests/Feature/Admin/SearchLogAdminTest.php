@@ -32,7 +32,7 @@ class SearchLogAdminTest extends TestCase
     /** @test */
     public function admin_can_view_search_logs_index()
     {
-        $this->withoutExceptionHandling(); // 에러 내용 다 보여줘! ️‍️
+        $this->withoutExceptionHandling(); // 에러 내용 다 보여줘! 
         
         // 1. 검색 로그 데이터 생성 
         SearchLog::create(['keyword' => '레깅스', 'ip_address' => '127.0.0.1']);

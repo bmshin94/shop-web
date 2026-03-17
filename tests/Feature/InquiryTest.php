@@ -25,7 +25,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function other_members_cannot_see_private_inquiry_content()
     {
-        //  타인이 비밀글 내용을 볼 수 없는지 테스트! ️‍️
+        //  타인이 비밀글 내용을 볼 수 없는지 테스트! 
         $owner = Member::factory()->create();
         $inquiry = Inquiry::factory()->create([
             'member_id' => $owner->id,
@@ -206,7 +206,7 @@ class InquiryTest extends TestCase
     /** @test */
     public function member_cannot_update_others_inquiry()
     {
-        //  타인 문의 수정 시도 차단 테스트! ️‍️
+        //  타인 문의 수정 시도 차단 테스트! 
         $this->actingAs($this->member);
 
         $otherMember = Member::factory()->create();

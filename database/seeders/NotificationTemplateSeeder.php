@@ -39,7 +39,18 @@ class NotificationTemplateSeeder extends Seeder
             ],
             'is_active' => true,
         ]);
-        
-        // 추가로 '주문 완료' 같은 템플릿도 미리 만들어둘 수 있어! ✨
+
+        // 2. 휴대폰 본인 인증 번호 발송 템플릿 (SMS 전용) 🚀
+        NotificationTemplate::create([
+            'code' => 'VERIFICATION_CODE',
+            'send_type' => 'sms', // 처음부터 문자로 쏘기! ✨
+            'name' => '본인 인증 번호 발송',
+            'template_id' => null,
+            'content' => "[Active Women] 인증번호 [#{{code}}]를 입력해주세요. 타인에게 노출되지 않도록 주의하세요.",
+            'buttons' => null,
+            'is_active' => true,
+        ]);
+
+            // 추가로 '주문 완료' 같은 템플릿도 미리 만들어둘 수 있어! ✨
     }
 }

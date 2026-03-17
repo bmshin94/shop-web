@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('ootd_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            // 한 회원이 같은 OOTD에 좋아요를 중복으로 누를 수 없게! ️
+            // 한 회원이 같은 OOTD에 좋아요를 중복으로 누를 수 없게! 
             $table->unique(['member_id', 'ootd_id']);
         });
     }

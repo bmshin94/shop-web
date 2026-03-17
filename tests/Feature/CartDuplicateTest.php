@@ -63,7 +63,7 @@ class CartDuplicateTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson(['status' => 'success']);
 
-        // 수량이 1에서 2로 올라갔는지 확인! ✨
+        // 수량이 1에서 2로 올라갔는지 확인! 
         $this->assertEquals(1, Cart::where('member_id', $member->id)->count());
         $this->assertEquals(2, Cart::where('member_id', $member->id)->first()->quantity);
     }

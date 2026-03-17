@@ -27,7 +27,7 @@ class ProfileTest extends TestCase
     {
         $this->actingAs($this->member);
 
-        // 확인 없이 바로 수정 페이지 접속 시도 ️‍️
+        // 확인 없이 바로 수정 페이지 접속 시도 
         $response = $this->get(route('mypage.profile-edit'));
 
         // 비밀번호 확인 페이지로 튕겨야 해! 

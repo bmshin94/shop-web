@@ -97,7 +97,7 @@ class ReviewController extends Controller
      */
     public function edit(Review $review)
     {
-        // 본인 리뷰인지 확인 🛡️
+        // 본인 리뷰인지 확인 🛡
         if ($review->member_id !== auth()->id()) {
             return response()->json(['success' => false, 'message' => '권한이 없습니다.'], 403);
         }
@@ -115,7 +115,7 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
-        // 본인 리뷰인지 확인 🛡️
+        // 본인 리뷰인지 확인 🛡
         if ($review->member_id !== auth()->id()) {
             return response()->json(['success' => false, 'message' => '권한이 없습니다.'], 403);
         }
@@ -129,7 +129,7 @@ class ReviewController extends Controller
 
         $currentImages = $review->images ?? [];
 
-        // 1. 기존 이미지 삭제 처리 🗑️
+        // 1. 기존 이미지 삭제 처리 🗑
         if ($request->has('delete_images')) {
             foreach ($request->delete_images as $deletePath) {
                 $storagePath = str_replace('/storage/', '', $deletePath);

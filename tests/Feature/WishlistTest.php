@@ -72,7 +72,7 @@ class WishlistTest extends TestCase
             $wishlistIds[] = $item->id;
         }
 
-        // 2개만 선택해서 삭제! ️
+        // 2개만 선택해서 삭제! 
         $deleteIds = [$wishlistIds[0], $wishlistIds[1]];
 
         $response = $this->postJson(route('wishlist.delete-selected'), [

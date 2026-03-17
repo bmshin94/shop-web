@@ -16,7 +16,7 @@
             <p class="mt-2 text-sm font-medium text-text-muted italic ml-15">고객님들이 무엇을 찾고 있는지 데이터를 분석합니다! </p>
         </div>
         <div class="flex gap-3">
-            <form action="{{ route('admin.search-logs.clear') }}" method="POST" class="js-confirm-submit" data-confirm-message="정말 모든 검색 기록을 초기화할까요? ️">
+            <form action="{{ route('admin.search-logs.clear') }}" method="POST" class="js-confirm-submit" data-confirm-message="정말 모든 검색 기록을 초기화할까요? ">
                 @csrf
                 <button type="submit" class="h-12 px-6 rounded-2xl bg-white border border-gray-200 text-red-500 font-bold text-sm hover:bg-red-50 transition-all shadow-sm flex items-center gap-2">
                     <span class="material-symbols-outlined text-lg">delete_sweep</span> 전체 삭제

@@ -75,7 +75,7 @@
                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
                 
                 <div id="preview-wrapper" class="w-full min-h-[200px] aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl overflow-hidden flex flex-col items-center justify-center transition-all relative group-hover:border-primary/30 group-hover:bg-primary/5">
-                    {{-- 기존 이미지 또는 미리보기 이미지 ️ --}}
+                    {{-- 기존 이미지 또는 미리보기 이미지  --}}
                     <img 
                         id="banner-preview" 
                         src="{{ $exhibition?->banner_image_url ?? '' }}" 
@@ -293,7 +293,7 @@
     </div>
 </form>
 
-{{-- 삭제 처리를 위한 숨겨진 폼 ️‍️ --}}
+{{-- 삭제 처리를 위한 숨겨진 폼  --}}
 @if($exhibition && $exhibition->exists)
     <form id="delete-exhibition-form" action="{{ route('admin.exhibitions.destroy', $exhibition) }}" method="POST" class="hidden">
         @csrf

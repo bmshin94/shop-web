@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            SiteSettingSeeder::class, // 사이트 기본 설정 추가! 🚀
             AdminMenuSeeder::class,
             CategorySeeder::class,
             ColorSeeder::class,

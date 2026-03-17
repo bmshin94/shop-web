@@ -44,7 +44,7 @@ class SearchLogController extends Controller
     }
 
     /**
-     * 검색 기록 전체 초기화 (주의! ️)
+     * 검색 기록 전체 초기화 (주의! )
      */
     public function clearAll()
     {

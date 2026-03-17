@@ -165,6 +165,12 @@
         }
         .toast-enter { animation: toast-in 0.3s ease-out forwards; }
         .toast-exit { animation: toast-out 0.3s ease-in forwards; }
+
+        /* Custom Scrollbar for Sidebar */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
     </style>
     @stack('styles')
 </head>
@@ -183,7 +189,7 @@
         <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-[40] hidden opacity-0 transition-opacity duration-300"></div>
 
         <!-- Sidebar -->
-        <aside id="admin-sidebar" class="bg-admin-sidebar text-white flex flex-col flex-shrink-0 overflow-hidden shadow-2xl lg:shadow-none">
+        <aside id="admin-sidebar" class="bg-admin-sidebar text-white flex flex-col flex-shrink-0 overflow-hidden shadow-2xl lg:shadow-none h-screen sticky top-0">
             <div class="w-64 flex flex-col h-full">
                 <div class="p-6 border-b border-white/10 flex items-center justify-between">
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
@@ -196,7 +202,7 @@
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
-                <nav class="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
+                <nav class="flex-1 min-h-0 py-6 px-4 space-y-1 overflow-y-auto custom-scrollbar">
                     @php $currentGroup = ''; @endphp
                     @foreach($sidebarMenus as $menu)
                         @if($menu->group_name && $menu->group_name !== $currentGroup)
@@ -367,6 +373,12 @@
 
             @if(session('success')) showToast("{{ session('success') }}", "check_circle", "bg-[#181211]"); @endif
             @if(session('error')) showToast("{{ session('error') }}", "error", "bg-[#ec3713]"); @endif
+
+            // 활성화된 메뉴가 화면 중앙에 보이도록 자동 스크롤 🚀
+            const activeMenu = document.querySelector('.sidebar-item.active');
+            if (activeMenu) {
+                activeMenu.scrollIntoView({ block: 'center', inline: 'nearest' });
+            }
         });
     </script>
     @stack('scripts')

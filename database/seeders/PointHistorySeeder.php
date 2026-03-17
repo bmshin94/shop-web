@@ -78,7 +78,7 @@ class PointHistorySeeder extends Seeder
                 'created_at' => now()->subDays(350), // 거의 1년 다 되어감
             ]);
 
-            // 최종 잔액을 회원 테이블에 업데이트! ️
+            // 최종 잔액을 회원 테이블에 업데이트! 
             $member->update(['points' => $currentBalance]);
         }
     }

@@ -33,6 +33,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'free_shipping_threshold' => ['required', 'integer', 'min:0', 'max:10000000'],
             'point_earn_rate' => ['required', 'numeric', 'between:0,100'],
             'maintenance_mode' => ['required', 'boolean'],
+            'alimtalk_test_mode' => ['required', 'boolean'],
             'order_auto_cancel_hours' => ['required', 'integer', 'min:1', 'max:720'],
             'couriers' => ['nullable', 'array'],
             'couriers.*.name' => ['required_with:couriers', 'string', 'max:50'],
@@ -57,6 +58,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'free_shipping_threshold' => '무료배송 기준금액',
             'point_earn_rate' => '포인트 적립률',
             'maintenance_mode' => '점검 모드',
+            'alimtalk_test_mode' => '알림 발송 테스트 모드',
             'order_auto_cancel_hours' => '미결제 자동취소 시간',
             'couriers' => '택배사 설정',
             'couriers.*.name' => '택배사명',
@@ -78,6 +80,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'business_name' => $this->normalizeNullableText($this->input('business_name')),
             'business_number' => $this->normalizeNullableText($this->input('business_number')),
             'maintenance_mode' => $this->boolean('maintenance_mode'),
+            'alimtalk_test_mode' => $this->boolean('alimtalk_test_mode'),
         ]);
     }
 

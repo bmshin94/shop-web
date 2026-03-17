@@ -273,7 +273,7 @@
                 <p id="alert-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
             </div>
             <div class="p-4 bg-gray-50 flex gap-3">
-                <button onclick="closeAlert()" class="flex-1 py-3 bg-text-main text-white text-sm font-black rounded-xl hover:bg-black transition-all">확인</button>
+                <button onclick="closeAlert()" class="flex-1 py-3 bg-text-main text-white text-sm font-black rounded-xl hover:bg-black active:scale-95 transition-all">확인</button>
             </div>
         </div>
     </div>
@@ -289,8 +289,8 @@
                 <p id="confirm-message" class="text-sm font-bold text-text-muted leading-relaxed"></p>
             </div>
             <div class="p-4 bg-gray-50 flex gap-3">
-                <button id="confirm-cancel" class="flex-1 py-3 bg-white border border-gray-200 text-text-muted text-sm font-black rounded-xl hover:bg-gray-100 transition-all">취소</button>
-                <button id="confirm-accept" class="flex-1 py-3 bg-primary text-white text-sm font-black rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-primary/20">확인</button>
+                <button id="confirm-cancel" class="flex-1 py-3 bg-white border border-gray-200 text-text-muted text-sm font-black rounded-xl hover:bg-gray-100 active:scale-95 transition-all">취소</button>
+                <button id="confirm-accept" class="flex-1 py-3 bg-primary text-white text-sm font-black rounded-xl hover:bg-red-600 active:scale-95 transition-all shadow-lg shadow-primary/20">확인</button>
             </div>
         </div>
     </div>

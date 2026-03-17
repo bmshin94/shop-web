@@ -118,10 +118,10 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('admin.orders.index') }}" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-text-muted hover:bg-gray-50 transition-colors">
+                    <a href="{{ route('admin.orders.index') }}" class="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-text-muted hover:bg-gray-50 active:scale-95 transition-all">
                         초기화
                     </a>
-                    <button type="submit" class="px-6 py-2.5 bg-text-main text-white rounded-xl text-sm font-bold hover:bg-black transition-colors">
+                    <button type="submit" class="px-6 py-2.5 bg-text-main text-white rounded-xl text-sm font-bold hover:bg-black active:scale-95 transition-all">
                         검색
                     </button>
                 </div>
@@ -136,7 +136,7 @@
                 검색 결과 {{ number_format($orders->total()) }}건
             </p>
             <div class="flex items-center gap-2 text-[12px] font-bold text-text-muted">
-                <a href="{{ route('admin.orders.trash') }}" class="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-text-main hover:border-primary hover:text-primary transition-colors">
+                <a href="{{ route('admin.orders.trash') }}" class="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-text-main hover:border-primary hover:text-primary active:scale-95 transition-all">
                     <span class="material-symbols-outlined text-[14px]">delete</span>
                     휴지통 {{ number_format($trashedOrdersCount ?? 0) }}
                 </a>
@@ -192,7 +192,7 @@
                     </div>
 
                     <div class="flex lg:justify-center">
-                        <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[12px] font-bold text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+                        <a href="{{ route('admin.orders.show', $order) }}" class="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[12px] font-bold text-text-main hover:border-primary hover:text-primary active:scale-95 transition-all shadow-sm">
                             <span class="material-symbols-outlined text-[16px]">receipt_long</span>
                             상세
                         </a>

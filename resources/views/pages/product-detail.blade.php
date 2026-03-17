@@ -94,11 +94,11 @@
                     <!-- Floating Actions (Wishlist & Share) -->
                     <div class="absolute right-4 top-4 flex flex-col gap-3">
                         <button type="button" id="wishlist-btn"
-                            class="flex size-10 items-center justify-center rounded-full bg-white/90 shadow-md hover:bg-primary hover:text-white transition-colors cursor-pointer z-10 {{ $product->is_wishlisted ? 'text-primary' : 'text-text-main' }}">
+                            class="flex size-10 items-center justify-center rounded-full bg-white/90 shadow-md hover:bg-primary hover:text-white transition-all active:scale-95 cursor-pointer z-10 {{ $product->is_wishlisted ? 'text-primary' : 'text-text-main' }}">
                             <span class="material-symbols-outlined block text-xl" style="font-variation-settings: 'FILL' {{ $product->is_wishlisted ? 1 : 0 }}">favorite</span>
                         </button>
                         <button type="button" id="share-btn"
-                            class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:text-primary transition-colors cursor-pointer z-10">
+                            class="flex size-10 items-center justify-center rounded-full bg-white/90 text-text-main shadow-md hover:text-primary transition-all active:scale-95 cursor-pointer z-10">
                             <span class="material-symbols-outlined block text-xl">share</span>
                         </button>
                     </div>
@@ -191,7 +191,7 @@
                             <div class="grid grid-cols-4 gap-3">
                                 @foreach($product->sizes as $size)
                                 <button type="button"
-                                    class="size-option-btn flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white font-bold text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+                                    class="size-option-btn flex h-12 items-center justify-center rounded-lg border border-gray-300 bg-white font-bold text-text-main hover:border-primary hover:text-primary transition-all active:scale-95 shadow-sm">
                                     {{ $size->name }}
                                 </button>
                                 @endforeach
@@ -205,12 +205,12 @@
                             <div id="qtyContainer"
                                 class="flex items-center rounded-lg border border-gray-300 p-1 w-32 justify-between bg-white shadow-sm">
                                 <button type="button" id="qtyMinus"
-                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
+                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-all active:scale-95">
                                     <span class="material-symbols-outlined text-[18px]">remove</span>
                                 </button>
                                 <span id="qtyDisplay" class="text-sm font-bold text-text-main text-center w-8">1</span>
                                 <button type="button" id="qtyPlus"
-                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors">
+                                    class="flex size-8 items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-all active:scale-95">
                                     <span class="material-symbols-outlined text-[18px]">add</span>
                                 </button>
                             </div>
@@ -231,17 +231,17 @@
                     <div class="flex flex-col sm:flex-row gap-3 px-4 lg:px-0">
                         <!-- hidden sm:flex 를 flex 로 변경하여 모바일에서도 장바구니 버튼 노출 -->
                         <button type="button" id="addToCartBtn"
-                            class="flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-primary bg-white text-base font-bold text-primary transition-colors hover:bg-primary/5 shadow-sm">
+                            class="flex h-14 w-full sm:w-auto sm:flex-1 items-center justify-center rounded-xl border-2 border-primary bg-white text-base font-bold text-primary transition-all hover:bg-primary/5 active:scale-[0.98] shadow-sm">
                             장바구니 담기
                         </button>
                         <button type="button" id="buyNowBtn"
-                            class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-primary text-base font-extrabold text-white transition-colors hover:bg-red-600 shadow-lg shadow-primary/30">
+                            class="flex h-14 w-full sm:w-auto sm:flex-grow-[2] items-center justify-center rounded-xl bg-primary text-base font-extrabold text-white transition-all hover:bg-red-600 active:scale-[0.98] shadow-lg shadow-primary/30">
                             바로 구매하기
                         </button>
                     </div>
                     <!-- Naver Pay Button -->
                     <button type="button"
-                        class="mt-3 hidden lg:flex h-14 w-full items-center justify-center rounded-xl bg-[#03C75A] text-base font-bold text-white transition-opacity hover:opacity-90 shadow-sm">
+                        class="mt-3 hidden lg:flex h-14 w-full items-center justify-center rounded-xl bg-[#03C75A] text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] shadow-sm">
                         <span class="mr-2 font-extrabold italic font-sans text-xl tracking-tighter text-white">N</span>
                         <span class="text-white">Pay 구매하기</span>
                     </button>
@@ -617,453 +617,23 @@
 
 @push('scripts')
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const BASE_PRICE = {{ $product->sale_price ?? $product->price }};
-        let quantity = 1;
-        let selectedSize = "";
-        let selectedColor = "{{ $product->colors->first()?->name ?? '' }}"; // 초기값 설정
-
-        function showToast(message, icon = "check_circle", color = "bg-text-main") {
-            const container = document.getElementById("toastContainer");
-            if (!container) return;
-            const toast = document.createElement("div");
-            toast.className = `flex items-center gap-3 ${color} text-white px-6 py-3.5 rounded-xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`;
-            toast.innerHTML = `<span class="material-symbols-outlined text-lg">${icon}</span><span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove("toast-enter");
-                toast.classList.add("toast-exit");
-                toast.addEventListener("animationend", () => toast.remove());
-            }, 2500);
+    window.ProductConfig = {
+        basePrice: {{ $product->sale_price ?? $product->price }},
+        productId: {{ $product->id }},
+        initialColor: "{{ $product->colors->first()?->name ?? '' }}",
+        shippingType: "{{ $product->shipping_type }}",
+        shippingFee: {{ $product->shipping_fee ?? 0 }},
+        isGuest: @guest true @else false @endguest,
+        hasColors: @if($product->colors->count() > 0) true @else false @endif,
+        hasSizes: @if($product->sizes->count() > 0) true @else false @endif,
+        csrfToken: '{{ csrf_token() }}',
+        routes: {
+            login: "{{ route('login') }}",
+            wishlistToggle: "{{ route('wishlist.toggle', $product) }}",
+            cartStore: "{{ route('cart.store') }}",
+            buyNow: "{{ route('buy-now') }}"
         }
-
-        // Modal Functions (전역에서 접근 가능하도록 상단 배치)
-        function openModal(modal) {
-            if (!modal) return;
-            modal.style.display = "flex";
-            modal.classList.remove("hidden");
-            document.body.style.overflow = "hidden";
-        }
-        function closeModal(modal) {
-            if (!modal) return;
-            modal.style.display = "none";
-            modal.classList.add("hidden");
-            document.body.style.overflow = "";
-        }
-        window.openModal = openModal;
-        window.closeModal = closeModal;
-
-        // 모달 닫기 버튼들 이벤트 연결
-        document.querySelectorAll('[data-modal-close]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const modal = this.closest('.fixed');
-                closeModal(modal);
-            });
-        });
-
-        // 모달 외부 클릭 시 닫기 통합 관리
-        [document.getElementById('cartSuccessModal'), document.getElementById('cartConfirmModal'), document.getElementById('sizeGuideModal')].forEach(modal => {
-            if (modal) {
-                modal.addEventListener("click", (e) => {
-                    if (e.target === modal) closeModal(modal);
-                });
-            }
-        });
-
-        // Tab Switching
-        const tabBtns = document.querySelectorAll(".tab-btn");
-        const tabContents = document.querySelectorAll(".tab-content");
-        function activateTab(targetId) {
-            tabBtns.forEach(b => {
-                b.classList.remove("border-primary", "text-primary");
-                b.classList.add("border-transparent", "text-text-muted");
-            });
-            tabContents.forEach(c => c.classList.add("hidden"));
-
-            const activeBtn = document.querySelector(`.tab-btn[data-tab="${targetId}"]`);
-            const activeContent = document.getElementById(targetId);
-            
-            if (activeBtn) {
-                activeBtn.classList.add("border-primary", "text-primary");
-                activeBtn.classList.remove("border-transparent", "text-text-muted");
-            }
-            if (activeContent) activeContent.classList.remove("hidden");
-        }
-
-        tabBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const targetId = btn.getAttribute("data-tab");
-                activateTab(targetId);
-                history.replaceState(null, "", "#" + targetId);
-                // 스크롤은 수동 클릭 시에만 부드럽게 이동
-                document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
-            });
-        });
-
-        // 초기 해시 체크
-        if (window.location.hash) {
-            const hash = window.location.hash.substring(1);
-            if (['details', 'reviews', 'qna', 'shipping'].includes(hash)) {
-                activateTab(hash);
-            }
-        }
-
-        // Top Review Link Click -> Activate Review Tab
-        const topReviewLink = document.getElementById("top-review-link");
-        if (topReviewLink) {
-            topReviewLink.addEventListener("click", (e) => {
-                e.preventDefault();
-                activateTab("reviews");
-                document.getElementById("reviews").scrollIntoView({ behavior: "smooth" });
-            });
-        }
-
-        // Load More Reviews
-        const loadMoreBtn = document.getElementById("loadMoreReviews");
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener("click", () => {
-                const hiddenReviews = document.querySelectorAll(".review-item.hidden");
-                for (let i = 0; i < 5 && i < hiddenReviews.length; i++) {
-                    hiddenReviews[i].classList.remove("hidden");
-                }
-                if (document.querySelectorAll(".review-item.hidden").length === 0) {
-                    loadMoreBtn.parentElement.classList.add("hidden");
-                }
-            });
-        }
-
-        // Thumbnail Gallery
-        const thumbBtns = document.querySelectorAll(".thumb-btn");
-        const mainImg = document.getElementById("main-product-image");
-        thumbBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                thumbBtns.forEach(b => b.classList.remove("active", "border-primary", "opacity-100"));
-                btn.classList.add("active", "border-primary", "opacity-100");
-                const src = btn.querySelector("img").src;
-                if (mainImg) {
-                    mainImg.style.opacity = "0.5";
-                    setTimeout(() => { mainImg.src = src; mainImg.style.opacity = "1"; }, 150);
-                }
-            });
-        });
-
-        // Image Zoom
-        const zoomModal = document.getElementById("imageZoomModal");
-        const zoomImage = document.getElementById("zoomImage");
-        if (mainImg && zoomModal && zoomImage) {
-            mainImg.addEventListener("click", () => { zoomImage.src = mainImg.src; openModal(zoomModal); });
-            document.getElementById("zoomClose").addEventListener("click", () => closeModal(zoomModal));
-        }
-
-        // Color Selection
-        const colorBtns = document.querySelectorAll(".color-btn");
-        colorBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                colorBtns.forEach(b => b.classList.remove("ring-2", "ring-primary"));
-                btn.classList.add("ring-2", "ring-primary");
-                selectedColor = btn.getAttribute("data-color-name");
-                const label = document.getElementById("colorLabel");
-                if (label) label.textContent = selectedColor;
-            });
-        });
-
-        // Size Selection
-        const sizeBtns = document.querySelectorAll(".size-option-btn");
-        sizeBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                sizeBtns.forEach(b => {
-                    b.classList.remove("border-2", "border-primary", "bg-primary/5", "text-primary", "shadow-sm");
-                    b.classList.add("border", "border-gray-300", "bg-white", "text-text-main");
-                });
-                btn.classList.remove("border", "border-gray-300", "bg-white", "text-text-main");
-                btn.classList.add("border-2", "border-primary", "bg-primary/5", "text-primary", "shadow-sm");
-                selectedSize = btn.textContent.trim();
-            });
-        });
-
-        // 8. Size Guide
-        const sizeGuideModal = document.getElementById("sizeGuideModal");
-        const sgBtn = document.getElementById("sizeGuideBtn");
-        const sgClose = document.getElementById("sizeGuideClose");
-        if (sizeGuideModal && sgBtn) {
-            sgBtn.addEventListener("click", () => openModal(sizeGuideModal));
-        }
-        if (sizeGuideModal && sgClose) {
-            sgClose.addEventListener("click", () => closeModal(sizeGuideModal));
-        }
-
-        // 9. Quantity & Total
-        function updateQuantity(newQty) {
-            quantity = Math.max(1, Math.min(99, newQty));
-            const totalItemPrice = BASE_PRICE * quantity;
-            let shippingFee = 0;
-
-            const shippingType = "{{ $product->shipping_type }}";
-            const fixedFee = {{ $product->shipping_fee ?? 0 }};
-
-            if (shippingType === '무료') {
-                shippingFee = 0;
-            } else if (shippingType === '고정') {
-                shippingFee = fixedFee;
-            } else {
-                // 기본 (5만원 이상 무료, 미만 시 3,000원)
-                shippingFee = totalItemPrice >= 50000 ? 0 : 3000;
-            }
-
-            const qDisp = document.getElementById("qtyDisplay");
-            const tPrice = document.getElementById("totalPrice");
-            const sInfo = document.getElementById("shippingFeeInfo");
-
-            if (qDisp) qDisp.textContent = quantity;
-            if (tPrice) tPrice.textContent = "₩" + (totalItemPrice + shippingFee).toLocaleString();
-            
-            if (sInfo) {
-                if (shippingFee > 0) {
-                    sInfo.textContent = `(배송비 ₩${shippingFee.toLocaleString()} 포함)`;
-                    sInfo.classList.remove('hidden');
-                } else {
-                    sInfo.textContent = "(무료배송 적용됨)";
-                    sInfo.classList.remove('hidden');
-                }
-            }
-        }
-        
-        // 초기 실행 (배송비 포함 금액 표시)
-        updateQuantity(1);
-        const qPlus = document.getElementById("qtyPlus");
-        const qMinus = document.getElementById("qtyMinus");
-        if (qPlus) qPlus.addEventListener("click", () => updateQuantity(quantity + 1));
-        if (qMinus) qMinus.addEventListener("click", () => updateQuantity(quantity - 1));
-
-        // Wishlist Toggle
-        const wBtn = document.getElementById("wishlist-btn");
-        if (wBtn) {
-            wBtn.addEventListener("click", function() {
-                @guest
-                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
-                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
-                    return;
-                @endguest
-
-                const icon = this.querySelector(".material-symbols-outlined");
-                
-                fetch("{{ route('wishlist.toggle', $product) }}", {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'added') {
-                        this.classList.add("text-primary");
-                        this.classList.remove("text-text-main");
-                        icon.style.fontVariationSettings = "'FILL' 1";
-                    } else {
-                        this.classList.remove("text-primary");
-                        this.classList.add("text-text-main");
-                        icon.style.fontVariationSettings = "'FILL' 0";
-                    }
-                    showToast(data.message, data.status === 'added' ? "favorite" : "heart_broken", data.status === 'added' ? "bg-primary" : "bg-gray-600");
-                    
-                    // 찜 카운트 업데이트 (wishlistCount 사용)
-                    const wishlistBadges = document.querySelectorAll(".header-wishlist-count");
-                    if (data.wishlistCount !== undefined) {
-                        wishlistBadges.forEach(badge => {
-                            badge.textContent = data.wishlistCount;
-                            if (data.wishlistCount > 0) {
-                                badge.classList.remove("hidden");
-                                badge.classList.add("flex");
-                            } else {
-                                badge.classList.remove("flex");
-                                badge.classList.add("hidden");
-                            }
-                        });
-                    }
-                });
-            });
-        }
-
-        // Share
-        const sBtn = document.getElementById("share-btn");
-        if (sBtn) {
-            sBtn.addEventListener("click", () => {
-                navigator.clipboard.writeText(location.href).then(() => {
-                    showToast("링크가 클립보드에 복사되었습니다", "content_copy", "bg-green-600");
-                });
-            });
-        }
-
-        // Add to Cart
-        const cBtn = document.getElementById("addToCartBtn");
-        if (cBtn) {
-            cBtn.addEventListener("click", () => {
-                @guest
-                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
-                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
-                    return;
-                @endguest
-
-                @if($product->colors->count() > 0)
-                if (!selectedColor) {
-                    showToast("색상을 선택해주세요", "error", "bg-red-500");
-                    return;
-                }
-                @endif
-
-                @if($product->sizes->count() > 0)
-                if (!selectedSize) {
-                    showToast("사이즈를 선택해주세요", "error", "bg-red-500");
-                    return;
-                }
-                @endif
-
-                const addToCart = (force = false) => {
-                    fetch("{{ route('cart.store') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            product_id: {{ $product->id }},
-                            color: selectedColor,
-                            size: selectedSize,
-                            quantity: quantity,
-                            force: force
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'duplicate') {
-                            const cartModal = document.getElementById("cartConfirmModal");
-                            openModal(cartModal);
-                            
-                            // 모달 버튼 이벤트 바인딩 (일회성)
-                            const proceedBtn = document.getElementById("cartConfirmProceed");
-                            const cancelBtn = document.getElementById("cartConfirmCancel");
-                            
-                            const onProceed = () => {
-                                closeModal(cartModal);
-                                addToCart(true);
-                                cleanup();
-                            };
-                            const onCancel = () => {
-                                closeModal(cartModal);
-                                cleanup();
-                            };
-                            const cleanup = () => {
-                                proceedBtn.removeEventListener("click", onProceed);
-                                cancelBtn.removeEventListener("click", onCancel);
-                            };
-                            
-                            proceedBtn.addEventListener("click", onProceed);
-                            cancelBtn.addEventListener("click", onCancel);
-
-                        } else if (data.status === 'success') {
-                            // 토스트 대신 성공 모달 띄우기
-                            openModal(document.getElementById("cartSuccessModal"));
-                            
-                            // 장바구니 아이콘 카운트 업데이트 (Header)
-                            const cartBadges = document.querySelectorAll(".header-cart-count");
-                            cartBadges.forEach(badge => {
-                                badge.textContent = data.cart_count;
-                                badge.classList.remove("hidden");
-                            });
-                        } else {
-                            showToast("처리에 실패했습니다", "error", "bg-red-500");
-                        }
-                    });
-                };
-
-                addToCart();
-            });
-        }
-
-        // Buy Now
-        const buyNowBtn = document.getElementById("buyNowBtn");
-        if (buyNowBtn) {
-            buyNowBtn.addEventListener("click", () => {
-                @guest
-                    showToast("로그인이 필요한 서비스입니다", "login", "bg-red-500");
-                    setTimeout(() => location.href = "{{ route('login') }}", 1500);
-                    return;
-                @endguest
-
-                @if($product->colors->count() > 0)
-                if (!selectedColor) {
-                    showToast("색상을 선택해주세요", "error", "bg-red-500");
-                    return;
-                }
-                @endif
-
-                @if($product->sizes->count() > 0)
-                if (!selectedSize) {
-                    showToast("사이즈를 선택해주세요", "error", "bg-red-500");
-                    return;
-                }
-                @endif
-
-                fetch("{{ route('buy-now') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        product_id: {{ $product->id }},
-                        color: selectedColor,
-                        size: selectedSize,
-                        quantity: quantity
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.redirect) {
-                        location.href = data.redirect;
-                    } else {
-                        showToast("처리에 실패했습니다", "error", "bg-red-500");
-                    }
-                })
-                .catch(err => {
-                    showToast("오류가 발생했습니다", "error", "bg-red-500");
-                });
-            });
-        }
-
-        // Other Utilities
-        const btt = document.getElementById("backToTop");
-        if (btt) {
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 600) btt.classList.replace("opacity-0", "opacity-100"), btt.classList.remove("pointer-events-none");
-                else btt.classList.replace("opacity-100", "opacity-0"), btt.classList.add("pointer-events-none");
-            });
-            btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-        }
-    });
-
-    /**
-     * 문의 삭제 처리 
-     */
-    async function deleteInquiry(id) {
-        if (!await showConfirm('정말 이 문의를 삭제하시겠어요? ')) return;
-
-        $.ajax({
-            url: `/qna/${id}`,
-            method: 'DELETE',
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-            success: function(response) {
-                showToast(response.message, 'delete', 'bg-red-500');
-                setTimeout(() => location.reload(), 1500);
-            },
-            error: function(xhr) {
-                const msg = xhr.responseJSON?.message || '삭제 중 오류가 발생했습니다.';
-                showToast(msg, 'error', 'bg-red-500');
-            }
-        });
-    }
+    };
 </script>
+<script src="{{ asset('js/product-detail.js') }}"></script>
 @endpush

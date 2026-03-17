@@ -27,6 +27,9 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         $orderStatus = $this->input('order_status');
+        $settings = app(\App\Services\Admin\SettingManagementService::class)->getSettings();
+        $couriers = collect($settings['couriers'] ?? [])->pluck('name')->all();
+        $courierOptions = $couriers ?: Order::COURIERS;
 
         return [
             'order_status' => ['required', Rule::in(Order::ORDER_STATUSES)],
@@ -35,6 +38,7 @@ class UpdateOrderRequest extends FormRequest
                 Rule::requiredIf(fn (): bool => in_array($orderStatus, Order::SHIPPING_STARTED_STATUSES, true)),
                 'nullable',
                 'string',
+                Rule::in($courierOptions),
                 'max:100',
             ],
             'tracking_number' => [

@@ -194,6 +194,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/orders/{order_number}/exchange-return', [MemberController::class, 'exchangeReturnForm'])->name('mypage.exchange-return');
     Route::post('/mypage/orders/{order_number}/exchange-return', [MemberController::class, 'storeExchangeReturn'])->name('mypage.exchange-return.store');
     Route::post('/mypage/orders/{order_number}/cancel', [MemberController::class, 'cancelOrder'])->name('mypage.order-cancel');
+    Route::post('/mypage/orders/{order_number}/confirm', [MemberController::class, 'confirmPurchase'])->name('mypage.order-confirm');
     Route::get('/mypage/orders/{order_number}/receipt', [MemberController::class, 'printReceipt'])->name('mypage.order-receipt');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -216,9 +217,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::post('/checkout/verify', [CheckoutController::class, 'verifyPayment'])->name('checkout.verify');
 
-    // 리뷰 작성
+    // 리뷰 작성 및 관리
     Route::get('/review/write', [ReviewController::class, 'create'])->name('review.write');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/review/{review}/edit', [ReviewController::class, 'edit'])->name('review.edit');
+    Route::post('/review/{review}/update', [ReviewController::class, 'update'])->name('review.update');
 
     // 회원정보 수정 
     Route::get('/mypage/profile', [MemberController::class, 'confirmPasswordForm'])->name('mypage.profile');

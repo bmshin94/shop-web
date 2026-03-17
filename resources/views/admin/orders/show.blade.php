@@ -23,7 +23,7 @@
     <!-- 주문 헤더 -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.orders.index') }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+            <a href="{{ route('admin.orders.index') }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary active:scale-95 transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>
@@ -190,7 +190,12 @@
 
                     <div class="space-y-2">
                         <label class="text-sm font-bold text-text-main">택배사</label>
-                        <input type="text" name="courier" value="{{ old('courier', $order->courier) }}" placeholder="예: CJ대한통운" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        <select name="courier" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 appearance-none outline-none">
+                            <option value="">택배사 선택</option>
+                            @foreach($courierOptions as $courier)
+                                <option value="{{ $courier }}" {{ old('courier', $order->courier) === $courier ? 'selected' : '' }}>{{ $courier }}</option>
+                            @endforeach
+                        </select>
                         @error('courier')
                             <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
                         @enderror
@@ -218,7 +223,7 @@
                         </div>
                     @endif
 
-                    <button type="submit" class="w-full px-5 py-4 bg-primary text-white rounded-2xl text-sm font-extrabold hover:bg-red-600 transition-colors shadow-lg shadow-primary/20">
+                    <button type="submit" class="w-full px-5 py-4 bg-primary text-white rounded-2xl text-sm font-extrabold hover:bg-red-600 active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
                         주문 상태 저장
                     </button>
                 </form>
@@ -283,7 +288,7 @@
                     @method('DELETE')
                     <button
                         type="submit"
-                        class="w-full px-5 py-4 bg-red-50 text-red-600 border border-red-200 rounded-2xl text-sm font-extrabold hover:bg-red-100 transition-colors">
+                        class="w-full px-5 py-4 bg-red-50 text-red-600 border border-red-200 rounded-2xl text-sm font-extrabold hover:bg-red-100 active:scale-[0.98] transition-all">
                         주문 삭제
                     </button>
                 </form>

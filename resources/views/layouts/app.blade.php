@@ -163,6 +163,7 @@
   <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="{{ asset('js/wishlist.js') }}"></script>
 
   <script>
     let confirmResolver = null;
@@ -172,6 +173,45 @@
     function showConfirm(message, options = {}) { $('#confirm-title').text(options.title || "확인"); $('#confirm-message').html(message); $('#confirm-accept').text(options.confirmText || "확인"); $('#confirm-modal').removeClass('hidden').addClass('flex'); $('body').addClass('overflow-hidden'); return new Promise((resolve) => { confirmResolver = resolve; }); }
     function closeConfirm(result) { $('#confirm-modal').removeClass('flex').addClass('hidden'); $('body').removeClass('overflow-hidden'); if (confirmResolver) { confirmResolver(result); confirmResolver = null; } }
     function showToast(message, icon = "check_circle", color = "bg-[#181211]") { const container = document.getElementById("toastContainer"); const toast = document.createElement("div"); toast.className = `flex items-center gap-3 ${color} text-white px-8 py-4 rounded-2xl shadow-2xl text-sm font-bold pointer-events-auto toast-enter`; toast.innerHTML = `<span class="material-symbols-outlined text-xl">${icon}</span><span>${message}</span>`; container.appendChild(toast); setTimeout(() => { toast.classList.remove("toast-enter"); toast.classList.add("toast-exit"); toast.addEventListener("animationend", () => toast.remove()); }, 3000); }
+
+    @inject('settingService', 'App\Services\Admin\SettingManagementService')
+    @php
+        $settings = $settingService->getSettings();
+        $couriersData = collect($settings['couriers'] ?? [])->pluck('url', 'name')->all();
+    @endphp
+    const COURIER_URLS = @json($couriersData);
+
+    function trackDelivery(courier, trackingNumber) {
+        if (!trackingNumber) {
+            showToast('운송장 번호가 없습니다.', 'error', 'bg-red-500');
+            return;
+        }
+
+        const carriers = {
+            'CJ대한통운': `https://www.doortodoor.co.kr/parcel/doortodoor_search.jsp?f_invc_no=${trackingNumber}`,
+            '한진택배': `https://www.hanjin.com/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&wblNum=${trackingNumber}`,
+            '롯데택배': `https://www.lotteglogis.com/home/reservation/tracking/linkView?InvNo=${trackingNumber}`,
+            '로젠택배': `https://www.ilogen.com/web/personal/trace/${trackingNumber}`,
+            '우체국택배': `https://service.epost.go.kr/trace.RetrieveDomRcvTracePost.comm?POST_STR=${trackingNumber}`,
+            '경동택배': `https://kdexp.com/basic_search.kd?barcode=${trackingNumber}`,
+            '대신택배': `https://www.daesin.co.kr/kr/service/service01.jsp?wbl=${trackingNumber}`,
+            'CU 편의점택배': `https://www.cupost.co.kr/post/tracking/tracking.cupost?inv_no=${trackingNumber}`,
+            'GS25 편의점택배': `https://www.cvsnet.co.kr/invoice/tracking.do?invoice_no=${trackingNumber}`
+        };
+
+        let url = carriers[courier];
+        
+        // 관리자 설정에서 가져온 URL이 있다면 우선 적용!
+        if (COURIER_URLS[courier]) {
+            url = COURIER_URLS[courier].replace('{tracking_number}', trackingNumber);
+        }
+
+        if (!url) {
+            url = `https://search.naver.com/search.naver?query=${encodeURIComponent(courier + ' ' + trackingNumber)}`;
+        }
+        
+        window.open(url, '_blank', 'width=800,height=800');
+    }
 
     $(document).ready(function() {
       // 1. Flatpickr 전역 초기화
@@ -211,66 +251,6 @@
 
       $('#close-mobile-menu, #mobile-menu-overlay').on('click', closeMobileMenu);
 
-      // 4. 전역 찜하기(Wishlist) 토글 핸들러
-      $(document).on('click', '.btn-toggle-wishlist', function(e) {
-          e.preventDefault();
-          e.stopPropagation(); // 이벤트 전파 중단 (부모 클릭 방지)
-          
-          const $btn = $(this);
-          const productId = $btn.data('id');
-          const $icon = $btn.find('.material-symbols-outlined');
-
-          if ($btn.hasClass('processing')) return;
-          $btn.addClass('processing');
-
-          $.ajax({
-              url: `/wishlist/${productId}/toggle`,
-              method: 'POST',
-              headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-              data: { _token: "{{ csrf_token() }}" },
-              success: function(response) {
-                  const isAdded = response.status === 'added';
-                  
-                  // 아이콘 상태 및 토스트 알림
-                  if (isAdded) {
-                      $icon.addClass('filled text-red-500').css('font-variation-settings', "'FILL' 1");
-                      showToast('찜 목록에 추가되었습니다.', 'favorite', 'bg-[#181211]');
-                  } else {
-                      $icon.removeClass('filled text-red-500').css('font-variation-settings', "'FILL' 0");
-                      showToast('찜 목록에서 제거되었습니다.', 'heart_broken', 'bg-[#ec3713]');
-                      
-                      const $item = $btn.closest('.wishlist-item');
-                      if ($item.length) {
-                          $item.fadeOut(300, function() { 
-                              $(this).remove();
-                              if ($('.wishlist-item').length === 0) location.reload();
-                          });
-                      }
-                  }
-
-                  // 헤더 찜 개수 배지 실시간 업데이트!
-                  const $wishlistBadge = $('.header-wishlist-count');
-                  if (response.wishlistCount !== undefined) {
-                      const count = response.wishlistCount;
-                      $wishlistBadge.text(count);
-                      
-                      if (count > 0) {
-                          $wishlistBadge.removeClass('hidden').addClass('flex animate-bounce-subtle');
-                          setTimeout(() => $wishlistBadge.removeClass('animate-bounce-subtle'), 1000);
-                      } else {
-                          $wishlistBadge.removeClass('flex').addClass('hidden');
-                      }
-                  }
-              },
-              error: function(xhr) {
-                  const msg = xhr.status === 401 ? '로그인이 필요한 서비스입니다.' : '요청 처리 중 오류가 발생했습니다.';
-                  showToast(msg, 'error', 'bg-red-500');
-              },
-              complete: function() {
-                  $btn.removeClass('processing');
-              }
-          });
-      });
     });
 
     /**

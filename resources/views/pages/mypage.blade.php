@@ -34,19 +34,19 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('mypage.profile-edit') }}" class="px-5 py-2.5 bg-white border border-border-color rounded-xl text-sm font-bold text-text-main hover:bg-gray-50 transition-colors shadow-sm">회원정보 수정</a>
+                        <a href="{{ route('mypage.profile-edit') }}" class="px-5 py-2.5 bg-white border border-border-color rounded-xl text-sm font-bold text-text-main hover:bg-gray-50 transition-all active:scale-95 shadow-sm">회원정보 수정</a>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border-color border-t border-border-color">
-                    <a href="{{ route('mypage.point') }}" class="p-6 text-center hover:bg-background-alt transition-colors group">
+                    <a href="{{ route('mypage.point') }}" class="p-6 text-center hover:bg-background-alt transition-all active:scale-[0.98] group">
                         <p class="text-text-muted text-sm font-medium mb-2 group-hover:text-primary transition-colors">가용 적립금</p>
                         <p class="text-2xl font-extrabold text-text-main">{{ number_format($member->points) }} <span class="text-lg font-bold">원</span></p>
                     </a>
-                    <a href="{{ route('mypage.coupon') }}" class="p-6 text-center hover:bg-background-alt transition-colors group">
+                    <a href="{{ route('mypage.coupon') }}" class="p-6 text-center hover:bg-background-alt transition-all active:scale-[0.98] group">
                         <p class="text-text-muted text-sm font-medium mb-2 group-hover:text-primary transition-colors">보유 쿠폰</p>
                         <p class="text-2xl font-extrabold text-text-main">{{ number_format($couponCount) }} <span class="text-lg font-bold">장</span></p>
                     </a>
-                    <a href="{{ route('mypage.order-list') }}" class="p-6 text-center hover:bg-background-alt transition-colors group">
+                    <a href="{{ route('mypage.order-list') }}" class="p-6 text-center hover:bg-background-alt transition-all active:scale-[0.98] group">
                         <p class="text-text-muted text-sm font-medium mb-2 group-hover:text-primary transition-colors">총 주문 횟수</p>
                         <p class="text-2xl font-extrabold text-text-main">{{ number_format($totalOrderCount) }} <span class="text-lg font-bold">건</span></p>
                     </a>
@@ -57,40 +57,40 @@
             <div class="bg-white rounded-2xl shadow-sm border border-border-color p-6 sm:p-8">
                 <h3 class="text-xl font-bold text-text-main mb-6">나의 주문처리 현황</h3>
                 <div class="flex items-center justify-between">
-                    <a href="{{ route('mypage.order-list', ['status' => '주문접수']) }}" class="flex flex-col items-center gap-3 group">
-                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-all">
+                    <a href="{{ route('mypage.order-list', ['status' => '주문접수']) }}" class="flex flex-col items-center gap-3 group transition-transform active:scale-95">
+                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined text-2xl">assignment</span>
                         </div>
                         <p class="text-xs font-bold text-text-muted group-hover:text-text-main">주문접수</p>
                         <p class="text-lg font-black text-text-main">{{ number_format($orderStats['received']) }}</p>
                     </a>
                     <span class="material-symbols-outlined text-gray-200">chevron_right</span>
-                    <a href="{{ route('mypage.order-list', ['status' => '상품준비중']) }}" class="flex flex-col items-center gap-3 group">
-                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-all">
+                    <a href="{{ route('mypage.order-list', ['status' => '상품준비중']) }}" class="flex flex-col items-center gap-3 group transition-transform active:scale-95">
+                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined text-2xl">inventory_2</span>
                         </div>
                         <p class="text-xs font-bold text-text-muted group-hover:text-text-main">상품준비중</p>
                         <p class="text-lg font-black text-text-main">{{ number_format($orderStats['preparing']) }}</p>
                     </a>
                     <span class="material-symbols-outlined text-gray-200">chevron_right</span>
-                    <a href="{{ route('mypage.order-list', ['status' => '배송중']) }}" class="flex flex-col items-center gap-3 group">
-                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-all">
+                    <a href="{{ route('mypage.order-list', ['status' => '배송중']) }}" class="flex flex-col items-center gap-3 group transition-transform active:scale-95">
+                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined text-2xl">local_shipping</span>
                         </div>
                         <p class="text-xs font-bold text-text-muted group-hover:text-text-main">배송중</p>
                         <p class="text-lg font-black text-text-main">{{ number_format($orderStats['shipping']) }}</p>
                     </a>
                     <span class="material-symbols-outlined text-gray-200">chevron_right</span>
-                    <a href="{{ route('mypage.order-list', ['status' => '배송완료']) }}" class="flex flex-col items-center gap-3 group">
-                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-all">
+                    <a href="{{ route('mypage.order-list', ['status' => '배송완료']) }}" class="flex flex-col items-center gap-3 group transition-transform active:scale-95">
+                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined text-2xl">package_2</span>
                         </div>
                         <p class="text-xs font-bold text-text-muted group-hover:text-text-main">배송완료</p>
                         <p class="text-lg font-black text-text-main">{{ number_format($orderStats['delivered']) }}</p>
                     </a>
                     <span class="material-symbols-outlined text-gray-200">chevron_right</span>
-                    <a href="{{ route('mypage.order-list', ['status' => '구매확정']) }}" class="flex flex-col items-center gap-3 group">
-                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-all">
+                    <a href="{{ route('mypage.order-list', ['status' => '구매확정']) }}" class="flex flex-col items-center gap-3 group transition-transform active:scale-95">
+                        <div class="size-14 rounded-2xl bg-gray-50 flex items-center justify-center text-text-muted group-hover:bg-primary-light group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined text-2xl">verified</span>
                         </div>
                         <p class="text-xs font-bold text-text-muted group-hover:text-text-main">구매확정</p>

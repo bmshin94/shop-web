@@ -94,6 +94,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="flex gap-2">
+                                <button onclick="openEditReviewModal({{ $review->id }})" class="px-3 py-1 bg-gray-50 text-[11px] font-bold text-gray-500 rounded-lg hover:bg-primary-light hover:text-primary transition-all">수정</button>
+                            </div>
                         </div>
                         <h5 class="text-sm font-black text-text-main mb-2">{{ $review->title }}</h5>
                         <p class="text-sm text-text-muted leading-relaxed whitespace-pre-wrap">{{ $review->content }}</p>
@@ -137,8 +140,10 @@
 
         <form id="reviewSubmitForm" class="flex-1 overflow-y-auto p-8 space-y-10 min-h-0" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="review_id" id="modalReviewId">
             <input type="hidden" name="product_id" id="modalProductId">
             <input type="hidden" name="rating" id="modalRating">
+            <div id="delete-images-container"></div>
 
             <div class="bg-gray-50 rounded-2xl border border-gray-100 p-5 flex items-center gap-5">
                 <div class="size-20 rounded-xl overflow-hidden bg-white shrink-0 border border-gray-50 shadow-sm">
@@ -165,26 +170,27 @@
             <div class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold text-text-main mb-3 ml-1">리뷰 제목</label>
-                    <input type="text" name="title" placeholder="제목을 입력해주세요 (최대 50자)" 
+                    <input type="text" name="title" id="modalReviewTitle" placeholder="제목을 입력해주세요 (최대 50자)" 
                            class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary/20 transition-all bg-gray-50/30">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-text-main mb-3 ml-1">상세 후기</label>
-                    <textarea name="content" rows="6" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 관리자가 너무 기쁠 거야! " 
+                    <textarea name="content" id="modalReviewContent" rows="6" placeholder="최소 10자 이상 작성해주세요. 착용감, 사이즈 팁 등을 공유해주시면 관리자가 너무 기쁠 거야!" 
                               class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary/20 transition-all resize-none bg-gray-50/30 leading-relaxed"></textarea>
                 </div>
             </div>
 
             <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
                 <h3 class="text-md font-bold text-text-main mb-2">포토 리뷰 (선택)</h3>
-                <p class="text-xs text-text-muted mb-6 italic">멋진 착용샷을 올려주시면 포인트 500P를 줄게!</p>
-                <div class="flex items-center gap-4 overflow-x-auto pb-4 scrollbar-hide" id="image-preview-wrapper">
-                    <label for="reviewImageUpload" class="flex flex-col items-center justify-center w-24 h-24 rounded-2xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-primary hover:bg-primary-light/30 transition-all text-gray-400 hover:text-primary group shrink-0">
-                        <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">add_a_photo</span>
-                        <span class="text-[10px] font-bold mt-1">사진 추가</span>
+                <p class="text-xs text-text-muted mb-6 italic">정성스러운 포토 리뷰를 남겨주시면 적립금 혜택을 드려요!</p>
+                <div class="flex flex-wrap items-center gap-4" id="image-preview-container">
+                    <label for="reviewImageUpload" class="flex flex-col items-center justify-center w-20 h-20 rounded-2xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-primary hover:bg-primary-light/30 transition-all text-gray-400 hover:text-primary group shrink-0">
+                        <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">add_a_photo</span>
+                        <span class="text-[9px] font-bold mt-1">사진 추가</span>
                         <input type="file" id="reviewImageUpload" name="images[]" multiple class="hidden" accept="image/*">
                     </label>
-                    <div id="reviewImagePreviewContainer" class="flex gap-4"></div>
+                    <div id="existingReviewImages" class="flex flex-wrap gap-4"></div>
+                    <div id="reviewImagePreviewContainer" class="flex flex-wrap gap-4"></div>
                 </div>
             </div>
 
@@ -193,23 +199,17 @@
                 <button type="submit" class="flex-[2] py-5 bg-primary text-white font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/30 active:scale-95">리뷰 등록하기</button>
             </div>
         </form>
+    <div id="toast" class="hidden"></div>
     </div>
-</div>
 
-{{-- 이미지 확대 모달 --}}
-<div id="imageZoomModal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-zoom-out" onclick="this.classList.add('hidden')">
+    {{-- 이미지 확대 모달 --}}
+    <div id="imageZoomModal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-zoom-out" onclick="this.classList.add('hidden')">
     <img id="zoomImage" src="" class="max-h-full max-w-full rounded-xl shadow-2xl">
-</div>
+    </div>
+    @endsection
 
-{{-- 토스트 알림 --}}
-<div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[120] px-8 py-4 bg-[#181211] text-white rounded-2xl shadow-2xl text-sm font-bold transition-all duration-500 opacity-0 translate-y-8 flex items-center gap-3">
-    <span class="material-symbols-outlined text-primary">check_circle</span>
-    <span id="toastMsg"></span>
-</div>
-@endsection
-
-@push('scripts')
-<script>
+    @push('scripts')
+    <script>
     function switchTab(tab) {
         const available = document.getElementById('tabAvailable');
         const written = document.getElementById('tabWritten');
@@ -260,11 +260,16 @@
     const feedbackTexts = ["아쉬워요", "그저 그래요", "보통이에요", "맘에 들어요", "최고에요!"];
 
     function openReviewModal(productId, productName, imageUrl) {
+        document.getElementById('modalReviewId').value = '';
         document.getElementById('modalProductId').value = productId;
         document.getElementById('modalProductName').textContent = productName;
         document.getElementById('modalProductImage').src = imageUrl;
-        document.getElementById('reviewSubmitForm').reset();
+        document.getElementById('modalReviewTitle').value = '';
+        document.getElementById('modalReviewContent').value = '';
+        document.getElementById('delete-images-container').innerHTML = '';
+        document.getElementById('existingReviewImages').innerHTML = '';
         document.getElementById('reviewImagePreviewContainer').innerHTML = '';
+        document.querySelector('#reviewSubmitForm button[type="submit"]').textContent = '리뷰 등록하기';
         resetStars();
 
         reviewModal.classList.remove('hidden');
@@ -274,6 +279,71 @@
             reviewModalContent.classList.replace('scale-95', 'scale-100');
         }, 10);
         document.body.style.overflow = 'hidden';
+    }
+
+    /**
+     * 리뷰 수정 모달 오픈
+     */
+    function openEditReviewModal(reviewId) {
+        fetch(`/review/${reviewId}/edit`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const review = data.review;
+                document.getElementById('modalReviewId').value = review.id;
+                document.getElementById('modalProductId').value = review.product_id;
+                document.getElementById('modalProductName').textContent = data.product_name;
+                document.getElementById('modalProductImage').src = data.product_image;
+                document.getElementById('modalReviewTitle').value = review.title;
+                document.getElementById('modalReviewContent').value = review.content;
+                document.getElementById('delete-images-container').innerHTML = '';
+                document.getElementById('reviewImagePreviewContainer').innerHTML = '';
+                document.querySelector('#reviewSubmitForm button[type="submit"]').textContent = '리뷰 수정하기';
+
+                // 별점 세팅
+                currentRating = review.rating;
+                fillStars(currentRating);
+                ratingFeedback.textContent = feedbackTexts[currentRating - 1];
+                document.getElementById('modalRating').value = currentRating;
+
+                // 기존 이미지 세팅
+                const existingContainer = document.getElementById('existingReviewImages');
+                existingContainer.innerHTML = '';
+                if (review.images) {
+                    review.images.forEach(img => {
+                        const div = document.createElement('div');
+                        div.className = 'relative w-20 h-20 rounded-2xl overflow-hidden border border-gray-100 shrink-0 group shadow-sm';
+                        div.innerHTML = `
+                            <img src="${img}" class="w-full h-full object-cover">
+                            <button type="button" onclick="removeExistingImage(this, '${img}')" class="absolute top-1 right-1 size-6 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="material-symbols-outlined text-[14px]">close</span>
+                            </button>
+                        `;
+                        existingContainer.appendChild(div);
+                    });
+                }
+
+                reviewModal.classList.remove('hidden');
+                setTimeout(() => {
+                    reviewModal.classList.add('flex');
+                    reviewModal.classList.remove('opacity-0');
+                    reviewModalContent.classList.replace('scale-95', 'scale-100');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+
+    function removeExistingImage(btn, path) {
+        const container = document.getElementById('delete-images-container');
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'delete_images[]';
+        input.value = path;
+        container.appendChild(input);
+        btn.parentElement.remove();
     }
 
     function closeReviewModal() {
@@ -304,90 +374,80 @@
     }
 
     starBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            currentRating = parseInt(e.currentTarget.getAttribute('data-rating'));
-            fillStars(currentRating);
-            ratingFeedback.textContent = feedbackTexts[currentRating - 1];
-            document.getElementById('modalRating').value = currentRating;
-        });
+    btn.addEventListener('click', (e) => {
+        currentRating = parseInt(e.currentTarget.getAttribute('data-rating'));
+        fillStars(currentRating);
+        ratingFeedback.textContent = feedbackTexts[currentRating - 1];
+        document.getElementById('modalRating').value = currentRating;
+    });
     });
 
     document.getElementById('reviewImageUpload').addEventListener('change', function(e) {
-        const container = document.getElementById('reviewImagePreviewContainer');
-        Array.from(this.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const div = document.createElement('div');
-                div.className = 'relative w-24 h-24 rounded-2xl overflow-hidden border border-gray-100 shrink-0 group shadow-sm';
-                div.innerHTML = `
-                    <img src="${event.target.result}" class="w-full h-full object-cover">
-                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-1 right-1 size-6 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined text-[14px]">close</span>
-                    </button>
-                `;
-                container.appendChild(div);
-            };
-            reader.readAsDataURL(file);
-        });
+    const container = document.getElementById('reviewImagePreviewContainer');
+    Array.from(this.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const div = document.createElement('div');
+            div.className = 'relative w-20 h-20 rounded-2xl overflow-hidden border border-gray-100 shrink-0 group shadow-sm';
+            div.innerHTML = `
+                <img src="${event.target.result}" class="w-full h-full object-cover">
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-1 right-1 size-6 bg-black/50 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined text-[14px]">close</span>
+                </button>
+            `;
+            container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+    });
     });
 
     document.getElementById('reviewSubmitForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!currentRating) {
-            showToast('별점을 선택해주세요!', 'error', 'bg-red-500');
-            return;
-        }
-        const title = this.querySelector('input[name="title"]').value.trim();
-        if (!title) {
-            showToast('리뷰 제목을 입력해주세요!', 'error', 'bg-red-500');
-            return;
-        }
-        const content = this.querySelector('textarea[name="content"]').value.trim();
-        if (!content) {
-            showToast('상세 후기를 입력해주세요!', 'error', 'bg-red-500');
-            return;
-        }
-        if (content.length < 10) {
-            showToast('상세 후기를 10자 이상 작성해주세요! ', 'info', 'bg-[#181211]');
-            return;
-        }
-
-        const formData = new FormData(this);
-        const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="animate-spin material-symbols-outlined mr-2">sync</span>등록 중...';
-
-        fetch("{{ route('review.store') }}", {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message || '리뷰가 성공적으로 등록되었습니다! ');
-                closeReviewModal();
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                showToast(data.message || '오류가 발생했습니다.', 'error', 'bg-red-500');
-                submitBtn.disabled = false;
-                submitBtn.textContent = '리뷰 등록하기';
-            }
-        });
-    });
-
-    function showToast(message, icon = 'check_circle', color = 'bg-[#181211]') {
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toastMsg');
-        toastMsg.textContent = message;
-        toast.classList.remove('opacity-0', 'translate-y-8');
-        toast.classList.add('opacity-100', 'translate-y-0');
-        setTimeout(() => {
-            toast.classList.replace('opacity-100', 'opacity-0');
-            toast.classList.replace('translate-y-0', 'translate-y-8');
-        }, 3000);
+    e.preventDefault();
+    if (!currentRating) {
+        showToast('별점을 선택해주세요!', 'error', 'bg-red-500');
+        return;
+    }
+    const title = document.getElementById('modalReviewTitle').value.trim();
+    if (!title) {
+        showToast('리뷰 제목을 입력해주세요!', 'error', 'bg-red-500');
+        return;
+    }
+    const content = document.getElementById('modalReviewContent').value.trim();
+    if (!content) {
+        showToast('상세 후기를 입력해주세요!', 'error', 'bg-red-500');
+        return;
+    }
+    if (content.length < 10) {
+        showToast('상세 후기를 10자 이상 작성해주세요!', 'info', 'bg-[#181211]');
+        return;
     }
 
+    const formData = new FormData(this);
+    const reviewId = document.getElementById('modalReviewId').value;
+    const url = reviewId ? `/review/${reviewId}/update` : "{{ route('review.store') }}";
+    const submitBtn = this.querySelector('button[type="submit"]');
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="animate-spin material-symbols-outlined mr-2">sync</span>${reviewId ? '수정' : '등록'} 중...`;
+
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message || '완료되었습니다!');
+            closeReviewModal();
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast(data.message || '오류가 발생했습니다.', 'error', 'bg-red-500');
+            submitBtn.disabled = false;
+            submitBtn.textContent = reviewId ? '리뷰 수정하기' : '리뷰 등록하기';
+        }
+    });
+    });
     function openImageZoom(src) {
         document.getElementById('zoomImage').src = src;
         document.getElementById('imageZoomModal').classList.remove('hidden');

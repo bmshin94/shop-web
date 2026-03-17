@@ -262,9 +262,9 @@ class MemberService
      */
     public function getReviewListData(Member $member): array
     {
-        // 1. 작성 가능한 리뷰 대상 추출 (배송완료 상품 중 미작성건)
+        // 1. 작성 가능한 리뷰 대상 추출 (배송완료 또는 구매확정 상품 중 미작성건)
         $purchasedProductIds = OrderItem::whereHas('order', function($q) use ($member) {
-                $q->where('member_id', $member->id)->where('order_status', '배송완료');
+                $q->where('member_id', $member->id)->whereIn('order_status', ['배송완료', '구매확정']);
             })
             ->pluck('product_id')
             ->unique();

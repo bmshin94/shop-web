@@ -45,14 +45,14 @@ class ReviewTest extends TestCase
     }
 
     /** @test */
-    public function member_cannot_write_review_for_non_confirmed_order()
+    public function member_can_write_review_after_delivered_or_confirmed()
     {
-        // 2. 주문은 했지만 '배송완료' 상태일 때 (구매확정 전!) 
+        // 2. '배송완료' 상태일 때도 리뷰 작성이 가능해야 함! 
         $this->actingAs($this->member);
 
         $order = Order::factory()->create([
             'member_id' => $this->member->id,
-            'order_status' => '배송완료' // 구매확정이 아니야! 
+            'order_status' => '배송완료'
         ]);
         OrderItem::factory()->create([
             'order_id' => $order->id,
@@ -60,49 +60,37 @@ class ReviewTest extends TestCase
         ]);
 
         $response = $this->get(route('review.write', ['product_id' => $this->product->id]));
-
-        // 여전히 접근 불가! 
-        $response->assertRedirect(route('product-detail', $this->product->slug));
-    }
-
-    /** @test */
-    public function member_can_write_review_after_order_confirmed()
-    {
-        // 3. 드디어 '구매확정'을 했을 때! 
-        $this->actingAs($this->member);
-
-        $order = Order::factory()->create([
-            'member_id' => $this->member->id,
-            'order_status' => '구매확정' // 찐 고객님 인증! 
-        ]);
-        OrderItem::factory()->create([
-            'order_id' => $order->id,
-            'product_id' => $this->product->id
-        ]);
-
-        $response = $this->get(route('review.write', ['product_id' => $this->product->id]));
-
-        // 접근 성공! 200 OK! 
         $response->assertStatus(200);
-        $response->assertSee($this->product->name);
+
+        // 3. '구매확정' 상태일 때도 당연히 가능! 
+        $order->update(['order_status' => '구매확정']);
+        $response = $this->get(route('review.write', ['product_id' => $this->product->id]));
+        $response->assertStatus(200);
     }
 
     /** @test */
-    public function member_cannot_store_review_without_confirmed_order()
+    public function member_cannot_store_review_without_proper_order_status()
     {
-        // 4. 실제로 저장(POST) 요청을 보낼 때도 구매확정 여부를 체크하는지! 
+        // 4. '상품준비중' 등 리뷰 불가능한 상태일 때 체크! 
         $this->actingAs($this->member);
+
+        $order = Order::factory()->create([
+            'member_id' => $this->member->id,
+            'order_status' => '상품준비중'
+        ]);
+        OrderItem::factory()->create([
+            'order_id' => $order->id,
+            'product_id' => $this->product->id
+        ]);
 
         $response = $this->postJson(route('review.store'), [
             'product_id' => $this->product->id,
             'rating' => 5,
-            'title' => '구매도 안 했는데 리뷰?',
+            'title' => '배송도 안 왔는데?',
             'content' => '이런 건 막아야지! ',
         ]);
 
-        // 403 Forbidden 응답이 와야 함! 
         $response->assertStatus(403);
-        $response->assertJson(['success' => false]);
     }
 
     /** @test */

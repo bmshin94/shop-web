@@ -40,28 +40,28 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->filled('remember-me');
 
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-
-            // 마지막 로그인 시간 업데이트
-            $member = Auth::user();
-            $member->update(['last_login_at' => now()]);
-
-            // 최근 본 상품 쿠키 -> DB 동기화 
-            $this->syncRecentViews($member);
-
+        if (!Auth::attempt($credentials, $remember)) {
             return response()->json([
-                'success' => true,
-                'message' => '반가워요! 로그인이 완료되었습니다.',
-                'redirect' => redirect()->intended(route('home'))->getTargetUrl(),
-            ]);
+                'success' => false,
+                'message' => '이메일 주소 또는 비밀번호가 일치하지 않습니다.',
+                'errors' => ['email' => ['인증 정보가 올바르지 않습니다.']]
+            ], 422);
         }
 
+        $request->session()->regenerate();
+
+        // 마지막 로그인 시간 업데이트
+        $member = Auth::user();
+        $member->update(['last_login_at' => now()]);
+
+        // 최근 본 상품 쿠키 -> DB 동기화 
+        $this->syncRecentViews($member);
+
         return response()->json([
-            'success' => false,
-            'message' => '이메일 주소 또는 비밀번호가 일치하지 않습니다.',
-            'errors' => ['email' => ['인증 정보가 올바르지 않습니다.']]
-        ], 422);
+            'success' => true,
+            'message' => '반가워요! 로그인이 완료되었습니다.',
+            'redirect' => redirect()->intended(route('home'))->getTargetUrl(),
+        ]);
     }
 
     /**
@@ -101,29 +101,34 @@ class AuthController extends Controller
             ->where('provider_id', $socialUser->getId())
             ->first();
 
-        if (!$member) {
-            // 이메일로 기존 회원 확인
-            $member = Member::where('email', $socialUser->getEmail())->first();
+        if ($member) {
+            Auth::login($member);
+            $member->update(['last_login_at' => now()]);
+            $this->syncRecentViews($member);
+            return redirect()->intended(route('home'));
+        }
 
-            if ($member) {
-                // 기존 회원이 있다면 소셜 정보 업데이트
-                $member->update([
-                    'provider' => $provider,
-                    'provider_id' => $socialUser->getId(),
-                    'avatar' => $socialUser->getAvatar(),
-                ]);
-            } else {
-                // 신규 회원이라면 생성
-                $member = Member::create([
-                    'name' => $socialUser->getName() ?? $socialUser->getNickname(),
-                    'email' => $socialUser->getEmail(),
-                    'provider' => $provider,
-                    'provider_id' => $socialUser->getId(),
-                    'avatar' => $socialUser->getAvatar(),
-                    'status' => '활성',
-                    'email_verified_at' => now(),
-                ]);
-            }
+        // 이메일로 기존 회원 확인
+        $member = Member::where('email', $socialUser->getEmail())->first();
+
+        if ($member) {
+            // 기존 회원이 있다면 소셜 정보 업데이트
+            $member->update([
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'avatar' => $socialUser->getAvatar(),
+            ]);
+        } else {
+            // 신규 회원이라면 생성
+            $member = Member::create([
+                'name' => $socialUser->getName() ?? $socialUser->getNickname(),
+                'email' => $socialUser->getEmail(),
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'avatar' => $socialUser->getAvatar(),
+                'status' => '활성',
+                'email_verified_at' => now(),
+            ]);
         }
 
         Auth::login($member);
@@ -198,28 +203,28 @@ class AuthController extends Controller
             ->orWhere('phone', $phone)
             ->first();
 
-        if ($member) {
-            // 인증 정보 사용 완료 처리 (삭제)
-            PhoneVerification::where('phone', $phone)->delete();
-
-            // 이메일 마스킹 처리 (예: ab****@example.com)
-            $emailParts = explode('@', $member->email);
-            $name = $emailParts[0];
-            $domain = $emailParts[1];
-            $length = strlen($name);
-            $visibleCount = $length > 4 ? 3 : 2;
-            $maskedEmail = substr($name, 0, $visibleCount) . str_repeat('*', $length - $visibleCount) . '@' . $domain;
-
+        if (!$member) {
             return response()->json([
-                'success' => true,
-                'email' => $maskedEmail,
-            ]);
+                'success' => false,
+                'message' => '입력하신 번호로 가입된 정보가 없습니다.',
+            ], 404);
         }
 
+        // 인증 정보 사용 완료 처리 (삭제)
+        PhoneVerification::where('phone', $phone)->delete();
+
+        // 이메일 마스킹 처리 (예: ab****@example.com)
+        $emailParts = explode('@', $member->email);
+        $name = $emailParts[0];
+        $domain = $emailParts[1];
+        $length = strlen($name);
+        $visibleCount = $length > 4 ? 3 : 2;
+        $maskedEmail = substr($name, 0, $visibleCount) . str_repeat('*', $length - $visibleCount) . '@' . $domain;
+
         return response()->json([
-            'success' => false,
-            'message' => '입력하신 번호로 가입된 정보가 없습니다.',
-        ], 404);
+            'success' => true,
+            'email' => $maskedEmail,
+        ]);
     }
 
     /**
@@ -248,24 +253,24 @@ class AuthController extends Controller
         }
 
         $member = Member::where('email', $request->email)->first();
-        if ($member) {
-            $member->update([
-                'password' => Hash::make($request->password)
-            ]);
-
-            // 인증 정보 삭제
-            EmailVerification::where('email', $request->email)->delete();
-
+        if (!$member) {
             return response()->json([
-                'success' => true,
-                'message' => '비밀번호가 성공적으로 변경되었습니다.',
-            ]);
+                'success' => false,
+                'message' => '회원 정보를 찾을 수 없습니다.',
+            ], 404);
         }
 
+        $member->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        // 인증 정보 삭제
+        EmailVerification::where('email', $request->email)->delete();
+
         return response()->json([
-            'success' => false,
-            'message' => '회원 정보를 찾을 수 없습니다.',
-        ], 404);
+            'success' => true,
+            'message' => '비밀번호가 성공적으로 변경되었습니다.',
+        ]);
     }
 
     /**

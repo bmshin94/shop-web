@@ -507,6 +507,30 @@ class MemberController extends Controller
     }
 
     /**
+     * 구매확정 처리 
+     */
+    public function confirmPurchase(Request $request, $orderNumber): JsonResponse
+    {
+        $member = Auth::user();
+        $order = $member->orders()->where('order_number', $orderNumber)->firstOrFail();
+
+        if ($order->order_status !== '배송완료') {
+            return response()->json(['message' => '배송완료 상태에서만 구매확정이 가능합니다.'], 422);
+        }
+
+        try {
+            // 상태 변경 
+            $order->update(['order_status' => '구매확정']);
+            
+            // TODO: 구매확정 시 적립금 지급 등의 추가 로직이 필요하다면 CheckoutService 등에 위임하는 것이 좋습니다.
+            
+            return response()->json(['message' => '구매확정이 완료되었습니다! 즐거운 쇼핑 되세요! ']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => '구매확정 처리 중 오류가 발생했습니다.'], 500);
+        }
+    }
+
+    /**
      * 교환/반품 신청 저장
      */
     public function storeExchangeReturn(Request $request, $orderNumber): JsonResponse

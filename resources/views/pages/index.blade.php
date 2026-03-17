@@ -83,7 +83,7 @@
     
     <!-- Custom Pagination Controls -->
     <div class="flex items-center justify-center gap-6 mt-4 sm:mt-6">
-      <button class="hero-prev flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+      <button class="hero-prev flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all active:scale-95 shadow-sm">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
       
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <button class="hero-next flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all shadow-sm">
+      <button class="hero-next flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all active:scale-95 shadow-sm">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
@@ -105,7 +105,7 @@
 <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
   <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-8">
     @foreach($topCategories as $cat)
-    <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md"
+    <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md active:scale-[0.98]"
       href="{{ route('product-list', ['category' => $cat->slug]) }}">
       <div class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
         <span class="material-symbols-outlined text-3xl">
@@ -136,45 +136,7 @@
     </div>
     <div class="grid grid-cols-2 gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 lg:grid-cols-4">
       @foreach($editorsPicks as $product)
-      <div class="group relative flex flex-col">
-        <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200">
-          <a href="{{ route('product-detail', $product->slug) }}" class="block h-full w-full">
-            <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-              style="background-image: url('{{ $product->image_url ?? ($product->images->first()?->image_url ?? 'https://via.placeholder.com/400x533') }}');">
-            </div>
-          </a>
-          <!-- 찜하기 버튼 -->
-          <div class="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-colors hover:bg-primary hover:text-white cursor-pointer z-10 btn-toggle-wishlist" data-id="{{ $product->id }}">
-            <span class="material-symbols-outlined block text-lg {{ $product->is_wishlisted ? 'filled text-red-500' : '' }}" style="{{ $product->is_wishlisted ? "font-variation-settings: 'FILL' 1" : "" }}">favorite</span>
-          </div>
-          @if($product->is_new)
-          <div class="absolute bottom-3 left-3 flex gap-1">
-            <span class="rounded bg-black/70 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">NEW SEASON</span>
-          </div>
-          @endif
-        </div>
-        <div class="mt-4 flex flex-1 flex-col">
-          <a href="{{ route('product-detail', $product->slug) }}">
-            <h4 class="text-base font-bold text-text-main">{{ $product->name }}</h4>
-            <p class="text-xs text-text-muted">{{ $product->brief_description ?? ($product->category?->name ?? 'Premium Gear') }}</p>
-          </a>
-          <div class="mt-3 flex items-center justify-between">
-            <div class="flex flex-col">
-              @if($product->discount_rate > 0)
-              <span class="text-xs text-red-500 font-bold">{{ $product->discount_rate }}%
-                <span class="text-text-muted font-normal line-through ml-1">₩{{ number_format($product->price) }}</span></span>
-              @endif
-              <span class="text-lg font-bold text-text-main">₩{{ number_format($product->sale_price ?? $product->price) }}</span>
-            </div>
-          </div>
-          <div class="mt-2 flex gap-1">
-            <span class="inline-block rounded-sm bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">{{ $product->shipping_info }}</span>
-            @if($product->stock_quantity <= 5 && $product->stock_quantity > 0)
-            <span class="inline-block rounded-sm bg-red-50 px-1.5 py-0.5 text-[10px] text-red-500">품절임박</span>
-            @endif
-          </div>
-        </div>
-      </div>
+        <x-product-card :product="$product" />
       @endforeach
     </div>
   </div>
@@ -188,29 +150,17 @@
       <p class="mt-2 text-sm text-text-muted">지금 가장 주목받는 아이템을 확인하세요.</p>
     </div>
     <div class="flex gap-2">
-      <button class="btn-scroll-left flex size-9 items-center justify-center rounded-full border border-gray-200 bg-white transition-colors hover:border-primary hover:text-primary">
+      <button class="btn-scroll-left flex size-9 items-center justify-center rounded-full border border-gray-200 bg-white transition-all hover:border-primary hover:text-primary active:scale-95">
         <span class="material-symbols-outlined text-sm">arrow_back</span>
       </button>
-      <button class="btn-scroll-right flex size-9 items-center justify-center rounded-full border border-gray-200 bg-white transition-colors hover:border-primary hover:text-primary">
+      <button class="btn-scroll-right flex size-9 items-center justify-center rounded-full border border-gray-200 bg-white transition-all hover:border-primary hover:text-primary active:scale-95">
         <span class="material-symbols-outlined text-sm">arrow_forward</span>
       </button>
     </div>
   </div>
   <div class="scrollbar-hide touch-scroll trending-container -mx-4 flex gap-6 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0 scroll-smooth">
     @foreach($trendingProducts as $product)
-    <div class="w-56 flex-none">
-      <div class="group relative mb-3 aspect-square overflow-hidden rounded-xl bg-gray-100">
-        <a href="{{ route('product-detail', $product->slug) }}">
-          <div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-            style="background-image: url('{{ $product->image_url ?? ($product->images->first()?->image_url ?? 'https://via.placeholder.com/300x300') }}');">
-          </div>
-        </a>
-      </div>
-      <a href="{{ route('product-detail', $product->slug) }}">
-        <h5 class="text-sm font-bold text-text-main truncate">{{ $product->name }}</h5>
-        <p class="text-sm font-medium text-text-muted">₩{{ number_format($product->sale_price ?? $product->price) }}</p>
-      </a>
-    </div>
+      <x-product-card :product="$product" class="w-56 flex-none" />
     @endforeach
   </div>
 </section>

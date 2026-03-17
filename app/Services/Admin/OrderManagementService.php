@@ -23,6 +23,7 @@ class OrderManagementService
     public function paginateOrders(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Order::query()
+            ->with(['member', 'items.product'])
             ->withCount('items')
             ->withSum('items as total_quantity', 'quantity')
             ->latest('ordered_at');
@@ -42,6 +43,7 @@ class OrderManagementService
     public function paginateTrashedOrders(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Order::onlyTrashed()
+            ->with(['member', 'items.product'])
             ->withCount('items')
             ->withSum('items as total_quantity', 'quantity')
             ->latest('deleted_at');

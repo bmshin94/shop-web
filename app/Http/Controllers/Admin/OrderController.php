@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function __construct(
-        private readonly OrderManagementService $orderManagementService
+        private readonly OrderManagementService $orderManagementService,
+        private readonly \App\Services\Admin\SettingManagementService $settingManagementService
     ) {
     }
 
@@ -79,11 +80,14 @@ class OrderController extends Controller
     public function show(Order $order): View
     {
         $order->load(['items.product']);
+        $settings = $this->settingManagementService->getSettings();
+        $couriers = collect($settings['couriers'] ?? [])->pluck('name')->all();
 
         return view('admin.orders.show', [
             'order' => $order,
             'orderStatusOptions' => Order::ORDER_STATUSES,
             'paymentStatusOptions' => Order::PAYMENT_STATUSES,
+            'courierOptions' => $couriers ?: Order::COURIERS,
         ]);
     }
 

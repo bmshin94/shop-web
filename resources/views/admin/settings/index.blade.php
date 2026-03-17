@@ -100,6 +100,37 @@
                 </div>
             </section>
 
+            <section class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-base font-extrabold text-text-main">택배사 관리</h4>
+                    <button type="button" id="btnAddCourier" class="flex items-center gap-1 text-[12px] font-black text-primary hover:text-red-600 transition-colors">
+                        <span class="material-symbols-outlined text-sm">add_circle</span> 택배사 추가
+                    </button>
+                </div>
+                <div id="courierContainer" class="space-y-3">
+                    @php
+                        $couriers = old('couriers', $settings['couriers'] ?? []);
+                    @endphp
+                    @foreach((array)$couriers as $index => $courier)
+                    @php if(!is_array($courier)) continue; @endphp
+                    <div class="courier-item grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] gap-3 items-start bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
+                        <div class="space-y-1">
+                            <input type="text" name="couriers[{{ $index }}][name]" value="{{ $courier['name'] ?? '' }}" placeholder="택배사명" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:border-primary outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <input type="text" name="couriers[{{ $index }}][url]" value="{{ $courier['url'] ?? '' }}" placeholder="추적 URL ({tracking_number} 포함)" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:border-primary outline-none">
+                        </div>
+                        <button type="button" class="btn-remove-courier size-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+                <p class="text-[11px] font-bold text-text-muted leading-relaxed">
+                    송장번호가 들어갈 위치에 <code class="text-primary">{tracking_number}</code>를 입력해 주세요.
+                </p>
+            </section>
+
             <section class="space-y-3">
                 <h4 class="text-base font-extrabold text-text-main">운영 모드</h4>
                 <label class="inline-flex items-center gap-3 cursor-pointer">
@@ -133,3 +164,49 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const courierContainer = document.getElementById('courierContainer');
+        const btnAddCourier = document.getElementById('btnAddCourier');
+
+        btnAddCourier.addEventListener('click', () => {
+            const index = 0; // 새로 추가되는 항목의 임시 인덱스
+            const html = `
+                <div class="courier-item grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] gap-3 items-start bg-gray-50/50 p-4 rounded-2xl border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div class="space-y-1">
+                        <input type="text" name="couriers[${index}][name]" value="" placeholder="택배사명" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:border-primary outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <input type="text" name="couriers[${index}][url]" value="" placeholder="추적 URL ({tracking_number} 포함)" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold focus:border-primary outline-none">
+                    </div>
+                    <button type="button" class="btn-remove-courier size-9 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                </div>
+            `;
+            courierContainer.insertAdjacentHTML('afterbegin', html);
+            reindexCouriers(); // 맨 위에 추가했으니 인덱스 싹~ 다시 정리! ✨
+        });
+
+        courierContainer.addEventListener('click', (e) => {
+            const btnRemove = e.target.closest('.btn-remove-courier');
+            if (btnRemove) {
+                const item = btnRemove.closest('.courier-item');
+                if (item) {
+                    item.remove();
+                    reindexCouriers();
+                }
+            }
+        });
+
+        function reindexCouriers() {
+            document.querySelectorAll('.courier-item').forEach((item, index) => {
+                item.querySelector('input[name*="[name]"]').name = `couriers[${index}][name]`;
+                item.querySelector('input[name*="[url]"]').name = `couriers[${index}][url]`;
+            });
+        }
+    });
+</script>
+@endpush

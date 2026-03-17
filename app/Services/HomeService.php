@@ -67,7 +67,7 @@ class HomeService
      */
     private function getEditorsPicks(): Collection
     {
-        return Product::with(['images', 'category'])
+        return Product::with(['images', 'category', 'colors'])
             ->selling()
             ->where('is_best', true)
             ->latest()
@@ -82,7 +82,7 @@ class HomeService
     {
         // 실제로는 view_count 같은 컬럼이 있으면 좋겠지만, 
         // 우선은 최신 상품 중 랜덤하게 10개 보여주는 걸로 시작할게! 
-        return Product::with(['images', 'category'])
+        return Product::with(['images', 'category', 'colors'])
             ->selling()
             ->inRandomOrder()
             ->take(10)

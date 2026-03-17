@@ -100,12 +100,17 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="mt-4 flex items-center gap-2">
+                        <div class="mt-4 flex items-center gap-3">
                             <span class="inline-flex py-1 px-3 bg-white text-primary font-bold text-xs rounded-full border border-primary/20">
                                 {{ $order->order_status }}
                             </span>
                             @if($order->tracking_number)
-                            <span class="text-xs text-text-muted">{{ $order->courier }} | {{ $order->tracking_number }}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-text-muted">{{ $order->courier }} | {{ $order->tracking_number }}</span>
+                                <button type="button" 
+                                        onclick="trackDelivery('{{ $order->courier }}', '{{ $order->tracking_number }}')"
+                                        class="px-2 py-1 bg-gray-100 text-[10px] font-bold text-text-main rounded-md border border-gray-200 hover:bg-gray-200 transition-colors">배송추적</button>
+                            </div>
                             @endif
                         </div>
                     </div>
@@ -179,6 +184,14 @@
             @if($order->order_status === '배송완료' && !$order->has_active_claim)
             <div class="flex items-center gap-3">
                 <a href="{{ route('mypage.exchange-return', $order->order_number) }}" class="px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">교환/반품 신청</a>
+            </div>
+            @endif
+
+            @if($order->order_status === '배송완료')
+            <div class="flex items-center gap-3">
+                <button type="button" 
+                        class="btn-confirm-purchase px-6 py-3 bg-text-main text-white text-sm font-bold rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200"
+                        data-order-number="{{ $order->order_number }}">구매확정</button>
             </div>
             @endif
             
@@ -324,6 +337,38 @@
 
         const btnExchangeReturn = document.getElementById('btnExchangeReturn');
         if (btnExchangeReturn) btnExchangeReturn.addEventListener('click', () => { showToast('교환/반품 신청 페이지로 이동합니다.', 'swap_horiz', 'text-blue-400'); });
+
+        // 구매확정 버튼 
+        const btnConfirmPurchase = document.querySelector('.btn-confirm-purchase');
+        if (btnConfirmPurchase) {
+            btnConfirmPurchase.addEventListener('click', async function() {
+                const orderNumber = this.dataset.orderNumber;
+                
+                if (!await showConfirm('상품을 잘 받으셨나요? \n구매확정 후에는 교환/반품이 어려울 수 있어요. ')) return;
+
+                try {
+                    const response = await fetch(`/mypage/orders/${orderNumber}/confirm`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        showToast(result.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showToast(result.message || '처리 중 오류가 발생했습니다.', 'error', 'bg-red-500');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('처리 중 오류가 발생했습니다.', 'error', 'bg-red-500');
+                }
+            });
+        }
     });
 </script>
 @endpush

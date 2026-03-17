@@ -67,6 +67,7 @@
                         class="w-full rounded-2xl border-gray-200 px-5 py-4 text-sm text-text-main focus:border-primary focus:ring-primary transition-all resize-none shadow-inner bg-gray-50/30 leading-relaxed">{{ $inquiry->content }}</textarea>
                 </div>
                 
+                @if($inquiry->product_id)
                 <!-- Secret Post Option  -->
                 <div class="mt-6 flex items-center gap-2 px-1">
                     <label class="relative flex items-center cursor-pointer">
@@ -77,6 +78,7 @@
                         <span class="ml-2 text-sm font-bold text-text-muted peer-checked:text-primary transition-colors">비밀글로 문의하기</span>
                     </label>
                 </div>
+                @endif
             </div>
 
             <!-- Photos  -->

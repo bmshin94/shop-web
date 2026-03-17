@@ -240,20 +240,21 @@ class AdminController extends Controller
             $product->relatedProducts()->sync($relatedData);
         }
 
-        // 4. 이미지 저장 (Laravel 정석 방식)
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('products', 'public');
-                $fullPath = '/storage/' . $path;
-                
-                $product->images()->create([
-                    'image_path' => $fullPath,
-                    'sort_order' => $index
-                ]);
+        if (! $request->hasFile('images')) {
+            return redirect()->route('admin.products.index')->with('success', '새로운 상품이 등록되었습니다.');
+        }
 
-                if ($index == 0) {
-                    $product->update(['image_url' => $fullPath]);
-                }
+        foreach ($request->file('images') as $index => $file) {
+            $path = $file->store('products', 'public');
+            $fullPath = '/storage/' . $path;
+            
+            $product->images()->create([
+                'image_path' => $fullPath,
+                'sort_order' => $index
+            ]);
+
+            if ($index == 0) {
+                $product->update(['image_url' => $fullPath]);
             }
         }
 
@@ -502,20 +503,30 @@ class AdminController extends Controller
     public function categoryReorder(Request $request)
     {
         $order = json_decode($request->input('order'));
-        if (is_array($order)) {
-            $parentSort = 0; $childSort = 0;
-            foreach ($order as $id) {
-                $category = Category::find($id);
-                if ($category) {
-                    if ($category->level == 1) {
-                        $parentSort++; $category->update(['sort_order' => $parentSort]); $childSort = 0;
-                    } else {
-                        $childSort++; $category->update(['sort_order' => $childSort]);
-                    }
-                }
-            }
-            return redirect()->route('admin.categories.index')->with('success', '순서가 저장되었습니다.');
+        
+        if (! is_array($order)) {
+            return redirect()->route('admin.categories.index')->with('error', '순서 정보가 올바르지 않습니다.');
         }
-        return redirect()->route('admin.categories.index')->with('error', '순서 정보가 올바르지 않습니다.');
+
+        $parentSort = 0; 
+        $childSort = 0;
+        
+        foreach ($order as $id) {
+            $category = Category::find($id);
+            if (! $category) {
+                continue;
+            }
+            
+            if ($category->level == 1) {
+                $parentSort++; 
+                $category->update(['sort_order' => $parentSort]); 
+                $childSort = 0;
+            } else {
+                $childSort++; 
+                $category->update(['sort_order' => $childSort]);
+            }
+        }
+        
+        return redirect()->route('admin.categories.index')->with('success', '순서가 저장되었습니다.');
     }
 }

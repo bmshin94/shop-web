@@ -34,6 +34,9 @@ class UpdateSiteSettingRequest extends FormRequest
             'point_earn_rate' => ['required', 'numeric', 'between:0,100'],
             'maintenance_mode' => ['required', 'boolean'],
             'order_auto_cancel_hours' => ['required', 'integer', 'min:1', 'max:720'],
+            'couriers' => ['nullable', 'array'],
+            'couriers.*.name' => ['required_with:couriers', 'string', 'max:50'],
+            'couriers.*.url' => ['required_with:couriers', 'string', 'max:255'],
         ];
     }
 
@@ -55,6 +58,9 @@ class UpdateSiteSettingRequest extends FormRequest
             'point_earn_rate' => '포인트 적립률',
             'maintenance_mode' => '점검 모드',
             'order_auto_cancel_hours' => '미결제 자동취소 시간',
+            'couriers' => '택배사 설정',
+            'couriers.*.name' => '택배사명',
+            'couriers.*.url' => '추적 URL',
         ];
     }
 

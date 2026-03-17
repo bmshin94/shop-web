@@ -58,6 +58,13 @@
                                 <div class="flex items-center gap-2 mb-3">
                                     <span class="size-6 rounded-full bg-text-main text-white flex items-center justify-center text-[10px] font-black">Q</span>
                                     <span class="text-xs font-bold text-text-main">나의 문의 내용</span>
+                                    
+                                    @if(!$inquiry->answer)
+                                    <div class="flex gap-2 ml-auto">
+                                        <a href="{{ route('qna.edit', $inquiry->id) }}" class="px-3 py-1 bg-gray-100 text-[11px] font-bold text-gray-500 rounded-lg hover:bg-primary-light hover:text-primary transition-all">수정</a>
+                                        <button type="button" onclick="deleteInquiry({{ $inquiry->id }})" class="px-3 py-1 bg-gray-100 text-[11px] font-bold text-gray-500 rounded-lg hover:bg-red-50 hover:text-red-500 transition-all">삭제</button>
+                                    </div>
+                                    @endif
                                 </div>
                                 <p class="text-sm text-text-main leading-relaxed whitespace-pre-wrap pl-8">{{ $inquiry->content }}</p>
                                 
@@ -144,17 +151,6 @@
                 </div>
             </div>
 
-            {{-- 비밀글 설정  --}}
-            <div class="flex items-center gap-2 pt-2">
-                <label class="relative flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_private" value="1" class="peer sr-only">
-                    <div class="w-5 h-5 border-2 border-gray-200 rounded-md bg-white peer-checked:bg-primary peer-checked:border-primary transition-all flex items-center justify-center">
-                        <span class="material-symbols-outlined text-white text-[12px] scale-0 peer-checked:scale-100 transition-transform">lock</span>
-                    </div>
-                    <span class="ml-2 text-xs font-bold text-text-muted peer-checked:text-primary transition-colors">비밀글로 문의하기</span>
-                </label>
-            </div>
-
             <div class="pt-4 flex gap-3">
                 <button type="button" onclick="closeModal(document.getElementById('inquiryWriteModal'))" class="flex-1 h-14 bg-gray-100 text-text-muted text-sm font-black rounded-2xl hover:bg-gray-200 transition-all">취소</button>
                 <button type="submit" class="flex-1 h-14 bg-primary text-white text-sm font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/30">문의 등록하기</button>
@@ -189,6 +185,27 @@
 
         content.classList.toggle('hidden');
         icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    /**
+     * 문의 삭제 처리 
+     */
+    async function deleteInquiry(id) {
+        if (!await showConfirm('정말 이 문의를 삭제하시겠어요? ')) return;
+
+        $.ajax({
+            url: `/qna/${id}`,
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            success: function(response) {
+                showToast(response.message, 'delete', 'bg-red-500');
+                setTimeout(() => location.reload(), 1500);
+            },
+            error: function(xhr) {
+                const msg = xhr.responseJSON?.message || '삭제 중 오류가 발생했습니다.';
+                showToast(msg, 'error', 'bg-red-500');
+            }
+        });
     }
 
     $(document).ready(function() {

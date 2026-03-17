@@ -144,7 +144,15 @@
                                     </span>
                                     
                                     @if($order->tracking_number)
-                                    <button class="block w-full mt-3 py-2 px-3 bg-white border border-gray-200 rounded-xl text-[10px] font-black text-text-muted hover:bg-gray-50 hover:text-primary hover:border-primary transition-all shadow-sm">배송추적</button>
+                                    <button type="button" 
+                                            onclick="trackDelivery('{{ $order->courier }}', '{{ $order->tracking_number }}')"
+                                            class="block w-full mt-3 py-2 px-3 bg-white border border-gray-200 rounded-xl text-[10px] font-black text-text-muted hover:bg-gray-50 hover:text-primary hover:border-primary transition-all shadow-sm">배송추적</button>
+                                    @endif
+
+                                    @if($order->order_status === '배송완료')
+                                    <button type="button" 
+                                            class="btn-confirm-purchase block w-full mt-2 py-2 px-3 bg-text-main text-white rounded-xl text-[10px] font-black hover:bg-black transition-all shadow-md"
+                                            data-order-number="{{ $order->order_number }}">구매확정</button>
                                     @endif
                                 </td>
                                 @endif
@@ -214,9 +222,19 @@
                             <span class="text-sm font-black text-text-main">₩{{ number_format($order->total_amount) }}</span>
                         </div>
 
-                        @if($order->tracking_number)
-                        <button class="w-full py-2.5 bg-gray-50 text-text-main text-xs font-bold rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">배송추적</button>
-                        @endif
+                        <div class="flex flex-col gap-2">
+                            @if($order->tracking_number)
+                            <button type="button"
+                                    onclick="trackDelivery('{{ $order->courier }}', '{{ $order->tracking_number }}')"
+                                    class="w-full py-2.5 bg-gray-50 text-text-main text-xs font-bold rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">배송추적</button>
+                            @endif
+
+                            @if($order->order_status === '배송완료')
+                            <button type="button" 
+                                    class="btn-confirm-purchase w-full py-2.5 bg-text-main text-white text-xs font-bold rounded-xl hover:bg-black transition-all shadow-md"
+                                    data-order-number="{{ $order->order_number }}">구매확정</button>
+                            @endif
+                        </div>
                     </div>
                     @empty
                     <div class="py-20 text-center">
@@ -295,6 +313,37 @@
                 resetPeriodButtons();
                 this.classList.remove('bg-white', 'text-text-muted', 'border-gray-200');
                 this.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md', 'shadow-primary/20');
+            });
+        });
+
+        // 구매확정 버튼 클릭 이벤트
+        document.querySelectorAll('.btn-confirm-purchase').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const orderNumber = this.dataset.orderNumber;
+                
+                if (!await showConfirm('상품을 잘 받으셨나요? \n구매확정 후에는 교환/반품이 어려울 수 있어요. ')) return;
+
+                try {
+                    const response = await fetch(`/mypage/orders/${orderNumber}/confirm`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        showToast(result.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showToast(result.message || '처리 중 오류가 발생했습니다.', 'error', 'bg-red-500');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('처리 중 오류가 발생했습니다.', 'error', 'bg-red-500');
+                }
             });
         });
     });

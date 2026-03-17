@@ -268,4 +268,44 @@ class MyPageTest extends TestCase
         $response->assertDontSee('RET-202');
         $response->assertDontSee('EXC-303');
     }
+
+    /**
+     * 구매확정 처리가 정상적으로 이루어지는지 테스트합니다.
+     */
+    public function test_member_can_confirm_purchase(): void
+    {
+        $member = Member::factory()->create();
+        $order = Order::factory()->create([
+            'member_id' => $member->id,
+            'order_number' => 'ORD-CONFIRM-TEST',
+            'order_status' => '배송완료'
+        ]);
+
+        $response = $this->actingAs($member)->post(route('mypage.order-confirm', ['order_number' => $order->order_number]));
+
+        $response->assertStatus(200);
+        $response->assertJson(['message' => '구매확정이 완료되었습니다! 즐거운 쇼핑 되세요! ']);
+        
+        $this->assertEquals('구매확정', $order->fresh()->order_status);
+    }
+
+    /**
+     * 배송완료 상태가 아닐 때 구매확정 시 실패하는지 테스트합니다.
+     */
+    public function test_member_cannot_confirm_purchase_if_not_delivered(): void
+    {
+        $member = Member::factory()->create();
+        $order = Order::factory()->create([
+            'member_id' => $member->id,
+            'order_number' => 'ORD-CONFIRM-FAIL',
+            'order_status' => '배송중'
+        ]);
+
+        $response = $this->actingAs($member)->post(route('mypage.order-confirm', ['order_number' => $order->order_number]));
+
+        $response->assertStatus(422);
+        $response->assertJson(['message' => '배송완료 상태에서만 구매확정이 가능합니다.']);
+        
+        $this->assertEquals('배송중', $order->fresh()->order_status);
+    }
 }

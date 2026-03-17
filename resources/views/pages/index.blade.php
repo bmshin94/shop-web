@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- 메인 히어로 배너 섹션 (Swiper) -->
-<section class="relative mt-6 w-full overflow-hidden">
+<section class="relative mt-6 w-full overflow-hidden opacity-0 transition-opacity duration-500" id="hero-section">
   <div class="swiper hero-swiper px-4 py-4">
     <div class="swiper-wrapper">
       @forelse($heroProducts as $product)
@@ -198,6 +198,8 @@
       on: {
         init: function () {
           updateHeroProgress(this);
+          // 스와이퍼 초기화 후 섹션 표시 (점핑 현상 방지)
+          document.getElementById('hero-section').classList.remove('opacity-0');
         },
         slideChange: function () {
           updateHeroProgress(this);

@@ -615,4 +615,44 @@ class MemberService
             'status' => '답변대기'
         ]);
     }
+
+    /**
+     * 휴대폰 번호로 가입된 이메일 주소 찾기 (마스킹 처리 포함)
+     * 
+     * @param string $phone 찾으려는 휴대폰 번호
+     * @return string|null 마스킹된 이메일 주소 또는 null
+     */
+    public function findEmailByPhone(string $phone): ?string
+    {
+        // 1. 휴대폰 번호에서 하이픈 제거 후 조회
+        $cleanPhone = str_replace('-', '', $phone);
+        $member = Member::where('phone', $phone)
+            ->orWhere('phone', $cleanPhone)
+            ->first();
+
+        if (!$member) {
+            return null;
+        }
+
+        // 2. 이메일 마스킹 처리
+        return $this->maskEmail($member->email);
+    }
+
+    /**
+     * 이메일 주소 마스킹 처리
+     * 
+     * @param string $email 원본 이메일 주소
+     * @return string 마스킹된 이메일 주소 (예: ab****@example.com)
+     */
+    public function maskEmail(string $email): string
+    {
+        $emailParts = explode('@', $email);
+        $name = $emailParts[0];
+        $domain = $emailParts[1];
+        
+        $length = strlen($name);
+        $visibleCount = $length > 4 ? 3 : 2;
+        
+        return substr($name, 0, $visibleCount) . str_repeat('*', $length - $visibleCount) . '@' . $domain;
+    }
 }

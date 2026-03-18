@@ -11,6 +11,7 @@ class NotificationTemplate extends Model
 
     protected $fillable = [
         'code',
+        'send_type',
         'name',
         'template_id',
         'content',
@@ -33,7 +34,8 @@ class NotificationTemplate extends Model
     {
         $content = $this->content;
         foreach ($data as $key => $value) {
-            $content = str_replace("#{{$key}}", $value, $content);
+            // #{key}와 #{{key}} 형식을 모두 지원하도록 유연하게 치환
+            $content = str_replace(["#{".$key."}", "#{{".$key."}}"], (string)$value, $content);
         }
         return $content;
     }

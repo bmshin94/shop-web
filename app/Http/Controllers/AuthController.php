@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\FindEmailRequest;
+use App\Services\MemberService;
 use App\Models\Member;
 use App\Models\PhoneVerification;
 use App\Models\EmailVerification;
@@ -161,6 +163,16 @@ class AuthController extends Controller
     }
 
     /**
+     * AuthController 생성자
+     * 
+     * @param \App\Services\MemberService $memberService
+     */
+    public function __construct(\App\Services\MemberService $memberService)
+    {
+        $this->memberService = $memberService;
+    }
+
+    /**
      * 비밀번호 찾기 페이지 표시
      */
     public function showFindPasswordForm()
@@ -178,16 +190,16 @@ class AuthController extends Controller
 
     /**
      * 아이디(이메일) 찾기 처리
+     * 
+     * @param \App\Http\Requests\Auth\FindEmailRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function findEmail(Request $request)
+    public function findEmail(\App\Http\Requests\Auth\FindEmailRequest $request)
     {
-        $request->validate([
-            'phone' => ['required', 'string'],
-        ]);
-
+        // 1. 휴대폰 번호 전처리 (하이픈 제거)
         $phone = str_replace('-', '', $request->phone);
 
-        // 휴대폰 인증 여부 확인
+        // 2. 휴대폰 인증 여부 확인 (PhoneVerification 테이블 조회)
         $isVerified = PhoneVerification::where('phone', $phone)
             ->where('is_verified', true)
             ->exists();
@@ -199,27 +211,18 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $member = Member::where('phone', $request->phone)
-            ->orWhere('phone', $phone)
-            ->first();
+        // 3. MemberService를 통해 마스킹된 이메일 주소 조회
+        $maskedEmail = $this->memberService->findEmailByPhone($request->phone);
 
-        if (!$member) {
+        if (!$maskedEmail) {
             return response()->json([
                 'success' => false,
                 'message' => '입력하신 번호로 가입된 정보가 없습니다.',
             ], 404);
         }
 
-        // 인증 정보 사용 완료 처리 (삭제)
+        // 4. 인증 정보 사용 완료 처리 (보안을 위해 삭제)
         PhoneVerification::where('phone', $phone)->delete();
-
-        // 이메일 마스킹 처리 (예: ab****@example.com)
-        $emailParts = explode('@', $member->email);
-        $name = $emailParts[0];
-        $domain = $emailParts[1];
-        $length = strlen($name);
-        $visibleCount = $length > 4 ? 3 : 2;
-        $maskedEmail = substr($name, 0, $visibleCount) . str_repeat('*', $length - $visibleCount) . '@' . $domain;
 
         return response()->json([
             'success' => true,

@@ -14,9 +14,38 @@ class SizeSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. 사이즈 그룹 생성
-        $clothingGroup = SizeGroup::updateOrCreate(['name' => '의류']);
-        $shoeGroup = SizeGroup::updateOrCreate(['name' => '신발']);
+        // 1. 사이즈 그룹 생성 및 가이드 데이터 설정
+        $clothingGuide = [
+            'headers' => ['사이즈(cm)', '어깨너비', '가슴단면', '소매길이', '총장'],
+            'rows' => [
+                ['S', '44', '50', '22', '68'],
+                ['M', '46', '52', '23', '70'],
+                ['L', '48', '54', '24', '72'],
+                ['XL', '50', '56', '25', '74'],
+                ['Free', '52', '58', '26', '76'],
+            ]
+        ];
+
+        $shoeGuide = [
+            'headers' => ['한국(mm)', 'US', 'UK', 'EU'],
+            'rows' => [
+                ['230', '5', '4', '37'],
+                ['240', '6', '5', '38'],
+                ['250', '7', '6', '39.5'],
+                ['260', '8', '7', '41'],
+                ['270', '9', '8', '42.5'],
+                ['280', '10', '9', '44'],
+            ]
+        ];
+
+        $clothingGroup = SizeGroup::updateOrCreate(
+            ['name' => '의류'],
+            ['size_guide' => $clothingGuide]
+        );
+        $shoeGroup = SizeGroup::updateOrCreate(
+            ['name' => '신발'],
+            ['size_guide' => $shoeGuide]
+        );
 
         // 2. 의류 사이즈 데이터
         $clothingSizes = [

@@ -2,38 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\PhoneVerificationRequest;
+use App\Http\Requests\Auth\PhoneVerifyRequest;
+use App\Http\Requests\Auth\EmailVerificationRequest;
+use App\Http\Requests\Auth\EmailVerifyRequest;
 use App\Models\PhoneVerification;
 use App\Models\EmailVerification;
 use App\Models\Member;
 use App\Services\SmsService;
 use App\Mail\PasswordResetCode;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class VerificationController extends Controller
 {
     protected $smsService;
 
+    /**
+     * VerificationController 생성자
+     * 
+     * @param SmsService $smsService
+     */
     public function __construct(SmsService $smsService)
     {
         $this->smsService = $smsService;
     }
 
     /**
-     * 인증번호 발송
+     * 휴대폰 인증번호 발송
+     * 
+     * @param PhoneVerificationRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sendCode(Request $request)
+    public function sendCode(PhoneVerificationRequest $request)
     {
-        $request->validate([
-            'phone' => ['required', 'string', 'regex:/^010-?\d{3,4}-?\d{4}$/'],
-        ]);
-
+        // 1. 휴대폰 번호 전처리 (하이픈 제거)
         $phone = str_replace('-', '', $request->phone);
         $code = sprintf('%06d', mt_rand(0, 999999));
         $expiresAt = Carbon::now()->addMinutes(3);
 
-        // 이전 인증 정보 삭제
+        // 2. 이전 인증 정보 삭제 및 신규 생성
         PhoneVerification::where('phone', $phone)->delete();
 
         PhoneVerification::create([
@@ -42,12 +51,13 @@ class VerificationController extends Controller
             'expires_at' => $expiresAt,
         ]);
 
-        // DB 템플릿 기반 메시지 생성 (없으면 기본 메시지 사용) 🚀
+        // 3. DB 템플릿 기반 메시지 생성 (없으면 기본 메시지 사용)
         $template = \App\Models\NotificationTemplate::where('code', 'VERIFICATION_CODE')->where('is_active', true)->first();
         $message = $template 
             ? $template->parseContent(['code' => $code])
             : "[Active Women] 인증번호 [{$code}]를 입력해주세요.";
 
+        // 4. SMS 발송 처리
         $result = $this->smsService->sendSms($phone, $message);
 
         if ($result['result_code'] > 0) {
@@ -64,15 +74,14 @@ class VerificationController extends Controller
     }
 
     /**
-     * 인증번호 확인
+     * 휴대폰 인증번호 확인
+     * 
+     * @param PhoneVerifyRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function verifyCode(Request $request)
+    public function verifyCode(PhoneVerifyRequest $request)
     {
-        $request->validate([
-            'phone' => ['required', 'string'],
-            'code' => ['required', 'string', 'size:6'],
-        ]);
-
+        // 1. 휴대폰 번호 하이픈 제거 및 일치하는 인증 정보 조회
         $phone = str_replace('-', '', $request->phone);
         
         $verification = PhoneVerification::where('phone', $phone)
@@ -80,6 +89,7 @@ class VerificationController extends Controller
             ->where('expires_at', '>', Carbon::now())
             ->first();
 
+        // 2. 인증 완료 상태 업데이트
         if ($verification) {
             $verification->update(['is_verified' => true]);
             return response()->json([
@@ -96,14 +106,13 @@ class VerificationController extends Controller
 
     /**
      * 이메일 인증번호 발송 (비밀번호 찾기용)
+     * 
+     * @param EmailVerificationRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sendEmailCode(Request $request)
+    public function sendEmailCode(EmailVerificationRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
-        // 가입된 회원인지 확인
+        // 1. 가입된 회원인지 확인
         $exists = Member::where('email', $request->email)->exists();
         if (!$exists) {
             return response()->json([
@@ -112,6 +121,7 @@ class VerificationController extends Controller
             ], 422);
         }
 
+        // 2. 인증 코드 생성 및 저장 (3분 만료)
         $email = $request->email;
         $code = sprintf('%06d', mt_rand(0, 999999));
         $expiresAt = Carbon::now()->addMinutes(3);
@@ -124,6 +134,7 @@ class VerificationController extends Controller
             'expires_at' => $expiresAt,
         ]);
 
+        // 3. 인증 메일 발송
         try {
             Mail::to($email)->send(new PasswordResetCode($code));
             return response()->json([
@@ -131,7 +142,7 @@ class VerificationController extends Controller
                 'message' => '인증번호가 이메일로 발송되었습니다.',
             ]);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Email Send Error: " . $e->getMessage());
+            Log::error("Email Send Error: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => '메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.',
@@ -141,19 +152,19 @@ class VerificationController extends Controller
 
     /**
      * 이메일 인증번호 확인
+     * 
+     * @param EmailVerifyRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function verifyEmailCode(Request $request)
+    public function verifyEmailCode(EmailVerifyRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'code' => ['required', 'string', 'size:6'],
-        ]);
-
+        // 1. 인증 정보 조회 및 유효성 검사
         $verification = EmailVerification::where('email', $request->email)
             ->where('code', $request->code)
             ->where('expires_at', '>', Carbon::now())
             ->first();
 
+        // 2. 인증 완료 처리
         if ($verification) {
             $verification->update(['is_verified' => true]);
             return response()->json([

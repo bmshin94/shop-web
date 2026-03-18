@@ -28,7 +28,7 @@
                     <div>
                         <label for="phone" class="block text-sm font-bold text-text-main mb-2">휴대폰 번호</label>
                         <div class="flex gap-2">
-                            <input id="phone" name="phone" type="tel" required
+                            <input id="phone" name="phone" type="tel"
                                 class="flex-1 block w-full appearance-none rounded-xl border border-gray-200 px-4 py-3 text-text-main placeholder-text-muted focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-sm transition-colors"
                                 placeholder="010-0000-0000" />
                             <button type="button" id="btnSendSms"

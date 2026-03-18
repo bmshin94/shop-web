@@ -271,6 +271,32 @@ $(document).ready(function() {
     const $activeFiltersContainer = $('#active-filters');
     
     /**
+     * 배열 파라미터 가져오기 (key[], key[0] 형태 모두 매칭)
+     */
+    function getArrayParams(params, baseKey) {
+        const values = [];
+        for (const [key, val] of params.entries()) {
+            if (key === baseKey + '[]' || (key.startsWith(baseKey + '[') && key.endsWith(']'))) {
+                values.push(val);
+            }
+        }
+        return values;
+    }
+
+    /**
+     * 배열 파라미터 일괄 삭제
+     */
+    function clearArrayParams(params, baseKey) {
+        const keysToDelete = [];
+        for (const key of params.keys()) {
+            if (key === baseKey + '[]' || (key.startsWith(baseKey + '[') && key.endsWith(']'))) {
+                keysToDelete.push(key);
+            }
+        }
+        keysToDelete.forEach(k => params.delete(k));
+    }
+
+    /**
      * 필터링 상태 적용
      */
     function applyFilters() {
@@ -279,21 +305,23 @@ $(document).ready(function() {
 
         const cat = urlParams.get('category');
         if (cat) {
-            const $catEl = $(`.filter-category[data-filter-value="${cat}"]`);
+            const $catEl = $('.filter-category[data-filter-value="' + cat + '"]');
             if ($catEl.length) {
-                // 텍스트 노드만 추출하여 'chevron_right' 같은 아이콘 텍스트 제외! 
-                const pureText = $catEl.first().find('span:first').text().trim();
+                let pureText = '';
+                if ($catEl.first().find('span:first').length) {
+                    pureText = $catEl.first().find('span:first').text().trim();
+                } else {
+                    pureText = $catEl.first().text().trim();
+                }
                 addFilterTag('category', pureText, cat);
             }
         }
 
-        urlParams.getAll('colors[]').forEach(color => {
-            addFilterTag('colors[]', color, color);
-        });
+        const colors = getArrayParams(urlParams, 'colors');
+        colors.forEach(color => addFilterTag('colors', color, color));
 
-        urlParams.getAll('price_range[]').forEach(price => {
-            addFilterTag('price_range[]', price, price);
-        });
+        const prices = getArrayParams(urlParams, 'price_range');
+        prices.forEach(price => addFilterTag('price_range', price, price));
     }
 
     /**
@@ -316,11 +344,12 @@ $(document).ready(function() {
      */
     function removeFilter(type, value) {
         const urlParams = new URLSearchParams(window.location.search);
-        if (type === 'category') urlParams.delete('category');
-        else {
-            const current = urlParams.getAll(type).filter(v => v !== value);
-            urlParams.delete(type);
-            current.forEach(v => urlParams.append(type, v));
+        if (type === 'category') {
+            urlParams.delete('category');
+        } else {
+            const current = getArrayParams(urlParams, type).filter(v => v !== value);
+            clearArrayParams(urlParams, type);
+            current.forEach(v => urlParams.append(type + '[]', v));
         }
         urlParams.delete('page');
         window.location.href = window.location.pathname + '?' + urlParams.toString();
@@ -335,14 +364,14 @@ $(document).ready(function() {
             if (value) urlParams.set('category', value);
             else urlParams.delete('category');
         } else {
+            let current = getArrayParams(urlParams, type);
             if (active) {
-                const current = urlParams.getAll(type);
-                if (!current.includes(value)) urlParams.append(type, value);
+                if (!current.includes(value)) current.push(value);
             } else {
-                const current = urlParams.getAll(type).filter(v => v !== value);
-                urlParams.delete(type);
-                current.forEach(v => urlParams.append(type, v));
+                current = current.filter(v => v !== value);
             }
+            clearArrayParams(urlParams, type);
+            current.forEach(v => urlParams.append(type + '[]', v));
         }
         urlParams.delete('page');
         window.location.href = window.location.pathname + '?' + urlParams.toString();
@@ -357,12 +386,12 @@ $(document).ready(function() {
     // 색상 필터 클릭 이벤트 
     $('.filter-color').on('click', function() {
         const isSelected = $(this).attr('data-selected') === 'true';
-        updateFilter('colors[]', $(this).data('filterValue'), !isSelected);
+        updateFilter('colors', $(this).data('filterValue'), !isSelected);
     });
 
     // 가격 필터 변경 이벤트 
     $('.filter-price').on('change', function() {
-        updateFilter('price_range[]', $(this).data('filterValue'), this.checked);
+        updateFilter('price_range', $(this).data('filterValue'), this.checked);
     });
 
     // 정렬 순서 변경 이벤트

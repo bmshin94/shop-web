@@ -52,7 +52,28 @@
         border-radius: 20px !important;
         box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1) !important;
         border: 1px solid #f3f4f6 !important;
-        min-width: 307px !important;
+        width: 320px !important;
+        padding-bottom: 5px !important;
+        box-sizing: border-box !important;
+    }
+    .flatpickr-innerContainer, .flatpickr-rContainer, .flatpickr-days, .dayContainer {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+    @media (max-width: 640px) {
+        .flatpickr-calendar {
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            right: auto !important;
+            margin-top: 10px !important;
+        }
+        .flatpickr-calendar.arrowTop:before,
+        .flatpickr-calendar.arrowTop:after,
+        .flatpickr-calendar.arrowBottom:before,
+        .flatpickr-calendar.arrowBottom:after {
+            display: none !important; /* 화살표 제거 (중앙 정렬 시 어긋나 보이기 때문) */
+        }
     }
     .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
     .flatpickr-day.selected:hover, .flatpickr-day.nextMonthDay.selected, 

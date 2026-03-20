@@ -8,7 +8,7 @@
     <nav class="flex items-center gap-2 text-sm text-text-muted mb-6">
         <a href="{{ route('mypage') }}" class="hover:text-primary transition-colors">마이페이지</a>
         <span class="material-symbols-outlined text-xs">chevron_right</span>
-        <a href="{{ route('mypage.order-list') }}" class="hover:text-primary transition-colors">주문/배송 조회</a>
+        <a href="{{ route('mypage.order-list', request()->query()) }}" class="hover:text-primary transition-colors">주문/배송 조회</a>
         <span class="material-symbols-outlined text-xs">chevron_right</span>
         <span class="font-bold text-text-main">주문 상세</span>
     </nav>
@@ -160,7 +160,7 @@
         <!-- 하단 버튼 영역 -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
             <div class="flex flex-wrap items-center gap-3">
-                <a href="{{ route('mypage.order-list') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                <a href="{{ route('mypage.order-list', request()->query()) }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">
                     <span class="material-symbols-outlined text-lg">arrow_back</span> 목록으로
                 </a>
                 <a href="{{ route('mypage') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 text-text-main text-sm font-bold rounded-xl hover:bg-gray-50 transition-colors">

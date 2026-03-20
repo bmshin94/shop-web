@@ -483,6 +483,21 @@ class CheckoutService
                 $member->increment('points', $rewardPoints);
             }
 
+            // 주문 완료 알림 발송 🚀
+            try {
+                $smsService = app(\App\Services\SmsService::class);
+                $template = \App\Models\NotificationTemplate::where('code', 'ORDER_COMPLETED')->where('is_active', true)->first();
+                if ($template) {
+                    $message = $template->parseContent([
+                        'order_number' => $order->order_number,
+                        'final_total' => number_format($order->total_amount) . '원',
+                    ]);
+                    $smsService->sendSms($order->recipient_phone, $message);
+                }
+            } catch (\Exception $e) {
+                Log::error('주문 완료 알림 발송 실패: ' . $e->getMessage());
+            }
+
             // 세션 초기화
             session()->forget('buy_now');
 

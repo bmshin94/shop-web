@@ -24,7 +24,7 @@
         <div class="flex-1 w-full space-y-6">
             
             <!-- Modern Filter Section -->
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 transition-all">
                 <form action="{{ route('mypage.order-list') }}" method="GET" class="p-5 lg:p-8 space-y-5">
                     <input type="hidden" name="months" id="selected-months" value="{{ $months }}">
                     <!-- Top Row: Search & Status -->
@@ -102,7 +102,7 @@
                                 @if($itemIndex === 0)
                                 <td class="py-6 px-8 text-center border-r border-gray-50/50 align-top" rowspan="{{ $order->items->count() }}">
                                     <p class="font-semibold text-text-main text-sm">{{ $order->ordered_at->format('Y.m.d') }}</p>
-                                    <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number]) }}" class="inline-block mt-2 px-2.5 py-1 bg-gray-50 rounded-lg text-xs font-semibold text-text-muted hover:bg-primary-light hover:text-primary transition-colors tracking-tighter">
+                                    <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number] + request()->query()) }}" class="inline-block mt-2 px-2.5 py-1 bg-gray-50 rounded-lg text-xs font-semibold text-text-muted hover:bg-primary-light hover:text-primary transition-colors tracking-tighter">
                                         {{ $order->order_number }}
                                     </a>
                                 </td>
@@ -183,7 +183,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-bold text-text-muted">{{ $order->ordered_at->format('Y.m.d') }}</span>
                                 <span class="text-[10px] text-gray-300">|</span>
-                                <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number]) }}" class="text-xs font-black text-text-main underline decoration-gray-200 underline-offset-4">{{ $order->order_number }}</a>
+                                <a href="{{ route('mypage.order-detail', ['order_number' => $order->order_number] + request()->query()) }}" class="text-xs font-black text-text-main underline decoration-gray-200 underline-offset-4">{{ $order->order_number }}</a>
                             </div>
                             @php
                                 $statusClasses = [
@@ -260,21 +260,27 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const monthsInput = document.getElementById('selected-months');
+        const startEl = document.querySelector("input[name='start_date']");
+        const endEl = document.querySelector("input[name='end_date']");
         
-        const fpStart = flatpickr("input[name='start_date']", {
+        // Flatpickr 달력 인스턴스 생성
+        flatpickr(startEl, {
             locale: "ko",
             dateFormat: "Y-m-d",
-            disableMobile: "true",
+            disableMobile: true,
+            appendTo: document.body, // body에 렌더링하여 부모 컨테이너에 의한 잘림 방지
+            position: "auto",
             onChange: function() {
-                // 날짜 직접 변경 시 개월 수 버튼 해제
                 monthsInput.value = '';
                 resetPeriodButtons();
             }
         });
-        const fpEnd = flatpickr("input[name='end_date']", {
+        flatpickr(endEl, {
             locale: "ko",
             dateFormat: "Y-m-d",
-            disableMobile: "true",
+            disableMobile: true,
+            appendTo: document.body, // body에 렌더링하여 부모 컨테이너에 의한 잘림 방지
+            position: "auto",
             onChange: function() {
                 monthsInput.value = '';
                 resetPeriodButtons();
@@ -292,7 +298,7 @@
         document.querySelectorAll('.btn-period').forEach(btn => {
             btn.addEventListener('click', function() {
                 const months = parseInt(this.dataset.months);
-                monthsInput.value = months; // Hidden 필드에 저장
+                monthsInput.value = months;
 
                 const now = new Date();
                 const startDate = new Date();
@@ -305,16 +311,35 @@
                     return `${y}-${m}-${d}`;
                 };
 
-                // 입력창 및 Flatpickr 업데이트
-                fpStart.setDate(formatDate(startDate));
-                fpEnd.setDate(formatDate(now));
+                const formattedStart = formatDate(startDate);
+                const formattedEnd = formatDate(now);
+
+                // Flatpickr 인스턴스를 직접 호출하여 날짜 동기화
+                if (startEl._flatpickr) startEl._flatpickr.setDate(formattedStart);
+                if (endEl._flatpickr) endEl._flatpickr.setDate(formattedEnd);
+
+                // 입력창 value 강제 동기화 
+                startEl.value = formattedStart;
+                endEl.value = formattedEnd;
 
                 // 버튼 스타일 업데이트
                 resetPeriodButtons();
                 this.classList.remove('bg-white', 'text-text-muted', 'border-gray-200');
                 this.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md', 'shadow-primary/20');
+
+                // 조회 버튼 클릭 시에만 폼 제출되도록 자동 제출 생략
             });
         });
+
+        // 페이지 로드 시 현재 선택된 기간 버튼 활성화
+        if (monthsInput.value) {
+            const activeBtn = document.querySelector(`.btn-period[data-months="${monthsInput.value}"]`);
+            if (activeBtn) {
+                resetPeriodButtons();
+                activeBtn.classList.remove('bg-white', 'text-text-muted', 'border-gray-200');
+                activeBtn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md', 'shadow-primary/20');
+            }
+        }
 
         // 구매확정 버튼 클릭 이벤트
         document.querySelectorAll('.btn-confirm-purchase').forEach(btn => {

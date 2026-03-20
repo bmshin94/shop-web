@@ -289,20 +289,6 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request, \App\Services\MemberService $memberService)
     {
-        // 휴대폰 인증 최종 확인
-        $phone = str_replace('-', '', $request->phone);
-        $isVerified = PhoneVerification::where('phone', $phone)
-            ->where('is_verified', true)
-            ->exists();
-
-        if (!$isVerified) {
-            return response()->json([
-                'success' => false,
-                'message' => '휴대폰 인증이 완료되지 않았습니다.',
-                'errors' => ['phone' => ['휴대폰 인증을 완료해주세요.']]
-            ], 422);
-        }
-
         // MemberService를 통해 회원 가입 및 환영 알림 처리
         $member = $memberService->register($request->all());
 

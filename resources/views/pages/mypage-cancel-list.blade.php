@@ -54,7 +54,7 @@
         <div class="flex-1 w-full space-y-6">
             
             <!-- Modern Filter Section -->
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 transition-all">
                 <form action="{{ route('mypage.cancel-list') }}" method="GET" class="p-5 lg:p-8 space-y-5">
                     <input type="hidden" name="months" id="selected-months" value="{{ $months }}">
                     <!-- Top Row: Search & Type & Status -->
@@ -274,20 +274,25 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const monthsInput = document.getElementById('selected-months');
+        const startEl = document.querySelector("input[name='start_date']");
+        const endEl = document.querySelector("input[name='end_date']");
         
-        const fpStart = flatpickr("input[name='start_date']", {
+        // Flatpickr 인스턴스 생성! ✨
+        flatpickr(startEl, {
             locale: "ko",
             dateFormat: "Y-m-d",
-            disableMobile: "true",
+            disableMobile: true,
+            static: true, // 컨테이너 안에서 안정적으로 위치 🚀
             onChange: function() {
                 monthsInput.value = '';
                 resetPeriodButtons();
             }
         });
-        const fpEnd = flatpickr("input[name='end_date']", {
+        flatpickr(endEl, {
             locale: "ko",
             dateFormat: "Y-m-d",
-            disableMobile: "true",
+            disableMobile: true,
+            static: true, // 컨테이너 안에서 안정적으로 위치 🚀
             onChange: function() {
                 monthsInput.value = '';
                 resetPeriodButtons();
@@ -318,16 +323,35 @@
                     return `${y}-${m}-${d}`;
                 };
 
-                // 입력창 및 Flatpickr 업데이트
-                fpStart.setDate(formatDate(startDate));
-                fpEnd.setDate(formatDate(now));
+                const formattedStart = formatDate(startDate);
+                const formattedEnd = formatDate(now);
+
+                // 엘리먼트의 _flatpickr 인스턴스를 직접 호출하여 날짜 동기화 🚀
+                if (startEl._flatpickr) startEl._flatpickr.setDate(formattedStart);
+                if (endEl._flatpickr) endEl._flatpickr.setDate(formattedEnd);
+
+                // 입력창 value 강제 동기화 
+                startEl.value = formattedStart;
+                endEl.value = formattedEnd;
 
                 // 버튼 스타일 업데이트
                 resetPeriodButtons();
                 this.classList.remove('bg-white', 'text-text-muted', 'border-gray-200');
                 this.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md', 'shadow-primary/20');
+
+                // 오빠가 "조회" 버튼 누를 때만 조회되게 자동 제출은 하지 않아! 💖
             });
         });
+
+        // 페이지 로드 시 현재 months 버튼에 불 켜기 ✨
+        if (monthsInput.value) {
+            const activeBtn = document.querySelector(`.btn-period[data-months="${monthsInput.value}"]`);
+            if (activeBtn) {
+                resetPeriodButtons();
+                activeBtn.classList.remove('bg-white', 'text-text-muted', 'border-gray-200');
+                activeBtn.classList.add('bg-primary', 'text-white', 'border-primary', 'shadow-md', 'shadow-primary/20');
+            }
+        }
     });
 </script>
 @endpush

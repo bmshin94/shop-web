@@ -79,9 +79,30 @@ class OrderManagementService
             return $this->checkoutService->cancelOrder($order, $payload['admin_memo'] ?? '관리자에 의한 취소 처리');
         }
 
+        // 배송 시작 알림 발송 체크 🚀
+        $isTransitionToShipping = ($payload['order_status'] === '배송중' && $order->order_status !== '배송중');
+
         $normalizedPayload = $this->normalizeStatusPayload($order, $payload);
 
         $order->update($normalizedPayload);
+
+        // 배송 시작 안내 발송 💌
+        if ($isTransitionToShipping) {
+            try {
+                $smsService = app(\App\Services\SmsService::class);
+                $template = \App\Models\NotificationTemplate::where('code', 'SHIPPING_STARTED')->where('is_active', true)->first();
+                if ($template) {
+                    $message = $template->parseContent([
+                        'order_number' => $order->order_number,
+                        'shipping_company' => $order->shipping_company ?? '택배',
+                        'tracking_number' => $order->tracking_number ?? '준비중',
+                    ]);
+                    $smsService->sendSms($order->recipient_phone, $message);
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('배송 시작 알림 발송 실패: ' . $e->getMessage());
+            }
+        }
 
         return $order->refresh();
     }

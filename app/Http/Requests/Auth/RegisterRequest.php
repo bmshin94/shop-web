@@ -28,10 +28,23 @@ class RegisterRequest extends FormRequest
                 'required', 
                 'string', 
                 'min:8', 
-                'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&^#_-])[A-Za-z\d@$!%*?&^#_-]{8,}$/ '
+                'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&^#_-])[A-Za-z\d@$!%*?&^#_-]{8,}$/'
             ],
             'password_confirm' => ['required', 'same:password'],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => [
+                'required', 
+                'string', 
+                'max:20',
+                function ($attribute, $value, $fail) {
+                    $phone = str_replace('-', '', $value);
+                    $isVerified = \App\Models\PhoneVerification::where('phone', $phone)
+                        ->where('is_verified', true)
+                        ->exists();
+                    if (!$isVerified) {
+                        $fail('휴대폰 인증을 완료해주세요.');
+                    }
+                },
+            ],
         ];
     }
 

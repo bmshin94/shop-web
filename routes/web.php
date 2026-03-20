@@ -247,7 +247,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/mypage/recent/selected', [MemberController::class, 'deleteSelectedRecentViews'])->name('mypage.recent.delete-selected');
     Route::delete('/mypage/recent/clear', [MemberController::class, 'clearRecentViews'])->name('mypage.recent.clear');
     Route::get('/mypage/receipt', [MemberController::class, 'receiptList'])->name('mypage.receipt');
-    Route::get('/mypage/withdraw', function () { return view('pages.mypage-withdraw'); })->name('mypage.withdraw');
+    Route::get('/mypage/withdraw', function () { 
+        return view('pages.mypage-withdraw', ['member' => auth()->user()]); 
+    })->name('mypage.withdraw');
+    Route::post('/mypage/withdraw', [MemberController::class, 'withdraw'])->name('mypage.withdraw.post');
     Route::get('/mypage/inquiry', [MemberController::class, 'inquiryList'])->name('mypage.inquiry');
     Route::post('/mypage/inquiry', [MemberController::class, 'storeInquiry'])->name('mypage.inquiry.store');
     Route::get('/qna/write', function () { return view('pages.qna-write'); })->name('qna.write');
@@ -296,15 +299,13 @@ Route::middleware('guest')->group(function () {
     // 소셜 로그인
     Route::get('/auth/{provider}/redirect', [AuthController::class, 'redirectToProvider'])->name('login.social');
     Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback'])->name('login.social.callback');
-
-    // 휴대폰 인증
-    Route::post('/verify-phone/send', [VerificationController::class, 'sendCode'])->name('verify.phone.send');
-    Route::post('/verify-phone/confirm', [VerificationController::class, 'verifyCode'])->name('verify.phone.confirm');
-
-    // 이메일 인증 (비밀번호 찾기용)
-    Route::post('/verify-email/send', [VerificationController::class, 'sendEmailCode'])->name('email.send');
-    Route::post('/verify-email/confirm', [VerificationController::class, 'verifyEmailCode'])->name('email.verify');
 });
+
+// 휴대폰 및 이메일 인증 (로그인 여부와 상관없이 접근 가능하도록 밖으로 이동 ✨)
+Route::post('/verify-phone/send', [VerificationController::class, 'sendCode'])->name('verify.phone.send');
+Route::post('/verify-phone/confirm', [VerificationController::class, 'verifyCode'])->name('verify.phone.confirm');
+Route::post('/verify-email/send', [VerificationController::class, 'sendEmailCode'])->name('email.send');
+Route::post('/verify-email/confirm', [VerificationController::class, 'verifyEmailCode'])->name('email.verify');
 
 // 공통 페이지 (인증 여부와 상관없이 접근 가능)
 Route::get('/support', [SupportController::class, 'index'])->name('support');

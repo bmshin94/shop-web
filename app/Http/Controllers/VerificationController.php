@@ -67,9 +67,11 @@ class VerificationController extends Controller
             ]);
         }
 
+        \Log::error("SMS Send Failure Detail: " . json_encode($result));
+
         return response()->json([
             'success' => false,
-            'message' => '인증번호 발송에 실패했습니다. 관리자에게 문의하세요.',
+            'message' => '인증번호 발송에 실패했습니다: ' . ($result['message'] ?? '알 수 없는 오류'),
         ], 500);
     }
 

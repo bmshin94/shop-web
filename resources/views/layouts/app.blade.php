@@ -158,6 +158,11 @@
   <!-- Toast Container -->
   <div id="toastContainer" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[10001] flex flex-col gap-3 pointer-events-none"></div>
 
+  <!-- Back to Top Button ✨ -->
+  <button id="backToTop" class="fixed bottom-8 right-8 z-[100] flex size-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none hover:bg-red-600 active:scale-95 group">
+    <span class="material-symbols-outlined text-xl group-hover:-translate-y-1 transition-transform">arrow_upward</span>
+  </button>
+
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
@@ -250,6 +255,21 @@
       };
 
       $('#close-mobile-menu, #mobile-menu-overlay').on('click', closeMobileMenu);
+
+      // 4. Back to Top 버튼 제어 ✨
+      const $btt = $('#backToTop');
+      if ($btt.length) {
+        $(window).on('scroll', function() {
+          if ($(window).scrollTop() > 600) {
+            $btt.removeClass('opacity-0 translate-y-4 pointer-events-none').addClass('opacity-100 translate-y-0 pointer-events-auto');
+          } else {
+            $btt.removeClass('opacity-100 translate-y-0 pointer-events-auto').addClass('opacity-0 translate-y-4 pointer-events-none');
+          }
+        });
+        $btt.on('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
 
     });
 

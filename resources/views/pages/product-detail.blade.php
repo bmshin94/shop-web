@@ -377,9 +377,6 @@
                     </div>
                     <h3 class="text-xl font-bold text-text-main mb-2">아직 작성된 리뷰가 없습니다</h3>
                     <p class="text-sm text-text-muted mb-8 max-w-sm leading-relaxed">이 상품을 구매하신 후 첫 번째 리뷰를 남겨주세요!</p>
-                    <a href="{{ route('review.write', ['product_id' => $product->id]) }}" class="inline-flex items-center px-6 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm">
-                        <span class="material-symbols-outlined text-sm align-middle mr-1">edit</span> 리뷰 작성하기
-                    </a>
                 </div>
                 @endforelse
             </div>
@@ -625,10 +622,6 @@
 </div>
 
 <div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9998] flex flex-col items-center gap-3 pointer-events-none"></div>
-
-<button id="backToTop" class="fixed bottom-6 right-6 z-[100] flex size-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none hover:bg-red-600">
-    <span class="material-symbols-outlined text-xl">arrow_upward</span>
-</button>
 @endsection
 
 @push('scripts')

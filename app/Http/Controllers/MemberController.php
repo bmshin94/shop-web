@@ -170,30 +170,35 @@ class MemberController extends Controller
     /**
      * 최근 본 상품 선택 삭제 
      */
-    public function deleteSelectedRecentViews(Request $request): JsonResponse
+    /**
+     * 회원 탈퇴 처리 😢
+     * 
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function withdraw(Request $request): JsonResponse
     {
         try {
+            /** @var Member $member */
             $member = Auth::user();
-            $ids = $request->input('ids', []);
 
-            if (empty($ids)) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => '삭제할 상품을 선택해주세요.'
-                ], 422);
-            }
+            // 1. 서비스 호출하여 탈퇴 처리 🚀
+            $this->memberService->withdraw($member);
 
-            $this->memberService->deleteSelectedRecentViews($member, $ids);
+            // 2. 로그아웃 및 세션 무효화 ✨
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return response()->json([
-                'status' => 'success',
-                'message' => '선택한 상품이 삭제되었습니다.'
+                'success' => true,
+                'message' => '회원 탈퇴가 정상적으로 처리되었습니다. 그동안 이용해주셔서 감사합니다.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'message' => '삭제 처리 중 오류가 발생했습니다.'
-            ], 500);
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
 
@@ -519,13 +524,32 @@ class MemberController extends Controller
         }
 
         try {
-            // 상태 변경 
-            $order->update(['order_status' => '구매확정']);
+            \DB::transaction(function () use ($member, $order) {
+                // 1. 주문 상태 변경 ✅
+                $order->update(['order_status' => '구매확정']);
+                
+                // 2. 대기 중인 포인트 찾기 🔍
+                $pendingPoints = \App\Models\PointHistory::where('order_id', $order->id)
+                    ->where('status', '적립대기')
+                    ->where('member_id', $member->id)
+                    ->get();
+
+                foreach ($pendingPoints as $history) {
+                    // 실제 포인트 지급 💰
+                    $member->increment('points', $history->amount);
+                    
+                    // 이력 업데이트 ✨
+                    $history->update([
+                        'status' => '적립완료',
+                        'balance_after' => $member->points,
+                        'reason' => str_replace('적립 대기', '적립 완료', $history->reason)
+                    ]);
+                }
+            });
             
-            // TODO: 구매확정 시 적립금 지급 등의 추가 로직이 필요하다면 CheckoutService 등에 위임하는 것이 좋습니다.
-            
-            return response()->json(['message' => '구매확정이 완료되었습니다! 즐거운 쇼핑 되세요! ']);
+            return response()->json(['message' => '구매확정이 완료되었습니다! 적립금이 지급되었어요. 💖']);
         } catch (\Exception $e) {
+            \Log::error("구매확정 처리 실패: " . $e->getMessage());
             return response()->json(['message' => '구매확정 처리 중 오류가 발생했습니다.'], 500);
         }
     }

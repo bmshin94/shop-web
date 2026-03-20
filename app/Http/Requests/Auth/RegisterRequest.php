@@ -23,7 +23,24 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
+            'email' => [
+                'required', 
+                'string', 
+                'email', 
+                'max:255', 
+                'unique:members',
+                function ($attribute, $value, $fail) {
+                    $withdrawn = \DB::table('withdrawn_accounts')
+                        ->where('email', $value)
+                        ->where('withdrawn_at', '>=', now()->subDays(30))
+                        ->first();
+                    
+                    if ($withdrawn) {
+                        $availableDate = \Carbon\Carbon::parse($withdrawn->withdrawn_at)->addDays(30)->format('Y년 m월 d일');
+                        $fail("해당 이메일은 탈퇴 후 30일이 지나지 않아 가입이 불가능합니다. ({$availableDate} 이후 가입 가능)");
+                    }
+                },
+            ],
             'password' => [
                 'required', 
                 'string', 

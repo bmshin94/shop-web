@@ -470,19 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----------------------------------------------------
     // Other Utilities
     // ----------------------------------------------------
-    const btt = document.getElementById("backToTop");
-    if (btt) {
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 600) {
-                btt.classList.replace("opacity-0", "opacity-100");
-                btt.classList.remove("pointer-events-none");
-            } else {
-                btt.classList.replace("opacity-100", "opacity-0");
-                btt.classList.add("pointer-events-none");
-            }
-        });
-        btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    }
 });
 
 // 전역 공개 (블레이드 인라인 스크립트에서도 사용)

@@ -84,6 +84,19 @@
                         @enderror
                     </div>
                     <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-main">미결제 자동취소 시간 (시간)</label>
+                        <input type="number" min="1" max="720" name="order_auto_cancel_hours" value="{{ old('order_auto_cancel_hours', $settings['order_auto_cancel_hours']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        @error('order_auto_cancel_hours')
+                            <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4">
+                <h4 class="text-base font-extrabold text-text-main">적립금/포인트 정책</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div class="space-y-2">
                         <label class="text-sm font-bold text-text-main">포인트 적립률 (%)</label>
                         <input type="number" min="0" max="100" step="0.1" name="point_earn_rate" value="{{ old('point_earn_rate', $settings['point_earn_rate']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
                         @error('point_earn_rate')
@@ -91,9 +104,30 @@
                         @enderror
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-bold text-text-main">미결제 자동취소 시간 (시간)</label>
-                        <input type="number" min="1" max="720" name="order_auto_cancel_hours" value="{{ old('order_auto_cancel_hours', $settings['order_auto_cancel_hours']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
-                        @error('order_auto_cancel_hours')
+                        <label class="text-sm font-bold text-text-main">신규 가입 축하금 (P)</label>
+                        <input type="number" min="0" name="welcome_points" value="{{ old('welcome_points', $settings['welcome_points']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        @error('welcome_points')
+                            <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-main">리뷰 작성 적립금 (P)</label>
+                        <input type="number" min="0" name="review_reward_points" value="{{ old('review_reward_points', $settings['review_reward_points']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        @error('review_reward_points')
+                            <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-main">최소 사용 가능 금액 (원)</label>
+                        <input type="number" min="0" name="min_use_points" value="{{ old('min_use_points', $settings['min_use_points']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        @error('min_use_points')
+                            <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-text-main">적립금 유효기간 (개월)</label>
+                        <input type="number" min="1" max="120" name="point_expiry_months" value="{{ old('point_expiry_months', $settings['point_expiry_months']) }}" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none">
+                        @error('point_expiry_months')
                             <p class="text-[12px] font-bold text-red-600">{{ $message }}</p>
                         @enderror
                     </div>

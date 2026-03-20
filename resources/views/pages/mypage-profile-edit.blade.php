@@ -126,9 +126,15 @@
                     </div>
 
                     {{-- 버튼 --}}
-                    <div class="flex gap-4 pt-8 border-t border-gray-50">
-                        <button type="button" onclick="history.back()" class="flex-1 h-14 bg-gray-100 text-text-muted text-sm font-black rounded-2xl hover:bg-gray-200 transition-all">취소</button>
-                        <button type="submit" class="flex-1 h-14 bg-primary text-white font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/30 active:scale-95">수정 완료</button>
+                    <div class="flex flex-col gap-6 pt-8 border-t border-gray-50">
+                        <div class="flex gap-4">
+                            <button type="button" onclick="history.back()" class="flex-1 h-14 bg-gray-100 text-text-muted text-sm font-black rounded-2xl hover:bg-gray-200 transition-all">취소</button>
+                            <button type="submit" class="flex-1 h-14 bg-primary text-white font-black rounded-2xl hover:bg-red-600 transition-all shadow-lg shadow-primary/30 active:scale-95">수정 완료</button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ route('mypage.withdraw') }}" class="text-xs text-gray-400 hover:text-primary underline font-bold transition-colors">회원 탈퇴를 원하시나요?</a>
+                        </div>
                     </div>
                 </form>
             </div>

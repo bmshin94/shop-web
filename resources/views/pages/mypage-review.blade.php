@@ -36,24 +36,24 @@
 
                 <!-- 작성 가능한 리뷰 탭 -->
                 <div id="tabAvailable" class="space-y-4">
-                    @forelse ($availableReviews as $product)
+                    @forelse ($availableReviews as $item)
                     <div class="group relative flex gap-4 sm:gap-6 p-4 sm:p-5 border border-gray-100 rounded-2xl sm:rounded-3xl hover:shadow-xl transition-all bg-white overflow-hidden active:scale-[0.98]">
                         <div class="size-20 sm:size-24 bg-gray-100 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 shadow-inner border border-gray-50">
-                            <img src="{{ $product->image_url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <img src="{{ $item->product->image_url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         </div>
                         <div class="flex flex-col sm:flex-row justify-between flex-1 min-w-0 py-0.5 gap-4">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 mb-1.5">
-                                    <span class="inline-flex px-2 py-0.5 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase tracking-tighter border border-primary/10">배송완료</span>
+                                    <span class="inline-flex px-2 py-0.5 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase tracking-tighter border border-primary/10">{{ $item->order->order_status }}</span>
                                     <span class="text-[10px] text-green-600 font-bold flex items-center gap-0.5">
                                         <span class="material-symbols-outlined text-[12px] filled" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
-                                        500P 적립
+                                        {{ number_format($reviewPoints) }}P 적립
                                     </span>
                                 </div>
-                                <h4 class="text-sm sm:text-base font-bold text-text-main group-hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2 leading-tight">{{ $product->name }}</h4>
+                                <h4 class="text-sm sm:text-base font-bold text-text-main group-hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2 leading-tight">{{ $item->product_name }}</h4>
                             </div>
                             <div class="flex items-center justify-end sm:justify-center shrink-0">
-                                <button onclick="openReviewModal({{ $product->id }}, '{{ addslashes($product->name) }}', '{{ $product->image_url }}')" 
+                                <button onclick="openReviewModal({{ $item->product_id }}, '{{ addslashes($item->product_name) }}', '{{ $item->product->image_url }}')" 
                                         class="px-6 py-2.5 sm:px-8 sm:py-3 bg-text-main text-white text-[11px] sm:text-xs font-black rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-200 whitespace-nowrap active:scale-95">
                                     리뷰 작성
                                 </button>

@@ -85,9 +85,31 @@ class ReviewController extends Controller
             'images' => $imagePaths,
         ]);
 
+        // 3. 포인트 적립 로직 추가 🚀 ✨
+        try {
+            $member = auth()->user();
+            $rewardPoints = \App\Models\SiteSetting::where('setting_key', 'review_reward_points')->first()?->setting_value ?? 500;
+            
+            if ($rewardPoints > 0) {
+                // 포인트 증액
+                $member->increment('points', $rewardPoints);
+
+                // 적립 이력 남기기 📝
+                \App\Models\PointHistory::create([
+                    'member_id' => $member->id,
+                    'reason' => "상품 리뷰 작성 적립 (#{$review->id})",
+                    'amount' => $rewardPoints,
+                    'balance_after' => $member->points,
+                    'expired_at' => now()->addYears(1), // 포인트 유효기간 1년 ⏰
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error("리뷰 포인트 적립 실패: " . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
-            'message' => '리뷰가 소중하게 등록되었습니다! 감사해요!',
+            'message' => '리뷰가 등록되었습니다! ' . number_format($rewardPoints) . 'P가 적립되었어요! 💖',
             'redirect' => route('product-detail', ['slug' => $review->product->slug])
         ]);
     }

@@ -12,8 +12,10 @@ class PointHistory extends Model
 
     protected $fillable = [
         'member_id',
+        'order_id',
         'reason',
         'amount',
+        'status',
         'remaining_amount',
         'balance_after',
         'expired_at',

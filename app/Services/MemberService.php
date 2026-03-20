@@ -28,16 +28,31 @@ class MemberService
      */
     public function register(array $data): Member
     {
-        // 1. 회원 정보 생성
+        // 1. 가입 축하금 설정 가져오기 ✨
+        $welcomePoints = \App\Models\SiteSetting::where('setting_key', 'welcome_points')->first()?->setting_value ?? 3000;
+
+        // 2. 회원 정보 생성
         $member = Member::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
+            'points' => $welcomePoints, // 가입 축하금 즉시 지급! 🎁
             'status' => '활성',
         ]);
 
-        // 2. 가입 축하 알림 발송 (푸쉬/데이터베이스)
+        // 3. 적립 이력 남기기 📝
+        if ($welcomePoints > 0) {
+            \App\Models\PointHistory::create([
+                'member_id' => $member->id,
+                'reason' => '신규 회원가입 축하 적립금 🎁',
+                'amount' => $welcomePoints,
+                'balance_after' => $welcomePoints,
+                'expired_at' => now()->addYears(1), // 기본 1년 유효 ⏰
+            ]);
+        }
+
+        // 4. 가입 축하 알림 발송 (푸쉬/데이터베이스)
         $member->notify(new WelcomeNotification());
 
         return $member;
@@ -289,20 +304,25 @@ class MemberService
      */
     public function getReviewListData(Member $member): array
     {
-        // 1. 작성 가능한 리뷰 대상 추출 (배송완료 또는 구매확정 상품 중 미작성건)
-        $purchasedProductIds = OrderItem::whereHas('order', function($q) use ($member) {
+        // 1. 리뷰 적립금 설정 가져오기 (없으면 기본 500P) ✨
+        $reviewPoints = \App\Models\SiteSetting::where('setting_key', 'review_reward_points')->first()?->setting_value ?? 500;
+
+        // 2. 작성 가능한 리뷰 대상 추출 (배송완료 또는 구매확정된 주문의 아이템 중 미작성건) 🚀
+        // 상품별로 중복 리뷰 방지를 위해 product_id 기준 최신 주문 건 하나씩만 가져옴
+        $availableReviews = OrderItem::whereHas('order', function($q) use ($member) {
                 $q->where('member_id', $member->id)->whereIn('order_status', ['배송완료', '구매확정']);
             })
-            ->pluck('product_id')
-            ->unique();
-
-        $reviewedProductIds = Review::where('member_id', $member->id)->pluck('product_id');
-        
-        $availableProductIds = $purchasedProductIds->diff($reviewedProductIds);
-        $availableReviews = Product::whereIn('id', $availableProductIds)
+            ->with(['order', 'product'])
+            ->whereNotExists(function($query) use ($member) {
+                $query->select(\DB::raw(1))
+                    ->from('reviews')
+                    ->whereColumn('reviews.product_id', 'order_items.product_id')
+                    ->where('reviews.member_id', $member->id);
+            })
+            ->latest()
             ->paginate(10, ['*'], 'page_avail');
 
-        // 2. 이미 작성된 나의 리뷰 목록 추출
+        // 3. 이미 작성된 나의 리뷰 목록 추출
         $writtenReviews = Review::with('product')
             ->where('member_id', $member->id)
             ->latest()
@@ -312,6 +332,7 @@ class MemberService
             'member' => $member,
             'availableReviews' => $availableReviews,
             'writtenReviews' => $writtenReviews,
+            'reviewPoints' => $reviewPoints,
         ];
     }
 
@@ -556,21 +577,45 @@ class MemberService
     /**
      * 최근 본 상품 전체 삭제  (비로그인 지원!)
      */
-    public function clearRecentViews(?Member $member = null): void
-    {
-        if ($member) {
-            $member->recentViews()->delete();
-        } else {
-            \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forget('recent_views'));
-        }
-    }
-
     /**
-     * 최근 본 상품 선택 삭제 
+     * 회원 탈퇴 처리 🚀
+     * 
+     * @param Member $member 탈퇴할 회원 객체
+     * @throws \Exception 진행 중인 주문이 있을 경우
      */
-    public function deleteSelectedRecentViews(Member $member, array $ids): void
+    public function withdraw(Member $member): void
     {
-        $member->recentViews()->whereIn('id', $ids)->delete();
+        // 1. 진행 중인 주문/클레임이 있는지 확인 (유의사항 준수!) 🛡️
+        $pendingStatus = ['주문접수', '상품준비중', '배송중', '배송완료', '취소신청', '교환신청', '반품신청'];
+        $hasPendingOrders = $member->orders()
+            ->whereIn('order_status', $pendingStatus)
+            ->exists();
+
+        if ($hasPendingOrders) {
+            throw new \Exception('진행 중인 주문이나 클레임 건이 있어 탈퇴가 불가능합니다. 모든 처리가 완료된 후 다시 시도해주세요.');
+        }
+
+        // 1-1. 탈퇴 기록 생성 (재가입 방지용) ✨
+        \DB::table('withdrawn_accounts')->insert([
+            'email' => $member->email,
+            'withdrawn_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // 2. 보유 혜택 소멸 처리 😢
+        $member->update([
+            'points' => 0,
+            'status' => '탈퇴',
+            'email' => 'withdrawn_' . $member->id . '@deleted.com', // 중복 방지 및 마스킹
+            'phone' => '000-0000-0000',
+            'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(32)), // 비밀번호 무력화
+        ]);
+
+        // 3. 미사용 쿠폰 삭제 
+        $member->coupons()->whereNull('used_at')->delete();
+
+        // 4. 세션 무효화는 컨트롤러에서 처리! 🫡
     }
 
     /**

@@ -425,6 +425,14 @@ class CheckoutService
             $finalTotal = $data['calculated_total'];
             $appliedPoints = $data['applied_points'] ?? 0;
 
+            // 0. 적립금 최소 사용 금액 검증 ✨
+            if ($appliedPoints > 0) {
+                $minUsePoints = \App\Models\SiteSetting::where('setting_key', 'min_use_points')->first()?->setting_value ?? 1000;
+                if ($appliedPoints < $minUsePoints) {
+                    throw new \Exception("적립금은 최소 " . number_format($minUsePoints) . "원부터 사용 가능합니다.");
+                }
+            }
+
             // 프론트엔드에서 넘어온 결제수단 매핑
             $paymentMethodMap = [
                 'card' => '신용카드',
@@ -474,13 +482,33 @@ class CheckoutService
                 'line_total' => $totalProductPrice,
             ]);
 
-            // 적립금 차감 및 부여 (기존과 동일)
+            // 적립금 차감 및 부여 ✨
             if ($appliedPoints > 0) {
                 $member->decrement('points', $appliedPoints);
+                // 적립금 사용 이력 남기기 📝
+                \App\Models\PointHistory::create([
+                    'member_id' => $member->id,
+                    'reason' => "상품 구매 적립금 사용 (#{$order->order_number})",
+                    'amount' => -$appliedPoints,
+                    'balance_after' => $member->points,
+                ]);
             }
-            $rewardPoints = floor($finalTotal * 0.01);
+
+            // 구매 적립금 계산 (설정값 적용! 📈)
+            $earnRate = \App\Models\SiteSetting::where('setting_key', 'point_earn_rate')->first()?->setting_value ?? 1.0;
+            $rewardPoints = floor($finalTotal * ($earnRate / 100));
+
             if ($rewardPoints > 0) {
-                $member->increment('points', $rewardPoints);
+                // [수정] 회원의 points는 여기서 올리지 않고, 이력에만 '적립 대기' 상태로 남김 ✨
+                \App\Models\PointHistory::create([
+                    'member_id' => $member->id,
+                    'reason' => "상품 구매 적립 대기 (#{$order->order_number})",
+                    'amount' => $rewardPoints,
+                    'balance_after' => $member->points, // 실제 잔액은 변동 없음
+                    'status' => '적립대기', // 상태 컬럼 활용 (없으면 reason에 표시)
+                    'order_id' => $order->id, // 어떤 주문인지 연결!
+                    'expired_at' => now()->addMonths((int)(\App\Models\SiteSetting::where('setting_key', 'point_expiry_months')->first()?->setting_value ?? 12)),
+                ]);
             }
 
             // 주문 완료 알림 발송 🚀

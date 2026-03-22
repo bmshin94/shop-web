@@ -3,12 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Member;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 회원가입 페이지가 정상적으로 표시되는지 테스트합니다.

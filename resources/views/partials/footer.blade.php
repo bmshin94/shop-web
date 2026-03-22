@@ -53,22 +53,21 @@
     <div class="mt-16 border-t border-gray-100 pt-8 text-xs text-text-muted leading-relaxed">
       <div class="grid md:grid-cols-2 gap-4">
         <div>
-          <p class="font-bold text-text-main mb-2">{{ $siteSettings['company_name'] ?? '(주)액티브우먼' }}</p>
-          <p>대표이사: {{ $siteSettings['ceo_name'] ?? '김액티브' }} | 사업자등록번호: {{ $siteSettings['business_number'] ?? '123-45-67890' }}</p>
-          <p>통신판매업신고: {{ $siteSettings['ecommerce_number'] ?? '2024-서울강남-1234' }} | 개인정보관리책임자: {{ $siteSettings['privacy_officer'] ?? '이담당' }}</p>
-          <p>주소: {{ $siteSettings['address'] ?? '서울특별시 강남구 테헤란로 123, 액티브타워 10층' }}</p>
-          <p class="mt-2">고객센터: {{ $siteSettings['customer_center'] ?? '1544-0000 (평일 09:00 - 18:00)' }}</p>
-        </div>
-        <div class="md:text-right flex flex-col justify-between">
-          <div class="flex gap-2 justify-start md:justify-end mb-2">
-            <a class="font-bold text-text-main" href="#">이용약관</a>
+          <p class="font-bold text-text-main mb-2">{{ $siteSettings['business_name'] ?? '(주)액티브우먼' }}</p>
+          <p>대표이사: {{ $siteSettings['representative_name'] ?? '김액티브' }} | 사업자등록번호: {{ $siteSettings['business_number'] ?? '123-45-67890' }}</p>
+          <p>통신판매업신고: {{ $siteSettings['mail_order_report_number'] ?? '2024-서울강남-1234' }} | 개인정보관리책임자: {{ $siteSettings['privacy_manager'] ?? '이담당' }}</p>
+          <p>주소: {{ $siteSettings['business_address'] ?? '서울특별시 강남구 테헤란로 123, 액티브타워 10층' }}</p>
+          <p>고객센터: {{ $siteSettings['customer_center_phone'] ?? '1588-0000' }}</p>
+          </div>        <div class="md:text-right flex flex-col justify-between">
+          <div class="flex gap-2 justify-start md:justify-end mb-2 text-[11px]">
+            <a class="font-bold text-text-main hover:text-primary transition-colors" href="#">이용약관</a>
             <span class="text-gray-300">|</span>
-            <a class="font-bold text-primary" href="#">개인정보처리방침</a>
+            <a class="font-bold text-primary hover:text-red-600 transition-colors" href="#">개인정보처리방침</a>
             <span class="text-gray-300">|</span>
-            <a class="font-bold text-text-main" href="#">사업자정보확인</a>
+            <a class="font-bold text-text-main hover:text-primary transition-colors" href="#">사업자정보확인</a>
           </div>
-          <p>© 2024 Active Women Store. All rights reserved.</p>
-          <p class="mt-1">에스크로 서비스 가입 사실 확인</p>
+          <p>© {{ date('Y') }} {{ $siteSettings['mall_name'] ?? 'Active Women' }}. All rights reserved.</p>
+          <p class="mt-1 text-[10px] text-gray-400">본 사이트의 모든 컨텐츠는 저작권법의 보호를 받으며, 무단 전재 및 재배포를 금지합니다.</p>
         </div>
       </div>
     </div>

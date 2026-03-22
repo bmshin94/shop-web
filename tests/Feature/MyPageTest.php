@@ -284,7 +284,7 @@ class MyPageTest extends TestCase
         $response = $this->actingAs($member)->post(route('mypage.order-confirm', ['order_number' => $order->order_number]));
 
         $response->assertStatus(200);
-        $response->assertJson(['message' => '구매확정이 완료되었습니다! 즐거운 쇼핑 되세요! ']);
+        $response->assertJson(['message' => '구매확정이 완료되었습니다! 적립금이 지급되었어요. 💖']);
         
         $this->assertEquals('구매확정', $order->fresh()->order_status);
     }

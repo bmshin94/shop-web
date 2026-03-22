@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Member;
 use App\Models\PhoneVerification;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FindEmailTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 아이디 찾기 페이지 접근 테스트

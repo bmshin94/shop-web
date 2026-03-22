@@ -14,6 +14,7 @@ class Category extends Model
         'slug',
         'parent_id',
         'level', // 새로운 level 컬럼 허용! 
+        'icon',
         'sort_order',
         'is_active',
     ];

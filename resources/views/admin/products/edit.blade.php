@@ -73,7 +73,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
         <h3 class="text-2xl font-extrabold text-text-main">상품 정보 수정</h3>
-        <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 text-sm font-bold text-text-muted hover:text-primary transition-all font-display">
+        <a href="{{ request('return_url', route('admin.products.index')) }}" class="flex items-center gap-2 text-sm font-bold text-text-muted hover:text-primary transition-all font-display">
             <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             목록으로 돌아가기
         </a>
@@ -84,6 +84,7 @@
         <form id="product-form" action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="p-8 md:p-10 space-y-10" novalidate>
             @csrf
             @method('PUT')
+            <input type="hidden" name="return_url" value="{{ request('return_url') }}">
             
             <!-- Section 1: Basic Info -->
             <div class="space-y-6">
@@ -227,6 +228,10 @@
                             <label class="flex-1 flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-2xl border border-gray-200 cursor-pointer hover:bg-white hover:border-amber-500 transition-all group">
                                 <input type="checkbox" name="is_best" value="1" {{ old('is_best', $product->is_best) ? 'checked' : '' }} class="w-5 h-5 text-amber-500 border-gray-300 rounded focus:ring-amber-500/20">
                                 <span class="text-sm font-bold text-text-muted group-hover:text-text-main">BEST</span>
+                            </label>
+                            <label class="flex-1 flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:border-primary transition-all group">
+                                <input type="checkbox" name="is_hero" value="1" {{ old('is_hero', $product->is_hero) ? 'checked' : '' }} class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary/20">
+                                <span class="text-sm font-bold text-text-muted group-hover:text-text-main">HERO</span>
                             </label>
                         </div>
                     </div>

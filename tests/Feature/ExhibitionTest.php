@@ -51,7 +51,7 @@ class ExhibitionTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('스페셜 테스트 기획전');
-        $response->assertSee('전체 기획전 보기');
+        $response->assertSee('전체 기획전 목록');
     }
 
     /**

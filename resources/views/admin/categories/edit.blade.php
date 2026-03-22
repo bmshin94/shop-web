@@ -48,6 +48,9 @@
                             <option value="{{ $parent->id }}" {{ old('parent_id', $category->parent_id) == $parent->id ? 'selected' : '' }}>{{ $parent->name }}</option>
                         @endforeach
                     </select>
+                    @if($category->level == 1)
+                        <input type="hidden" name="parent_id" value="">
+                    @endif
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                         <span class="material-symbols-outlined text-text-muted group-focus-within:text-primary transition-colors">expand_more</span>
                     </div>
@@ -63,6 +66,31 @@
                         @else
                             소분류는 다른 대분류 그룹으로만 이동이 가능합니다.
                         @endif
+                    </p>
+                @enderror
+            </div>
+
+            <!-- Icon (Only for Level 1) -->
+            <div id="icon-field" class="space-y-2 transition-all duration-300 {{ $category->level == 2 ? 'hidden opacity-0 pointer-events-none' : '' }}">
+                <label for="icon" class="text-sm font-bold text-text-main flex items-center gap-1">
+                    카테고리 아이콘 <span class="text-xs text-text-muted font-normal">(Material Symbols 이름)</span>
+                </label>
+                <div class="relative group">
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2 size-10 rounded-xl bg-primary/5 flex items-center justify-center pointer-events-none transition-all duration-300" id="icon-preview-container">
+                        <span id="icon-preview" class="text-primary material-symbols-outlined text-[24px]">{{ $category->icon ?? 'category' }}</span>
+                    </div>
+                    <input type="text" id="icon" name="icon" value="{{ old('icon', $category->icon) }}" placeholder="예: sports_baseball, directions_run 등"
+                        class="w-full pl-16 pr-5 py-4 bg-gray-50 border {{ $errors->has('icon') ? 'border-red-500' : 'border-gray-200' }} rounded-2xl text-base focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
+                </div>
+                <div id="icon-warning" class="hidden text-[11px] text-red-500 font-bold mt-1 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">warning</span> 존재하지 않거나 유효하지 않은 아이콘 이름입니다.
+                </div>
+                <p class="text-[11px] text-text-muted font-medium mt-1">
+                    <a href="https://fonts.google.com/icons?icon.set=Material+Symbols" target="_blank" class="text-primary hover:underline">Material Symbols</a>의 이름을 입력하세요. 대분류일 때만 노출됩니다.
+                </p>
+                @error('icon')
+                    <p class="text-xs text-red-500 font-bold mt-1 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}
                     </p>
                 @enderror
             </div>
@@ -194,6 +222,13 @@
         $parentIdSelect.on('change', function() {
             const selectedVal = $(this).val();
             
+            // 아이콘 필드 토글 (대분류일 때만 표시)
+            if (selectedVal === "" || selectedVal === null) {
+                $('#icon-field').slideDown(300).removeClass('opacity-0 pointer-events-none');
+            } else {
+                $('#icon-field').slideUp(300).addClass('opacity-0 pointer-events-none');
+            }
+
             // 원래 부모로 돌아오면 정렬 순서도 원래대로 복구!
             if (selectedVal == originalParentId) {
                 $sortOrderInput.val(originalSortOrder);
@@ -207,6 +242,60 @@
                 $sortOrderInput.val(nextOrderMap[key]);
                 $sortOrderInput.addClass('ring-4 ring-primary/10 border-primary');
                 setTimeout(() => $sortOrderInput.removeClass('ring-4 ring-primary/10 border-primary'), 500);
+            }
+        });
+
+        // 아이콘 실시간 미리보기
+        $('#icon').on('input', function() {
+            const iconName = $(this).val().trim();
+            const $preview = $('#icon-preview');
+            const $container = $('#icon-preview-container');
+            const $warning = $('#icon-warning');
+            
+            if (!iconName) {
+                $preview.text('category');
+                $container.css('opacity', '0.2');
+                $warning.addClass('hidden');
+                return;
+            }
+            
+            $preview.text(iconName);
+            
+            // 스마트 아이콘 판별 로직 ✨
+            setTimeout(() => {
+                const width = $preview[0].offsetWidth;
+                const height = $preview[0].offsetHeight;
+                
+                if (width > height * 1.2 || width === 0) {
+                    $container.css('opacity', '0').addClass('is-invalid');
+                    $warning.removeClass('hidden'); // 아이콘 아니면 경고! 🚨
+                } else {
+                    $container.css('opacity', '1').removeClass('is-invalid');
+                    $warning.addClass('hidden'); // 아이콘이면 안심 ✨
+                }
+            }, 50);
+        });
+
+        // 폼 제출 시 최종 체크! 🔒
+        $('form').on('submit', function(e) {
+            const isParent = $('#parent_id').val() === "" || $('#parent_id').val() === null;
+            const isIconInvalid = $('#icon-preview-container').hasClass('is-invalid');
+            const iconValue = $('#icon').val().trim();
+
+            // 대분류일 때만 아이콘 체크!
+            if (isParent) {
+                if (!iconValue) {
+                    e.preventDefault();
+                    showAlert('1차 카테고리는 아이콘 입력이 필수입니다! 💖', '알림', 'warning');
+                    $('#icon').focus();
+                    return false;
+                }
+                if (isIconInvalid) {
+                    e.preventDefault();
+                    showAlert('유효하지 않은 아이콘 이름입니다. 다시 확인해주세요! ✨', '오류', 'error');
+                    $('#icon').focus();
+                    return false;
+                }
             }
         });
     });

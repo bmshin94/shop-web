@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Member;
 use App\Models\Product;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $member;
     protected $product;

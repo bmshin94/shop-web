@@ -99,6 +99,14 @@ class Member extends Authenticatable
     }
 
     /**
+     * 회원의 배송지 목록
+     */
+    public function shippingAddresses()
+    {
+        return $this->hasMany(ShippingAddress::class);
+    }
+
+    /**
      * 회원의 찜 목록
      */
     public function wishlists()

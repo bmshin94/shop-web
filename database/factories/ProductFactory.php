@@ -32,7 +32,7 @@ class ProductFactory extends Factory
         $salePrice = $hasSale ? $price * 0.8 : null; // 20% 할인
 
         return [
-            'category_id' => Category::inRandomOrder()->first()->id ?? 1,
+            'category_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
             'name' => $name,
             'brief_description' => $this->faker->sentence(10),
             'slug' => Str::slug($name) . '-' . Str::random(5),

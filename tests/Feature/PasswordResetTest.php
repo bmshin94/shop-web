@@ -4,13 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\Member;
 use App\Models\EmailVerification;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 비밀번호 찾기 페이지 접근 테스트

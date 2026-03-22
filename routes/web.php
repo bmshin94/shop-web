@@ -136,7 +136,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // 쿠폰 관리
     Route::resource('coupons', AdminCouponController::class);
 
+    // 상품 관리
     Route::get('/products', [AdminController::class, 'productList'])->name('products.index');
+    Route::post('/products/{product}/toggle-hero', [AdminController::class, 'productToggleHero'])->name('products.toggle-hero');
     Route::get('/products/create', [AdminController::class, 'productCreate'])->name('products.create');
     Route::post('/products', [AdminController::class, 'productStore'])->name('products.store');
     Route::get('/products/search', [AdminController::class, 'productSearch'])->name('products.search');
@@ -246,6 +248,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/recent', [MemberController::class, 'recentViewList'])->name('mypage.recent');
     Route::delete('/mypage/recent/selected', [MemberController::class, 'deleteSelectedRecentViews'])->name('mypage.recent.delete-selected');
     Route::delete('/mypage/recent/clear', [MemberController::class, 'clearRecentViews'])->name('mypage.recent.clear');
+    
+    // 배송지 관리 라우트 추가
+    Route::get('/mypage/shipping-address', [\App\Http\Controllers\ShippingAddressController::class, 'index'])->name('mypage.shipping-address');
+    Route::post('/mypage/shipping-address', [\App\Http\Controllers\ShippingAddressController::class, 'store'])->name('mypage.shipping-address.store');
+    Route::put('/mypage/shipping-address/{id}', [\App\Http\Controllers\ShippingAddressController::class, 'update'])->name('mypage.shipping-address.update');
+    Route::delete('/mypage/shipping-address/{id}', [\App\Http\Controllers\ShippingAddressController::class, 'destroy'])->name('mypage.shipping-address.destroy');
+    Route::post('/mypage/shipping-address/{id}/default', [\App\Http\Controllers\ShippingAddressController::class, 'setDefault'])->name('mypage.shipping-address.default');
+
     Route::get('/mypage/receipt', [MemberController::class, 'receiptList'])->name('mypage.receipt');
     Route::get('/mypage/withdraw', function () { 
         return view('pages.mypage-withdraw', ['member' => auth()->user()]); 

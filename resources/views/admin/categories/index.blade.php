@@ -99,8 +99,12 @@
                     <span class="material-symbols-outlined text-gray-300 drag-handle hover:text-primary transition-colors text-[20px] lg:text-[22px]">drag_indicator</span>
                 </div>
                 <div class="flex items-center gap-2 lg:gap-3 min-w-0">
-                    <div class="size-7 lg:size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-[11px] shrink-0">
-                        {{ mb_substr($parent->name, 0, 1) }}
+                    <div class="size-7 lg:size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold shrink-0">
+                        @if($parent->icon)
+                            <span class="material-symbols-outlined text-[18px] lg:text-[20px]">{{ $parent->icon }}</span>
+                        @else
+                            <span class="text-[11px]">{{ mb_substr($parent->name, 0, 1) }}</span>
+                        @endif
                     </div>
                     <div class="min-w-0">
                         <p class="text-xs lg:text-sm font-bold text-text-main truncate">

@@ -628,8 +628,11 @@ class CheckoutService
                 // TODO: 포인트 사용 내역 로그 기록
             }
 
-            // 9. 구매 적립금 계산 및 추후 지급 예약 (현재는 즉시 지급으로 테스트)
-            $rewardPoints = floor($finalTotal * 0.01);
+            // 9. 구매 적립금 계산 및 추후 지급 예약 (설정값 적용! 📈)
+            $settings = app(\App\Services\Admin\SettingManagementService::class)->getSettings();
+            $earnRate = $settings['point_earn_rate'] ?? 1.0;
+            $rewardPoints = floor($finalTotal * ($earnRate / 100));
+            
             if ($rewardPoints > 0) {
                 $member->increment('points', $rewardPoints);
                 // TODO: 포인트 적립 내역 로그 기록
@@ -647,13 +650,19 @@ class CheckoutService
      */
     private function calculateShippingFee($product, $totalProductPrice)
     {
+        // 1. 상품별 개별 배송 정책이 있는 경우 우선 적용
         if ($product->shipping_type === '무료') {
             return 0;
         } elseif ($product->shipping_type === '고정') {
             return $product->shipping_fee ?? 0;
-        } else {
-            return $totalProductPrice >= 50000 ? 0 : 3000;
-        }
+        } 
+        
+        // 2. 기본 쇼핑몰 배송 정책 적용 (관리자 설정값! 🚀)
+        $settings = app(\App\Services\Admin\SettingManagementService::class)->getSettings();
+        $baseFee = $settings['shipping_fee'] ?? 3000;
+        $threshold = $settings['free_shipping_threshold'] ?? 50000;
+
+        return $totalProductPrice >= $threshold ? 0 : $baseFee;
     }
 
     /**

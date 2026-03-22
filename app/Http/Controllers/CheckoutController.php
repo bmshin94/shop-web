@@ -58,13 +58,23 @@ class CheckoutController extends Controller
             return redirect()->route('home')->with('error', $result['message'] ?? null);
         }
 
-        // 3. 뷰 데이터 추출 및 렌더링
+        // 3. 회원의 배송지 목록 가져오기 (최신순, 기본 배송지 우선)
+        $addresses = Auth::user()->shippingAddresses()
+            ->orderBy('is_default', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        $defaultAddress = $addresses->where('is_default', true)->first();
+
+        // 4. 뷰 데이터 추출 및 렌더링
         return view('pages.checkout', [
             'member' => Auth::user(),
             'checkoutItems' => $result['items'],
             'totalProductPrice' => $result['totalProductPrice'],
             'shippingFee' => $result['shippingFee'],
             'finalTotal' => $result['finalTotal'],
+            'addresses' => $addresses,
+            'defaultAddress' => $defaultAddress,
         ]);
     }
 

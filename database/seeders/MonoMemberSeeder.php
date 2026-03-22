@@ -45,12 +45,13 @@ class MonoMemberSeeder extends Seeder
         });
         $member->inquiries()->delete();
 
-        // 2. 적립금 설정 (50,000원)
+        // 2. 적립금 설정 (50,000원) - 회원 테이블 포인트 직접 업데이트 💰✨
+        $member->update(['points' => 50000]);
+
         PointHistory::create([
             'member_id' => $member->id,
-            'reason' => '회원가입 축하 적립금',
+            'reason' => '회원가입 축하 적립금 (카리나의 선물 💖)',
             'amount' => 50000,
-            'remaining_amount' => 50000,
             'balance_after' => 50000,
             'expired_at' => now()->addYear(),
         ]);

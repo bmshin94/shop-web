@@ -24,6 +24,7 @@ class Product extends Model
         'image_url',
         'is_new',
         'is_best',
+        'is_hero',
     ];
 
     /**

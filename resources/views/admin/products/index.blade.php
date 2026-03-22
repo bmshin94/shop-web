@@ -21,8 +21,8 @@
 
     @media (min-width: 1024px) {
         .product-row {
-            grid-template-columns: 80px 2fr 120px 150px 80px 80px 100px 120px; /* lg: 전체 노출 */
-            gap: 16px;
+            grid-template-columns: 80px 2fr 120px 140px 70px 70px 80px 100px 110px; /* lg: HERO 컬럼 포함 9컬럼 대응 */
+            gap: 12px;
         }
     }
 </style>
@@ -32,7 +32,13 @@
 <div class="space-y-6">
     <!-- Top Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h3 class="text-lg lg:text-xl font-extrabold text-text-main">상품 관리 <span class="text-primary ml-1">{{ $products->total() }}</span></h3>
+        <div class="flex items-center gap-4">
+            <h3 class="text-lg lg:text-xl font-extrabold text-text-main">상품 관리 <span class="text-primary ml-1">{{ $products->total() }}</span></h3>
+            <div id="hero-counter-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ ($heroCount ?? 0) > 10 ? 'bg-red-50 text-red-600' : 'bg-primary/5 text-primary' }} transition-colors duration-300">
+                <span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+                <span class="text-[11px] font-black tracking-tight uppercase">Hero <span id="hero-count-number">{{ $heroCount ?? 0 }}</span>/10</span>
+            </div>
+        </div>
         <div class="flex items-center gap-2 lg:gap-3">
             <a href="{{ route('admin.products.create') }}" class="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-primary text-white text-sm lg:text-base font-bold rounded-xl shadow-lg shadow-primary/20 hover:bg-red-600 transition-all">
                 <span class="material-symbols-outlined text-[20px]">add</span>
@@ -166,6 +172,7 @@
             <div class="hidden md:block text-right text-sm font-black text-text-main uppercase">판매가</div>
             <div class="hidden lg:block text-center text-sm font-black text-text-main uppercase">재고</div>
             <div class="hidden lg:block text-center text-sm font-black text-text-main uppercase">구분</div>
+            <div class="hidden lg:block text-center text-sm font-black text-text-main uppercase">HERO</div>
             <div class="text-center text-sm font-black text-text-main uppercase">상태</div>
             <div class="text-center text-sm font-black text-text-main uppercase">관리</div>
         </div>
@@ -176,7 +183,7 @@
         @forelse($products as $product)
         <div class="product-row px-4 lg:px-6 py-3 lg:py-4 hover:bg-gray-50/50 transition-colors bg-white relative group">
             <!-- 1. 이미지 -->
-            <a href="{{ route('admin.products.show', $product) }}" class="flex items-center justify-center cursor-pointer">
+            <a href="{{ route('admin.products.show', ['product' => $product->id, 'return_url' => request()->fullUrl()]) }}" class="flex items-center justify-center cursor-pointer">
                 <div class="size-12 lg:size-14 rounded-xl overflow-hidden bg-gray-100 border border-gray-100 group-hover:border-primary transition-colors">
                     @if($product->image_url)
                         @if(Str::startsWith($product->image_url, 'http'))
@@ -194,7 +201,7 @@
 
             <!-- 2. 상품명 -->
             <div class="min-w-0">
-                <a href="{{ route('admin.products.show', $product) }}" class="text-xs lg:text-sm font-bold text-text-main hover:text-primary transition-colors truncate block">{{ $product->name }}</a>
+                <a href="{{ route('admin.products.show', ['product' => $product->id, 'return_url' => request()->fullUrl()]) }}" class="text-xs lg:text-sm font-bold text-text-main hover:text-primary transition-colors truncate block">{{ $product->name }}</a>
                 <div class="flex items-center gap-2 mt-0.5">                    <p class="text-[11px] font-bold text-text-muted tracking-tight">ID: {{ $product->id }}</p>
                     <span class="lg:hidden text-[11px] font-bold text-primary tracking-tight">
                         @if($product->sale_price && $product->discount_rate > 0)
@@ -251,6 +258,15 @@
                 @endif
             </div>
 
+            <!-- 6.5. HERO (lg+) -->
+            <div class="hidden lg:flex items-center justify-center">
+                <button type="button" 
+                    onclick="toggleHero('{{ $product->id }}', this)" 
+                    class="hero-toggle-btn relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {{ $product->is_hero ? 'bg-primary' : 'bg-gray-200' }}">
+                    <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $product->is_hero ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                </button>
+            </div>
+
             <!-- 7. 상태 (항시) -->
             <div class="text-center">
                 @php
@@ -267,8 +283,8 @@
             </div>
 
             <!-- 8. 관리 (항시) -->
-            <div class="flex items-center justify-center gap-1 lg:gap-2">
-                <a href="{{ route('admin.products.edit', $product) }}" title="수정" class="size-7 lg:size-8 rounded-lg bg-white border border-gray-100 text-text-muted hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-center shadow-sm">
+            <div class="flex items-center justify-center gap-1 lg:gap-2 flex-nowrap">
+                <a href="{{ route('admin.products.edit', ['product' => $product->id, 'return_url' => request()->fullUrl()]) }}" title="수정" class="size-7 lg:size-8 rounded-lg bg-white border border-gray-100 text-text-muted hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-center shadow-sm">
                     <span class="material-symbols-outlined text-[16px] lg:text-[18px]">edit</span>
                 </a>
                 <button type="button" onclick="openDeleteModal('{{ $product->id }}', '{{ $product->name }}')" title="삭제" class="size-7 lg:size-8 rounded-lg bg-white border border-gray-100 text-text-muted hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center shadow-sm">
@@ -277,6 +293,7 @@
                 <form id="delete-form-{{ $product->id }}" action="{{ route('admin.products.destroy', $product) }}" method="POST" class="hidden">
                     @csrf
                     @method('DELETE')
+                    <input type="hidden" name="return_url" value="{{ request()->fullUrl() }}">
                 </form>
             </div>
         </div>
@@ -388,6 +405,50 @@
     }
 
     $(document).ready(function() {
+        // CSRF Token Setup for AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // 히어로 토글 함수 (전역 등록)
+        window.toggleHero = function(productId, btn) {
+            const $btn = $(btn);
+            const $dot = $btn.find('span');
+            
+            // 시각적 상태 즉시 변경은 하지 않고 서버 응답을 기다립니다 (안정성 우선!)
+            
+            $.post(`/admin/products/${productId}/toggle-hero`)
+                .done(function(response) {
+                    if (response.success) {
+                        // 실제 상태로 업데이트
+                        if (response.is_hero) {
+                            $btn.removeClass('bg-gray-200').addClass('bg-primary');
+                            $dot.removeClass('translate-x-0').addClass('translate-x-5');
+                        } else {
+                            $btn.removeClass('bg-primary').addClass('bg-gray-200');
+                            $dot.removeClass('translate-x-5').addClass('translate-x-0');
+                        }
+                        
+                        // 카운터 갱신
+                        $('#hero-count-number').text(response.hero_count);
+                        const $badge = $('#hero-counter-badge');
+                        $badge.removeClass('bg-red-50 text-red-600 animate-pulse').addClass('bg-primary/5 text-primary');
+                        
+                        showToast(response.message, 'rocket_launch');
+                    }
+                })
+                .fail(function(xhr) {
+                    const response = xhr.responseJSON;
+                    if (xhr.status === 422 && response && response.message) {
+                        showToast(response.message, 'warning', 'bg-amber-500');
+                    } else {
+                        showToast('상태 변경에 실패했습니다. 다시 시도해주세요.', 'error', 'bg-red-500');
+                    }
+                });
+        };
+
         // 모달 외부 클릭 시 닫기
         $('#delete-modal').on('click', function(e) {
             if (e.target === this) closeDeleteModal();

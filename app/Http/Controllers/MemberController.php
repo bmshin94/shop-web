@@ -119,7 +119,7 @@ class MemberController extends Controller
      */
     public function registerCoupon(Request $request): JsonResponse
     {
-        $request->validate(['code' => 'required|string']);
+        $request->validate(['code' => 'required|string|alpha_dash']);
 
         try {
             $member = Auth::user();

@@ -1,8 +1,10 @@
 <meta charset="utf-8" />
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="description" content="{{ $siteSettings['site_description'] ?? '프리미엄 스포츠 기어와 뷰티 에센셜로 완성하는 액티브 라이프스타일, Active Women입니다.' }}">
+<meta name="keywords" content="{{ $siteSettings['site_keywords'] ?? '요가복, 레깅스, 필라테스복, 여성스포츠웨어' }}">
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-<title>@yield('title', 'Active Women\'s Premium Store')</title>
+<title>@yield('title', $siteSettings['mall_name'] ?? 'Active Women\'s Premium Store')</title>
 
 <!-- Fonts -->
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet" />

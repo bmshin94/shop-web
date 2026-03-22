@@ -36,6 +36,9 @@ class HomeService
             
             // 6. 최신 OOTD (8개 - 프리뷰용) 
             'recentOotds' => Ootd::with('member')->latest()->take(8)->get(),
+
+            // 7. 메인 히어로 기획전 (최신 5개)
+            'heroExhibitions' => Exhibition::active()->latest()->take(5)->get(),
         ];
     }
 
@@ -44,11 +47,30 @@ class HomeService
      */
     private function getHeroProducts(): Collection
     {
-        return Product::with(['images', 'category'])
+        // 1. 관리자가 명시적으로 선택한 히어로 상품 우선 조회
+        $heroProducts = Product::with(['images', 'category'])
             ->selling()
+            ->where('is_hero', true)
             ->latest()
             ->take(10)
             ->get();
+
+        // 2. 만약 히어로 상품이 10개 미만이라면 최신 상품으로 부족한 만큼 채우기
+        if ($heroProducts->count() < 10) {
+            $excludeIds = $heroProducts->pluck('id')->toArray();
+            $neededCount = 10 - $heroProducts->count();
+
+            $extraProducts = Product::with(['images', 'category'])
+                ->selling()
+                ->whereNotIn('id', $excludeIds)
+                ->latest()
+                ->take($neededCount)
+                ->get();
+
+            $heroProducts = $heroProducts->concat($extraProducts);
+        }
+
+        return $heroProducts;
     }
 
     /**

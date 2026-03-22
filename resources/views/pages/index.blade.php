@@ -2,139 +2,144 @@
 
 @section('title', '홈 - Active Women\'s Premium Store')
 
+@push('styles')
+<style>
+    /* 스크롤 시 나타나는 애니메이션 효과 */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* Hero Swiper Custom Styles */
+    .hero-swiper { overflow: visible !important; }
+    .hero-swiper .swiper-slide { transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1); transform: scale(0.85); opacity: 0.4; filter: blur(2px); }
+    .hero-swiper .swiper-slide-active { transform: scale(1.02); opacity: 1; z-index: 20; filter: blur(0); }
+    .hero-swiper .swiper-slide-active > div { box-shadow: 0 30px 60px -12px rgba(236, 55, 19, 0.15); }
+    
+    /* 상품 정보 애니메이션 */
+    .hero-info { transform: translateY(15px); opacity: 0; transition: all 0.5s ease 0.3s; }
+    .swiper-slide-active .hero-info { transform: translateY(0); opacity: 1; }
+
+    /* 섹션 타이틀 디자인 */
+    .section-title::before { content: ''; position: absolute; left: 0; top: -12px; width: 24px; height: 3px; background-color: #ec3713; border-radius: 2px; }
+
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+</style>
+@endpush
+
 @section('content')
-<!-- 메인 히어로 배너 섹션 (Swiper) -->
-<section class="relative mt-6 w-full overflow-hidden opacity-0 transition-opacity duration-500" id="hero-section">
-  <div class="swiper hero-swiper px-4 py-4">
+<!-- 메인 히어로 배너 섹션 -->
+<section class="relative mt-4 w-full overflow-hidden opacity-0 transition-opacity duration-700" id="hero-section">
+  <div class="swiper hero-swiper px-4 py-8">
     <div class="swiper-wrapper">
       @forelse($heroProducts as $product)
-      <div class="swiper-slide w-full transition-transform duration-500">
-        <div class="group relative overflow-hidden rounded-3xl bg-gray-100 aspect-[3/4] w-full h-full shadow-md transition-all duration-500">
+      <div class="swiper-slide w-full">
+        <div class="group relative overflow-hidden rounded-[2.5rem] bg-gray-50 aspect-[4/5] w-full shadow-lg transition-all duration-500">
           <a href="{{ route('product-detail', $product->slug) }}" class="block w-full h-full">
             @php
-              $imgSrc = $product->images->first()?->image_url;
-              if (empty($imgSrc)) $imgSrc = $product->image_url;
+              $imgSrc = $product->images->first()?->image_url ?? $product->image_url;
               $hasImage = !empty($imgSrc);
-              // 각 슬라이드마다 다른 그라데이션 색상을 적용
-              $gradients = [
-                'from-rose-300 to-pink-500',
-                'from-violet-300 to-purple-500',
-                'from-sky-300 to-blue-500',
-                'from-emerald-300 to-green-500',
-                'from-amber-300 to-orange-500',
-                'from-teal-300 to-cyan-500',
-                'from-fuchsia-300 to-pink-600',
-                'from-indigo-300 to-blue-600',
-                'from-lime-300 to-emerald-500',
-                'from-red-300 to-rose-500',
-              ];
+              $gradients = ['from-rose-400 to-pink-600', 'from-violet-400 to-purple-600', 'from-sky-400 to-blue-600', 'from-emerald-400 to-green-600', 'from-amber-400 to-orange-600'];
               $gradient = $gradients[$loop->index % count($gradients)];
             @endphp
+            
             @if($hasImage)
-              <img src="{{ $imgSrc }}"
-                alt="{{ $product->name }}"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <!-- 이미지 로딩 실패 시 표시될 그라데이션 fallback -->
-              <div class="h-full w-full bg-gradient-to-br {{ $gradient }} items-center justify-center p-6 transition-transform duration-700 group-hover:scale-110" style="display:none;">
-                <span class="text-white text-lg sm:text-xl font-extrabold text-center drop-shadow-md break-keep leading-relaxed">{{ $product->name }}</span>
-              </div>
+              <img src="{{ $imgSrc }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
             @else
-              <!-- 이미지 미등록 시 그라데이션 배경 + 상품명 표시 -->
-              <div class="h-full w-full bg-gradient-to-br {{ $gradient }} flex items-center justify-center p-6 transition-transform duration-700 group-hover:scale-110">
-                <span class="text-white text-lg sm:text-xl font-extrabold text-center drop-shadow-md break-keep leading-relaxed">{{ $product->name }}</span>
+              <div class="h-full w-full bg-gradient-to-br {{ $gradient }} flex items-center justify-center p-8">
+                <span class="text-white text-2xl font-black text-center drop-shadow-xl break-keep">{{ $product->name }}</span>
               </div>
             @endif
-          </a>
-          
-          <!-- 그라데이션 오버레이 (텍스트 가독성 확보, 호버 시 노출) -->
-          <div class="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-
-          <!-- 상품 정보 (호버 시 아래에서 위로 등장) -->
-          <div class="absolute bottom-0 left-0 right-0 z-10 p-6 sm:p-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-            <h3 class="text-xl sm:text-2xl font-extrabold text-white mb-2 drop-shadow-md truncate">
-              {{ $product->name }}
-            </h3>
-            <div class="flex items-end gap-3">
-              <span class="text-lg sm:text-xl font-black text-primary drop-shadow-md">
-                ₩{{ number_format($product->sale_price ?? $product->price) }}
-              </span>
-              @if($product->discount_rate > 0)
-              <span class="text-sm font-bold text-gray-300 line-through">
-                ₩{{ number_format($product->price) }}
-              </span>
-              @endif
+            
+            <!-- 오버레이 및 정보 -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 transition-opacity group-hover:opacity-80"></div>
+            
+            <div class="hero-info absolute bottom-0 left-0 right-0 p-8 sm:p-10 z-30">
+                <div class="mb-3 flex gap-2">
+                    <span class="px-3 py-1 bg-primary text-[10px] font-black text-white rounded-full uppercase tracking-widest">Premium Pick</span>
+                </div>
+                <h3 class="text-2xl sm:text-3xl font-black text-white mb-3 drop-shadow-md line-clamp-2 leading-tight">
+                    {{ $product->name }}
+                </h3>
+                <div class="flex items-center gap-4">
+                    <span class="text-xl sm:text-2xl font-black text-white">
+                        ₩{{ number_format($product->sale_price ?? $product->price) }}
+                    </span>
+                    @if($product->discount_rate > 0)
+                    <span class="text-sm font-bold text-white/50 line-through">
+                        ₩{{ number_format($product->price) }}
+                    </span>
+                    @endif
+                </div>
             </div>
-          </div>
-          
+          </a>
         </div>
       </div>
       @empty
-      <!-- 데이터가 없을 때 기본 슬라이드 -->
-      <div class="swiper-slide w-full transition-transform duration-500">
-        <div class="relative overflow-hidden rounded-3xl bg-black aspect-[3/4] w-full h-full shadow-lg">
-          <div class="relative z-10 flex h-full flex-col items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">상품을 <br/> <span class="text-primary">준비 중입니다</span></h2>
-          </div>
+      <div class="swiper-slide w-full">
+        <div class="relative overflow-hidden rounded-[2.5rem] bg-black aspect-[3/4] flex items-center justify-center">
+            <h2 class="text-3xl font-black text-white">COMING SOON</h2>
         </div>
       </div>
       @endforelse
     </div>
     
-    <!-- Custom Pagination Controls -->
-    <div class="flex items-center justify-center gap-6 mt-4 sm:mt-6">
-      <button class="hero-prev flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all active:scale-95 shadow-sm">
-        <span class="material-symbols-outlined">chevron_left</span>
+    <!-- Navigation & Progress -->
+    <div class="flex items-center justify-center gap-8 mt-12">
+      <button class="hero-prev flex size-12 items-center justify-center rounded-2xl bg-white text-text-main shadow-sm hover:bg-primary hover:text-white transition-all active:scale-90">
+        <span class="material-symbols-outlined">west</span>
       </button>
       
-      <div class="flex items-center gap-4">
-        <div class="text-sm font-black text-text-main tracking-widest"><span class="hero-current-slide">1</span> <span class="text-gray-400 font-medium mx-1">/</span> <span class="hero-total-slides whitespace-nowrap">1</span></div>
-        <div class="w-24 sm:w-48 h-1.5 bg-gray-200 rounded-full overflow-hidden relative">
-          <div class="hero-progress-bar h-full bg-primary absolute left-0 top-0 transition-all duration-300 ease-out" style="width: 0%"></div>
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-32 sm:w-64 h-1 bg-gray-100 rounded-full overflow-hidden relative">
+          <div class="hero-progress-bar h-full bg-primary absolute left-0 top-0 transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        <div class="text-[10px] font-black text-text-main tracking-[0.3em] uppercase opacity-40">
+            <span class="hero-current-slide">01</span> / <span class="hero-total-slides">00</span>
         </div>
       </div>
 
-      <button class="hero-next flex size-10 items-center justify-center rounded-full bg-white border border-gray-200 text-text-main hover:border-primary hover:text-primary transition-all active:scale-95 shadow-sm">
-        <span class="material-symbols-outlined">chevron_right</span>
+      <button class="hero-next flex size-12 items-center justify-center rounded-2xl bg-white text-text-main shadow-sm hover:bg-primary hover:text-white transition-all active:scale-90">
+        <span class="material-symbols-outlined">east</span>
       </button>
     </div>
   </div>
 </section>
 
 <!-- 카테고리 퀵 메뉴 섹션 -->
-<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-  <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-8">
+<section class="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 reveal">
+  <div class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:gap-10">
     @foreach($topCategories as $cat)
-    <a class="group flex flex-col items-center gap-4 rounded-xl border border-transparent bg-background-alt p-6 transition-all hover:border-primary/20 hover:bg-primary-light hover:shadow-md active:scale-[0.98]"
+    <a class="group relative flex flex-col items-center gap-6 rounded-[2.5rem] bg-white p-10 transition-all hover:shadow-2xl hover:-translate-y-2 active:scale-95 border border-gray-50"
       href="{{ route('product-list', ['category' => $cat->slug]) }}">
-      <div class="flex size-16 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-transform group-hover:scale-110">
-        <span class="material-symbols-outlined text-3xl">
-          @if(str_contains($cat->name, '야구')) sports_baseball
-          @elseif(str_contains($cat->name, '축구') || str_contains($cat->name, '풋살')) sports_soccer
-          @elseif(str_contains($cat->name, '러닝')) directions_run
-          @elseif(str_contains($cat->name, '뷰티')) spa
-          @else category @endif
-        </span>
+      <div class="relative">
+          <div class="absolute inset-0 bg-primary/10 rounded-full blur-xl scale-0 group-hover:scale-150 transition-transform duration-500"></div>
+          <div class="relative flex size-20 items-center justify-center rounded-3xl bg-gray-50 text-text-main shadow-inner transition-all group-hover:bg-primary group-hover:text-white group-hover:rotate-[10deg]">
+            <span class="material-symbols-outlined text-4xl">
+              {{ $cat->icon ?? 'category' }}
+            </span>
+          </div>
       </div>
-      <span class="text-lg font-bold text-text-main group-hover:text-primary">{{ $cat->name }}</span>
+      <div class="text-center">
+          <span class="block text-lg font-black text-text-main mb-1">{{ $cat->name }}</span>
+          <span class="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">둘러보기</span>
+      </div>
     </a>
     @endforeach
   </div>
 </section>
 
-<!-- Editor's Pick 섹션 (베스트 상품) -->
-<section class="bg-background-alt py-16">
+<!-- Editor's Pick 섹션 -->
+<section class="bg-white py-24 reveal">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-10 flex items-center justify-between border-b border-gray-200 pb-4">
-      <div>
-        <h3 class="text-2xl font-bold tracking-tight text-text-main sm:text-3xl">Editor's Pick</h3>
-        <p class="mt-2 text-sm text-text-muted">액티브한 당신을 위한 에디터 추천 #OOTD</p>
+    <div class="mb-16 flex items-end justify-between">
+      <div class="relative">
+        <h3 class="section-title text-3xl font-black tracking-tight text-text-main sm:text-4xl">Editor's Pick</h3>
+        <p class="mt-4 text-base text-text-muted font-medium">에디터가 제안하는 이번 시즌 머스트 해브 아이템</p>
       </div>
-      <a class="group flex items-center text-sm font-bold text-text-muted transition-colors hover:text-primary" href="{{ route('products.best') }}">
-        전체보기 <span class="material-symbols-outlined ml-1 text-base transition-transform group-hover:translate-x-1">arrow_forward</span>
+      <a class="group flex items-center gap-2 text-xs font-black text-text-main uppercase tracking-widest hover:text-primary transition-colors" href="{{ route('products.best') }}">
+        View All <span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-2">east</span>
       </a>
     </div>
-    <div class="grid grid-cols-2 gap-x-4 gap-y-8 lg:gap-x-6 lg:gap-y-10 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-x-6 gap-y-12 lg:gap-x-8 lg:gap-y-16 lg:grid-cols-4">
       @foreach($editorsPicks as $product)
         <x-product-card :product="$product" />
       @endforeach
@@ -143,7 +148,7 @@
 </section>
 
 <!-- 실시간 인기 급상승 섹션 -->
-<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+<section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 reveal">
   <div class="mb-8 flex items-end justify-between">
     <div>
       <h3 class="text-2xl font-bold tracking-tight text-text-main sm:text-3xl">실시간 인기 급상승</h3>
@@ -169,159 +174,102 @@
 @push('scripts')
 <script>
   $(document).ready(function() {
-    // 0. 메인 히어로 Swiper 초기화 (상품 10개, 5열 직노출)
+    // 0. Scroll Reveal Logic
+    const reveal = () => {
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(el => {
+            const windowHeight = window.innerHeight;
+            const elementTop = el.getBoundingClientRect().top;
+            const elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                el.classList.add('active');
+            }
+        });
+    };
+    window.addEventListener('scroll', reveal);
+    reveal();
+
+    // 1. Hero Swiper
     const heroSwiper = new Swiper('.hero-swiper', {
-      slidesPerView: 2, // 모바일 기본
+      slidesPerView: 1.4,
       centeredSlides: true,
-      spaceBetween: 10,
+      spaceBetween: 20,
       loop: true,
-      speed: 800,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true, // 마우스 오버 시 일시정지, 아웃 시 자동 재개
-      },
-      navigation: {
-        nextEl: '.hero-next',
-        prevEl: '.hero-prev',
-      },
+      speed: 1000,
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      navigation: { nextEl: '.hero-next', prevEl: '.hero-prev' },
       breakpoints: {
-        640: {
-          slidesPerView: 3,
-          spaceBetween: 14,
-        },
-        1024: {
-          slidesPerView: 5, // PC 화면에서는 5줄!
-          spaceBetween: 18,
-        }
+        640: { slidesPerView: 2, spaceBetween: 30 },
+        1024: { slidesPerView: 3, spaceBetween: 50 }
       },
       on: {
         init: function () {
           updateHeroProgress(this);
-          // 스와이퍼 초기화 후 섹션 표시 (점핑 현상 방지)
-          document.getElementById('hero-section').classList.remove('opacity-0');
+          setTimeout(() => $('#hero-section').removeClass('opacity-0'), 100);
         },
-        slideChange: function () {
-          updateHeroProgress(this);
-        }
+        slideChange: function () { updateHeroProgress(this); }
       }
     });
 
     function updateHeroProgress(swiper) {
-      if(!swiper.slides) return;
       const total = document.querySelectorAll('.hero-swiper .swiper-slide:not(.swiper-slide-duplicate)').length;
       if (total === 0) return;
-      
       let current = swiper.realIndex + 1;
-      
-      $('.hero-current-slide').text(current);
-      $('.hero-total-slides').text(total);
-      
-      const progress = (current / total) * 100;
-      $('.hero-progress-bar').css('width', progress + '%');
+      $('.hero-current-slide').text(current.toString().padStart(2, '0'));
+      $('.hero-total-slides').text(total.toString().padStart(2, '0'));
+      $('.hero-progress-bar').css('width', (current / total) * 100 + '%');
     }
 
-    // 1. 장바구니 담기 (AJAX 연동 준비)
-    $(document).on('click', '.btn-add-cart', function(e) {
-      e.preventDefault();
-      const productId = $(this).data('id');
-      
-      // 지금은 일단 알림만 띄워줄게!
-      showToast('상품을 장바구니에 담았어요! ', 'shopping_cart');
-      
-      const $cartBadge = $('.header-cart-count'); // 레이아웃에 정의된 배지 클래스 확인 필요!
-      if($cartBadge.length) {
-          let count = parseInt($cartBadge.first().text()) || 0;
-          $cartBadge.text(count + 1).removeClass('hidden').addClass('flex animate-bounce-subtle');
-          setTimeout(() => $cartBadge.removeClass('animate-bounce-subtle'), 1000);
-      }
-    });
-
-    // 2. 실시간 인기 급상승 섹션 가로 스크롤 제어 (아이템 1개씩 이동)
-    const containerEl = document.querySelector('.trending-container');
-    
-    // 이동할 너비 계산 (아이템 너비 56rem(224px) + gap 6rem(24px) = 248px 추정, 좀 더 넉넉하게 250px)
-    // 혹은 동적으로 계산
-    function getScrollAmount() {
-        const item = containerEl.querySelector('.w-56');
-        if (item) {
-            // 아이템 너비 + 부모의 gap (보통 24px)
-            return item.offsetWidth + 24; 
-        }
-        return 248; // 기본값
-    }
-
-    $('.btn-scroll-right').on('click', function() {
-        containerEl.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-    });
-
-    $('.btn-scroll-left').on('click', function() {
-        containerEl.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-    });
-
-    // 3. 마우스 드래그 스크롤 기능 (가장 최신의 드래그 로직)
+    // 2. 실시간 인기 급상승 섹션 가로 스크롤 및 드래그 제어
     const container = document.querySelector('.trending-container');
+    
+    function getScrollAmount() {
+        const item = container.querySelector('.w-56');
+        return item ? item.offsetWidth + 24 : 248;
+    }
+
+    $('.btn-scroll-right').on('click', () => container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' }));
+    $('.btn-scroll-left').on('click', () => container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' }));
+
+    // 마우스 드래그 스크롤 기능
     let isDown = false;
     let startX;
     let scrollLeft;
     let isDragging = false;
-    const DRAG_THRESHOLD = 5; // 드래그 판정 기준 픽셀
+    const DRAG_THRESHOLD = 5;
     let initialX;
 
-    // 기본 이미지/링크 드래그 팡지
-    $(container).on('mousedown', 'a, img', function(e) {
-        e.preventDefault();
-    });
+    $(container).on('mousedown', 'a, img', (e) => e.preventDefault());
 
     $(container).on('mousedown', function(e) {
         isDown = true;
         isDragging = false;
         container.classList.add('active');
         container.style.cursor = 'grabbing';
-        
         startX = e.pageX - container.offsetLeft;
         scrollLeft = container.scrollLeft;
         initialX = e.pageX;
     });
 
-    $(container).on('mouseleave', function() {
+    $(container).on('mouseleave mouseup', function() {
         if(!isDown) return;
         isDown = false;
         container.classList.remove('active');
         container.style.cursor = 'grab';
-        
-        setTimeout(() => { isDragging = false; }, 50);
-    });
-
-    $(container).on('mouseup', function(e) {
-        isDown = false;
-        container.classList.remove('active');
-        container.style.cursor = 'grab';
-        
-        const finalX = e.pageX;
-        if (Math.abs(finalX - initialX) > DRAG_THRESHOLD) {
-            isDragging = true;
-        }
-
         setTimeout(() => { isDragging = false; }, 50);
     });
 
     $(container).on('mousemove', function(e) {
         if (!isDown) return;
-        
         const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX); // 스크롤 감도 조절 (기본 1배)
-        
+        const walk = (x - startX);
         if (Math.abs(walk) > DRAG_THRESHOLD) {
             isDragging = true;
-            e.preventDefault(); // 스크롤 중 선택/클릭 이벤트 방지
-            
-            // 드래그 방향에 맞춰 스크롤 부드럽게 이동
+            e.preventDefault();
             container.scrollLeft = scrollLeft - walk;
         }
     });
 
-    // 드래그 중일 때는 링크 클릭 방지 로직 (확실하게!)
     $(container).on('click', 'a', function(e) {
         if (isDragging) {
             e.preventDefault();
@@ -331,41 +279,7 @@
   });
 </script>
 <style>
-  /* Hero Swiper Custom Styles */
-  .hero-swiper {
-    overflow: visible; /* scale 확대 시 잘림 방지 */
-  }
-  .hero-swiper .swiper-slide {
-    transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
-    transform: scale(0.88);
-    opacity: 0.5;
-  }
-  .hero-swiper .swiper-slide-active {
-    transform: scale(1); /* 활성화 슬라이드만 원래 크기 (짤림 없음!) */
-    opacity: 1;
-    z-index: 10;
-  }
-  .hero-swiper .swiper-slide-active > div {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* 활성화된 슬라이드 그림자 강화 */
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .touch-scroll {
-    -webkit-overflow-scrolling: touch;
-  }
-  .trending-container {
-    cursor: grab;
-    user-select: none;
-  }
-  .trending-container.active {
-    cursor: grabbing;
-    scroll-behavior: auto; /* 드래그 중에는 부드러운 스크롤 잠시 끄기! */
-  }
+  .trending-container { cursor: grab; user-select: none; }
+  .trending-container.active { cursor: grabbing; scroll-behavior: auto; }
 </style>
 @endpush

@@ -3,19 +3,19 @@
 namespace Tests\Feature;
 
 use App\Models\PhoneVerification;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PhoneVerificationTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 인증번호 발송 요청이 정상적으로 처리되는지 테스트합니다.
      */
     public function test_send_verification_code(): void
     {
-        $response = $this->postJson(route('sms.send'), [
+        $response = $this->postJson(route('verify.phone.send'), [
             'phone' => '010-4666-9565',
         ]);
 
@@ -44,7 +44,7 @@ class PhoneVerificationTest extends TestCase
         ]);
 
         // 2. 검증 요청
-        $response = $this->postJson(route('sms.verify'), [
+        $response = $this->postJson(route('verify.phone.confirm'), [
             'phone' => '010-4666-9565',
             'code' => $code,
         ]);
@@ -70,7 +70,7 @@ class PhoneVerificationTest extends TestCase
             'expires_at' => now()->addMinutes(3),
         ]);
 
-        $response = $this->postJson(route('sms.verify'), [
+        $response = $this->postJson(route('verify.phone.confirm'), [
             'phone' => '010-4666-9565',
             'code' => '222222',
         ]);
@@ -97,7 +97,7 @@ class PhoneVerificationTest extends TestCase
         ]);
 
         // 2. 검증 요청
-        $response = $this->postJson(route('sms.verify'), [
+        $response = $this->postJson(route('verify.phone.confirm'), [
             'phone' => '010-4666-9565',
             'code' => $code,
         ]);

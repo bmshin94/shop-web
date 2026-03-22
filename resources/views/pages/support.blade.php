@@ -34,19 +34,40 @@
             </nav>
 
             <!-- Contact Panel -->
-            <div class="p-6 bg-background-alt rounded-[2rem] border border-gray-100">
-                <h3 class="font-bold text-text-main flex items-center gap-2 mb-4">
-                    <span class="material-symbols-outlined text-primary">support_agent</span> 고객상담센터
-                </h3>
-                <p class="text-3xl font-black text-primary mb-1">1544-0000</p>
-                <div class="text-xs text-text-muted space-y-1.5 mt-4">
-                    <p>평일 <span class="text-text-main font-bold">09:00 - 18:00</span></p>
-                    <p>점심 <span class="text-text-main font-bold">12:00 - 13:00</span></p>
-                    <p>주말/공휴일 휴무</p>
+            <div class="relative overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white shadow-sm transition-all hover:shadow-lg group">
+                <!-- Background Decoration -->
+                <div class="absolute -right-4 -top-4 size-32 rounded-full bg-primary/5 blur-3xl transition-all group-hover:bg-primary/10"></div>
+                
+                <div class="relative p-8">
+                    <div class="mb-8 flex items-center gap-3">
+                        <div class="flex size-12 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-primary/20">
+                            <span class="material-symbols-outlined text-2xl">support_agent</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-text-main">고객상담센터</h3>
+                            <p class="text-[11px] font-bold text-primary uppercase tracking-widest">CS CENTER</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <a href="tel:{{ str_replace('-', '', $siteSettings['customer_center_phone'] ?? '15880000') }}" class="inline-block group/phone">
+                            <p class="text-3xl font-black text-text-main tabular-nums tracking-tighter transition-colors group-hover/phone:text-primary">
+                                {{ $siteSettings['customer_center_phone'] ?? '1588-0000' }}
+                            </p>
+                            <div class="h-1 w-0 bg-primary transition-all group-hover/phone:w-full rounded-full mt-1"></div>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-4 pt-6 border-t border-gray-50">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-lg text-primary/40 mt-0.5">schedule</span>
+                            <div class="flex-1">
+                                <h4 class="text-xs font-bold text-text-main mb-1.5 uppercase tracking-tight">Operating Hours</h4>
+                                <p class="text-[12px] leading-relaxed text-text-muted font-medium whitespace-pre-wrap">{{ $siteSettings['cs_hours'] ?? "평일 10:00 ~ 17:00\n(점심 12:00 ~ 13:30 / 토,일,공휴일 휴무)" }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <a href="https://pf.kakao.com" target="_blank" class="w-full mt-8 py-4 kakao-bg text-background-dark rounded-2xl font-bold text-sm flex items-center justify-center gap-2 hover:shadow-lg transition-all">
-                    <span class="material-symbols-outlined text-lg">chat_bubble</span> 카카오톡 실시간 상담
-                </a>
             </div>
         </aside>
 

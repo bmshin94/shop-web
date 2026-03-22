@@ -6,12 +6,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Member;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProductReviewTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /**
      * 상품의 평균 별점과 리뷰 수가 정상적으로 계산되는지 테스트합니다.

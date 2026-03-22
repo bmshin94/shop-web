@@ -5,12 +5,12 @@ namespace Tests\Feature;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\Cart;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CartTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $member;
     protected $product;

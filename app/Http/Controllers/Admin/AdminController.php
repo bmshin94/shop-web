@@ -132,8 +132,38 @@ class AdminController extends Controller
         $products = $query->paginate(10)->withQueryString(); 
 
         $categories = Category::onlyParents()->with('children')->orderBy('sort_order')->get();
+        $heroCount = Product::where('is_hero', true)->count();
 
-        return view('admin.products.index', compact('products', 'categories'));
+        return view('admin.products.index', compact('products', 'categories', 'heroCount'));
+    }
+
+    /**
+     * 상품 히어로 상태 토글 (AJAX)
+     */
+    public function productToggleHero(Product $product)
+    {
+        $currentHeroCount = Product::where('is_hero', true)->count();
+
+        // 1. 이미 10개인데 새로운 상품을 히어로로 등록하려고 할 때 차단!
+        if (!$product->is_hero && $currentHeroCount >= 10) {
+            return response()->json([
+                'success' => false,
+                'message' => '메인 히어로 상품은 최대 10개까지만 등록 가능합니다. ✨',
+                'hero_count' => $currentHeroCount
+            ], 422);
+        }
+
+        $product->is_hero = !$product->is_hero;
+        $product->save();
+
+        $heroCount = Product::where('is_hero', true)->count();
+
+        return response()->json([
+            'success' => true,
+            'is_hero' => $product->is_hero,
+            'hero_count' => $heroCount,
+            'message' => $product->is_hero ? '메인 히어로 상품으로 등록되었습니다.' : '메인 히어로 등록이 취소되었습니다.'
+        ]);
     }
 
     /**
@@ -221,6 +251,7 @@ class AdminController extends Controller
 
         $data['is_new'] = $request->has('is_new');
         $data['is_best'] = $request->has('is_best');
+        $data['is_hero'] = $request->has('is_hero');
 
         $product = Product::create($data);
 
@@ -289,10 +320,7 @@ class AdminController extends Controller
     public function productUpdate(Request $request, Product $product)
     {
         $request->validate([
-            'category_id' => [
-                'required',
-                Rule::exists('categories', 'id')->where(fn ($q) => $q->where('level', 2))
-            ],
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'brief_description' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255|unique:products,slug,' . $product->id,
@@ -304,7 +332,7 @@ class AdminController extends Controller
             'shipping_fee' => 'required_if:shipping_type,고정|integer|min:0',
             'description' => 'nullable|string',
             'images' => 'nullable|array|max:5',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             'remove_images' => 'nullable|array',
             'colors' => 'nullable|array',
             'colors.*' => 'exists:colors,id',
@@ -323,6 +351,7 @@ class AdminController extends Controller
 
         $data['is_new'] = $request->has('is_new');
         $data['is_best'] = $request->has('is_best');
+        $data['is_hero'] = $request->has('is_hero');
 
         $product->update($data);
 
@@ -337,25 +366,31 @@ class AdminController extends Controller
         }
         $product->relatedProducts()->sync($relatedData);
 
-        // 4. 기존 이미지 삭제 처리
+        // 4. 기존 이미지 삭제 처리 (중복 방지를 위해 업로드할 슬롯은 제외하고 처리 가능하지만, 
+        // 여기서는 명시적으로 remove_images에 담긴 것들만 먼저 처리)
         if ($request->has('remove_images')) {
-            foreach ($request->input('remove_images') as $imageId) {
-                $image = $product->images()->find($imageId);
-                if ($image) {
-                    $storagePath = str_replace('/storage/', '', $image->image_path);
+            $removeIds = $request->input('remove_images');
+            $imagesToDelete = $product->images()->whereIn('id', $removeIds)->get();
+            
+            foreach ($imagesToDelete as $image) {
+                $storagePath = str_replace('/storage/', '', $image->image_path);
+                if (Storage::disk('public')->exists($storagePath)) {
                     Storage::disk('public')->delete($storagePath);
-                    $image->delete();
                 }
+                $image->delete();
             }
         }
 
-        // 새 이미지 업로드 및 교체 (슬롯 기준)
+        // 5. 새 이미지 업로드 및 교체 (슬롯 기준)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $sortOrder => $file) {
+                // 해당 슬롯에 이미 이미지가 있다면 삭제 (remove_images에서 이미 지워졌을 수도 있으므로 존재 확인 후 처리)
                 $existingInSlot = $product->images()->where('sort_order', $sortOrder)->first();
                 if ($existingInSlot) {
                     $storagePath = str_replace('/storage/', '', $existingInSlot->image_path);
-                    Storage::disk('public')->delete($storagePath);
+                    if (Storage::disk('public')->exists($storagePath)) {
+                        Storage::disk('public')->delete($storagePath);
+                    }
                     $existingInSlot->delete();
                 }
 
@@ -369,9 +404,15 @@ class AdminController extends Controller
             }
         }
 
-        // 대표 이미지 재설정
-        $firstImage = $product->images()->orderBy('sort_order')->first();
+        // 6. 대표 이미지 재설정 (sort_order가 가장 낮은 이미지를 image_url로 사용)
+        $firstImage = $product->images()->orderBy('sort_order', 'asc')->first();
         $product->update(['image_url' => $firstImage ? $firstImage->image_path : null]);
+
+        // 검색 조건 유지 로직 추가 (URL 파라미터가 있으면 해당 경로로, 없으면 상세페이지로)
+        $returnUrl = $request->input('return_url');
+        if ($returnUrl) {
+            return redirect($returnUrl)->with('success', '상품 정보가 수정되었습니다.');
+        }
 
         return redirect()->route('admin.products.show', $product)->with('success', '상품 정보가 수정되었습니다.');
     }
@@ -379,14 +420,21 @@ class AdminController extends Controller
     /**
      * 관리자 상품 삭제 처리 
      */
-    public function productDestroy(Product $product)
+    public function productDestroy(Request $request, Product $product)
     {
         foreach ($product->images as $image) {
             $storagePath = str_replace('/storage/', '', $image->image_path);
-            Storage::disk('public')->delete($storagePath);
+            if (Storage::disk('public')->exists($storagePath)) {
+                Storage::disk('public')->delete($storagePath);
+            }
         }
 
         $product->delete();
+
+        $returnUrl = $request->input('return_url');
+        if ($returnUrl) {
+            return redirect($returnUrl)->with('success', '상품이 삭제되었습니다.');
+        }
 
         return redirect()->route('admin.products.index')->with('success', '상품이 삭제되었습니다.');
     }
@@ -425,6 +473,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255|unique:categories,name',
             'slug' => 'nullable|string|max:255|unique:categories,slug',
             'parent_id' => 'nullable|exists:categories,id',
+            'icon' => 'required_if:parent_id,null,empty|nullable|string|max:50',
             'sort_order' => [
                 'required', 'integer', 'min:0',
                 Rule::unique('categories')->where(fn ($q) => $q->where('parent_id', $request->parent_id))
@@ -463,6 +512,7 @@ class AdminController extends Controller
             'name' => ['required', 'string', 'max:255', Rule::unique('categories', 'name')->ignore($category->id)],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories', 'slug')->ignore($category->id)],
             'parent_id' => 'nullable|exists:categories,id',
+            'icon' => 'required_if:parent_id,null,empty|nullable|string|max:50',
             'sort_order' => ['required', 'integer', 'min:0'],
             'is_active' => 'required|boolean',
         ]);

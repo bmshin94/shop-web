@@ -228,6 +228,10 @@
                                 <input type="checkbox" name="is_best" value="1" {{ old('is_best') ? 'checked' : '' }} class="w-5 h-5 text-amber-500 border-gray-300 rounded focus:ring-amber-500/20">
                                 <span class="text-sm font-bold text-text-muted group-hover:text-text-main">BEST</span>
                             </label>
+                            <label class="flex-1 flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-2xl border border-gray-100 cursor-pointer hover:bg-white hover:border-primary transition-all group">
+                                <input type="checkbox" name="is_hero" value="1" {{ old('is_hero') ? 'checked' : '' }} class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary/20">
+                                <span class="text-sm font-bold text-text-muted group-hover:text-text-main">HERO</span>
+                            </label>
                         </div>
                     </div>
                 </div>

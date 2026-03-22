@@ -5,12 +5,12 @@ namespace Tests\Feature\Admin;
 use App\Models\Size;
 use App\Models\SizeGroup;
 use App\Models\Operator;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AdminSizeTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $admin;
 

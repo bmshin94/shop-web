@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Admin;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PromotionMenuTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     /** @test */
     public function admin_event_management_page_is_accessible(): void

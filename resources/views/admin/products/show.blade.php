@@ -7,7 +7,7 @@
     <!-- Header: Action Buttons -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.products.index') }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-200 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+            <a href="{{ request('return_url', route('admin.products.index')) }}" class="flex items-center justify-center size-10 rounded-xl bg-white border border-gray-100 text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>
@@ -16,10 +16,10 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.products.edit', $product) }}" class="px-5 py-2.5 bg-text-main text-white rounded-xl text-sm font-bold hover:bg-black transition-all flex items-center gap-2 shadow-lg shadow-black/10">
+            <a href="{{ route('admin.products.edit', ['product' => $product->id, 'return_url' => request('return_url')]) }}" class="px-5 py-2.5 bg-text-main text-white rounded-xl text-sm font-bold hover:bg-black transition-all flex items-center gap-2 shadow-lg shadow-black/10">
                 <span class="material-symbols-outlined text-[18px]">edit</span> 정보 수정
             </a>
-            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="js-confirm-submit" data-confirm-title="상품 삭제" data-confirm-message="정말로 이 상품을 삭제하시겠습니까? 연결된 이미지 데이터도 모두 삭제됩니다." data-confirm-text="영구 삭제">
+            <form action="{{ route('admin.products.destroy', ['product' => $product->id, 'return_url' => request('return_url')]) }}" method="POST" class="js-confirm-submit" data-confirm-title="상품 삭제" data-confirm-message="정말로 이 상품을 삭제하시겠습니까? 연결된 이미지 데이터도 모두 삭제됩니다." data-confirm-text="영구 삭제">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="px-5 py-2.5 bg-red-50 text-red-600 border border-red-100 rounded-xl text-sm font-bold hover:bg-red-100 transition-all flex items-center gap-2">
